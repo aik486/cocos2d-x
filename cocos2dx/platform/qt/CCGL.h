@@ -22,23 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __PLATFORM_MAC_CCACCELEROMETER_H__
-#define __PLATFORM_MAC_CCACCELEROMETER_H__
+#ifndef __CCGL_H__
+#define __CCGL_H__
 
-#include "platform/CCAccelerometerDelegate.h"
+#include <QtOpenGL>
 
-NS_CC_BEGIN
+#define CC_GL_DEPTH24_STENCIL8		GL_DEPTH24_STENCIL8
 
-class CC_DLL CCAccelerometer
-{
-public:
-    CCAccelerometer() {}
-    ~CCAccelerometer() {}
-
-    void setDelegate(CCAccelerometerDelegate* pDelegate) { CC_UNUSED_PARAM(pDelegate); }
-    void setAccelerometerInterval(float interval) {CC_UNUSED_PARAM(interval);}
-};
-
-NS_CC_END
-
-#endif
+#endif // __CCGL_H__
