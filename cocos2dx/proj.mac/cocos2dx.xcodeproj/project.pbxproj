@@ -306,6 +306,15 @@
 		469A7DFA16C247C8006FFCB2 /* tinyxml2.h in Headers */ = {isa = PBXBuildFile; fileRef = 469A7DF816C247C8006FFCB2 /* tinyxml2.h */; };
 		46A3939A16E03F4D00210B16 /* ccFPSImages.c in Sources */ = {isa = PBXBuildFile; fileRef = 46A3939816E03F4D00210B16 /* ccFPSImages.c */; };
 		46A3939B16E03F4D00210B16 /* ccFPSImages.h in Headers */ = {isa = PBXBuildFile; fileRef = 46A3939916E03F4D00210B16 /* ccFPSImages.h */; };
+		E8F22A571B30108800652B8F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A561B30108800652B8F /* Cocoa.framework */; };
+		E8F22A591B3010A500652B8F /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A581B3010A500652B8F /* EventKit.framework */; };
+		E8F22A5B1B3010B100652B8F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A5A1B3010B100652B8F /* QuartzCore.framework */; };
+		E8F22A5D1B3010BE00652B8F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A5C1B3010BE00652B8F /* CoreGraphics.framework */; };
+		E8F22A5F1B3010C800652B8F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A5E1B3010C800652B8F /* CoreVideo.framework */; };
+		E8F22A611B3010CF00652B8F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A601B3010CF00652B8F /* CoreMedia.framework */; };
+		E8F22A631B3010D600652B8F /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A621B3010D600652B8F /* ImageIO.framework */; };
+		E8F22A651B30110B00652B8F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A641B30110B00652B8F /* OpenGL.framework */; };
+		E8F22A671B30112E00652B8F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F22A661B30112E00652B8F /* libz.dylib */; };
 		F4D7A74715F269D10081CE26 /* ccTypeInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D7A74615F269D10081CE26 /* ccTypeInfo.h */; };
 /* End PBXBuildFile section */
 
@@ -316,7 +325,7 @@
 		152DCD8D165614AB009B8D87 /* CCDrawNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDrawNode.h; sourceTree = "<group>"; };
 		154269DA15B5653000712A7F /* CCNotificationCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCNotificationCenter.cpp; sourceTree = "<group>"; };
 		154269DB15B5653000712A7F /* CCNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCNotificationCenter.h; sourceTree = "<group>"; };
-		1551A33F158F2AB200E66CFE /* libcocos2dx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcocos2dx.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1551A33F158F2AB200E66CFE /* libcocos2dx.dylib */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcocos2dx.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		1551A342158F2AB200E66CFE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1551A355158F2ADE00E66CFE /* CCAction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCAction.cpp; sourceTree = "<group>"; };
 		1551A356158F2ADE00E66CFE /* CCAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAction.h; sourceTree = "<group>"; };
@@ -613,6 +622,15 @@
 		469A7DF816C247C8006FFCB2 /* tinyxml2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml2.h; sourceTree = "<group>"; };
 		46A3939816E03F4D00210B16 /* ccFPSImages.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ccFPSImages.c; sourceTree = "<group>"; };
 		46A3939916E03F4D00210B16 /* ccFPSImages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccFPSImages.h; sourceTree = "<group>"; };
+		E8F22A561B30108800652B8F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		E8F22A581B3010A500652B8F /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		E8F22A5A1B3010B100652B8F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E8F22A5C1B3010BE00652B8F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E8F22A5E1B3010C800652B8F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		E8F22A601B3010CF00652B8F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		E8F22A621B3010D600652B8F /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		E8F22A641B30110B00652B8F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		E8F22A661B30112E00652B8F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F4D7A74615F269D10081CE26 /* ccTypeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccTypeInfo.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -621,6 +639,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8F22A671B30112E00652B8F /* libz.dylib in Frameworks */,
+				E8F22A651B30110B00652B8F /* OpenGL.framework in Frameworks */,
+				E8F22A631B3010D600652B8F /* ImageIO.framework in Frameworks */,
+				E8F22A611B3010CF00652B8F /* CoreMedia.framework in Frameworks */,
+				E8F22A5F1B3010C800652B8F /* CoreVideo.framework in Frameworks */,
+				E8F22A5D1B3010BE00652B8F /* CoreGraphics.framework in Frameworks */,
+				E8F22A5B1B3010B100652B8F /* QuartzCore.framework in Frameworks */,
+				E8F22A591B3010A500652B8F /* EventKit.framework in Frameworks */,
+				E8F22A571B30108800652B8F /* Cocoa.framework in Frameworks */,
 				1A94D35016C2072800D79D09 /* libwebp.a in Frameworks */,
 				1A94D35116C2072800D79D09 /* Foundation.framework in Frameworks */,
 			);
@@ -653,7 +680,7 @@
 		1551A340158F2AB200E66CFE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1551A33F158F2AB200E66CFE /* libcocos2dx.a */,
+				1551A33F158F2AB200E66CFE /* libcocos2dx.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -661,6 +688,15 @@
 		1551A341158F2AB200E66CFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E8F22A661B30112E00652B8F /* libz.dylib */,
+				E8F22A641B30110B00652B8F /* OpenGL.framework */,
+				E8F22A621B3010D600652B8F /* ImageIO.framework */,
+				E8F22A601B3010CF00652B8F /* CoreMedia.framework */,
+				E8F22A5E1B3010C800652B8F /* CoreVideo.framework */,
+				E8F22A5C1B3010BE00652B8F /* CoreGraphics.framework */,
+				E8F22A5A1B3010B100652B8F /* QuartzCore.framework */,
+				E8F22A581B3010A500652B8F /* EventKit.framework */,
+				E8F22A561B30108800652B8F /* Cocoa.framework */,
 				1A94D34C16C2014900D79D09 /* libwebp.a */,
 				1551A342158F2AB200E66CFE /* Foundation.framework */,
 			);
@@ -1464,7 +1500,7 @@
 			);
 			name = cocos2dx;
 			productName = cocos2dx;
-			productReference = 1551A33F158F2AB200E66CFE /* libcocos2dx.a */;
+			productReference = 1551A33F158F2AB200E66CFE /* libcocos2dx.dylib */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -1682,7 +1718,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_MODULE_DEBUGGING = NO;
 				DSTROOT = /tmp/cocos2dx.dst;
+				EXECUTABLE_EXTENSION = dylib;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cocos2dx-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1700,10 +1738,11 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../platform/third_party/mac/libraries\"",
 				);
+				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -1711,8 +1750,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_MODULE_DEBUGGING = NO;
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/cocos2dx.dst;
+				EXECUTABLE_EXTENSION = dylib;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cocos2dx-Prefix.pch";
@@ -1730,10 +1771,11 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../platform/third_party/mac/libraries\"",
 				);
+				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};

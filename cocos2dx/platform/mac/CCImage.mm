@@ -465,6 +465,7 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
 		[stringWithAttributes drawInRect:textRect];
 		//[stringWithAttributes drawInRect:textRect withAttributes:tokenAttributesDict];
 		NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect (0.0f, 0.0f, POTWide, POTHigh)];
+        
 		[image unlockFocus];
 		
 		data = (unsigned char*) [bitmap bitmapData];  //Use the same buffer to improve the performance.
@@ -915,8 +916,37 @@ bool CCImage::initWithString(
 
 bool CCImage::saveToFile(const char *pszFilePath, bool bIsToRGB)
 {
-	assert(false);
-	return false;
+    size_t bufferLength = m_nWidth * m_nHeight * 4;
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, m_pData, bufferLength, NULL);
+    size_t bitsPerComponent = 8;
+    size_t bitsPerPixel = 32;
+    size_t bytesPerRow = 4 * m_nWidth;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast;
+    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
+    
+    CGImageRef iref = CGImageCreate(m_nWidth,
+                                    m_nHeight,
+                                    bitsPerComponent,
+                                    bitsPerPixel,
+                                    bytesPerRow,
+                                    colorSpaceRef,
+                                    bitmapInfo,
+                                    provider,   // data provider
+                                    NULL,       // decode
+                                    YES,        // should interpolate
+                                    renderingIntent);
+    
+//    NSImage *image = [[NSImage alloc] initWithCGImage:iref size:NSMakeSize(m_nWidth, m_nHeight)];
+    
+    NSBitmapImageRep *bits = [[NSBitmapImageRep alloc] initWithCGImage:iref];
+    
+    NSData *data = [bits representationUsingType:bIsToRGB ? NSPNGFileType : NSJPEGFileType properties:nil];
+    
+    [data writeToFile:[NSString stringWithUTF8String:pszFilePath] atomically:NO];
+    
+    [bits release];
+	return true;
 }
 
 
