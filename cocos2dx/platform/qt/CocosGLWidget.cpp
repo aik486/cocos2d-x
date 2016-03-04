@@ -1,6 +1,12 @@
+#ifdef QT_WIN32
+#include "platform/third_party/win32/OGLES/GL/glew.h"
+#endif
+
 #include "CocosGLWidget.h"
 
 #include "cocos2dx_qt.h"
+
+#include <QMouseEvent>
 
 using namespace cocos2d;
 

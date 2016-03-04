@@ -5,5 +5,6 @@
 #endif
 
 #ifdef QT_WIN32
+#include "CCGL.h"
 #include "platform/win32/CCApplication.h"
 #endif
