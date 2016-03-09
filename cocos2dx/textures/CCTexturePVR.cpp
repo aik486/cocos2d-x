@@ -634,6 +634,7 @@ bool CCTexturePVR::initWithData(const unsigned char *data, size_t len,
     switch (compression) {
     case CCZ_Compression:
       out_len = ZipUtils::ccInflateCCZBuffer(data, len, &out);
+      break;
     case GZ_Compression:
       out_len = ZipUtils::ccInflateGZipBuffer(data, len, &out);
       break;
