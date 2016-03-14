@@ -96,7 +96,7 @@ static void SetupPixelFormat(HDC hDC)
     SetPixelFormat(hDC, pixelFormat, &pfd);
 }
 
-static bool glew_dynamic_binding()
+bool CC_DLL glew_dynamic_binding()
 {
 	const char *gl_extensions = (const char*)glGetString(GL_EXTENSIONS);
 
