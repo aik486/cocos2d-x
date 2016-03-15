@@ -5,7 +5,10 @@ echo. * Check VC++ environment...
 echo. */
 echo.
 
-if defined VS110COMNTOOLS (
+if defined VS120COMNTOOLS (
+    set VSTOOLS="%VS120COMNTOOLS%"
+    set VC_VER=120
+) else if defined VS110COMNTOOLS (
     set VSTOOLS="%VS110COMNTOOLS%"
     set VC_VER=110
 ) else if defined VS100COMNTOOLS (
@@ -21,7 +24,7 @@ set "VSTOOLS=%VSTOOLS:\=/%"
 set VSVARS="%VSTOOLS%vsvars32.bat"
 
 if not defined VSVARS (
-    echo Can't find VC2010 or VC2012 installed!
+    echo Can't find VC2010 or VC2012 or VC2013 installed!
     goto ERROR
 )
 
@@ -34,7 +37,7 @@ call %VSVARS%
 if %VC_VER%==100 (
     msbuild cocos2d-win32.vc2010.sln /p:Configuration="Debug"
     msbuild cocos2d-win32.vc2010.sln /p:Configuration="Release"
-) else if %VC_VER%==110 (
+) else if (%VC_VER%==110) or ((%VC_VER%==120) (
     msbuild cocos2d-win32.vc2012.sln /t:Clean
     msbuild cocos2d-win32.vc2012.sln /p:Configuration="Debug" /m
     msbuild cocos2d-win32.vc2012.sln /p:Configuration="Release" /m
