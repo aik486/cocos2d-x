@@ -1,7 +1,3 @@
-#ifdef QT_WIN32
-#include "platform/third_party/win32/OGLES/GL/glew.h"
-#endif
-
 #include "CocosGLWidget.h"
 
 #include "cocos2dx_qt.h"
@@ -153,7 +149,7 @@ void CocosGLWidget::resizeGL(int width, int height)
 
 	emit VisibleFrameAdjusted();
 
-	timer->start(0);
+	timer->start(20);
 }
 
 void CocosGLWidget::mousePressEvent(QMouseEvent *event)
