@@ -24,7 +24,7 @@ public:
 	explicit CocosGLWidget(QWidget *parent = 0);
 	virtual ~CocosGLWidget();
 
-	cocos2d::CCNode *MainNode() const { return main_node; }
+	cocos2d::CCNode *MainNode() const { return mainNode; }
 
 	enum
 	{
@@ -68,12 +68,12 @@ private slots:
 	void BeforeResize();
 
 private:
-	cocos2d::CCEGLViewQt *egl_view;
+	cocos2d::CCEGLViewQt *eglView;
 	QMutex mutex;
 	QTimer *timer;
 
-	cocos2d::CCNode *main_node;
+	cocos2d::CCNode *mainNode;
 
-	uint32_t mouse_buttons;
-	bool begin_no_touch;
+	uint32_t mouseButtons;
+	bool beginNoTouch;
 };
