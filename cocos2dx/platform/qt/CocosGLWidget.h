@@ -26,6 +26,8 @@ public:
 	explicit CocosGLWidget(QWidget *parent = 0);
 	virtual ~CocosGLWidget();
 
+	void useRenderBuffer(bool use);
+
 	cocos2d::CCNode *MainNode() const { return mMainNode; }
 
 	enum
@@ -70,7 +72,7 @@ private slots:
 	void BeforeResize();
 
 private:
-	void updateRenderBuffer(int width, int height, double scale);
+	void updateRenderBuffer(int width, int height);
 
 	cocos2d::CCEGLViewQt *mEGLView;
 	QMutex mMutex;
@@ -80,10 +82,7 @@ private:
 	cocos2d::CCNode *mMainNode;
 	cocos2d::CCScene *mScene;
 
-	int mWidth;
-	int mHeight;
-	double mScale;
-
 	uint32_t mMouseButtons;
-	bool mBeginNoTouch;
+	bool mBeginNoTouch:1;
+	bool mUseRenderBuffer:1;
 };

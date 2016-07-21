@@ -35,11 +35,9 @@ CocosGLWidget::CocosGLWidget(QWidget *parent)
 	, mRootNode(nullptr)
 	, mMainNode(nullptr)
 	, mScene(nullptr)
-	, mWidth(-1)
-	, mHeight(-1)
-	, mScale(1.0)
 	, mMouseButtons(0)
 	, mBeginNoTouch(false)
+	, mUseRenderBuffer(false)
 {
 	mEGLView = new CCEGLViewQt;
 
@@ -66,6 +64,22 @@ CocosGLWidget::~CocosGLWidget()
 	delete mEGLView;
 }
 
+void CocosGLWidget::useRenderBuffer(bool use)
+{
+	QMutexLocker locker(&mMutex);
+	if (use != mUseRenderBuffer)
+	{
+		mUseRenderBuffer = use;
+
+		if (nullptr != mMainNode)
+		{
+			auto size = mEGLView->getFrameSize();
+			makeCurrent();
+			updateRenderBuffer(size.width, size.height);
+		}
+	}
+}
+
 void CocosGLWidget::Synchronize(const std::function<void ()> &safeCode)
 {
 	QMutexLocker locker(&mMutex);
@@ -77,19 +91,25 @@ void CocosGLWidget::Synchronize(const std::function<void ()> &safeCode)
 class RenderBuffer : public CCRenderTexture
 {
 public:
-	static RenderBuffer *create(int width, int height, double scale)
+	static RenderBuffer *create(int width, int height)
 	{
 		auto result = new RenderBuffer;
-		bool ok = result->initWithWidthAndHeight(qFloor(width * scale),
-												 qFloor(height * scale),
+		bool ok = result->initWithWidthAndHeight(width,
+												 height,
 												 kTexture2DPixelFormat_RGBA8888);
 		Q_ASSERT(ok);
 		Q_UNUSED(ok);
 		result->setAutoDraw(true);
+		result->setClearFlags(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 		auto sprite = result->getSprite();
 		auto size = sprite->getContentSize();
+
+		sprite->setScale(1);
+		sprite->setFlipY(true);
+		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(CCPointZero);
-		sprite->setAnchorPoint(CCPoint(0.f, 1.f));
+
 		result->setContentSize(size);
 		result->setAnchorPoint(CCPointZero);
 		return result;
@@ -115,15 +135,15 @@ void CocosGLWidget::initializeGL()
 		{
 		}
 
-//		virtual void setScale(float scale) override
-//		{
-//			if (getScale() != scale)
-//			{
-//				CCNode::setScale(scale);
+		virtual void setScale(float scale) override
+		{
+			if (getScale() != scale)
+			{
+				CCNode::setScale(scale);
 
-//				emit widget->VisibleFrameAdjusted();
-//			}
-//		}
+				emit widget->VisibleFrameAdjusted();
+			}
+		}
 
 		void initialized(float)
 		{
@@ -159,51 +179,42 @@ void CocosGLWidget::BeforeResize()
 	mTimer->stop();
 }
 
-void CocosGLWidget::updateRenderBuffer(int width, int height, double scale)
+void CocosGLWidget::updateRenderBuffer(int width, int height)
 {
-	if (mWidth == width && mHeight == height && mScale == scale)
-		return;
-
-	makeCurrent();
-
 	mMainNode->removeFromParentAndCleanup(false);
-
-	CCPoint position;
-
-	if (nullptr != mRootNode)
-	{
-		position = mRootNode->convertToWorldSpace(mMainNode->getPosition());
-		mRootNode->removeFromParent();
-		mRootNode->release();
-	} else
-	{
-		auto size = CCDirector::sharedDirector()->getVisibleSize();
-		position.x = size.width * 0.5f;
-		position.y = size.height * 0.5f;
-	}
 
 	mEGLView->setFrameSize(width, height);
 	mEGLView->setDesignResolutionSize(width, height, kResolutionExactFit);
 
-	mRootNode = RenderBuffer::create(width, height, scale);
+	mMainNode->setPosition(CCPoint(width * 0.5f, height * 0.5f));
+	if (nullptr != mRootNode)
+	{
+		mRootNode->removeFromParent();
+		CC_SAFE_RELEASE_NULL(mRootNode);
+	}
 
-	mMainNode->setPosition(mRootNode->convertToNodeSpace(position));
-	mRootNode->addChild(mMainNode);
+	if (mUseRenderBuffer)
+	{
+		mRootNode = RenderBuffer::create(width, height);
 
-	mScene->addChild(mRootNode);
+		mRootNode->addChild(mMainNode);
 
-	mWidth = width;
-	mHeight = height;
-	mScale = scale;
-
-	emit VisibleFrameAdjusted();
+		mScene->addChild(mRootNode);
+	} else
+	{
+		mScene->addChild(mMainNode);
+	}
 }
 
 void CocosGLWidget::resizeGL(int width, int height)
 {
 	QOpenGLWidget::resizeGL(width, height);
 
-	updateRenderBuffer(width, height, mScale);
+	updateRenderBuffer(width, height);
+
+	emit VisibleFrameAdjusted();
+
+	CCDirector::sharedDirector()->mainLoop();
 
 	mTimer->start(20);
 }
@@ -331,7 +342,7 @@ void CocosGLWidget::wheelEvent(QWheelEvent *event)
 	{
 		QMutexLocker locker(&mMutex);
 
-		int newScale = (y > 0 ? 110.0 : 90.0) * mScale;
+		int newScale = (y > 0 ? 110.0 : 90.0) * mMainNode->getScale();
 		int mod = newScale % 5;
 		if (mod != 0)
 		{
@@ -346,7 +357,7 @@ void CocosGLWidget::wheelEvent(QWheelEvent *event)
 		if (newScale > 1600)
 			newScale = 1600;
 
-		updateRenderBuffer(mWidth, mHeight, newScale / 100.0);
+		mMainNode->setScale(newScale / 100.f);
 	}
 }
 
