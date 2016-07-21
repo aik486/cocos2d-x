@@ -96,7 +96,8 @@ public:
 		auto result = new RenderBuffer;
 		bool ok = result->initWithWidthAndHeight(width,
 												 height,
-												 kTexture2DPixelFormat_RGBA8888);
+												 kTexture2DPixelFormat_RGBA8888,
+												 GL_DEPTH24_STENCIL8);
 		Q_ASSERT(ok);
 		Q_UNUSED(ok);
 		result->setAutoDraw(true);
