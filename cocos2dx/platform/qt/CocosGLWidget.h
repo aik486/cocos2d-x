@@ -13,7 +13,9 @@
 
 namespace cocos2d
 {
+	class CCScene;
 	class CCNode;
+	class CCRenderTexture;
 }
 
 class CocosGLWidget : public QOpenGLWidget, public cocos2d::CCApplication
@@ -24,7 +26,7 @@ public:
 	explicit CocosGLWidget(QWidget *parent = 0);
 	virtual ~CocosGLWidget();
 
-	cocos2d::CCNode *MainNode() const { return mainNode; }
+	cocos2d::CCNode *MainNode() const { return mMainNode; }
 
 	enum
 	{
@@ -56,7 +58,7 @@ signals:
 	void KeyUp(QKeyEvent *event);
 
 public slots:
-	void Synchronize(const std::function<void ()> &safe_code);
+	void Synchronize(const std::function<void ()> &safeCode);
 
 public:
 	virtual bool applicationDidFinishLaunching() override;
@@ -68,12 +70,20 @@ private slots:
 	void BeforeResize();
 
 private:
-	cocos2d::CCEGLViewQt *eglView;
-	QMutex mutex;
-	QTimer *timer;
+	void updateRenderBuffer(int width, int height, double scale);
 
-	cocos2d::CCNode *mainNode;
+	cocos2d::CCEGLViewQt *mEGLView;
+	QMutex mMutex;
+	QTimer *mTimer;
 
-	uint32_t mouseButtons;
-	bool beginNoTouch;
+	cocos2d::CCRenderTexture *mRootNode;
+	cocos2d::CCNode *mMainNode;
+	cocos2d::CCScene *mScene;
+
+	int mWidth;
+	int mHeight;
+	double mScale;
+
+	uint32_t mMouseButtons;
+	bool mBeginNoTouch;
 };

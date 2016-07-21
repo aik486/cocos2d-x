@@ -31,43 +31,70 @@ void CocosGLWidget::setAnimationInterval(double)
 CocosGLWidget::CocosGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
 	, CCApplication()
-	, mutex(QMutex::Recursive)
-	, mainNode(nullptr)
-	, mouseButtons(0)
-	, beginNoTouch(false)
+	, mMutex(QMutex::Recursive)
+	, mRootNode(nullptr)
+	, mMainNode(nullptr)
+	, mScene(nullptr)
+	, mWidth(-1)
+	, mHeight(-1)
+	, mScale(1.0)
+	, mMouseButtons(0)
+	, mBeginNoTouch(false)
 {
-	eglView = new CCEGLViewQt;
+	mEGLView = new CCEGLViewQt;
 
 	connect(this, SIGNAL(aboutToResize()), this, SLOT(BeforeResize()));
 
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	mTimer = new QTimer(this);
+	connect(mTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 CocosGLWidget::~CocosGLWidget()
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
-	timer->stop();
+	mTimer->stop();
 
 	makeCurrent();
 
-	CC_SAFE_RELEASE_NULL(mainNode);
+	CC_SAFE_RELEASE_NULL(mMainNode);
 
 	auto director = CCDirector::sharedDirector();
 	director->end();
 	director->mainLoop();
 
-	delete eglView;
+	delete mEGLView;
 }
 
-void CocosGLWidget::Synchronize(const std::function<void ()> &safe_code)
+void CocosGLWidget::Synchronize(const std::function<void ()> &safeCode)
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
 	makeCurrent();
-	safe_code();
+	safeCode();
 }
+
+class RenderBuffer : public CCRenderTexture
+{
+public:
+	static RenderBuffer *create(int width, int height, double scale)
+	{
+		auto result = new RenderBuffer;
+		bool ok = result->initWithWidthAndHeight(qFloor(width * scale),
+												 qFloor(height * scale),
+												 kTexture2DPixelFormat_RGBA8888);
+		Q_ASSERT(ok);
+		Q_UNUSED(ok);
+		result->setAutoDraw(true);
+		auto sprite = result->getSprite();
+		auto size = sprite->getContentSize();
+		sprite->setPosition(CCPointZero);
+		sprite->setAnchorPoint(CCPoint(0.f, 1.f));
+		result->setContentSize(size);
+		result->setAnchorPoint(CCPointZero);
+		return result;
+	}
+};
 
 void CocosGLWidget::initializeGL()
 {
@@ -75,10 +102,10 @@ void CocosGLWidget::initializeGL()
 
 	auto director = CCDirector::sharedDirector();
 
-	if (false == eglView->InitGL())
+	if (false == mEGLView->InitGL())
 		abort();
 
-	director->setOpenGLView(eglView);
+	director->setOpenGLView(mEGLView);
 
 	class MainNode : public CCNode
 	{
@@ -88,15 +115,15 @@ void CocosGLWidget::initializeGL()
 		{
 		}
 
-		virtual void setScale(float scale) override
-		{
-			if (getScale() != scale)
-			{
-				CCNode::setScale(scale);
+//		virtual void setScale(float scale) override
+//		{
+//			if (getScale() != scale)
+//			{
+//				CCNode::setScale(scale);
 
-				emit widget->VisibleFrameAdjusted();
-			}
-		}
+//				emit widget->VisibleFrameAdjusted();
+//			}
+//		}
 
 		void initialized(float)
 		{
@@ -107,54 +134,83 @@ void CocosGLWidget::initializeGL()
 		CocosGLWidget *widget;
 	};
 
-	mainNode = new MainNode(this);
-	mainNode->autorelease()->retain();
-	mainNode->scheduleOnce(schedule_selector(MainNode::initialized), 0);
+	mMainNode = new MainNode(this);
+	mMainNode->autorelease()->retain();
+	mMainNode->scheduleOnce(schedule_selector(MainNode::initialized), 0);
 
-	mainNode->setAnchorPoint(ccp(0.5f, 0.5f));
-	mainNode->setContentSize(CCPointZero);
+	mMainNode->setAnchorPoint(ccp(0.5f, 0.5f));
+	mMainNode->setContentSize(CCPointZero);
 
-	auto scene = CCScene::create();
+	mScene = CCScene::create();
 
-	scene->addChild(mainNode);
-
-	director->runWithScene(scene);
+	director->runWithScene(mScene);
 }
 
 void CocosGLWidget::paintGL()
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 	CCDirector::sharedDirector()->mainLoop();
 }
 
 void CocosGLWidget::BeforeResize()
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
-	timer->stop();
+	mTimer->stop();
+}
+
+void CocosGLWidget::updateRenderBuffer(int width, int height, double scale)
+{
+	if (mWidth == width && mHeight == height && mScale == scale)
+		return;
+
+	makeCurrent();
+
+	mMainNode->removeFromParentAndCleanup(false);
+
+	CCPoint position;
+
+	if (nullptr != mRootNode)
+	{
+		position = mRootNode->convertToWorldSpace(mMainNode->getPosition());
+		mRootNode->removeFromParent();
+		mRootNode->release();
+	} else
+	{
+		auto size = CCDirector::sharedDirector()->getVisibleSize();
+		position.x = size.width * 0.5f;
+		position.y = size.height * 0.5f;
+	}
+
+	mEGLView->setFrameSize(width, height);
+	mEGLView->setDesignResolutionSize(width, height, kResolutionExactFit);
+
+	mRootNode = RenderBuffer::create(width, height, scale);
+
+	mMainNode->setPosition(mRootNode->convertToNodeSpace(position));
+	mRootNode->addChild(mMainNode);
+
+	mScene->addChild(mRootNode);
+
+	mWidth = width;
+	mHeight = height;
+	mScale = scale;
+
+	emit VisibleFrameAdjusted();
 }
 
 void CocosGLWidget::resizeGL(int width, int height)
 {
 	QOpenGLWidget::resizeGL(width, height);
 
-	eglView->setFrameSize(width, height);
-	eglView->setDesignResolutionSize(width, height, kResolutionExactFit);
+	updateRenderBuffer(width, height, mScale);
 
-	auto director = CCDirector::sharedDirector();
-
-	auto size = director->getVisibleSize();
-
-	mainNode->setPosition(size.width * 0.5f, size.height * 0.5f);
-
-	emit VisibleFrameAdjusted();
-
-	timer->start(20);
+	mTimer->start(20);
 }
 
 void CocosGLWidget::mousePressEvent(QMouseEvent *event)
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
 	auto pos = event->localPos();
 
@@ -162,17 +218,17 @@ void CocosGLWidget::mousePressEvent(QMouseEvent *event)
 	float xs = pos.x();
 	float ys = pos.y();
 
-	mouseButtons |= ids;
+	mMouseButtons |= ids;
 
 	LOG_MOUSE_EVENT("Mouse Down: x = %2.2f, y = %2.2f, button = %d", xs, ys, ids);
 
 	makeCurrent();
-	eglView->handleTouchesBegin(1, &ids, &xs, &ys);
+	mEGLView->handleTouchesBegin(1, &ids, &xs, &ys);
 }
 
 void CocosGLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
 	auto pos = event->localPos();
 
@@ -180,17 +236,17 @@ void CocosGLWidget::mouseReleaseEvent(QMouseEvent *event)
 	float xs = pos.x();
 	float ys = pos.y();
 
-	mouseButtons &= ~ids;
+	mMouseButtons &= ~ids;
 
 	LOG_MOUSE_EVENT("Mouse Up: x = %2.2f, y = %2.2f, button = %d", xs, ys, ids);
 
 	makeCurrent();
-	eglView->handleTouchesEnd(1, &ids, &xs, &ys);
+	mEGLView->handleTouchesEnd(1, &ids, &xs, &ys);
 }
 
 void CocosGLWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
 	auto pos = event->localPos();
 
@@ -198,19 +254,19 @@ void CocosGLWidget::mouseDoubleClickEvent(QMouseEvent *event)
 	float xs = pos.x();
 	float ys = pos.y();
 
-	mouseButtons |= ids;
+	mMouseButtons |= ids;
 
 	LOG_MOUSE_EVENT("Mouse Double: x = %2.2f, y = %2.2f, button = %d", xs, ys, ids);
 
 	ids |= CCEGLViewQt::DOUBLE_CLICK_FLAG;
 
 	makeCurrent();
-	eglView->handleTouchesBegin(1, &ids, &xs, &ys);
+	mEGLView->handleTouchesBegin(1, &ids, &xs, &ys);
 }
 
 void CocosGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
 	auto pos = event->localPos();
 	float pos_x = pos.x();
@@ -257,14 +313,14 @@ void CocosGLWidget::mouseMoveEvent(QMouseEvent *event)
 		xs.push_back(pos_x);
 		ys.push_back(pos_y);
 
-		if (!beginNoTouch)
+		if (!mBeginNoTouch)
 		{
-			beginNoTouch = true;
-			eglView->handleTouchesBegin(ids.size(), (int *) ids.data(), (float *) xs.data(), (float *) ys.data());
+			mBeginNoTouch = true;
+			mEGLView->handleTouchesBegin(ids.size(), (int *) ids.data(), (float *) xs.data(), (float *) ys.data());
 		}
 	}
 
-	eglView->handleTouchesMove(ids.size(), (int *) ids.data(), (float *) xs.data(), (float *) ys.data());
+	mEGLView->handleTouchesMove(ids.size(), (int *) ids.data(), (float *) xs.data(), (float *) ys.data());
 }
 
 void CocosGLWidget::wheelEvent(QWheelEvent *event)
@@ -273,24 +329,24 @@ void CocosGLWidget::wheelEvent(QWheelEvent *event)
 
 	if (y != 0)
 	{
-		QMutexLocker locker(&mutex);
+		QMutexLocker locker(&mMutex);
 
-		int new_scale = (y > 0 ? 110.f : 90.f) * mainNode->getScale();
-		int mod = new_scale % 5;
+		int newScale = (y > 0 ? 110.0 : 90.0) * mScale;
+		int mod = newScale % 5;
 		if (mod != 0)
 		{
-			new_scale -= mod;
+			newScale -= mod;
 			if (y > 0)
-				new_scale += 5;
+				newScale += 5;
 		}
 
-		if (new_scale < 10)
-			new_scale = 10;
+		if (newScale < 10)
+			newScale = 10;
 		else
-		if (new_scale > 1600)
-			new_scale = 1600;
+		if (newScale > 1600)
+			newScale = 1600;
 
-		mainNode->setScale(new_scale / 100.f);
+		updateRenderBuffer(mWidth, mHeight, newScale / 100.0);
 	}
 }
 
@@ -302,7 +358,7 @@ void CocosGLWidget::enterEvent(QEvent *)
 
 void CocosGLWidget::leaveEvent(QEvent *)
 {
-	if (0 != mouseButtons)
+	if (0 != mMouseButtons)
 	{
 		std::vector<int> ids;
 		std::vector<float> xs;
@@ -310,7 +366,7 @@ void CocosGLWidget::leaveEvent(QEvent *)
 
 		for (uint32_t i = 1; i != Qt::MaxMouseButton; i <<= 1)
 		{
-			if (0 != (mouseButtons & i))
+			if (0 != (mMouseButtons & i))
 			{
 				ids.push_back(i);
 				xs.push_back(0);
@@ -319,7 +375,7 @@ void CocosGLWidget::leaveEvent(QEvent *)
 		}
 
 		makeCurrent();
-		eglView->handleTouchesEnd(ids.size(), ids.data(), xs.data(), ys.data());
+		mEGLView->handleTouchesEnd(ids.size(), ids.data(), xs.data(), ys.data());
 	}
 
 	emit MouseLeft();
@@ -328,7 +384,7 @@ void CocosGLWidget::leaveEvent(QEvent *)
 
 void CocosGLWidget::keyPressEvent(QKeyEvent *event)
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
 	makeCurrent();
 	emit KeyDown(event);
@@ -336,7 +392,7 @@ void CocosGLWidget::keyPressEvent(QKeyEvent *event)
 
 void CocosGLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker(&mMutex);
 
 	makeCurrent();
 	emit KeyUp(event);
