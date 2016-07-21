@@ -66,13 +66,13 @@ CocosGLWidget::~CocosGLWidget()
 
 void CocosGLWidget::useRenderBuffer(bool use)
 {
-	QMutexLocker locker(&mMutex);
 	if (use != mUseRenderBuffer)
 	{
 		mUseRenderBuffer = use;
 
 		if (nullptr != mMainNode)
 		{
+			QMutexLocker locker(&mMutex);
 			auto size = mEGLView->getFrameSize();
 			makeCurrent();
 			updateRenderBuffer(size.width, size.height);
