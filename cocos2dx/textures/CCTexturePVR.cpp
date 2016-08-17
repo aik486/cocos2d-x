@@ -544,7 +544,7 @@ bool CCTexturePVR::createGLTexture() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   }
 
-  CHECK_GL_ERROR_DEBUG(); // clean possible GL error
+  glGetError(); // clean possible GL error
 
   GLenum internalFormat = m_pPixelFormatInfo->internalFormat;
   GLenum format = m_pPixelFormatInfo->format;
