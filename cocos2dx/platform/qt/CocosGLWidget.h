@@ -18,6 +18,8 @@ namespace cocos2d
 	class CCRenderTexture;
 }
 
+class InternalMainNode;
+
 class CocosGLWidget : public QOpenGLWidget, public cocos2d::CCApplication
 {
 	Q_OBJECT
@@ -28,7 +30,10 @@ public:
 
 	void useRenderBuffer(bool use);
 
-	cocos2d::CCNode *MainNode() const { return mMainNode; }
+	inline int GetScale() const;
+	void SetScale(int value);
+
+	inline cocos2d::CCNode *MainNode() const;
 
 	enum
 	{
@@ -54,6 +59,7 @@ protected:
 signals:
 	void Initialized();
 	void VisibleFrameAdjusted();
+	void ScaleChanged();
 	void MouseEntered();
 	void MouseLeft();
 	void KeyDown(QKeyEvent *event);
@@ -83,6 +89,19 @@ private:
 	cocos2d::CCScene *mScene;
 
 	uint32_t mMouseButtons;
-	bool mBeginNoTouch:1;
-	bool mUseRenderBuffer:1;
+	int mScale;
+	bool mBeginNoTouch;
+	bool mUseRenderBuffer;
+
+	friend class InternalMainNode;
 };
+
+int CocosGLWidget::GetScale() const
+{
+	return mScale;
+}
+
+cocos2d::CCNode *CocosGLWidget::MainNode() const
+{
+	return mMainNode;
+}
