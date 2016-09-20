@@ -8,6 +8,19 @@ using namespace cocos2d;
 
 #define LOG_MOUSE_EVENT(...) CCLOG(__VA_ARGS__)
 
+class InternalMainNode : public CCNode
+{
+public:
+	InternalMainNode(CocosGLWidget *widget);
+
+	virtual void setScale(float scale) override;
+
+	void initialized(float);
+
+private:
+	CocosGLWidget *widget;
+};
+
 bool CocosGLWidget::applicationDidFinishLaunching()
 {
 	return true;
@@ -36,15 +49,17 @@ CocosGLWidget::CocosGLWidget(QWidget *parent)
 	, mMainNode(nullptr)
 	, mScene(nullptr)
 	, mMouseButtons(0)
+	, mScale(100)
 	, mBeginNoTouch(false)
 	, mUseRenderBuffer(false)
 {
 	mEGLView = new CCEGLViewQt;
 
-	connect(this, SIGNAL(aboutToResize()), this, SLOT(BeforeResize()));
+	connect(this, &QOpenGLWidget::aboutToResize, this, &CocosGLWidget::BeforeResize);
 
 	mTimer = new QTimer(this);
-	connect(mTimer, SIGNAL(timeout()), this, SLOT(update()));
+	connect(mTimer, &QTimer::timeout,
+			this, static_cast<void (QWidget::*)()>(&QWidget::update));
 }
 
 CocosGLWidget::~CocosGLWidget()
@@ -76,6 +91,27 @@ void CocosGLWidget::useRenderBuffer(bool use)
 			auto size = mEGLView->getFrameSize();
 			makeCurrent();
 			updateRenderBuffer(size.width, size.height);
+		}
+	}
+}
+
+void CocosGLWidget::SetScale(int value)
+{
+	if (mScale != value)
+	{
+		if (nullptr != mMainNode)
+		{
+			QMutexLocker locker(&mMutex);
+			mMainNode->setScale(value / 100.f);
+		} else
+		{
+			if (value < 10)
+				value = 10;
+			else if (value > 1600)
+				value = 1600;
+			mScale = value;
+
+			emit ScaleChanged();
 		}
 	}
 }
@@ -128,36 +164,9 @@ void CocosGLWidget::initializeGL()
 
 	director->setOpenGLView(mEGLView);
 
-	class MainNode : public CCNode
-	{
-	public:
-		MainNode(CocosGLWidget *widget)
-			: widget(widget)
-		{
-		}
-
-		virtual void setScale(float scale) override
-		{
-			if (getScale() != scale)
-			{
-				CCNode::setScale(scale);
-
-				emit widget->VisibleFrameAdjusted();
-			}
-		}
-
-		void initialized(float)
-		{
-			emit widget->Initialized();
-		}
-
-	private:
-		CocosGLWidget *widget;
-	};
-
-	mMainNode = new MainNode(this);
+	mMainNode = new InternalMainNode(this);
 	mMainNode->autorelease()->retain();
-	mMainNode->scheduleOnce(schedule_selector(MainNode::initialized), 0);
+	mMainNode->scheduleOnce(schedule_selector(InternalMainNode::initialized), 0);
 
 	mMainNode->setAnchorPoint(ccp(0.5f, 0.5f));
 	mMainNode->setContentSize(CCPointZero);
@@ -341,8 +350,6 @@ void CocosGLWidget::wheelEvent(QWheelEvent *event)
 
 	if (y != 0)
 	{
-		QMutexLocker locker(&mMutex);
-
 		int newScale = (y > 0 ? 110.0 : 90.0) * mMainNode->getScale();
 		int mod = newScale % 5;
 		if (mod != 0)
@@ -352,13 +359,7 @@ void CocosGLWidget::wheelEvent(QWheelEvent *event)
 				newScale += 5;
 		}
 
-		if (newScale < 10)
-			newScale = 10;
-		else
-		if (newScale > 1600)
-			newScale = 1600;
-
-		mMainNode->setScale(newScale / 100.f);
+		SetScale(newScale);
 	}
 }
 
@@ -408,4 +409,35 @@ void CocosGLWidget::keyReleaseEvent(QKeyEvent *event)
 
 	makeCurrent();
 	emit KeyUp(event);
+}
+
+InternalMainNode::InternalMainNode(CocosGLWidget *widget)
+	: widget(widget)
+{
+}
+
+void InternalMainNode::setScale(float scale)
+{
+	if (getScale() != scale)
+	{
+		int percentScale = qRound(scale * 100.f);
+
+		if (percentScale < 10)
+			percentScale = 10;
+		else if (percentScale > 1600)
+			percentScale = 1600;
+
+		widget->mScale = percentScale;
+
+		CCNode::setScale(percentScale / 100.f);
+
+		emit widget->VisibleFrameAdjusted();
+		emit widget->ScaleChanged();
+	}
+}
+
+void InternalMainNode::initialized(float)
+{
+	CCNode::setScale(widget->mScale / 100.f);
+	emit widget->Initialized();
 }
