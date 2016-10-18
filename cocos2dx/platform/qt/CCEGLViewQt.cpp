@@ -1,5 +1,5 @@
 #ifdef QT_WIN32
-#	include "platform/third_party/win32/OGLES/GL/glew.h"
+#	include "OGLES/GL/glew.h"
 #	define __CCGL_H__
 #endif
 
