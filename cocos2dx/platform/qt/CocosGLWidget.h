@@ -13,9 +13,9 @@
 
 namespace cocos2d
 {
-	class CCScene;
-	class CCNode;
-	class CCRenderTexture;
+class CCScene;
+class CCNode;
+class CCRenderTexture;
 }
 
 class InternalMainNode;
@@ -37,9 +37,12 @@ public:
 
 	enum
 	{
-		DOUBLE_CLICK_LEFT = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG | (int) Qt::LeftButton,
-		DOUBLE_CLICK_RIGHT = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG | (int) Qt::RightButton,
-		DOUBLE_CLICK_MIDDLE = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG | (int) Qt::MiddleButton
+		DOUBLE_CLICK_LEFT = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG |
+							(int) Qt::LeftButton,
+		DOUBLE_CLICK_RIGHT = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG |
+							 (int) Qt::RightButton,
+		DOUBLE_CLICK_MIDDLE = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG |
+							  (int) Qt::MiddleButton
 	};
 
 protected:
@@ -66,7 +69,7 @@ signals:
 	void KeyUp(QKeyEvent *event);
 
 public slots:
-	void Synchronize(const std::function<void ()> &safeCode);
+	void Synchronize(const std::function<void()> &safeCode);
 
 public:
 	virtual bool applicationDidFinishLaunching() override;
