@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2010 cocos2d-x.org
 
 http://www.cocos2d-x.org
@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 #include <float.h>
+#include <stdio.h>
 
 // for math.h on win32 platform
 #ifndef __MINGW32__
@@ -48,7 +49,6 @@ THE SOFTWARE.
 #include <math.h>
 #include <string.h>
 #include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
