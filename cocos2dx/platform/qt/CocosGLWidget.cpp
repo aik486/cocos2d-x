@@ -464,3 +464,8 @@ void InternalMainNode::initialized(float)
 	CCNode::setScale(widget->mScale / 100.f);
 	emit widget->Initialized();
 }
+
+CocosGLWidget *CocosGLWidget::instance()
+{
+	return dynamic_cast<CocosGLWidget *>(CCApplication::sharedApplication());
+}

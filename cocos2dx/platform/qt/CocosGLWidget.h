@@ -38,12 +38,14 @@ public:
 	enum
 	{
 		DOUBLE_CLICK_LEFT = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG |
-							(int) Qt::LeftButton,
+			(int) Qt::LeftButton,
 		DOUBLE_CLICK_RIGHT = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG |
-							 (int) Qt::RightButton,
+			(int) Qt::RightButton,
 		DOUBLE_CLICK_MIDDLE = cocos2d::CCEGLViewQt::DOUBLE_CLICK_FLAG |
-							  (int) Qt::MiddleButton
+			(int) Qt::MiddleButton
 	};
+
+	static CocosGLWidget *instance();
 
 protected:
 	virtual void initializeGL() override;
