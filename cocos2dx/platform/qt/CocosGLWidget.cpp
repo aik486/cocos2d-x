@@ -1,4 +1,4 @@
-#include "CocosGLWidget.h"
+﻿#include "CocosGLWidget.h"
 
 #include "cocos2dx_qt.h"
 
@@ -93,7 +93,7 @@ void CocosGLWidget::useRenderBuffer(bool use)
 			QMutexLocker locker(&mMutex);
 			auto size = mEGLView->getFrameSize();
 			makeCurrent();
-			updateRenderBuffer(size.width, size.height);
+			updateRenderBuffer(int(size.width), int(size.height));
 		}
 	}
 }
@@ -244,8 +244,8 @@ void CocosGLWidget::mousePressEvent(QMouseEvent *event)
 	auto pos = event->localPos();
 
 	int ids = (int) event->button();
-	float xs = pos.x();
-	float ys = pos.y();
+	auto xs = float(pos.x());
+	auto ys = float(pos.y());
 
 	mMouseButtons |= ids;
 
@@ -263,8 +263,8 @@ void CocosGLWidget::mouseReleaseEvent(QMouseEvent *event)
 	auto pos = event->localPos();
 
 	int ids = (int) event->button();
-	float xs = pos.x();
-	float ys = pos.y();
+	auto xs = float(pos.x());
+	auto ys = float(pos.y());
 
 	mMouseButtons &= ~ids;
 
@@ -281,8 +281,8 @@ void CocosGLWidget::mouseDoubleClickEvent(QMouseEvent *event)
 	auto pos = event->localPos();
 
 	int ids = (int) event->button();
-	float xs = pos.x();
-	float ys = pos.y();
+	auto xs = float(pos.x());
+	auto ys = float(pos.y());
 
 	mMouseButtons |= ids;
 
@@ -300,8 +300,8 @@ void CocosGLWidget::mouseMoveEvent(QMouseEvent *event)
 	QMutexLocker locker(&mMutex);
 
 	auto pos = event->localPos();
-	float pos_x = pos.x();
-	float pos_y = pos.y();
+	auto pos_x = float(pos.x());
+	auto pos_y = float(pos.y());
 
 	std::vector<int> ids;
 	std::vector<float> xs;
@@ -370,7 +370,7 @@ void CocosGLWidget::wheelEvent(QWheelEvent *event)
 
 	if (y != 0)
 	{
-		int newScale = (y > 0 ? 110.0 : 90.0) * mMainNode->getScale();
+		auto newScale = int((y > 0 ? 110.0 : 90.0) * mMainNode->getScale());
 		int mod = newScale % 5;
 		if (mod != 0)
 		{
