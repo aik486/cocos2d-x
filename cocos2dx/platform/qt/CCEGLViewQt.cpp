@@ -1,4 +1,4 @@
-#ifdef QT_WIN32
+﻿#ifdef QT_WIN32
 
 #include "OGLES/GL/glew.h"
 #define __CCGL_H__
@@ -15,7 +15,7 @@ namespace cocos2d
 
 void CCEGLViewQt::end()
 {
-	// TODO
+	// do nothing
 }
 
 bool CCEGLViewQt::isOpenGLReady()
