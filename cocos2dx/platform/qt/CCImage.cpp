@@ -81,9 +81,9 @@ bool CCImage::initWithImageData(void *pData, int nDataLen, EImageFormat eFmt,
 	if (qimage.isNull())
 		return false;
 
-	auto pixelFormat = qimage.pixelFormat();
-	m_bHasAlpha = pixelFormat.alphaUsage() == QPixelFormat::UsesAlpha;
-	m_bPreMulti = pixelFormat.premultiplied() == QPixelFormat::Premultiplied;
+	m_bHasAlpha = qimage.hasAlphaChannel();
+	m_bPreMulti = m_bHasAlpha &&
+		qimage.pixelFormat().premultiplied() == QPixelFormat::Premultiplied;
 
 	if (m_bPreMulti)
 	{
@@ -91,9 +91,6 @@ bool CCImage::initWithImageData(void *pData, int nDataLen, EImageFormat eFmt,
 	} else if (m_bHasAlpha)
 	{
 		qimage = qimage.convertToFormat(QImage::Format_RGBA8888);
-	} else if (qimage.bitPlaneCount() <= 16)
-	{
-		qimage = qimage.convertToFormat(QImage::Format_RGB16);
 	} else
 	{
 		qimage = qimage.convertToFormat(QImage::Format_RGB888);
@@ -108,7 +105,7 @@ bool CCImage::initWithImageData(void *pData, int nDataLen, EImageFormat eFmt,
 	m_pData = qimage.bits();
 	m_nWidth = quint16(qimage.width());
 	m_nHeight = quint16(qimage.height());
-	m_nBitsPerComponent = qimage.depth();
+	m_nBitsPerComponent = 8;
 
 	return true;
 }
@@ -179,9 +176,11 @@ bool CCImage::initWithString(const char *pText, int nWidth, int nHeight,
 	}
 
 	m_pData = m_pImage->bits();
+	m_bHasAlpha = true;
+	m_bPreMulti = false;
 	m_nWidth = quint16(m_pImage->width());
 	m_nHeight = quint16(m_pImage->height());
-	m_nBitsPerComponent = m_pImage->depth();
+	m_nBitsPerComponent = 8;
 
 	return true;
 }
@@ -191,12 +190,12 @@ bool CCImage::saveToFile(const char *pszFilePath, bool bIsToRGB)
 	if (nullptr == m_pImage)
 		return false;
 
-	auto image = m_pImage;
+	QImage image = *m_pImage;
 
 	if (bIsToRGB)
-		*image = image->convertToFormat(QImage::Format_RGB888);
+		image = image.convertToFormat(QImage::Format_RGB888);
 
-	return image->save(QString::fromUtf8(pszFilePath));
+	return image.save(QString::fromUtf8(pszFilePath));
 }
 
 bool CCImage::_initWithJpgData(void *pData, int nDataLen)
@@ -222,53 +221,76 @@ bool CCImage::_initWithWebpData(void *pData, int nDataLen)
 bool CCImage::_initWithRawData(void *pData, int nDatalen, int nWidth,
 	int nHeight, int nBitsPerComponent, bool bPreMulti)
 {
-	QImage::Format imageFormat;
+	QImage::Format sourceImageFormat;
+	QImage::Format storeImageFormat = bPreMulti
+		? QImage::Format_RGBA8888_Premultiplied
+		: QImage::Format_RGB888;
 
-	switch (nBitsPerComponent)
+	Q_ASSERT(nWidth <= 65535);
+	Q_ASSERT(nHeight <= 65535);
+
+	int length = nWidth * nHeight;
+	Q_ASSERT(length > 0);
+
+	int bytesPerPixel = nDatalen / length;
+
+	switch (bytesPerPixel)
 	{
-		case 16:
-			imageFormat = QImage::Format_RGB16;
+		case 2:
+			Q_ASSERT(nBitsPerComponent == (bPreMulti ? 4 : 5));
+			sourceImageFormat = bPreMulti
+				? QImage::Format_ARGB4444_Premultiplied
+				: QImage::Format_RGB555;
 			break;
 
-		case 24:
-			imageFormat = QImage::Format_RGB888;
+		case 3:
+			Q_ASSERT(nBitsPerComponent == (bPreMulti ? 5 : 8));
+			sourceImageFormat = bPreMulti
+				? QImage::Format_ARGB8555_Premultiplied
+				: QImage::Format_RGB888;
 			break;
 
-		case 32:
-			imageFormat = bPreMulti ? QImage::Format_RGBA8888
-									: QImage::Format_RGBA8888_Premultiplied;
+		case 4:
+			Q_ASSERT(nBitsPerComponent == 8);
+			sourceImageFormat = bPreMulti
+				? QImage::Format_RGBA8888_Premultiplied
+				: QImage::Format_RGBA8888;
+			storeImageFormat = sourceImageFormat;
 			break;
 
 		default:
+			Q_UNREACHABLE();
 			return false;
 	}
-
-	int bytesPerLine = nWidth * (nBitsPerComponent / 8);
-	Q_ASSERT(nDatalen >= bytesPerLine * nHeight);
 
 	if (nullptr == m_pImage)
 	{
 		m_pImage = new QImage;
 	}
 
-	*m_pImage = QImage(nWidth, nHeight, imageFormat);
+	*m_pImage = QImage(nWidth, nHeight, sourceImageFormat);
+
+	int bytesPerLine = nWidth * (m_pImage->depth() / 8);
+
+	auto source = reinterpret_cast<const quint8 *>(pData);
+
+	for (int y = 0; y < nHeight; y++)
+	{
+		memcpy(m_pImage->scanLine(y), source, bytesPerLine);
+		source += bytesPerLine;
+	}
+
+	if (sourceImageFormat != storeImageFormat)
+		*m_pImage = m_pImage->convertToFormat(storeImageFormat);
 
 	auto pixelFormat = m_pImage->pixelFormat();
 	m_bHasAlpha = pixelFormat.alphaUsage() == QPixelFormat::UsesAlpha;
 	m_bPreMulti = pixelFormat.premultiplied() == QPixelFormat::Premultiplied;
 
 	m_pData = m_pImage->bits();
-	m_nBitsPerComponent = m_pImage->depth();
+	m_nBitsPerComponent = 8;
 	m_nWidth = quint16(nWidth);
 	m_nHeight = quint16(nHeight);
-
-	auto source = reinterpret_cast<const quint8 *>(pData);
-
-	for (quint16 y = 0; y < m_nHeight; y++)
-	{
-		memcpy(m_pImage->scanLine(y), source, bytesPerLine);
-		source += bytesPerLine;
-	}
 
 	return true;
 }
@@ -278,12 +300,12 @@ bool CCImage::_saveImageToPNG(const char *pszFilePath, bool bIsToRGB)
 	if (nullptr == m_pImage)
 		return false;
 
-	auto image = m_pImage;
+	QImage image = *m_pImage;
 
 	if (bIsToRGB)
-		*image = image->convertToFormat(QImage::Format_RGB888);
+		image = image.convertToFormat(QImage::Format_RGB888);
 
-	return image->save(QString::fromUtf8(pszFilePath), "png");
+	return image.save(QString::fromUtf8(pszFilePath), "png");
 }
 
 bool CCImage::_saveImageToJPG(const char *pszFilePath)
