@@ -105,5 +105,8 @@ NS_CC_END
 
 #endif // __MINGW32__
 
+#undef min
+#undef max
+
 #endif  // __CC_STD_C_H__
 
