@@ -880,9 +880,13 @@ void CCDirector::createStatsLabel()
     CCTexture2D *texture = NULL;
     CCTextureCache *textureCache = CCTextureCache::sharedTextureCache();
 
-    if( m_pFPSLabel && m_pSPFLabel )
-    {
-        CC_SAFE_RELEASE_NULL(m_pFPSLabel);
+	if (m_pFPSLabel || m_pSPFLabel || m_pDrawsLabel)
+	{
+#ifdef QT_COCOS
+		if (m_pFPSLabel && m_pSPFLabel && m_pDrawsLabel)
+			return;
+#endif
+	    CC_SAFE_RELEASE_NULL(m_pFPSLabel);
         CC_SAFE_RELEASE_NULL(m_pSPFLabel);
         CC_SAFE_RELEASE_NULL(m_pDrawsLabel);
         textureCache->removeTextureForKey("cc_fps_images");
@@ -918,8 +922,11 @@ void CCDirector::createStatsLabel()
      Secondly, the size of this image is 480*320, to display the FPS label with correct size, 
      a factor of design resolution ratio of 480x320 is also needed.
      */
-    float factor = CCEGLView::sharedOpenGLView()->getDesignResolutionSize().height / 320.0f;
-
+#ifdef QT_COCOS
+	static const float factor = 1.0f;
+#else
+	float factor = CCEGLView::sharedOpenGLView()->getDesignResolutionSize().height / 320.0f;
+#endif
     m_pFPSLabel = new CCLabelAtlas();
     m_pFPSLabel->setIgnoreContentScaleFactor(true);
     m_pFPSLabel->initWithString("00.0", texture, 12, 32 , '.');
