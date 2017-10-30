@@ -127,8 +127,8 @@ bool CCImage::initWithString(const char *pText, int nWidth, int nHeight,
 		font.setPixelSize(nSize);
 
 		painter.setFont(font);
-		painter.setPen(Qt::white);
-		painter.setBrush(Qt::transparent);
+		painter.setPen(Qt::transparent);
+		painter.setBrush(Qt::white);
 
 		auto text = QString::fromUtf8(pText);
 
