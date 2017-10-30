@@ -55,6 +55,8 @@ public:
 
 protected:
     virtual bool Create();
+	static bool glew_dynamic_binding();
+
 public:
     bool initGL();
     void destroyGL();

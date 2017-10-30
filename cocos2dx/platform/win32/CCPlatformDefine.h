@@ -5,15 +5,19 @@
 #include <string.h>
 #endif
 
+#ifdef CC_STATIC_LIB
+#define CC_DLL
+#else
 #if defined(_USRDLL)
-    #define CC_DLL     __declspec(dllexport)
+	#define CC_DLL     __declspec(dllexport)
 #else         /* use a DLL library */
-    #define CC_DLL     __declspec(dllimport)
+	#define CC_DLL     __declspec(dllimport)
+#endif
 #endif
 
 #include <assert.h>
 
-#if CC_DISABLE_ASSERT > 0
+#if defined(CC_DISABLE_ASSERT) && CC_DISABLE_ASSERT > 0
 #define CC_ASSERT(cond)
 #else
 #define CC_ASSERT(cond)    assert(cond)

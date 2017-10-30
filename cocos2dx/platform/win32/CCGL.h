@@ -25,7 +25,11 @@ THE SOFTWARE.
 #ifndef __CCGL_H__
 #define __CCGL_H__
 
-#include "GL/glew.h"
+#ifdef CC_USE_QT_OPENGL
+#include <QtOpenGL>
+#else
+#include "OGLES/GL/glew.h"
+#endif
 
 #define CC_GL_DEPTH24_STENCIL8		GL_DEPTH24_STENCIL8
 

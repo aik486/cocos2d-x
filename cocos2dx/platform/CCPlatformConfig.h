@@ -49,7 +49,6 @@ Config of cocos2d-x project, per target platform.
 #define CC_PLATFORM_TIZEN             11
 #define CC_PLATFORM_WINRT             12
 #define CC_PLATFORM_WP8               13
-#define CC_PLATFORM_QT                14
 
 // Determine target platform by compile environment macro.
 #define CC_TARGET_PLATFORM             CC_PLATFORM_UNKNOWN
@@ -132,10 +131,6 @@ Config of cocos2d-x project, per target platform.
     #define CC_TARGET_PLATFORM     CC_PLATFORM_TIZEN
 #endif
 
-#ifdef CC_TARGET_QT
-#undef  CC_TARGET_PLATFORM
-#define CC_TARGET_PLATFORM         CC_PLATFORM_QT
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 // post configure

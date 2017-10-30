@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "CCEGLView.h"
+#include "CCGL.h"
 #include "cocoa/CCSet.h"
 #include "ccMacros.h"
 #include "CCDirector.h"
@@ -41,11 +42,11 @@ NS_CC_BEGIN
 
 // Windows Touch functions
 // Workaround to be able tu run app on Windows XP
-typedef WINUSERAPI BOOL (WINAPI *RegisterTouchWindowFn)(_In_ HWND hwnd, _In_ ULONG ulFlags);
-typedef WINUSERAPI BOOL (WINAPI *UnregisterTouchWindowFn)(_In_ HWND hwnd);
-typedef WINUSERAPI LPARAM (WINAPI *GetMessageExtraInfoFn)(VOID);
-typedef WINUSERAPI BOOL (WINAPI *GetTouchInputInfoFn)(_In_ HTOUCHINPUT hTouchInput, _In_ UINT cInputs, __out_ecount(cInputs) PTOUCHINPUT pInputs, _In_ int cbSize);
-typedef WINUSERAPI BOOL (WINAPI *CloseTouchInputHandleFn)(_In_ HTOUCHINPUT hTouchInput);
+typedef BOOL (WINAPI *RegisterTouchWindowFn)(_In_ HWND hwnd, _In_ ULONG ulFlags);
+typedef BOOL (WINAPI *UnregisterTouchWindowFn)(_In_ HWND hwnd);
+typedef LPARAM (WINAPI *GetMessageExtraInfoFn)(VOID);
+typedef BOOL (WINAPI *GetTouchInputInfoFn)(_In_ HTOUCHINPUT hTouchInput, _In_ UINT cInputs, __out_ecount(cInputs) PTOUCHINPUT pInputs, _In_ int cbSize);
+typedef BOOL (WINAPI *CloseTouchInputHandleFn)(_In_ HTOUCHINPUT hTouchInput);
 
 static RegisterTouchWindowFn s_pfRegisterTouchWindowFunction = NULL;
 static UnregisterTouchWindowFn s_pfUnregisterTouchWindowFunction = NULL;
@@ -68,36 +69,63 @@ static bool CheckTouchSupport()
 
 static void SetupPixelFormat(HDC hDC)
 {
-    int pixelFormat;
+#ifndef QT_COCOS
+	int pixelFormat;
 
-    PIXELFORMATDESCRIPTOR pfd =
-    {
-        sizeof(PIXELFORMATDESCRIPTOR),  // size
-        1,                          // version
-        PFD_SUPPORT_OPENGL |        // OpenGL window
-        PFD_DRAW_TO_WINDOW |        // render to window
-        PFD_DOUBLEBUFFER,           // support double-buffering
-        PFD_TYPE_RGBA,              // color type
-        32,                         // preferred color depth
-        0, 0, 0, 0, 0, 0,           // color bits (ignored)
-        0,                          // no alpha buffer
-        0,                          // alpha bits (ignored)
-        0,                          // no accumulation buffer
-        0, 0, 0, 0,                 // accum bits (ignored)
-        24,                         // depth buffer
-        8,                          // no stencil buffer
-        0,                          // no auxiliary buffers
-        PFD_MAIN_PLANE,             // main layer
-        0,                          // reserved
-        0, 0, 0,                    // no layer, visible, damage masks
-    };
+	PIXELFORMATDESCRIPTOR pfd =
+	{
+		sizeof(PIXELFORMATDESCRIPTOR),  // size
+		1,                          // version
+		PFD_SUPPORT_OPENGL |        // OpenGL window
+		PFD_DRAW_TO_WINDOW |        // render to window
+		PFD_DOUBLEBUFFER,           // support double-buffering
+		PFD_TYPE_RGBA,              // color type
+		32,                         // preferred color depth
+		0, 0, 0, 0, 0, 0,           // color bits (ignored)
+		0,                          // no alpha buffer
+		0,                          // alpha bits (ignored)
+		0,                          // no accumulation buffer
+		0, 0, 0, 0,                 // accum bits (ignored)
+		24,                         // depth buffer
+		8,                          // no stencil buffer
+		0,                          // no auxiliary buffers
+		PFD_MAIN_PLANE,             // main layer
+		0,                          // reserved
+		0, 0, 0,                    // no layer, visible, damage masks
+	};
 
-    pixelFormat = ChoosePixelFormat(hDC, &pfd);
-    SetPixelFormat(hDC, pixelFormat, &pfd);
+	pixelFormat = ChoosePixelFormat(hDC, &pfd);
+	SetPixelFormat(hDC, pixelFormat, &pfd);
+#endif
 }
 
-bool CC_DLL glew_dynamic_binding()
+bool CCEGLView::glew_dynamic_binding()
 {
+	GLenum GlewInitResult = glewInit();
+	if (GLEW_OK != GlewInitResult)
+	{
+		CCLOGERROR("%s", (char *)glewGetErrorString(GlewInitResult));
+		return false;
+	}
+
+	if (GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader)
+	{
+		CCLog("Ready for GLSL");
+	}
+	else
+	{
+		CCLog("Not totally ready :(");
+	}
+
+	if (glewIsSupported("GL_VERSION_2_0"))
+	{
+		CCLog("Ready for OpenGL 2.0");
+	}
+	else
+	{
+		CCLog("OpenGL 2.0 not supported");
+	}
+
 	const char *gl_extensions = (const char*)glGetString(GL_EXTENSIONS);
 
 	// If the current opengl driver doesn't have framebuffers methods, check if an extension exists
@@ -182,10 +210,10 @@ CCEGLView::CCEGLView()
 , m_hDC(NULL)
 , m_hRC(NULL)
 , m_lpfnAccelerometerKeyHook(NULL)
+, m_bSupportTouch(false)
 , m_menu(NULL)
 , m_wndproc(NULL)
 , m_fFrameZoomFactor(1.0f)
-, m_bSupportTouch(false)
 {
     strcpy(m_szViewName, "Cocos2dxWin32");
 }
@@ -215,31 +243,6 @@ bool CCEGLView::initGL()
 		glVersion);
 		CCMessageBox(strComplain, "OpenGL version too old");
 		return false;
-    }
-
-    GLenum GlewInitResult = glewInit();
-    if (GLEW_OK != GlewInitResult)
-    {
-		CCMessageBox((char *)glewGetErrorString(GlewInitResult), "OpenGL error");
-        return false;
-    }
-
-    if (GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader)
-    {
-        CCLog("Ready for GLSL");
-    }
-    else
-    {
-        CCLog("Not totally ready :(");
-    }
-
-    if (glewIsSupported("GL_VERSION_2_0"))
-    {
-        CCLog("Ready for OpenGL 2.0");
-    }
-    else
-    {
-        CCLog("OpenGL 2.0 not supported");
     }
 
     if(glew_dynamic_binding() == false)
@@ -573,10 +576,12 @@ void CCEGLView::end()
 
 void CCEGLView::swapBuffers()
 {
-    if (m_hDC != NULL)
-    {
-        ::SwapBuffers(m_hDC);
-    }
+#ifndef QT_COCOS
+	if (m_hDC != NULL)
+	{
+		::SwapBuffers(m_hDC);
+	}
+#endif
 }
 
 

@@ -52,15 +52,11 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include <time.h>
 
-// for MIN MAX and sys/time.h on win32 platform
-#ifndef __MINGW32__
-
-#define MIN     min
-#define MAX     max
-
-#else // __MINGW32__
+#ifdef __MINGW32__
 
 #include <sys/time.h>
+
+#endif // __MINGW32__
 
 #ifndef MIN
 #define MIN(x,y) (((x) > (y)) ? (y) : (x))
@@ -69,8 +65,6 @@ THE SOFTWARE.
 #ifndef MAX
 #define MAX(x,y) (((x) < (y)) ? (y) : (x))
 #endif  // MAX
-
-#endif // __MINGW32__
 
 
 #if _MSC_VER >= 1600 || defined(__MINGW32__)
@@ -110,6 +104,9 @@ NS_CC_END
 #include <winsock.h>
 
 #endif // __MINGW32__
+
+#undef min
+#undef max
 
 #endif  // __CC_STD_C_H__
 
