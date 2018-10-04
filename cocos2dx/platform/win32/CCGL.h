@@ -325,6 +325,11 @@ inline GLenum glCheckFramebufferStatus(GLenum target)
 	return CC_QT_OPENGL_FUNCTIONS->glCheckFramebufferStatus(target);
 }
 
+inline void glClearDepth(GLclampd depth)
+{
+	CC_QT_OPENGL_FUNCTIONS->glClearDepthf(GLclampf(depth));
+}
+
 inline void glClearDepthf(GLclampf depth)
 {
 	CC_QT_OPENGL_FUNCTIONS->glClearDepthf(depth);
