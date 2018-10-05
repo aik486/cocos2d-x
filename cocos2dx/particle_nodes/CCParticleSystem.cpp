@@ -38,7 +38,7 @@ THE SOFTWARE.
 //
 // IMPORTANT: Particle Designer is supported by cocos2d, but
 // 'Radius Mode' in Particle Designer uses a fixed emit rate of 30 hz. Since that can't be guaranteed in cocos2d,
-//  cocos2d uses a another approach, but the results are almost identical. 
+//  cocos2d uses a another approach, but the results are almost identical.
 //
 
 #include "CCParticleSystem.h"
@@ -78,7 +78,7 @@ NS_CC_BEGIN
 //
 // IMPORTANT: Particle Designer is supported by cocos2d, but
 // 'Radius Mode' in Particle Designer uses a fixed emit rate of 30 hz. Since that can't be guaranteed in cocos2d,
-//  cocos2d uses a another approach, but the results are almost identical. 
+//  cocos2d uses a another approach, but the results are almost identical.
 //
 
 CCParticleSystem::CCParticleSystem()
@@ -128,7 +128,7 @@ CCParticleSystem::CCParticleSystem()
     modeB.startRadius = 0;
     modeB.startRadiusVar = 0;
     modeB.endRadius = 0;
-    modeB.endRadiusVar = 0;            
+    modeB.endRadiusVar = 0;
     modeB.rotatePerSecond = 0;
     modeB.rotatePerSecondVar = 0;
     m_tBlendFunc.src = CC_BLEND_SRC;
@@ -172,7 +172,7 @@ bool CCParticleSystem::initWithFile(const char *plistFile)
     CCDictionary *dict = CCDictionary::createWithContentsOfFileThreadSafe(m_sPlistFile.c_str());
 
     CCAssert( dict != NULL, "Particles: file not found");
-    
+
     // XXX compute path from a path, should define a function somewhere to do it
     string listFilePath = plistFile;
     if (listFilePath.find('/') != string::npos)
@@ -184,7 +184,7 @@ bool CCParticleSystem::initWithFile(const char *plistFile)
     {
         bRet = this->initWithDictionary(dict, "");
     }
-    
+
     dict->release();
 
     return bRet;
@@ -201,7 +201,7 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
     unsigned char *buffer = NULL;
     unsigned char *deflated = NULL;
     CCImage *image = NULL;
-    do 
+    do
     {
         int maxParticles = dictionary->valueForKey("maxParticles")->intValue();
         // self, not super
@@ -214,7 +214,7 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
             // duration
             m_fDuration = dictionary->valueForKey("duration")->floatValue();
 
-            // blend function 
+            // blend function
             m_tBlendFunc.src = dictionary->valueForKey("blendFuncSource")->intValue();
             m_tBlendFunc.dst = dictionary->valueForKey("blendFuncDestination")->intValue();
 
@@ -248,7 +248,7 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
             // position
             float x = dictionary->valueForKey("sourcePositionx")->floatValue();
             float y = dictionary->valueForKey("sourcePositiony")->floatValue();
-            this->setPosition( ccp(x,y) );            
+            this->setPosition( ccp(x,y) );
             m_tPosVar.x = dictionary->valueForKey("sourcePositionVariancex")->floatValue();
             m_tPosVar.y = dictionary->valueForKey("sourcePositionVariancey")->floatValue();
 
@@ -261,7 +261,7 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
             m_nEmitterMode = dictionary->valueForKey("emitterType")->intValue();
 
             // Mode A: Gravity + tangential accel + radial accel
-            if( m_nEmitterMode == kCCParticleModeGravity ) 
+            if( m_nEmitterMode == kCCParticleModeGravity )
             {
                 // gravity
                 modeA.gravity.x = dictionary->valueForKey("gravityx")->floatValue();
@@ -278,13 +278,13 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
                 // tangential acceleration
                 modeA.tangentialAccel = dictionary->valueForKey("tangentialAcceleration")->floatValue();
                 modeA.tangentialAccelVar = dictionary->valueForKey("tangentialAccelVariance")->floatValue();
-                
+
                 // rotation is dir
                 modeA.rotationIsDir = dictionary->valueForKey("rotationIsDir")->boolValue();
             }
 
             // or Mode B: radius movement
-            else if( m_nEmitterMode == kCCParticleModeRadius ) 
+            else if( m_nEmitterMode == kCCParticleModeRadius )
             {
                 modeB.startRadius = dictionary->valueForKey("maxRadius")->floatValue();
                 modeB.startRadiusVar = dictionary->valueForKey("maxRadiusVariance")->floatValue();
@@ -311,16 +311,16 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
                 // Set a compatible default for the alpha transfer
                 m_bOpacityModifyRGB = false;
 
-                // texture        
+                // texture
                 // Try to get the texture from the cache
                 std::string textureName = dictionary->valueForKey("textureFileName")->getCString();
-                
+
                 size_t rPos = textureName.rfind('/');
-               
+
                 if (rPos != string::npos)
                 {
                     string textureDir = textureName.substr(0, rPos + 1);
-                    
+
                     if (dirname != NULL && textureDir != dirname)
                     {
                         textureName = textureName.substr(rPos+1);
@@ -334,9 +334,9 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
                         textureName = string(dirname) + textureName;
                     }
                 }
-                
+
                 CCTexture2D *tex = NULL;
-                
+
                 if (textureName.length() > 0)
                 {
                     // set not pop-up message box when load image failed
@@ -346,34 +346,34 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
                     // reset the value of UIImage notify
                     CCFileUtils::sharedFileUtils()->setPopupNotify(bNotify);
                 }
-                
+
                 if (tex)
                 {
                     setTexture(tex);
                 }
                 else
-                {                        
+                {
                     const char *textureData = dictionary->valueForKey("textureImageData")->getCString();
                     CCAssert(textureData, "");
-                    
-                    int dataLen = strlen(textureData);
-                    if(dataLen != 0)
+
+                    size_t dataLen = strlen(textureData);
+                    if (dataLen > 0)
                     {
-                        // if it fails, try to get it from the base64-gzipped data    
-                        int decodeLen = base64Decode((unsigned char*)textureData, (unsigned int)dataLen, &buffer);
+                        // if it fails, try to get it from the base64-gzipped data
+                        int decodeLen = base64Decode((unsigned char*)const_cast<char*>(textureData), (unsigned int)dataLen, &buffer);
                         CCAssert( buffer != NULL, "CCParticleSystem: error decoding textureImageData");
                         CC_BREAK_IF(!buffer);
-                        
+
                         int deflatedLen = ZipUtils::ccInflateMemory(buffer, decodeLen, &deflated);
                         CCAssert( deflated != NULL, "CCParticleSystem: error ungzipping textureImageData");
                         CC_BREAK_IF(!deflated);
-                        
+
                         // For android, we should retain it in VolatileTexture::addCCImage which invoked in CCTextureCache::sharedTextureCache()->addUIImage()
                         image = new CCImage();
                         bool isOK = image->initWithImageData(deflated, deflatedLen);
                         CCAssert(isOK, "CCParticleSystem: error init image with Data");
                         CC_BREAK_IF(!isOK);
-                        
+
                         setTexture(CCTextureCache::sharedTextureCache()->addUIImage(image, textureName.c_str()));
 
                         image->release();
@@ -394,7 +394,7 @@ bool CCParticleSystem::initWithTotalParticles(unsigned int numberOfParticles)
     m_uTotalParticles = numberOfParticles;
 
     CC_SAFE_FREE(m_pParticles);
-    
+
     m_pParticles = (tCCParticle*)calloc(m_uTotalParticles, sizeof(tCCParticle));
 
     if( ! m_pParticles )
@@ -444,11 +444,11 @@ bool CCParticleSystem::initWithTotalParticles(unsigned int numberOfParticles)
 
 CCParticleSystem::~CCParticleSystem()
 {
-    // Since the scheduler retains the "target (in this case the ParticleSystem)
+	// Since the scheduler retains the "target (in this case the ParticleSystem)
 	// it is not needed to call "unscheduleUpdate" here. In fact, it will be called in "cleanup"
-    //unscheduleUpdate();
-    CC_SAFE_FREE(m_pParticles);
-    CC_SAFE_RELEASE(m_pTexture);
+	//unscheduleUpdate();
+	CC_SAFE_FREE(m_pParticles);
+	CC_SAFE_RELEASE(m_pTexture);
 }
 
 bool CCParticleSystem::addParticle()
@@ -531,10 +531,10 @@ void CCParticleSystem::initParticle(tCCParticle* particle)
     }
 
     // direction
-    float a = CC_DEGREES_TO_RADIANS( m_fAngle + m_fAngleVar * CCRANDOM_MINUS1_1() );    
+    float a = CC_DEGREES_TO_RADIANS( m_fAngle + m_fAngleVar * CCRANDOM_MINUS1_1() );
 
     // Mode Gravity: A
-    if (m_nEmitterMode == kCCParticleModeGravity) 
+    if (m_nEmitterMode == kCCParticleModeGravity)
     {
         CCPoint v(cosf( a ), sinf( a ));
         float s = modeA.speed + modeA.speedVar * CCRANDOM_MINUS1_1();
@@ -544,7 +544,7 @@ void CCParticleSystem::initParticle(tCCParticle* particle)
 
         // radial accel
         particle->modeA.radialAccel = modeA.radialAccel + modeA.radialAccelVar * CCRANDOM_MINUS1_1();
- 
+
 
         // tangential accel
         particle->modeA.tangentialAccel = modeA.tangentialAccel + modeA.tangentialAccelVar * CCRANDOM_MINUS1_1();
@@ -555,7 +555,7 @@ void CCParticleSystem::initParticle(tCCParticle* particle)
     }
 
     // Mode Radius: B
-    else 
+    else
     {
         // Set the default diameter of the particle from the source position
         float startRadius = modeB.startRadius + modeB.startRadiusVar * CCRANDOM_MINUS1_1();
@@ -574,7 +574,7 @@ void CCParticleSystem::initParticle(tCCParticle* particle)
 
         particle->modeB.angle = a;
         particle->modeB.degreesPerSecond = CC_DEGREES_TO_RADIANS(modeB.rotatePerSecond + modeB.rotatePerSecondVar * CCRANDOM_MINUS1_1());
-    }    
+    }
 }
 
 void CCParticleSystem::stopSystem()
@@ -604,7 +604,7 @@ void CCParticleSystem::update(float dt)
 {
     CC_PROFILER_START_CATEGORY(kCCProfilerCategoryParticles , "CCParticleSystem - update");
 
-    if (m_bIsActive && m_fEmissionRate)
+    if (m_bIsActive && m_fEmissionRate != 0.f)
     {
         float rate = 1.0f / m_fEmissionRate;
         //issue #1201, prevent bursts of particles, due to too high emitCounter
@@ -612,8 +612,8 @@ void CCParticleSystem::update(float dt)
         {
             m_fEmitCounter += dt;
         }
-        
-        while (m_uParticleCount < m_uTotalParticles && m_fEmitCounter > rate) 
+
+        while (m_uParticleCount < m_uTotalParticles && m_fEmitCounter > rate)
         {
             this->addParticle();
             m_fEmitCounter -= rate;
@@ -647,16 +647,16 @@ void CCParticleSystem::update(float dt)
             // life
             p->timeToLive -= dt;
 
-            if (p->timeToLive > 0) 
+            if (p->timeToLive > 0)
             {
                 // Mode A: gravity, direction, tangential accel & radial accel
-                if (m_nEmitterMode == kCCParticleModeGravity) 
+                if (m_nEmitterMode == kCCParticleModeGravity)
                 {
                     CCPoint tmp, radial, tangential;
 
                     radial = CCPointZero;
                     // radial acceleration
-                    if (p->pos.x || p->pos.y)
+                    if (0.f != p->pos.x || 0.f != p->pos.y)
                     {
                         radial = ccpNormalize(p->pos);
                     }
@@ -678,8 +678,8 @@ void CCParticleSystem::update(float dt)
                 }
 
                 // Mode B: radius movement
-                else 
-                {                
+                else
+                {
                     // Update the angle and radius of the particle.
                     p->modeB.angle += p->modeB.degreesPerSecond * dt;
                     p->modeB.radius += p->modeB.deltaRadius * dt;
@@ -707,11 +707,11 @@ void CCParticleSystem::update(float dt)
 
                 CCPoint    newPos;
 
-                if (m_ePositionType == kCCPositionTypeFree || m_ePositionType == kCCPositionTypeRelative) 
+                if (m_ePositionType == kCCPositionTypeFree || m_ePositionType == kCCPositionTypeRelative)
                 {
                     CCPoint diff = ccpSub( currentPosition, p->startPos );
                     newPos = ccpSub(p->pos, diff);
-                } 
+                }
                 else
                 {
                     newPos = p->pos;
@@ -730,8 +730,8 @@ void CCParticleSystem::update(float dt)
 
                 // update particle counter
                 ++m_uParticleIdx;
-            } 
-            else 
+            }
+            else
             {
                 // life < 0
                 int currentIndex = p->atlasIndex;
@@ -805,9 +805,9 @@ void CCParticleSystem::updateBlendFunc()
     if(m_pTexture)
     {
         bool premultiplied = m_pTexture->hasPremultipliedAlpha();
-        
+
         m_bOpacityModifyRGB = false;
-        
+
         if( m_pTexture && ( m_tBlendFunc.src == CC_BLEND_SRC && m_tBlendFunc.dst == CC_BLEND_DST ) )
         {
             if( premultiplied )
@@ -842,8 +842,8 @@ void CCParticleSystem::setBlendAdditive(bool additive)
         {
             m_tBlendFunc.src = GL_SRC_ALPHA;
             m_tBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
-        } 
-        else 
+        }
+        else
         {
             m_tBlendFunc.src = CC_BLEND_SRC;
             m_tBlendFunc.dst = CC_BLEND_DST;
@@ -856,7 +856,7 @@ bool CCParticleSystem::isBlendAdditive()
     return( m_tBlendFunc.src == GL_SRC_ALPHA && m_tBlendFunc.dst == GL_ONE);
 }
 
-// ParticleSystem - Properties of Gravity Mode 
+// ParticleSystem - Properties of Gravity Mode
 void CCParticleSystem::setTangentialAccel(float t)
 {
     CCAssert( m_nEmitterMode == kCCParticleModeGravity, "Particle Mode should be Gravity");
@@ -879,7 +879,7 @@ float CCParticleSystem::getTangentialAccelVar()
 {
     CCAssert( m_nEmitterMode == kCCParticleModeGravity, "Particle Mode should be Gravity");
     return modeA.tangentialAccelVar;
-}    
+}
 
 void CCParticleSystem::setRadialAccel(float t)
 {

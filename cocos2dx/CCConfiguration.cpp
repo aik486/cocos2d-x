@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "CCConfiguration.h"
 #include "ccMacros.h"
 #include "ccConfig.h"
-#include <string.h>
+#include <cstring>
 #include "cocoa/CCDictionary.h"
 #include "cocoa/CCInteger.h"
 #include "cocoa/CCBool.h"
@@ -41,7 +41,7 @@ NS_CC_BEGIN
 CCConfiguration* CCConfiguration::s_gSharedConfiguration = NULL;
 
 CCConfiguration::CCConfiguration(void)
-: m_nMaxTextureSize(0) 
+: m_nMaxTextureSize(0)
 , m_nMaxModelviewStackDepth(0)
 , m_bSupportsPVRTC(false)
 , m_bSupportsNPOT(false)
@@ -92,7 +92,7 @@ void CCConfiguration::dumpInfo(void) const
 	CCLOG("%s", visitor.getResult().c_str());
 
 
-	// And Dump some warnings as well
+    // And Dump some warnings as well
 #if CC_ENABLE_PROFILERS
     CCLOG("cocos2d: **** WARNING **** CC_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from ccConfig.h)");
     printf("\n");
@@ -112,35 +112,35 @@ void CCConfiguration::gatherGPUInfo()
 	m_pValueDict->setObject( CCString::create( (const char*)glGetString(GL_RENDERER)), "gl.renderer");
 	m_pValueDict->setObject( CCString::create( (const char*)glGetString(GL_VERSION)), "gl.version");
 
-    m_pGlExtensions = (char *)glGetString(GL_EXTENSIONS);
+	m_pGlExtensions = (const char *)glGetString(GL_EXTENSIONS);
 
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &m_nMaxTextureSize);
-	m_pValueDict->setObject( CCInteger::create((int)m_nMaxTextureSize), "gl.max_texture_size");
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &m_nMaxTextureSize);
+	m_pValueDict->setObject( CCInteger::create(m_nMaxTextureSize), "gl.max_texture_size");
 
-    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &m_nMaxTextureUnits);
-	m_pValueDict->setObject( CCInteger::create((int)m_nMaxTextureUnits), "gl.max_texture_units");
+	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &m_nMaxTextureUnits);
+	m_pValueDict->setObject( CCInteger::create(m_nMaxTextureUnits), "gl.max_texture_units");
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    glGetIntegerv(GL_MAX_SAMPLES_APPLE, &m_nMaxSamplesAllowed);
-	m_pValueDict->setObject( CCInteger::create((int)m_nMaxSamplesAllowed), "gl.max_samples_allowed");
+	glGetIntegerv(GL_MAX_SAMPLES_APPLE, &m_nMaxSamplesAllowed);
+	m_pValueDict->setObject( CCInteger::create(m_nMaxSamplesAllowed), "gl.max_samples_allowed");
 #endif
 
-    m_bSupportsPVRTC = checkForGLExtension("GL_IMG_texture_compression_pvrtc");
+	m_bSupportsPVRTC = checkForGLExtension("GL_IMG_texture_compression_pvrtc");
 	m_pValueDict->setObject( CCBool::create(m_bSupportsPVRTC), "gl.supports_PVRTC");
 
-    m_bSupportsNPOT = true;
+	m_bSupportsNPOT = true;
 	m_pValueDict->setObject( CCBool::create(m_bSupportsNPOT), "gl.supports_NPOT");
-	
-    m_bSupportsBGRA8888 = checkForGLExtension("GL_IMG_texture_format_BGRA888");
+
+	m_bSupportsBGRA8888 = checkForGLExtension("GL_IMG_texture_format_BGRA888");
 	m_pValueDict->setObject( CCBool::create(m_bSupportsBGRA8888), "gl.supports_BGRA8888");
 
-    m_bSupportsDiscardFramebuffer = checkForGLExtension("GL_EXT_discard_framebuffer");
+	m_bSupportsDiscardFramebuffer = checkForGLExtension("GL_EXT_discard_framebuffer");
 	m_pValueDict->setObject( CCBool::create(m_bSupportsDiscardFramebuffer), "gl.supports_discard_framebuffer");
 
-    m_bSupportsShareableVAO = checkForGLExtension("vertex_array_object");
+	m_bSupportsShareableVAO = checkForGLExtension("vertex_array_object");
 	m_pValueDict->setObject( CCBool::create(m_bSupportsShareableVAO), "gl.supports_vertex_array_object");
-    
-    CHECK_GL_ERROR_DEBUG();
+
+	CHECK_GL_ERROR_DEBUG();
 }
 
 CCConfiguration* CCConfiguration::sharedConfiguration(void)
@@ -150,7 +150,7 @@ CCConfiguration* CCConfiguration::sharedConfiguration(void)
         s_gSharedConfiguration = new CCConfiguration();
         s_gSharedConfiguration->init();
     }
-    
+
     return s_gSharedConfiguration;
 }
 
@@ -163,13 +163,13 @@ bool CCConfiguration::checkForGLExtension(const string &searchName) const
 {
     bool bRet = false;
     const char *kSearchName = searchName.c_str();
-    
-    if (m_pGlExtensions && 
+
+    if (m_pGlExtensions &&
         strstr(m_pGlExtensions, kSearchName))
     {
         bRet = true;
     }
-    
+
     return bRet;
 }
 
@@ -320,16 +320,16 @@ void CCConfiguration::loadConfigFile( const char *filename )
 
 	// Add all keys in the existing dictionary
 	CCDictionary *data_dict = static_cast<CCDictionary*>(data);
-    CCDictElement* element;
-    CCDICT_FOREACH(data_dict, element)
-    {
+	CCDictElement* element;
+	CCDICT_FOREACH(data_dict, element)
+	{
 		if( ! m_pValueDict->objectForKey( element->getStrKey() ) )
 			m_pValueDict->setObject(element->getObject(), element->getStrKey() );
 		else
 			CCLOG("Key already present. Ignoring '%s'", element->getStrKey() );
-    }
-    
-    CCDirector::sharedDirector()->setDefaultValues();
+	}
+
+	CCDirector::sharedDirector()->setDefaultValues();
 }
 
 NS_CC_END

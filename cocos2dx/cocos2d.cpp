@@ -30,7 +30,37 @@ NS_CC_BEGIN
 
 const char* cocos2dVersion()
 {
-    return "cocos2d-x 2.2.6";
+    return "cocos2d-x 2.2.6ac3";
+}
+
+TypeInfo::~TypeInfo()
+{
+
+}
+
+CCRGBAProtocol::~CCRGBAProtocol()
+{
+
+}
+
+CCDirectorDelegate::~CCDirectorDelegate()
+{
+
+}
+
+CCLabelProtocol::~CCLabelProtocol()
+{
+
+}
+
+CCTextureProtocol::~CCTextureProtocol()
+{
+
+}
+
+CCBlendProtocol::~CCBlendProtocol()
+{
+
 }
 
 NS_CC_END

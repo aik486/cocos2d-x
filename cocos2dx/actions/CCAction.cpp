@@ -2,7 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2008-2010 Ricardo Quesada
 Copyright (c) 2011      Zynga Inc.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -141,7 +141,7 @@ bool CCSpeed::initWithAction(CCActionInterval *pAction, float fSpeed)
     CCAssert(pAction != NULL, "");
     pAction->retain();
     m_pInnerAction = pAction;
-    m_fSpeed = fSpeed;    
+    m_fSpeed = fSpeed;
     return true;
 }
 
@@ -161,7 +161,7 @@ CCObject *CCSpeed::copyWithZone(CCZone *pZone)
     CCAction::copyWithZone(pZone);
 
     pRet->initWithAction( (CCActionInterval*)(m_pInnerAction->copy()->autorelease()) , m_fSpeed );
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pRet;
 }
@@ -206,6 +206,16 @@ void CCSpeed::setInnerAction(CCActionInterval *pAction)
 //
 // Follow
 //
+CCFollow::CCFollow()
+    : m_pobFollowedNode(NULL)
+    , m_bBoundarySet(false)
+    , m_bBoundaryFullyCovered(false)
+    , m_fLeftBoundary(0.0)
+    , m_fRightBoundary(0.0)
+    , m_fTopBoundary(0.0)
+    , m_fBottomBoundary(0.0)
+{}
+
 CCFollow::~CCFollow()
 {
     CC_SAFE_RELEASE(m_pobFollowedNode);
@@ -226,7 +236,7 @@ CCFollow* CCFollow::create(CCNode *pFollowedNode, const CCRect& rect/* = CCRectZ
 bool CCFollow::initWithTarget(CCNode *pFollowedNode, const CCRect& rect/* = CCRectZero*/)
 {
     CCAssert(pFollowedNode != NULL, "");
- 
+
     pFollowedNode->retain();
     m_pobFollowedNode = pFollowedNode;
     if (rect.equals(CCRectZero))
@@ -237,7 +247,7 @@ bool CCFollow::initWithTarget(CCNode *pFollowedNode, const CCRect& rect/* = CCRe
     {
         m_bBoundarySet = true;
     }
-    
+
     m_bBoundaryFullyCovered = false;
 
     CCSize winSize = CCDirector::sharedDirector()->getWinSize();
@@ -269,7 +279,7 @@ bool CCFollow::initWithTarget(CCNode *pFollowedNode, const CCRect& rect/* = CCRe
             m_bBoundaryFullyCovered = true;
         }
     }
-    
+
     return true;
 }
 
@@ -305,7 +315,7 @@ void CCFollow::step(float dt)
 
         CCPoint tempPos = ccpSub( m_obHalfScreenSize, m_pobFollowedNode->getPosition());
 
-        m_pTarget->setPosition(ccp(clampf(tempPos.x, m_fLeftBoundary, m_fRightBoundary), 
+        m_pTarget->setPosition(ccp(clampf(tempPos.x, m_fLeftBoundary, m_fRightBoundary),
                                    clampf(tempPos.y, m_fBottomBoundary, m_fTopBoundary)));
     }
     else

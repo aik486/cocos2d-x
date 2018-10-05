@@ -783,14 +783,11 @@ const char *CCTexture2D::stringForFormat() {
 
   case kCCTexture2DPixelFormat_PVRTC2:
     return "PVRTC2";
-
-  default:
-    CCAssert(false, "unrecognized pixel format");
-    CCLOG("stringForFormat: %ld, cannot give useful result",
-          (long)m_ePixelFormat);
-    break;
   }
 
+  CCAssert(false, "unrecognized pixel format");
+  CCLOG("stringForFormat: %d, cannot give useful result",
+        (int)m_ePixelFormat);
   return NULL;
 }
 
@@ -808,48 +805,33 @@ CCTexture2DPixelFormat CCTexture2D::defaultAlphaPixelFormat() {
 }
 
 unsigned int CCTexture2D::bitsPerPixelForFormat(CCTexture2DPixelFormat format) {
-  unsigned int ret = 0;
-
   switch (format) {
   case kCCTexture2DPixelFormat_RGBA8888:
-    ret = 32;
-    break;
+    return 32;
   case kCCTexture2DPixelFormat_RGB888:
     // It is 32 and not 24, since its internal representation uses 32 bits.
-    ret = 32;
-    break;
+    return 32;
   case kCCTexture2DPixelFormat_RGB565:
-    ret = 16;
-    break;
+    return 16;
   case kCCTexture2DPixelFormat_RGBA4444:
-    ret = 16;
-    break;
+    return 16;
   case kCCTexture2DPixelFormat_RGB5A1:
-    ret = 16;
-    break;
+    return 16;
   case kCCTexture2DPixelFormat_AI88:
-    ret = 16;
-    break;
+    return 16;
   case kCCTexture2DPixelFormat_A8:
-    ret = 8;
-    break;
+    return 8;
   case kCCTexture2DPixelFormat_I8:
-    ret = 8;
-    break;
+    return 8;
   case kCCTexture2DPixelFormat_PVRTC4:
-    ret = 4;
-    break;
+    return 4;
   case kCCTexture2DPixelFormat_PVRTC2:
-    ret = 2;
-    break;
-  default:
-    ret = -1;
-    CCAssert(false, "unrecognized pixel format");
-    CCLOG("bitsPerPixelForFormat: %ld, cannot give useful result",
-          (long)format);
-    break;
+    return 2;
   }
-  return ret;
+  CCAssert(false, "unrecognized pixel format");
+  CCLOG("bitsPerPixelForFormat: %d, cannot give useful result",
+        (int)format);
+  return -1;
 }
 
 unsigned int CCTexture2D::bitsPerPixelForFormat() {

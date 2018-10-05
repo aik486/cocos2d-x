@@ -174,10 +174,10 @@ void CCTextFieldTTF::insertText(const char * text, int len)
     std::string sInsert(text, len);
 
     // insert \n means input end
-    int nPos = sInsert.find('\n');
-    if ((int)sInsert.npos != nPos)
+    size_t nPos = sInsert.find('\n');
+    if (std::string::npos != nPos)
     {
-        len = nPos;
+        len = int(nPos);
         sInsert.erase(nPos);
     }
 
@@ -195,7 +195,7 @@ void CCTextFieldTTF::insertText(const char * text, int len)
         setString(sText.c_str());
     }
 
-    if ((int)sInsert.npos == nPos) {
+    if (std::string::npos == nPos) {
         return;
     }
 
@@ -211,7 +211,7 @@ void CCTextFieldTTF::insertText(const char * text, int len)
 
 void CCTextFieldTTF::deleteBackward()
 {
-    int nStrLen = m_pInputText->length();
+    size_t nStrLen = m_pInputText->length();
     if (! nStrLen)
     {
         // there is no string
@@ -219,14 +219,14 @@ void CCTextFieldTTF::deleteBackward()
     }
 
     // get the delete byte number
-    int nDeleteLen = 1;    // default, erase 1 byte
+    size_t nDeleteLen = 1;    // default, erase 1 byte
 
     while(0x80 == (0xC0 & m_pInputText->at(nStrLen - nDeleteLen)))
     {
         ++nDeleteLen;
     }
 
-    if (m_pDelegate && m_pDelegate->onTextFieldDeleteBackward(this, m_pInputText->c_str() + nStrLen - nDeleteLen, nDeleteLen))
+    if (m_pDelegate && m_pDelegate->onTextFieldDeleteBackward(this, m_pInputText->c_str() + nStrLen - nDeleteLen, int(nDeleteLen)))
     {
         // delegate doesn't wan't to delete backwards
         return;
@@ -290,7 +290,7 @@ void CCTextFieldTTF::setString(const char *text)
 {
     static char bulletString[] = {(char)0xe2, (char)0x80, (char)0xa2, (char)0x00};
     std::string displayText;
-    int length;
+    size_t length;
 
     CC_SAFE_DELETE(m_pInputText);
 

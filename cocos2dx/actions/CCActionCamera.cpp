@@ -2,7 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2008-2010 Ricardo Quesada
 Copyright (c) 2011      Zynga Inc.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,10 +33,24 @@ NS_CC_BEGIN
 //
 // CameraAction
 //
+CCActionCamera::CCActionCamera()
+    :m_fCenterXOrig(0)
+    ,m_fCenterYOrig(0)
+    ,m_fCenterZOrig(0)
+    ,m_fEyeXOrig(0)
+    ,m_fEyeYOrig(0)
+    ,m_fEyeZOrig(0)
+    ,m_fUpXOrig(0)
+    ,m_fUpYOrig(0)
+    ,m_fUpZOrig(0)
+{}
+
+CCActionCamera::~CCActionCamera(){}
+
 void CCActionCamera::startWithTarget(CCNode *pTarget)
 {
     CCActionInterval::startWithTarget(pTarget);
-    
+
     CCCamera *camera = pTarget->getCamera();
     camera->getCenterXYZ(&m_fCenterXOrig, &m_fCenterYOrig, &m_fCenterZOrig);
     camera->getEyeXYZ(&m_fEyeXOrig, &m_fEyeYOrig, &m_fEyeZOrig);
@@ -50,6 +64,21 @@ CCActionInterval * CCActionCamera::reverse()
 //
 // CCOrbitCamera
 //
+
+CCOrbitCamera::CCOrbitCamera()
+    : m_fRadius(0.0)
+    , m_fDeltaRadius(0.0)
+    , m_fAngleZ(0.0)
+    , m_fDeltaAngleZ(0.0)
+    , m_fAngleX(0.0)
+    , m_fDeltaAngleX(0.0)
+    , m_fRadZ(0.0)
+    , m_fRadDeltaZ(0.0)
+    , m_fRadX(0.0)
+    , m_fRadDeltaX(0.0)
+{}
+
+CCOrbitCamera::~CCOrbitCamera(){}
 
 CCOrbitCamera * CCOrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
 {
@@ -157,7 +186,7 @@ void CCOrbitCamera::sphericalRadius(float *newRadius, float *zenith, float *azim
     else
         *azimuth = asinf(y/s);
 
-    *newRadius = r / CCCamera::getZEye();                
+    *newRadius = r / CCCamera::getZEye();
 }
 
 NS_CC_END

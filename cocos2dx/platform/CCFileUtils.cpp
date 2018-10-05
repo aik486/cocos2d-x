@@ -38,7 +38,7 @@ using namespace std;
 
 NS_CC_BEGIN
 
-typedef enum 
+typedef enum
 {
     SAX_NONE = 0,
     SAX_KEY,
@@ -73,9 +73,9 @@ public:
     std::stack<CCSAXState>  m_tStateStack;
 
 public:
-    CCDictMaker()        
+    CCDictMaker()
         : m_eResultType(SAX_RESULT_NONE),
-          m_pRootArray(NULL), 
+          m_pRootArray(NULL),
           m_pRootDict(NULL),
           m_pCurDict(NULL),
           m_tState(SAX_NONE),
@@ -83,7 +83,7 @@ public:
     {
     }
 
-    ~CCDictMaker()
+    virtual ~CCDictMaker()
     {
     }
 
@@ -121,7 +121,7 @@ public:
     {
         CC_UNUSED_PARAM(ctx);
         CC_UNUSED_PARAM(atts);
-        std::string sName((char*)name);
+        std::string sName(name);
         if( sName == "dict" )
         {
             m_pCurDict = new CCDictionary();
@@ -214,7 +214,7 @@ public:
     {
         CC_UNUSED_PARAM(ctx);
         CCSAXState curState = m_tStateStack.empty() ? SAX_DICT : m_tStateStack.top();
-        std::string sName((char*)name);
+        std::string sName(name);
         if( sName == "dict" )
         {
             m_tStateStack.pop();
@@ -275,7 +275,7 @@ public:
             pStrValue->release();
             m_sCurValue.clear();
         }
-        
+
         m_tState = SAX_NONE;
     }
 
@@ -288,7 +288,7 @@ public:
         }
 
         CCSAXState curState = m_tStateStack.empty() ? SAX_DICT : m_tStateStack.top();
-        CCString *pText = new CCString(std::string((char*)ch,0,len));
+        CCString *pText = new CCString(std::string(ch,0,len));
 
         switch(m_tState)
         {
@@ -303,7 +303,7 @@ public:
                 {
                     CCAssert(!m_sCurKey.empty(), "key not found : <integer/real>");
                 }
-                
+
                 m_sCurValue.append(pText->getCString());
             }
             break;
@@ -343,18 +343,18 @@ bool CCFileUtils::writeToFile(cocos2d::CCDictionary *dict, const std::string &fu
     tinyxml2::XMLDocument *pDoc = new tinyxml2::XMLDocument();
     if (NULL == pDoc)
         return false;
-    
+
     tinyxml2::XMLDeclaration *pDeclaration = pDoc->NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
     if (NULL == pDeclaration)
     {
         delete pDoc;
         return false;
     }
-    
+
     pDoc->LinkEndChild(pDeclaration);
     tinyxml2::XMLElement *docType = pDoc->NewElement("!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"");
     pDoc->LinkEndChild(docType);
-    
+
     tinyxml2::XMLElement *pRootEle = pDoc->NewElement("plist");
     pRootEle->SetAttribute("version", "1.0");
     if (NULL == pRootEle)
@@ -363,7 +363,7 @@ bool CCFileUtils::writeToFile(cocos2d::CCDictionary *dict, const std::string &fu
         return false;
     }
     pDoc->LinkEndChild(pRootEle);
-    
+
     tinyxml2::XMLElement *innerDict = generateElementForDict(dict, pDoc);
     if (NULL == innerDict )
     {
@@ -371,9 +371,9 @@ bool CCFileUtils::writeToFile(cocos2d::CCDictionary *dict, const std::string &fu
         return false;
     }
     pRootEle->LinkEndChild(innerDict);
-    
+
     bool bRet = tinyxml2::XML_SUCCESS == pDoc->SaveFile(fullPath.c_str());
-    
+
     delete pDoc;
     return bRet;
 }
@@ -391,15 +391,15 @@ static tinyxml2::XMLElement* generateElementForObject(cocos2d::CCObject *object,
         node->LinkEndChild(content);
         return node;
     }
-    
+
     // object is CCArray
     if (CCArray *array = dynamic_cast<CCArray *>(object))
         return generateElementForArray(array, pDoc);
-    
+
     // object is CCDictionary
     if (CCDictionary *innerDict = dynamic_cast<CCDictionary *>(object))
         return generateElementForDict(innerDict, pDoc);
-    
+
     CCLOG("This type cannot appear in property list");
     return NULL;
 }
@@ -410,7 +410,7 @@ static tinyxml2::XMLElement* generateElementForObject(cocos2d::CCObject *object,
 static tinyxml2::XMLElement* generateElementForDict(cocos2d::CCDictionary *dict, tinyxml2::XMLDocument *pDoc)
 {
     tinyxml2::XMLElement* rootNode = pDoc->NewElement("dict");
-    
+
     CCDictElement *dictElement = NULL;
     CCDICT_FOREACH(dict, dictElement)
     {
@@ -418,7 +418,7 @@ static tinyxml2::XMLElement* generateElementForDict(cocos2d::CCDictionary *dict,
         rootNode->LinkEndChild(tmpNode);
         tinyxml2::XMLText* content = pDoc->NewText(dictElement->getStrKey());
         tmpNode->LinkEndChild(content);
-        
+
         CCObject *object = dictElement->getObject();
         tinyxml2::XMLElement *element = generateElementForObject(object, pDoc);
         if (element)
@@ -433,7 +433,7 @@ static tinyxml2::XMLElement* generateElementForDict(cocos2d::CCDictionary *dict,
 static tinyxml2::XMLElement* generateElementForArray(cocos2d::CCArray *array, tinyxml2::XMLDocument *pDoc)
 {
     tinyxml2::XMLElement* rootNode = pDoc->NewElement("array");
-    
+
     CCObject *object = NULL;
     CCARRAY_FOREACH(array, object)
     {
@@ -496,20 +496,20 @@ unsigned char* CCFileUtils::getFileData(const char* pszFileName, const char* psz
         std::string fullPath = fullPathForFilename(pszFileName);
         FILE *fp = fopen(fullPath.c_str(), pszMode);
         CC_BREAK_IF(!fp);
-        
+
         fseek(fp,0,SEEK_END);
         *pSize = ftell(fp);
         fseek(fp,0,SEEK_SET);
         pBuffer = new unsigned char[*pSize];
-        *pSize = fread(pBuffer,sizeof(unsigned char), *pSize,fp);
+        *pSize = static_cast<unsigned long>(fread(pBuffer,sizeof(unsigned char), *pSize,fp));
         fclose(fp);
     } while (0);
-    
+
     if (! pBuffer)
     {
         std::string msg = "Get data from file(";
         msg.append(pszFileName).append(") failed!");
-        
+
         CCLOG("%s", msg.c_str());
     }
     return pBuffer;
@@ -521,7 +521,7 @@ unsigned char* CCFileUtils::getFileDataFromZip(const char* pszZipFilePath, const
     unzFile pFile = NULL;
     *pSize = 0;
 
-    do 
+    do
     {
         CC_BREAK_IF(!pszZipFilePath || !pszFileName);
         CC_BREAK_IF(strlen(pszZipFilePath) == 0);
@@ -581,14 +581,14 @@ std::string CCFileUtils::getPathForFilename(const std::string& filename, const s
         file_path = filename.substr(0, pos+1);
         file = filename.substr(pos+1);
     }
-    
+
     // searchPath + file_path + resourceDirectory
     std::string path = searchPath;
     path += file_path;
     path += resolutionDirectory;
-    
+
     path = getFullPathForDirectoryAndFilename(path, file);
-    
+
     //CCLOG("getPathForFilename, fullPath = %s", path.c_str());
     return path;
 }
@@ -597,14 +597,14 @@ std::string CCFileUtils::getPathForFilename(const std::string& filename, const s
 std::string CCFileUtils::fullPathForFilename(const char* pszFileName)
 {
     CCAssert(pszFileName != NULL, "CCFileUtils: Invalid path");
-    
+
     std::string strFileName = pszFileName;
     if (isAbsolutePath(pszFileName))
     {
         //CCLOG("Return absolute path( %s ) directly.", pszFileName);
         return pszFileName;
     }
-    
+
     // Already Cached ?
     std::map<std::string, std::string>::iterator cacheIter = m_fullPathCache.find(pszFileName);
     if (cacheIter != m_fullPathCache.end())
@@ -612,21 +612,21 @@ std::string CCFileUtils::fullPathForFilename(const char* pszFileName)
         //CCLOG("Return full path from cache: %s", cacheIter->second.c_str());
         return cacheIter->second;
     }
-    
+
     // Get the new file name.
     std::string newFilename = getNewFilename(pszFileName);
-    
+
     string fullpath = "";
-    
+
     for (std::vector<std::string>::iterator searchPathsIter = m_searchPathArray.begin();
          searchPathsIter != m_searchPathArray.end(); ++searchPathsIter) {
         for (std::vector<std::string>::iterator resOrderIter = m_searchResolutionsOrderArray.begin();
              resOrderIter != m_searchResolutionsOrderArray.end(); ++resOrderIter) {
-            
+
             //CCLOG("\n\nSEARCHING: %s, %s, %s", newFilename.c_str(), resOrderIter->c_str(), searchPathsIter->c_str());
-            
+
             fullpath = this->getPathForFilename(newFilename, *resOrderIter, *searchPathsIter);
-            
+
             if (fullpath.length() > 0)
             {
                 // Using the filename passed in as key.
@@ -636,7 +636,7 @@ std::string CCFileUtils::fullPathForFilename(const char* pszFileName)
             }
         }
     }
-    
+
     //CCLOG("cocos2d: fullPathForFilename: No file found at %s. Possible missing file.", pszFileName);
 
     // The file wasn't found, return the file name passed in.
@@ -664,12 +664,12 @@ void CCFileUtils::setSearchResolutionsOrder(const std::vector<std::string>& sear
         {
             bExistDefault = true;
         }
-        
+
         if (resolutionDirectory.length() > 0 && resolutionDirectory[resolutionDirectory.length()-1] != '/')
         {
             resolutionDirectory += "/";
         }
-        
+
         m_searchResolutionsOrderArray.push_back(resolutionDirectory);
     }
     if (!bExistDefault)
@@ -718,7 +718,7 @@ void CCFileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
         }
         m_searchPathArray.push_back(path);
     }
-    
+
     if (!bExistDefaultRootPath)
     {
         //CCLOG("Default root path doesn't exist, adding it.");
@@ -761,7 +761,7 @@ void CCFileUtils::removeSearchPath(const char *path_)
 
 void CCFileUtils::removeAllPaths()
 {
-	m_searchPathArray.clear();
+    m_searchPathArray.clear();
 }
 void CCFileUtils::setFilenameLookupDictionary(CCDictionary* pFilenameLookupDict)
 {
@@ -783,7 +783,7 @@ void CCFileUtils::loadFilenameLookupDictionaryFromFile(const char* filename)
             int version = ((CCString*)pMetadata->objectForKey("version"))->intValue();
             if (version != 1)
             {
-                CCLOG("cocos2d: ERROR: Invalid filenameLookup dictionary version: %ld. Filename: %s", (long)version, filename);
+                CCLOG("cocos2d: ERROR: Invalid filenameLookup dictionary version: %d. Filename: %s", version, filename);
                 return;
             }
             setFilenameLookupDictionary((CCDictionary*)pDict->objectForKey("filenames"));

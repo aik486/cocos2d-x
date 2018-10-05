@@ -104,7 +104,7 @@ bool CCParticleBatchNode::initWithTexture(CCTexture2D *tex, unsigned int capacit
     m_tBlendFunc.dst = CC_BLEND_DST;
 
     setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor));
-    
+
     return true;
 }
 
@@ -173,7 +173,7 @@ void CCParticleBatchNode::addChild(CCNode * child, int zOrder, int tag)
     CCParticleSystem* pChild = (CCParticleSystem*)child;
     CCAssert( pChild->getTexture()->getName() == m_pTextureAtlas->getTexture()->getName(), "CCParticleSystem is not using the same texture id");
     // If this is the 1st children, then copy blending function
-    if( m_pChildren->count() == 0 ) 
+    if( m_pChildren->count() == 0 )
     {
         setBlendFunc(pChild->getBlendFunc());
     }
@@ -186,7 +186,7 @@ void CCParticleBatchNode::addChild(CCNode * child, int zOrder, int tag)
     //get new atlasIndex
     unsigned int atlasIndex = 0;
 
-    if (pos != 0) 
+    if (pos != 0)
     {
         CCParticleSystem* p = (CCParticleSystem*)m_pChildren->objectAtIndex(pos-1);
         atlasIndex = p->getAtlasIndex() + p->getTotalParticles();
@@ -212,7 +212,7 @@ unsigned int CCParticleBatchNode::addChildHelper(CCParticleSystem* child, int z,
     CCAssert( child != NULL, "Argument must be non-nil");
     CCAssert( child->getParent() == NULL, "child already added. It can't be added again");
 
-    if( ! m_pChildren ) 
+    if( ! m_pChildren )
     {
         m_pChildren = new CCArray();
         m_pChildren->initWithCapacity(4);
@@ -228,7 +228,7 @@ unsigned int CCParticleBatchNode::addChildHelper(CCParticleSystem* child, int z,
 
     child->setParent(this);
 
-    if( m_bRunning ) 
+    if( m_bRunning )
     {
         child->onEnter();
         child->onEnterTransitionDidFinish();
@@ -245,7 +245,7 @@ void CCParticleBatchNode::reorderChild(CCNode * child, int zOrder)
 
     CCParticleSystem* pChild = (CCParticleSystem*)(child);
 
-    if( zOrder == child->getZOrder() ) 
+    if( zOrder == child->getZOrder() )
     {
         return;
     }
@@ -277,7 +277,7 @@ void CCParticleBatchNode::reorderChild(CCNode * child, int zOrder)
             for( unsigned int i=0;i < m_pChildren->count();i++)
             {
                 CCParticleSystem* pNode = (CCParticleSystem*)m_pChildren->objectAtIndex(i);
-                if( pNode == pChild ) 
+                if( pNode == pChild )
                 {
                     newAtlasIndex = pChild->getAtlasIndex();
                     break;
@@ -302,12 +302,12 @@ void CCParticleBatchNode::getCurrentIndex(unsigned int* oldIndex, unsigned int* 
     int  minusOne = 0;
     unsigned int count = m_pChildren->count();
 
-    for( unsigned int i=0; i < count; i++ ) 
+    for( unsigned int i=0; i < count; i++ )
     {
         CCNode* pNode = (CCNode *)m_pChildren->objectAtIndex(i);
 
         // new index
-        if( pNode->getZOrder() > z &&  ! foundNewIdx ) 
+        if( pNode->getZOrder() > z &&  ! foundNewIdx )
         {
             *newIndex = i;
             foundNewIdx = true;
@@ -319,7 +319,7 @@ void CCParticleBatchNode::getCurrentIndex(unsigned int* oldIndex, unsigned int* 
         }
 
         // current index
-        if( child == pNode ) 
+        if( child == pNode )
         {
             *oldIndex = i;
             foundCurrentIdx = true;
@@ -349,7 +349,7 @@ unsigned int CCParticleBatchNode::searchNewPositionInChildrenForZ(int z)
 {
     unsigned int count = m_pChildren->count();
 
-    for( unsigned int i=0; i < count; i++ ) 
+    for( unsigned int i=0; i < count; i++ )
     {
         CCNode *child = (CCNode *)m_pChildren->objectAtIndex(i);
         if (child->getZOrder() > z)
@@ -368,7 +368,7 @@ void  CCParticleBatchNode::removeChild(CCNode* child, bool cleanup)
     {
         return;
     }
-    
+
     CCAssert( dynamic_cast<CCParticleSystem*>(child) != NULL, "CCParticleBatchNode only supports CCQuadParticleSystems as children");
     CCAssert(m_pChildren->containsObject(child), "CCParticleBatchNode doesn't contain the sprite. Can't remove it");
 
@@ -423,9 +423,9 @@ void CCParticleBatchNode::draw(void)
 
 void CCParticleBatchNode::increaseAtlasCapacityTo(unsigned int quantity)
 {
-    CCLOG("cocos2d: CCParticleBatchNode: resizing TextureAtlas capacity from [%lu] to [%lu].",
-          (long)m_pTextureAtlas->getCapacity(),
-          (long)quantity);
+    CCLOG("cocos2d: CCParticleBatchNode: resizing TextureAtlas capacity from [%u] to [%u].",
+         m_pTextureAtlas->getCapacity(),
+         quantity);
 
     if( ! m_pTextureAtlas->resizeCapacity(quantity) ) {
         // serious problems

@@ -34,6 +34,11 @@
 
 NS_CC_BEGIN
 
+CCDataVisitor::~CCDataVisitor()
+{
+
+}
+
 void CCDataVisitor::visit(const CCBool *value)
 {
     visitObject(value);
@@ -93,7 +98,7 @@ std::string CCPrettyPrinter::getResult()
 void CCPrettyPrinter::visitObject(const CCObject *p)
 {
     char buf[50] = {0};
-    sprintf(buf, "%p", p);
+    sprintf(buf, "%p", (const void*) p);
     _result += buf;
 }
 
@@ -107,7 +112,7 @@ void CCPrettyPrinter::visit(const CCBool * p)
 void CCPrettyPrinter::visit(const CCInteger *p)
 {
     char buf[50] = {0};
-    sprintf(buf, "%d", p->getValue());
+    sprintf(buf, "%lld", p->getValue());
     _result += buf;
 }
 
@@ -153,7 +158,7 @@ void CCPrettyPrinter::visit(const CCArray *p)
         i++;
     }
     setIndentLevel(_indentLevel-1);
-    
+
     _result += "\n";
     _result += _indentStr;
     _result += "</array>";
@@ -164,7 +169,7 @@ void CCPrettyPrinter::visit(const CCDictionary *p)
     _result += "\n";
     _result += _indentStr;
     _result += "<dict>\n";
-    
+
     setIndentLevel(_indentLevel+1);
     CCDictElement* element;
     bool bFirstElement = true;
@@ -182,7 +187,7 @@ void CCPrettyPrinter::visit(const CCDictionary *p)
         bFirstElement = false;
     }
     setIndentLevel(_indentLevel-1);
-    
+
     _result += "\n";
     _result += _indentStr;
     _result += "</dict>";
@@ -193,7 +198,7 @@ void CCPrettyPrinter::visit(const CCSet *p)
     _result += "\n";
     _result += _indentStr;
     _result += "<set>\n";
-    
+
     setIndentLevel(_indentLevel+1);
 
     int i = 0;
@@ -210,7 +215,7 @@ void CCPrettyPrinter::visit(const CCSet *p)
         _result += v.getResult();
     }
     setIndentLevel(_indentLevel-1);
-    
+
     _result += "\n";
     _result += _indentStr;
     _result += "</set>\n";

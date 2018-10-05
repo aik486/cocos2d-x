@@ -112,7 +112,7 @@ ccLanguageType CCApplication::getCurrentLanguage()
 
     LCID localeID = GetUserDefaultLCID();
     unsigned short primaryLanguageID = localeID & 0xFF;
-    
+
     switch (primaryLanguageID)
     {
         case LANG_CHINESE:
@@ -221,7 +221,7 @@ static void PVRFrameEnableControlWindow(bool bEnable)
         || (ERROR_SUCCESS == status                 // or the hide_gui value is exist
         && 0 != wcscmp(wszNewData, wszOldData)))    // but new data and old data not equal
     {
-        dwSize = sizeof(WCHAR) * (wcslen(wszNewData) + 1);
+        dwSize = DWORD(sizeof(WCHAR) * (wcslen(wszNewData) + 1));
         RegSetValueEx(hKey, wszValue, 0, REG_SZ, (const BYTE *)wszNewData, dwSize);
     }
 

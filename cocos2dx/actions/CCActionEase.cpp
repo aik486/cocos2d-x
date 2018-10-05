@@ -80,7 +80,7 @@ CCObject* CCActionEase::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCActionEase* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCActionEase*)(pZone->m_pCopyObject);
@@ -94,7 +94,7 @@ CCObject* CCActionEase::copyWithZone(CCZone *pZone)
     CCActionInterval::copyWithZone(pZone);
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -168,7 +168,7 @@ CCObject* CCEaseRateAction::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseRateAction* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseRateAction*)(pZone->m_pCopyObject);
@@ -220,7 +220,7 @@ CCObject* CCEaseIn::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseIn* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseIn*)(pZone->m_pCopyObject);
@@ -265,14 +265,14 @@ CCEaseOut* CCEaseOut::create(CCActionInterval *pAction, float fRate)
         }
     }
 
-    return pRet;   
+    return pRet;
 }
 
 CCObject* CCEaseOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseOut*)(pZone->m_pCopyObject);
@@ -317,14 +317,14 @@ CCEaseInOut* CCEaseInOut::create(CCActionInterval *pAction, float fRate)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseInOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseInOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseInOut*)(pZone->m_pCopyObject);
@@ -378,14 +378,14 @@ CCEaseExponentialIn* CCEaseExponentialIn::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet;    
+    return pRet;
 }
 
 CCObject* CCEaseExponentialIn::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseExponentialIn* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseExponentialIn*)(pZone->m_pCopyObject);
@@ -397,7 +397,7 @@ CCObject* CCEaseExponentialIn::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -430,14 +430,14 @@ CCEaseExponentialOut* CCEaseExponentialOut::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseExponentialOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseExponentialOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseExponentialOut*)(pZone->m_pCopyObject);
@@ -449,7 +449,7 @@ CCObject* CCEaseExponentialOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -483,14 +483,14 @@ CCEaseExponentialInOut* CCEaseExponentialInOut::create(CCActionInterval *pAction
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseExponentialInOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseExponentialInOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseExponentialInOut*)(pZone->m_pCopyObject);
@@ -502,7 +502,7 @@ CCObject* CCEaseExponentialInOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -546,7 +546,7 @@ CCEaseSineIn* CCEaseSineIn::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseSineIn::copyWithZone(CCZone *pZone)
@@ -565,7 +565,7 @@ CCObject* CCEaseSineIn::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -599,14 +599,14 @@ CCEaseSineOut* CCEaseSineOut::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseSineOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseSineOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseSineOut*)(pZone->m_pCopyObject);
@@ -618,7 +618,7 @@ CCObject* CCEaseSineOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -652,14 +652,14 @@ CCEaseSineInOut* CCEaseSineInOut::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseSineInOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseSineInOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseSineInOut*)(pZone->m_pCopyObject);
@@ -671,7 +671,7 @@ CCObject* CCEaseSineInOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -710,7 +710,7 @@ CCEaseElastic* CCEaseElastic::create(CCActionInterval *pAction, float fPeriod/* 
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 bool CCEaseElastic::initWithAction(CCActionInterval *pAction, float fPeriod/* = 0.3f*/)
@@ -728,7 +728,7 @@ CCObject* CCEaseElastic::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseElastic* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseElastic*)(pZone->m_pCopyObject);
@@ -776,14 +776,14 @@ CCEaseElasticIn* CCEaseElasticIn::create(CCActionInterval *pAction, float fPerio
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseElasticIn::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseElasticIn* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseElasticIn*)(pZone->m_pCopyObject);
@@ -846,14 +846,14 @@ CCEaseElasticOut* CCEaseElasticOut::create(CCActionInterval *pAction, float fPer
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject *CCEaseElasticOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseElasticOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseElasticOut*)(pZone->m_pCopyObject);
@@ -915,14 +915,14 @@ CCEaseElasticInOut* CCEaseElasticInOut::create(CCActionInterval *pAction, float 
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseElasticInOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseElasticInOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseElasticInOut*)(pZone->m_pCopyObject);
@@ -950,7 +950,7 @@ void CCEaseElasticInOut::update(float time)
     else
     {
         time = time * 2;
-        if (! m_fPeriod)
+        if (0.f == m_fPeriod)
         {
             m_fPeriod = 0.3f * 1.5f;
         }
@@ -995,14 +995,14 @@ CCEaseBounce* CCEaseBounce::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseBounce::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseBounce* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseBounce*)(pZone->m_pCopyObject);
@@ -1014,7 +1014,7 @@ CCObject* CCEaseBounce::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -1024,7 +1024,7 @@ float CCEaseBounce::bounceTime(float time)
     if (time < 1 / 2.75)
     {
         return 7.5625f * time * time;
-    } else 
+    } else
     if (time < 2 / 2.75)
     {
         time -= 1.5f / 2.75f;
@@ -1064,14 +1064,14 @@ CCEaseBounceIn* CCEaseBounceIn::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseBounceIn::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseBounceIn* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseBounceIn*)(pZone->m_pCopyObject);
@@ -1083,7 +1083,7 @@ CCObject* CCEaseBounceIn::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -1118,7 +1118,7 @@ CCEaseBounceOut* CCEaseBounceOut::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseBounceOut::copyWithZone(CCZone *pZone)
@@ -1137,7 +1137,7 @@ CCObject* CCEaseBounceOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -1172,14 +1172,14 @@ CCEaseBounceInOut* CCEaseBounceInOut::create(CCActionInterval* pAction)
         }
     }
 
-    return pRet; 
+    return pRet;
 }
 
 CCObject* CCEaseBounceInOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseBounceInOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseBounceInOut*)(pZone->m_pCopyObject);
@@ -1191,7 +1191,7 @@ CCObject* CCEaseBounceInOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -1243,7 +1243,7 @@ CCObject* CCEaseBackIn::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseBackIn* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseBackIn*)(pZone->m_pCopyObject);
@@ -1255,7 +1255,7 @@ CCObject* CCEaseBackIn::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -1297,7 +1297,7 @@ CCObject* CCEaseBackOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseBackOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseBackOut*)(pZone->m_pCopyObject);
@@ -1309,7 +1309,7 @@ CCObject* CCEaseBackOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
@@ -1353,7 +1353,7 @@ CCObject* CCEaseBackInOut::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCEaseBackInOut* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCEaseBackInOut*)(pZone->m_pCopyObject);
@@ -1365,7 +1365,7 @@ CCObject* CCEaseBackInOut::copyWithZone(CCZone *pZone)
     }
 
     pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }

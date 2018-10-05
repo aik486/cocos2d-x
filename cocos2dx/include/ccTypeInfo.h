@@ -29,29 +29,32 @@ THE SOFTWARE.
 
 #include <typeinfo>
 #include <ctype.h>
+#include <cstdint>
 #include <string.h>
 
 NS_CC_BEGIN
 
-class TypeInfo
+class CC_DLL TypeInfo
 {
 public:
+	virtual ~TypeInfo();
 	virtual long getClassTypeInfo() = 0;
 };
 
-static inline unsigned int getHashCodeByString(const char *key)
+inline uint32_t getHashCodeByString(const char *key)
 {
-	unsigned int len = strlen(key);
+	size_t len = strlen(key);
 	const char *end=key+len;
-	unsigned int hash;
+	uint32_t hash;
 
 	for (hash = 0; key < end; key++)
 	{
 		hash *= 16777619;
 		hash ^= (unsigned int) (unsigned char) toupper(*key);
 	}
-	return (hash);
+	return hash;
 }
+
 NS_CC_END
 
 #endif

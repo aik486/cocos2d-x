@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2009      On-Core 
+Copyright (c) 2009      On-Core
 
 http://www.cocos2d-x.org
 
@@ -110,7 +110,7 @@ CCObject* CCGridAction::copyWithZone(CCZone *pZone)
 {
     CCZone* pNewZone = NULL;
     CCGridAction* pCopy = NULL;
-    if(pZone && pZone->m_pCopyObject) 
+    if(pZone && pZone->m_pCopyObject)
     {
         //in case of being called at sub class
         pCopy = (CCGridAction*)(pZone->m_pCopyObject);
@@ -124,7 +124,7 @@ CCObject* CCGridAction::copyWithZone(CCZone *pZone)
     CCActionInterval::copyWithZone(pZone);
 
     pCopy->initWithDuration(m_fDuration, m_sGridSize);
-    
+
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
