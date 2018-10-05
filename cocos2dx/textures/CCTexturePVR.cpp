@@ -24,10 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
+#include "CCTexture2D.h"
 #include "CCTexturePVR.h"
 #include "CCConfiguration.h"
 #include "CCStdC.h"
-#include "CCTexture2D.h"
 #include "ccMacros.h"
 #include "platform/CCFileUtils.h"
 #include "shaders/ccGLStateCache.h"

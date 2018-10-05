@@ -30,7 +30,6 @@ THE SOFTWARE.
 #include "CCStdC.h"
 #include "cocoa/CCArray.h"
 #include "cocoa/CCObject.h"
-#include "textures/CCTexture2D.h"
 
 NS_CC_BEGIN
 
@@ -96,49 +95,82 @@ public:
     CCTexturePVR();
     virtual ~CCTexturePVR();
 
-    enum Compression { NoCompression,
+    enum Compression {
+        NoCompression,
         CCZ_Compression,
-        GZ_Compression };
+        GZ_Compression
+    };
 
     /** initializes a CCTexturePVR with a path */
     bool initWithContentsOfFile(const char* path);
-    bool initWithData(const unsigned char* data, size_t len,
-        Compression compression);
+    bool initWithData(
+        const unsigned char* data, size_t len, Compression compression);
 
     /** creates and initializes a CCTexturePVR with a path */
     static CCTexturePVR* create(const char* path);
-    static CCTexturePVR* create(const unsigned char* data, size_t len,
-        Compression compression);
+    static CCTexturePVR* create(
+        const unsigned char* data, size_t len, Compression compression);
 
     // properties
 
     /** texture id name */
-    inline unsigned int getName() { return m_uName; }
+    inline unsigned int getName()
+    {
+        return m_uName;
+    }
     /** texture width */
-    inline unsigned int getWidth() { return m_uWidth; }
+    inline unsigned int getWidth()
+    {
+        return m_uWidth;
+    }
     /** texture height */
-    inline unsigned int getHeight() { return m_uHeight; }
+    inline unsigned int getHeight()
+    {
+        return m_uHeight;
+    }
     /** whether or not the texture has alpha */
-    inline bool hasAlpha() { return m_bHasAlpha; }
+    inline bool hasAlpha()
+    {
+        return m_bHasAlpha;
+    }
     /** whether or not the texture has premultiplied alpha */
-    inline bool hasPremultipliedAlpha() { return m_bHasPremultipliedAlpha; }
+    inline bool hasPremultipliedAlpha()
+    {
+        return m_bHasPremultipliedAlpha;
+    }
     /** whether or not the texture should use hasPremultipliedAlpha instead of
    * global default */
-    inline bool isForcePremultipliedAlpha() { return m_bForcePremultipliedAlpha; }
+    inline bool isForcePremultipliedAlpha()
+    {
+        return m_bForcePremultipliedAlpha;
+    }
     /** how many mipmaps the texture has. 1 means one level (level 0 */
-    inline unsigned int getNumberOfMipmaps() { return m_uNumberOfMipmaps; }
-    inline CCTexture2DPixelFormat getFormat() { return m_eFormat; }
-    inline bool isRetainName() { return m_bRetainName; }
-    inline void setRetainName(bool retainName) { m_bRetainName = retainName; }
+    inline unsigned int getNumberOfMipmaps()
+    {
+        return m_uNumberOfMipmaps;
+    }
+    inline CCTexture2DPixelFormat getFormat()
+    {
+        return m_eFormat;
+    }
+    inline bool isRetainName()
+    {
+        return m_bRetainName;
+    }
+    inline void setRetainName(bool retainName)
+    {
+        m_bRetainName = retainName;
+    }
 
 private:
     bool unpackPVRv2Data(const unsigned char* data);
-    bool unpackPVRv3Data(const unsigned char* dataPointer,
-        unsigned int dataLength);
+    bool unpackPVRv3Data(
+        const unsigned char* dataPointer, unsigned int dataLength);
     bool createGLTexture();
 
 protected:
-    struct CCPVRMipmap m_asMipmaps[CC_PVRMIPMAP_MAX]; // pointer to mipmap images
+    struct CCPVRMipmap
+        m_asMipmaps[CC_PVRMIPMAP_MAX]; // pointer to mipmap images
     unsigned int m_uNumberOfMipmaps; // number of mipmap used
 
     unsigned int m_uWidth, m_uHeight;

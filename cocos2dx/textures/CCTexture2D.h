@@ -115,10 +115,10 @@ typedef struct _ccTexParams {
 * Be aware that the content of the generated textures will be upside-down!
 */
 
-class CC_DLL CCTexture2D : public CCObject
+class CC_DLL CCTexture2D
+    : public CCObject
 #ifdef EMSCRIPTEN
-    ,
-                           public CCGLBufferedNode
+    , public CCGLBufferedNode
 #endif // EMSCRIPTEN
 {
 public:
@@ -295,9 +295,8 @@ public:
     bool hasMipmaps();
 
 private:
-    bool initPremultipliedATextureWithImage(CCImage* image,
-        unsigned int pixelsWide,
-        unsigned int pixelsHigh);
+    bool initPremultipliedATextureWithImage(
+        CCImage* image, unsigned int pixelsWide, unsigned int pixelsHigh);
 
     // By default PVR images are treated as if they don't have the alpha channel
     // premultiplied
