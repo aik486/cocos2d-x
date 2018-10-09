@@ -81,7 +81,7 @@ bool CCSpriteBatchNode::initWithTexture(CCTexture2D *tex, unsigned int capacity)
     {
         capacity = kDefaultSpriteBatchCapacity;
     }
-    
+
     m_pobTextureAtlas->initWithTexture(tex, capacity);
 
     updateBlendFunc();
@@ -297,7 +297,7 @@ void CCSpriteBatchNode::updateAtlasIndex(CCSprite* sprite, int* curIndex)
     {
         count = pArray->count();
     }
-    
+
     int oldIndex = 0;
 
     if( count == 0 )
@@ -413,9 +413,9 @@ void CCSpriteBatchNode::increaseAtlasCapacity(void)
     // this is likely computationally expensive
     unsigned int quantity = (m_pobTextureAtlas->getCapacity() + 1) * 4 / 3;
 
-    CCLOG("cocos2d: CCSpriteBatchNode: resizing TextureAtlas capacity from [%lu] to [%lu].",
-        (long)m_pobTextureAtlas->getCapacity(),
-        (long)quantity);
+    CCLOG("cocos2d: CCSpriteBatchNode: resizing TextureAtlas capacity from [%u] to [%u].",
+        m_pobTextureAtlas->getCapacity(),
+        quantity);
 
     if (! m_pobTextureAtlas->resizeCapacity(quantity))
     {
@@ -440,7 +440,7 @@ unsigned int CCSpriteBatchNode::rebuildIndexInOrder(CCSprite *pobParent, unsigne
                 uIndex = rebuildIndexInOrder(pChild, uIndex);
             }
         }
-    }    
+    }
 
     // ignore self (batch node)
     if (! pobParent->isEqual(this))
@@ -575,7 +575,7 @@ void CCSpriteBatchNode::insertChild(CCSprite *pSprite, unsigned int uIndex)
 
     // update indices
     unsigned int i = uIndex+1;
-    
+
     CCSprite* pChild = NULL;
     for(; i<descendantsData->num; i++){
         pChild = (CCSprite*)descendantsData->arr[i];
@@ -615,7 +615,7 @@ void CCSpriteBatchNode::appendChild(CCSprite* sprite)
     m_pobTextureAtlas->insertQuad(&quad, index);
 
     // add children recursively
-    
+
     CCObject* pObj = NULL;
     CCARRAY_FOREACH(sprite->getChildren(), pObj)
     {
@@ -639,7 +639,7 @@ void CCSpriteBatchNode::removeSpriteFromAtlas(CCSprite *pobSprite)
 
         // update all sprites beyond this one
         unsigned int count = m_pobDescendants->count();
-        
+
         for(; uIndex < count; ++uIndex)
         {
             CCSprite* s = (CCSprite*)(m_pobDescendants->objectAtIndex(uIndex));
@@ -732,21 +732,21 @@ void CCSpriteBatchNode::updateQuadFromSprite(CCSprite *sprite, unsigned int inde
 {
     CCAssert(sprite != NULL, "Argument must be non-nil");
     CCAssert(dynamic_cast<CCSprite*>(sprite) != NULL, "CCSpriteBatchNode only supports CCSprites as children");
-    
+
 	// make needed room
 	while (index >= m_pobTextureAtlas->getCapacity() || m_pobTextureAtlas->getCapacity() == m_pobTextureAtlas->getTotalQuads())
-    {
+	{
 		this->increaseAtlasCapacity();
-    }
-    
+	}
+
 	//
 	// update the quad directly. Don't add the sprite to the scene graph
 	//
 	sprite->setBatchNode(this);
-    sprite->setAtlasIndex(index);
-    
+	sprite->setAtlasIndex(index);
+
 	sprite->setDirty(true);
-	
+
 	// UpdateTransform updates the textureAtlas quad
 	sprite->updateTransform();
 }
@@ -761,7 +761,7 @@ CCSpriteBatchNode * CCSpriteBatchNode::addSpriteWithoutQuad(CCSprite*child, unsi
 
     // XXX: optimize with a binary search
     int i=0;
- 
+
     CCObject* pObject = NULL;
     CCARRAY_FOREACH(m_pobDescendants, pObject)
     {
@@ -770,7 +770,7 @@ CCSpriteBatchNode * CCSpriteBatchNode::addSpriteWithoutQuad(CCSprite*child, unsi
             break;
         ++i;
     }
-    
+
     m_pobDescendants->insertObject(child, i);
 
     // IMPORTANT: Call super, and not self. Avoid adding it to the texture atlas array

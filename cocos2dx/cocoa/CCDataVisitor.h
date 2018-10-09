@@ -64,7 +64,7 @@ class CCSet;
 class CC_DLL CCDataVisitor
 {
 public:
-    virtual ~CCDataVisitor() {}
+    virtual ~CCDataVisitor();
 
     /** default method, called from non-overloaded methods and for unrecognized objects */
     virtual void visitObject(const CCObject *p) = 0;
@@ -87,10 +87,10 @@ class CC_DLL CCPrettyPrinter : public CCDataVisitor
 {
 public:
     CCPrettyPrinter(int indentLevel = 0);
-    
+
     virtual void clear();
     virtual std::string getResult();
-    
+
     virtual void visitObject(const CCObject *p);
     virtual void visit(const CCBool * p);
     virtual void visit(const CCInteger *p);

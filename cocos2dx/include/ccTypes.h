@@ -45,7 +45,7 @@ typedef struct _ccColor3B
 } ccColor3B;
 
 //! helper macro that creates an ccColor3B type
-static inline ccColor3B
+inline ccColor3B
 ccc3(const GLubyte r, const GLubyte g, const GLubyte b)
 {
     ccColor3B c = {r, g, b};
@@ -54,7 +54,7 @@ ccc3(const GLubyte r, const GLubyte g, const GLubyte b)
 
 /** returns true if both ccColor3B are equal. Otherwise it returns false.
  */
-static inline bool ccc3BEqual(const ccColor3B &col1, const ccColor3B &col2)
+inline bool ccc3BEqual(const ccColor3B &col1, const ccColor3B &col2)
 {
     return col1.r == col2.r && col1.g == col2.g && col1.b == col2.b;
 }
@@ -90,7 +90,7 @@ typedef struct _ccColor4B
     GLubyte a;
 } ccColor4B;
 //! helper macro that creates an ccColor4B type
-static inline ccColor4B
+inline ccColor4B
 ccc4(const GLubyte r, const GLubyte g, const GLubyte b, const GLubyte o)
 {
     ccColor4B c = {r, g, b, o};
@@ -112,14 +112,14 @@ typedef struct _ccColor4F {
 /** Returns a ccColor4F from a ccColor3B. Alpha will be 1.
  @since v0.99.1
  */
-static inline ccColor4F ccc4FFromccc3B(ccColor3B c)
+inline ccColor4F ccc4FFromccc3B(ccColor3B c)
 {
     ccColor4F c4 = {c.r/255.f, c.g/255.f, c.b/255.f, 1.f};
     return c4;
 }
 
 //! helper that creates a ccColor4f type
-static inline ccColor4F 
+inline ccColor4F
 ccc4f(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a)
 {
     ccColor4F c4 = {r, g, b, a};
@@ -129,22 +129,22 @@ ccc4f(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a)
 /** Returns a ccColor4F from a ccColor4B.
  @since v0.99.1
  */
-static inline ccColor4F ccc4FFromccc4B(ccColor4B c)
+inline ccColor4F ccc4FFromccc4B(ccColor4B c)
 {
     ccColor4F c4 = {c.r/255.f, c.g/255.f, c.b/255.f, c.a/255.f};
     return c4;
 }
 
-static inline ccColor4B ccc4BFromccc4F(ccColor4F c)
+inline ccColor4B ccc4BFromccc4F(ccColor4F c)
 {
-    ccColor4B ret = {(GLubyte)(c.r*255), (GLubyte)(c.g*255), (GLubyte)(c.b*255), (GLubyte)(c.a*255)};
+	ccColor4B ret = {(GLubyte)(c.r*255), (GLubyte)(c.g*255), (GLubyte)(c.b*255), (GLubyte)(c.a*255)};
 	return ret;
 }
 
 /** returns YES if both ccColor4F are equal. Otherwise it returns NO.
  @since v0.99.1
  */
-static inline bool ccc4FEqual(ccColor4F a, ccColor4F b)
+inline bool ccc4FEqual(ccColor4F a, ccColor4F b)
 {
     return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
 }
@@ -158,7 +158,7 @@ typedef struct _ccVertex2F
     GLfloat y;
 } ccVertex2F;
 
-static inline ccVertex2F vertex2(const float x, const float y)
+inline ccVertex2F vertex2(const float x, const float y)
 {
     ccVertex2F c = {x, y};
     return c;
@@ -175,12 +175,12 @@ typedef struct _ccVertex3F
     GLfloat z;
 } ccVertex3F;
 
-static inline ccVertex3F vertex3(const float x, const float y, const float z)
+inline ccVertex3F vertex3(const float x, const float y, const float z)
 {
     ccVertex3F c = {x, y, z};
     return c;
 }
-        
+
 /** A texcoord composed of 2 floats: u, y
  @since v0.8
  */
@@ -189,13 +189,13 @@ typedef struct _ccTex2F {
      GLfloat v;
 } ccTex2F;
 
-static inline ccTex2F tex2(const float u, const float v)
+inline ccTex2F tex2(const float u, const float v)
 {
     ccTex2F t = {u , v};
     return t;
 }
 
- 
+
 //! Point Sprite component
 typedef struct _ccPointSprite
 {
@@ -357,7 +357,7 @@ typedef struct
 {
     ccT2F_Quad texCoords;
     float delay;
-    CCSize size; 
+    CCSize size;
 } ccAnimationFrameData;
 
 
@@ -370,36 +370,36 @@ typedef struct
 typedef struct _ccFontShadow
 {
 public:
-    
+
     // shadow is not enabled by default
     _ccFontShadow(): m_shadowEnabled(false) {}
-    
+
     // true if shadow enabled
     bool   m_shadowEnabled;
     // shadow x and y offset
-	CCSize m_shadowOffset;
+    CCSize m_shadowOffset;
     // shadow blurrines
-	float  m_shadowBlur;
+    float  m_shadowBlur;
     // shadow opacity
-	float  m_shadowOpacity;
-    
+    float  m_shadowOpacity;
+
 } ccFontShadow;
 
 // stroke attributes
 typedef struct _ccFontStroke
 {
 public:
-    
+
     // stroke is disabled by default
     _ccFontStroke(): m_strokeEnabled(false) {}
-    
+
     // true if stroke enabled
     bool        m_strokeEnabled;
     // stroke color
-	ccColor3B   m_strokeColor;
+    ccColor3B   m_strokeColor;
     // stroke size
     float       m_strokeSize;
-    
+
 } ccFontStroke;
 
 // font attributes
@@ -410,12 +410,12 @@ public:
 typedef struct _ccFontDefinition
 {
 public:
-    
+
     _ccFontDefinition():  m_alignment(kCCTextAlignmentCenter),
     m_vertAlignment(kCCVerticalTextAlignmentTop),
     m_fontFillColor(ccWHITE)
     { m_dimensions = CCSizeMake(0,0); }
-    
+
     // font name
     std::string             m_fontName;
     // font size
@@ -432,7 +432,7 @@ public:
     ccFontShadow            m_shadow;
     // font stroke
     ccFontStroke            m_stroke;
-    
+
 } ccFontDefinition;
 
 

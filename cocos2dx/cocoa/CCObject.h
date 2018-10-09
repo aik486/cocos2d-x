@@ -50,6 +50,7 @@ class CCEvent;
 class CC_DLL CCCopying
 {
 public:
+    virtual ~CCCopying();
     virtual CCObject* copyWithZone(CCZone* pZone);
 };
 
@@ -74,7 +75,7 @@ public:
      *  @lua NA
      */
     virtual ~CCObject(void);
-    
+
     void release(void);
     void retain(void);
     CCObject* autorelease(void);
@@ -85,8 +86,8 @@ public:
 
     virtual void acceptVisitor(CCDataVisitor &visitor);
 
-    virtual void update(float dt) {CC_UNUSED_PARAM(dt);};
-    
+    virtual void update(float dt) {CC_UNUSED_PARAM(dt);}
+
     friend class CCAutoreleasePool;
 };
 

@@ -59,7 +59,7 @@
  */
 
 /* ---------------------------------------------------------------------
- 
+
  Conversions between UTF32, UTF-16, and UTF-8. Source code file.
  Author: Mark E. Davis, 1994.
  Rev History: Rick McGowan, fixes & updates May 2001.
@@ -71,9 +71,9 @@
  July 2003: slight mods to back out aggressive FFFE detection.
  Jan 2004: updated switches in from-UTF8 conversions.
  Oct 2004: updated to use UNI_MAX_LEGAL_UTF32 in UTF-32 conversions.
- 
+
  See the header file "ConvertUTF.h" for complete documentation.
- 
+
  ------------------------------------------------------------------------ */
 
 
@@ -115,29 +115,29 @@
  */
 
 /* ---------------------------------------------------------------------
- 
+
  Conversions between UTF32, UTF-16, and UTF-8.  Header file.
- 
+
  Several funtions are included here, forming a complete set of
  conversions between the three formats.  UTF-7 is not included
  here, but is handled in a separate source file.
- 
+
  Each of these routines takes pointers to input buffers and output
  buffers.  The input buffers are const.
- 
+
  Each routine converts the text between *sourceStart and sourceEnd,
  putting the result into the buffer between *targetStart and
  targetEnd. Note: the end pointers are *after* the last item: e.g.
  *(sourceEnd - 1) is the last item.
- 
+
  The return result indicates whether the conversion was successful,
  and if not, whether the problem was in the source or target buffers.
  (Only the first encountered problem is indicated.)
- 
+
  After the conversion, *sourceStart and *targetStart are both
  updated to point to the end of last text successfully converted in
  the respective buffers.
- 
+
  Input parameters:
  sourceStart - pointer to a pointer to the source buffer.
  The contents of this are modified on return so that
@@ -145,32 +145,32 @@
  targetStart - similarly, pointer to pointer to the target buffer.
  sourceEnd, targetEnd - respectively pointers to the ends of the
  two buffers, for overflow checking only.
- 
+
  These conversion functions take a ConversionFlags argument. When this
  flag is set to strict, both irregular sequences and isolated surrogates
  will cause an error.  When the flag is set to lenient, both irregular
  sequences and isolated surrogates are converted.
- 
+
  Whether the flag is strict or lenient, all illegal sequences will cause
  an error return. This includes sequences such as: <F4 90 80 80>, <C0 80>,
  or <A0> in UTF-8, and values above 0x10FFFF in UTF-32. Conformant code
  must check for illegal sequences.
- 
+
  When the flag is set to lenient, characters over 0x10FFFF are converted
  to the replacement character; otherwise (when the flag is set to strict)
  they constitute an error.
- 
+
  Output parameters:
  The value "sourceIllegal" is returned from some routines if the input
  sequence is malformed.  When "sourceIllegal" is returned, the source
  value will point to the illegal value that caused the problem. E.g.,
  in UTF-8 when a sequence is malformed, it points to the start of the
  malformed sequence.
- 
+
  Author: Mark E. Davis, 1994.
  Rev History: Rick McGowan, fixes & updates May 2001.
  Fixes & updates, Sept 2001.
- 
+
  ------------------------------------------------------------------------ */
 
 //#ifndef LLVM_SUPPORT_CONVERTUTF_H
@@ -250,7 +250,7 @@ Boolean isLegalUTF8String(const UTF8 **source, const UTF8 *sourceEnd);
 unsigned getNumBytesForUTF8(UTF8 firstByte);
 
 int getUTF8StringLength(const UTF8* utf8, int max);
-    
+
 //#ifdef __cplusplus
 //}
 
@@ -266,7 +266,7 @@ int getUTF8StringLength(const UTF8* utf8, int max);
 typedef std::basic_string<unsigned short> CCWideString;
 
 namespace llvm {
-    
+
     /**
      * Convert an UTF8 StringRef to UTF8, UTF16, or UTF32 depending on
      * WideCharWidth. The converted data is written to ResultPtr, which needs to
@@ -278,7 +278,7 @@ namespace llvm {
      */
     bool ConvertUTF8toWide(unsigned WideCharWidth, const std::string& Source,
                            char *&ResultPtr, const UTF8 *&ErrorPtr);
-    
+
     /**
      * Convert an Unicode code point to UTF8 sequence.
      *
@@ -290,7 +290,7 @@ namespace llvm {
      * \returns true on success.
      */
     bool ConvertCodePointToUTF8(unsigned Source, char *&ResultPtr);
-    
+
     /**
      * Convert the first UTF8 sequence in the given source buffer to a UTF32
      * code point.
@@ -317,13 +317,13 @@ namespace llvm {
             return sourceExhausted;
         return ConvertUTF8toUTF32(source, *source + size, &target, target + 1, flags);
     }
-    
+
     /**
      * Returns true if a blob of text starts with a UTF-16 big or little endian byte
      * order mark.
      */
     bool hasUTF16ByteOrderMark(const char* SrcBytes, size_t len);
-    
+
     /**
      * Converts a stream of raw bytes assumed to be UTF16 into a UTF8 std::string.
      *
@@ -332,7 +332,7 @@ namespace llvm {
      * \returns true on success
      */
     bool convertUTF16ToUTF8String(const CCWideString& utf16, std::string &Out);
-    
+
 } /* end namespace llvm */
 
 //#endif
@@ -556,7 +556,7 @@ ConversionResult ConvertUTF16toUTF8 (
         } else {                            bytesToWrite = 3;
             ch = UNI_REPLACEMENT_CHAR;
         }
-        
+
         target += bytesToWrite;
         if (target > targetEnd) {
             source = oldSource; /* Back up source pointer! */
@@ -609,7 +609,7 @@ ConversionResult ConvertUTF32toUTF8 (
             ch = UNI_REPLACEMENT_CHAR;
             result = sourceIllegal;
         }
-        
+
         target += bytesToWrite;
         if (target > targetEnd) {
             --source; /* Back up source pointer! */
@@ -650,7 +650,7 @@ static Boolean isLegalUTF8(const UTF8 *source, int length) {
         case 4: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return false;
         case 3: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return false;
         case 2: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return false;
-            
+
             switch (*source) {
                     /* no fall-through in this inner switch */
                 case 0xE0: if (a < 0xA0) return false; break;
@@ -659,7 +659,7 @@ static Boolean isLegalUTF8(const UTF8 *source, int length) {
                 case 0xF4: if (a > 0x8F) return false; break;
                 default:   if (a < 0x80) return false;
             }
-            
+
         case 1: if (*source >= 0x80 && *source < 0xC2) return false;
     }
     if (*source > 0xF4) return false;
@@ -757,7 +757,7 @@ ConversionResult ConvertUTF8toUTF16 (
             case 0: ch += *source++;
         }
         ch -= offsetsFromUTF8[extraBytesToRead];
-        
+
         if (target >= targetEnd) {
             source -= (extraBytesToRead+1); /* Back up source pointer! */
             result = targetExhausted; break;
@@ -830,7 +830,7 @@ ConversionResult ConvertUTF8toUTF32 (
             case 0: ch += *source++;
         }
         ch -= offsetsFromUTF8[extraBytesToRead];
-        
+
         if (target >= targetEnd) {
             source -= (extraBytesToRead+1); /* Back up the source pointer! */
             result = targetExhausted; break;
@@ -862,7 +862,7 @@ ConversionResult ConvertUTF8toUTF32 (
 }
 
 /* ---------------------------------------------------------------------
- 
+
  Note A.
  The fall-through switches in UTF-8 reading code save a
  temp variable, some decrements & conditionals.  The switches
@@ -877,7 +877,7 @@ ConversionResult ConvertUTF8toUTF32 (
  }
  In UTF-8 writing code, the switches on "bytesToWrite" are
  similarly unrolled loops.
- 
+
  --------------------------------------------------------------------- */
 
 /** Source codes from ConvertUTFWrapper.cpp */
@@ -900,7 +900,7 @@ ConversionResult ConvertUTF8toUTF32 (
 #include <memory.h>
 
 namespace llvm {
-    
+
     bool ConvertUTF8toWide(unsigned WideCharWidth, const std::string& Source,
                            char *&ResultPtr, const UTF8 *&ErrorPtr) {
         assert(WideCharWidth == 1 || WideCharWidth == 2 || WideCharWidth == 4);
@@ -946,7 +946,7 @@ namespace llvm {
                && "ConvertUTF8toUTFXX exhausted target buffer");
         return result == conversionOK;
     }
-    
+
     bool ConvertCodePointToUTF8(unsigned Source, char *&ResultPtr) {
         const UTF32 *SourceStart = &Source;
         const UTF32 *SourceEnd = SourceStart + 1;
@@ -957,17 +957,17 @@ namespace llvm {
                                                  strictConversion);
         if (CR != conversionOK)
             return false;
-        
+
         ResultPtr = reinterpret_cast<char*>(TargetStart);
         return true;
     }
-    
+
     bool hasUTF16ByteOrderMark(const char* S, size_t len) {
         return (len >= 2 &&
                 ((S[0] == '\xff' && S[1] == '\xfe') ||
                  (S[0] == '\xfe' && S[1] == '\xff')));
     }
-    
+
     /// SwapByteOrder_16 - This function returns a byte-swapped representation of
     /// the 16-bit argument.
     inline uint16_t SwapByteOrder_16(uint16_t value) {
@@ -981,17 +981,17 @@ namespace llvm {
         return Hi | Lo;
 #endif
     }
-    
+
     bool convertUTF16ToUTF8String(const CCWideString& utf16, std::string &Out) {
         assert(Out.empty());
-        
+
         // Avoid OOB by returning early on empty input.
         if (utf16.empty())
             return true;
-        
+
         const UTF16 *Src = reinterpret_cast<const UTF16 *>(utf16.data());
         const UTF16 *SrcEnd = reinterpret_cast<const UTF16 *>(utf16.data() + utf16.length());
-        
+
         // Byteswap if necessary.
         std::vector<UTF16> ByteSwapped;
         if (Src[0] == UNI_UTF16_BYTE_ORDER_MARK_SWAPPED) {
@@ -1001,29 +1001,29 @@ namespace llvm {
             Src = &ByteSwapped[0];
             SrcEnd = &ByteSwapped[ByteSwapped.size() - 1] + 1;
         }
-        
+
         // Skip the BOM for conversion.
         if (Src[0] == UNI_UTF16_BYTE_ORDER_MARK_NATIVE)
             Src++;
-        
+
         // Just allocate enough space up front.  We'll shrink it later.
         Out.resize(utf16.length() * UNI_MAX_UTF8_BYTES_PER_CODE_POINT + 1);
         UTF8 *Dst = reinterpret_cast<UTF8 *>(&Out[0]);
         UTF8 *DstEnd = Dst + Out.size();
-        
+
         ConversionResult CR =
         ConvertUTF16toUTF8(&Src, SrcEnd, &Dst, DstEnd, strictConversion);
         assert(CR != targetExhausted);
-        
+
         if (CR != conversionOK) {
             Out.clear();
             return false;
         }
-        
+
         Out.resize(reinterpret_cast<char *>(Dst) - &Out[0]);
         return true;
     }
-    
+
 } // end namespace llvm
 
 
@@ -1038,11 +1038,11 @@ NS_CC_BEGIN
 unsigned int cc_utf8_find_last_not_char(const std::vector<unsigned short>& str, unsigned short c)
 {
     int len = static_cast<int>(str.size());
-    
+
     int i = len - 1;
     for (; i >= 0; --i)
         if (str[i] != c) return i;
-    
+
     return i;
 }
 
@@ -1091,25 +1091,26 @@ bool iscjk_unicode(unsigned short ch)
 
 void cc_utf8_trim_ws(std::vector<unsigned short>* str)
 {
-    int len = str->size();
-    
-    if ( len <= 0 )
+    size_t len = str->size();
+
+    if ( len == 0 )
         return;
-    
-    int last_index = len - 1;
-    
+
+    size_t last_index = len - 1;
+
     // Only start trimming if the last character is whitespace..
     if (isspace_unicode((*str)[last_index]))
     {
-        for (int i = last_index - 1; i >= 0; --i)
+        for (size_t i = last_index; i > 0;)
         {
+            --i;
             if (isspace_unicode((*str)[i]))
                 last_index = i;
             else
                 break;
         }
-        
-        cc_utf8_trim_from(str, last_index);
+
+        cc_utf8_trim_from(str, int(last_index));
     }
 }
 
@@ -1136,7 +1137,7 @@ std::vector<unsigned short> cc_utf16_vec_from_utf16_str(const unsigned short* st
 {
     int len = cc_wcslen(str);
     std::vector<unsigned short> str_new;
-    
+
     for (int i = 0; i < len; ++i)
     {
         str_new.push_back(str[i]);
@@ -1148,18 +1149,18 @@ unsigned short* cc_utf8_to_utf16(const char* utf8, int* outUTF16CharacterCount /
 {
     if (utf8 == NULL)
         return NULL;
-    
+
     unsigned short* ret = NULL;
-    
+
     std::string utf8Str = utf8;
-    
+
     const size_t utf16Size = utf8Str.length()+1;
     unsigned short* utf16 = new unsigned short[utf16Size];
     memset(utf16, 0, utf16Size * sizeof(unsigned short));
-    
+
     char* utf16ptr = reinterpret_cast<char*>(utf16);
     const UTF8* error = NULL;
-    
+
     if (utf8Str.empty() || llvm::ConvertUTF8toWide(2, utf8Str, utf16ptr, error))
     {
         ret = utf16;
@@ -1172,7 +1173,7 @@ unsigned short* cc_utf8_to_utf16(const char* utf8, int* outUTF16CharacterCount /
     {
         delete [] utf16;
     }
-    
+
     return ret;
 }
 
@@ -1180,18 +1181,18 @@ char * cc_utf16_to_utf8(const unsigned short* utf16, int* outUTF8CharacterCount 
 {
     if (utf16 == NULL)
         return NULL;
-    
+
     CCWideString utf16Str;
     int utf16Len = cc_wcslen(utf16);
-    
+
     for (int i = 0; i < utf16Len; ++i)
     {
         utf16Str.push_back(utf16[i]);
     }
-    
+
     char* ret = NULL;
     std::string outUtf8;
-    
+
     if (utf16Len == 0 || llvm::convertUTF16ToUTF8String(utf16Str, outUtf8))
     {
 
@@ -1201,13 +1202,13 @@ char * cc_utf16_to_utf8(const unsigned short* utf16, int* outUTF8CharacterCount 
         {
             memcpy(ret, outUtf8.data(), outUtf8.length());
         }
-        
+
         if (outUTF8CharacterCount)
         {
-            *outUTF8CharacterCount = outUtf8.length();
+            *outUTF8CharacterCount = int(outUtf8.length());
         }
     }
-    
+
     return ret;
 }
 

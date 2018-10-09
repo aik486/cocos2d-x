@@ -22,14 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "CCUserDefault.h"
+#include "../tinyxml2/tinyxml2.h"
 #include "platform/CCCommon.h"
 #include "platform/CCFileUtils.h"
-#include "../tinyxml2/tinyxml2.h"
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS && CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 
 // root name of xml
-#define USERDEFAULT_ROOT_NAME    "userDefaultRoot"
+#define USERDEFAULT_ROOT_NAME "userDefaultRoot"
 
 #define XML_FILE_NAME "UserDefault.xml"
 
@@ -42,97 +42,82 @@ NS_CC_BEGIN
  * export xmlNodePtr and other types in "CCUserDefault.h"
  */
 
-static tinyxml2::XMLElement* getXMLNodeForKey(const char* pKey, tinyxml2::XMLElement** rootNode, tinyxml2::XMLDocument **doc)
+static tinyxml2::XMLElement* getXMLNodeForKey(const char* pKey, tinyxml2::XMLElement** rootNode, tinyxml2::XMLDocument** doc)
 {
     tinyxml2::XMLElement* curNode = NULL;
 
     // check the key value
-    if (! pKey)
-    {
+    if (!pKey) {
         return NULL;
     }
 
-    do 
-    {
- 		tinyxml2::XMLDocument* xmlDoc = new tinyxml2::XMLDocument();
-		*doc = xmlDoc;
-		//CCFileData data(CCUserDefault::sharedUserDefault()->getXMLFilePath().c_str(),"rt");
-		unsigned long nSize;
-		const char* pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(CCUserDefault::sharedUserDefault()->getXMLFilePath().c_str(), "rb", &nSize);
-		//const char* pXmlBuffer = (const char*)data.getBuffer();
-		if(NULL == pXmlBuffer)
-		{
-			CCLOG("can not read xml file");
-			break;
-		}
-		xmlDoc->Parse(pXmlBuffer, nSize);
+    do {
+        tinyxml2::XMLDocument* xmlDoc = new tinyxml2::XMLDocument();
+        *doc = xmlDoc;
+        //CCFileData data(CCUserDefault::sharedUserDefault()->getXMLFilePath().c_str(),"rt");
+        unsigned long nSize;
+        const char* pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(CCUserDefault::sharedUserDefault()->getXMLFilePath().c_str(), "rb", &nSize);
+        //const char* pXmlBuffer = (const char*)data.getBuffer();
+        if (NULL == pXmlBuffer) {
+            CCLOG("can not read xml file");
+            break;
+        }
+        xmlDoc->Parse(pXmlBuffer, nSize);
         delete[] pXmlBuffer;
-		// get root node
-		*rootNode = xmlDoc->RootElement();
-		if (NULL == *rootNode)
-		{
-			CCLOG("read root node error");
-			break;
-		}
-		// find the node
-		curNode = (*rootNode)->FirstChildElement();
-		while (NULL != curNode)
-		{
-			const char* nodeName = curNode->Value();
-			if (!strcmp(nodeName, pKey))
-			{
-				break;
-			}
+        // get root node
+        *rootNode = xmlDoc->RootElement();
+        if (NULL == *rootNode) {
+            CCLOG("read root node error");
+            break;
+        }
+        // find the node
+        curNode = (*rootNode)->FirstChildElement();
+        while (NULL != curNode) {
+            const char* nodeName = curNode->Value();
+            if (!strcmp(nodeName, pKey)) {
+                break;
+            }
 
-			curNode = curNode->NextSiblingElement();
-		}
-	} while (0);
+            curNode = curNode->NextSiblingElement();
+        }
+    } while (0);
 
-	return curNode;
+    return curNode;
 }
 
 static void setValueForKey(const char* pKey, const char* pValue)
 {
- 	tinyxml2::XMLElement* rootNode;
-	tinyxml2::XMLDocument* doc;
-	tinyxml2::XMLElement* node;
-	// check the params
-	if (! pKey || ! pValue)
-	{
-		return;
-	}
-	// find the node
-	node = getXMLNodeForKey(pKey, &rootNode, &doc);
-	// if node exist, change the content
-	if (node)
-	{
-        if (node->FirstChild())
-        {
+    tinyxml2::XMLElement* rootNode;
+    tinyxml2::XMLDocument* doc;
+    tinyxml2::XMLElement* node;
+    // check the params
+    if (!pKey || !pValue) {
+        return;
+    }
+    // find the node
+    node = getXMLNodeForKey(pKey, &rootNode, &doc);
+    // if node exist, change the content
+    if (node) {
+        if (node->FirstChild()) {
             node->FirstChild()->SetValue(pValue);
-        }
-        else
-        {
+        } else {
             tinyxml2::XMLText* content = doc->NewText(pValue);
             node->LinkEndChild(content);
         }
-	}
-	else
-	{
-		if (rootNode)
-		{
-			tinyxml2::XMLElement* tmpNode = doc->NewElement(pKey);//new tinyxml2::XMLElement(pKey);
-			rootNode->LinkEndChild(tmpNode);
-			tinyxml2::XMLText* content = doc->NewText(pValue);//new tinyxml2::XMLText(pValue);
-			tmpNode->LinkEndChild(content);
-		}	
-	}
+    } else {
+        if (rootNode) {
+            tinyxml2::XMLElement* tmpNode = doc->NewElement(pKey); //new tinyxml2::XMLElement(pKey);
+            rootNode->LinkEndChild(tmpNode);
+            tinyxml2::XMLText* content = doc->NewText(pValue); //new tinyxml2::XMLText(pValue);
+            tmpNode->LinkEndChild(content);
+        }
+    }
 
     // save file and free doc
-	if (doc)
-	{
-		doc->SaveFile(CCUserDefault::sharedUserDefault()->getXMLFilePath().c_str());
-		delete doc;
-	}
+    if (doc) {
+        doc->SaveFile(CCUserDefault::sharedUserDefault()->getXMLFilePath().c_str());
+        delete doc;
+    }
 }
 
 /**
@@ -149,13 +134,13 @@ bool CCUserDefault::m_sbIsFilePathInitialized = false;
  */
 CCUserDefault::~CCUserDefault()
 {
-	CC_SAFE_DELETE(m_spUserDefault);
+    CC_SAFE_DELETE(m_spUserDefault);
     m_spUserDefault = NULL;
 }
 
 CCUserDefault::CCUserDefault()
 {
-	m_spUserDefault = NULL;
+    m_spUserDefault = NULL;
 }
 
 void CCUserDefault::purgeSharedUserDefault()
@@ -163,34 +148,33 @@ void CCUserDefault::purgeSharedUserDefault()
     m_spUserDefault = NULL;
 }
 
- bool CCUserDefault::getBoolForKey(const char* pKey)
- {
-     return getBoolForKey(pKey, false);
- }
+bool CCUserDefault::getBoolForKey(const char* pKey)
+{
+    return getBoolForKey(pKey, false);
+}
 
 bool CCUserDefault::getBoolForKey(const char* pKey, bool defaultValue)
 {
     const char* value = NULL;
-	tinyxml2::XMLElement* rootNode;
-	tinyxml2::XMLDocument* doc;
-	tinyxml2::XMLElement* node;
-	node =  getXMLNodeForKey(pKey, &rootNode, &doc);
-	// find the node
-	if (node && node->FirstChild())
-	{
+    tinyxml2::XMLElement* rootNode;
+    tinyxml2::XMLDocument* doc;
+    tinyxml2::XMLElement* node;
+    node = getXMLNodeForKey(pKey, &rootNode, &doc);
+    // find the node
+    if (node && node->FirstChild()) {
         value = (const char*)(node->FirstChild()->Value());
-	}
+    }
 
-	bool ret = defaultValue;
+    bool ret = defaultValue;
 
-	if (value)
-	{
-		ret = (! strcmp(value, "true"));
-	}
+    if (value) {
+        ret = (!strcmp(value, "true"));
+    }
 
-    if (doc) delete doc;
+    if (doc)
+        delete doc;
 
-	return ret;
+    return ret;
 }
 
 int CCUserDefault::getIntegerForKey(const char* pKey)
@@ -200,31 +184,27 @@ int CCUserDefault::getIntegerForKey(const char* pKey)
 
 int CCUserDefault::getIntegerForKey(const char* pKey, int defaultValue)
 {
-	const char* value = NULL;
-	tinyxml2::XMLElement* rootNode;
-	tinyxml2::XMLDocument* doc;
-	tinyxml2::XMLElement* node;
-	node =  getXMLNodeForKey(pKey, &rootNode, &doc);
-	// find the node
-	if (node && node->FirstChild())
-	{
+    const char* value = NULL;
+    tinyxml2::XMLElement* rootNode;
+    tinyxml2::XMLDocument* doc;
+    tinyxml2::XMLElement* node;
+    node = getXMLNodeForKey(pKey, &rootNode, &doc);
+    // find the node
+    if (node && node->FirstChild()) {
         value = (const char*)(node->FirstChild()->Value());
-	}
+    }
 
-	int ret = defaultValue;
+    int ret = defaultValue;
 
-	if (value)
-	{
-		ret = atoi(value);
-	}
+    if (value) {
+        ret = atoi(value);
+    }
 
-	if(doc)
-	{
-		delete doc;
-	}
+    if (doc) {
+        delete doc;
+    }
 
-
-	return ret;
+    return ret;
 }
 
 float CCUserDefault::getFloatForKey(const char* pKey)
@@ -235,38 +215,37 @@ float CCUserDefault::getFloatForKey(const char* pKey)
 float CCUserDefault::getFloatForKey(const char* pKey, float defaultValue)
 {
     float ret = (float)getDoubleForKey(pKey, (double)defaultValue);
- 
+
     return ret;
 }
 
-double  CCUserDefault::getDoubleForKey(const char* pKey)
+double CCUserDefault::getDoubleForKey(const char* pKey)
 {
     return getDoubleForKey(pKey, 0.0);
 }
 
 double CCUserDefault::getDoubleForKey(const char* pKey, double defaultValue)
 {
-	const char* value = NULL;
-	tinyxml2::XMLElement* rootNode;
-	tinyxml2::XMLDocument* doc;
-	tinyxml2::XMLElement* node;
-	node =  getXMLNodeForKey(pKey, &rootNode, &doc);
-	// find the node
-	if (node && node->FirstChild())
-	{
+    const char* value = NULL;
+    tinyxml2::XMLElement* rootNode;
+    tinyxml2::XMLDocument* doc;
+    tinyxml2::XMLElement* node;
+    node = getXMLNodeForKey(pKey, &rootNode, &doc);
+    // find the node
+    if (node && node->FirstChild()) {
         value = (const char*)(node->FirstChild()->Value());
-	}
+    }
 
-	double ret = defaultValue;
+    double ret = defaultValue;
 
-	if (value)
-	{
-		ret = atof(value);
-	}
+    if (value) {
+        ret = atof(value);
+    }
 
-    if (doc) delete doc;
+    if (doc)
+        delete doc;
 
-	return ret;
+    return ret;
 }
 
 std::string CCUserDefault::getStringForKey(const char* pKey)
@@ -274,41 +253,37 @@ std::string CCUserDefault::getStringForKey(const char* pKey)
     return getStringForKey(pKey, "");
 }
 
-string CCUserDefault::getStringForKey(const char* pKey, const std::string & defaultValue)
+string CCUserDefault::getStringForKey(const char* pKey, const std::string& defaultValue)
 {
     const char* value = NULL;
-	tinyxml2::XMLElement* rootNode;
-	tinyxml2::XMLDocument* doc;
-	tinyxml2::XMLElement* node;
-	node =  getXMLNodeForKey(pKey, &rootNode, &doc);
-	// find the node
-	if (node && node->FirstChild())
-	{
+    tinyxml2::XMLElement* rootNode;
+    tinyxml2::XMLDocument* doc;
+    tinyxml2::XMLElement* node;
+    node = getXMLNodeForKey(pKey, &rootNode, &doc);
+    // find the node
+    if (node && node->FirstChild()) {
         value = (const char*)(node->FirstChild()->Value());
-	}
+    }
 
-	string ret = defaultValue;
+    string ret = defaultValue;
 
-	if (value)
-	{
-		ret = string(value);
-	}
+    if (value) {
+        ret = string(value);
+    }
 
-    if (doc) delete doc;
+    if (doc)
+        delete doc;
 
-	return ret;
+    return ret;
 }
 
 void CCUserDefault::setBoolForKey(const char* pKey, bool value)
 {
     // save bool value as string
 
-    if (true == value)
-    {
+    if (true == value) {
         setStringForKey(pKey, "true");
-    }
-    else
-    {
+    } else {
         setStringForKey(pKey, "false");
     }
 }
@@ -316,8 +291,7 @@ void CCUserDefault::setBoolForKey(const char* pKey, bool value)
 void CCUserDefault::setIntegerForKey(const char* pKey, int value)
 {
     // check key
-    if (! pKey)
-    {
+    if (!pKey) {
         return;
     }
 
@@ -337,8 +311,7 @@ void CCUserDefault::setFloatForKey(const char* pKey, float value)
 void CCUserDefault::setDoubleForKey(const char* pKey, double value)
 {
     // check key
-    if (! pKey)
-    {
+    if (!pKey) {
         return;
     }
 
@@ -350,11 +323,10 @@ void CCUserDefault::setDoubleForKey(const char* pKey, double value)
     setValueForKey(pKey, tmp);
 }
 
-void CCUserDefault::setStringForKey(const char* pKey, const std::string & value)
+void CCUserDefault::setStringForKey(const char* pKey, const std::string& value)
 {
     // check key
-    if (! pKey)
-    {
+    if (!pKey) {
         return;
     }
 
@@ -367,13 +339,11 @@ CCUserDefault* CCUserDefault::sharedUserDefault()
 
     // only create xml file one time
     // the file exists after the program exit
-    if ((! isXMLFileExist()) && (! createXMLFile()))
-    {
+    if ((!isXMLFileExist()) && (!createXMLFile())) {
         return NULL;
     }
 
-    if (! m_spUserDefault)
-    {
+    if (!m_spUserDefault) {
         m_spUserDefault = new CCUserDefault();
     }
 
@@ -382,56 +352,50 @@ CCUserDefault* CCUserDefault::sharedUserDefault()
 
 bool CCUserDefault::isXMLFileExist()
 {
-    FILE *fp = fopen(m_sFilePath.c_str(), "r");
-	bool bRet = false;
+    FILE* fp = fopen(m_sFilePath.c_str(), "r");
+    bool bRet = false;
 
-	if (fp)
-	{
-		bRet = true;
-		fclose(fp);
-	}
+    if (fp) {
+        bRet = true;
+        fclose(fp);
+    }
 
-	return bRet;
+    return bRet;
 }
 
 void CCUserDefault::initXMLFilePath()
 {
-    if (! m_sbIsFilePathInitialized)
-    {
+    if (!m_sbIsFilePathInitialized) {
         m_sFilePath += CCFileUtils::sharedFileUtils()->getWritablePath() + XML_FILE_NAME;
         m_sbIsFilePathInitialized = true;
-    }    
+    }
 }
 
 // create new xml file
 bool CCUserDefault::createXMLFile()
 {
-	bool bRet = false;  
-    tinyxml2::XMLDocument *pDoc = new tinyxml2::XMLDocument(); 
-    if (NULL==pDoc)  
-    {  
-        return false;  
-    }  
-	tinyxml2::XMLDeclaration *pDeclaration = pDoc->NewDeclaration(NULL);  
-	if (NULL==pDeclaration)  
-	{  
-		return false;  
-	}  
-	pDoc->LinkEndChild(pDeclaration); 
-	tinyxml2::XMLElement *pRootEle = pDoc->NewElement(USERDEFAULT_ROOT_NAME);  
-	if (NULL==pRootEle)  
-	{  
-		return false;  
-	}  
-	pDoc->LinkEndChild(pRootEle);  
-	bRet = tinyxml2::XML_SUCCESS == pDoc->SaveFile(m_sFilePath.c_str());
+    bool bRet = false;
+    tinyxml2::XMLDocument* pDoc = new tinyxml2::XMLDocument();
+    if (NULL == pDoc) {
+        return false;
+    }
+    tinyxml2::XMLDeclaration* pDeclaration = pDoc->NewDeclaration(NULL);
+    if (NULL == pDeclaration) {
+        return false;
+    }
+    pDoc->LinkEndChild(pDeclaration);
+    tinyxml2::XMLElement* pRootEle = pDoc->NewElement(USERDEFAULT_ROOT_NAME);
+    if (NULL == pRootEle) {
+        return false;
+    }
+    pDoc->LinkEndChild(pRootEle);
+    bRet = tinyxml2::XML_SUCCESS == pDoc->SaveFile(m_sFilePath.c_str());
 
-	if(pDoc)
-	{
-		delete pDoc;
-	}
+    if (pDoc) {
+        delete pDoc;
+    }
 
-	return bRet;
+    return bRet;
 }
 
 const string& CCUserDefault::getXMLFilePath()

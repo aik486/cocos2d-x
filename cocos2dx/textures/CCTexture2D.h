@@ -26,10 +26,10 @@ THE SOFTWARE.
 #ifndef __CCTEXTURE2D_H__
 #define __CCTEXTURE2D_H__
 
-#include <string>
-#include "cocoa/CCObject.h"
-#include "cocoa/CCGeometry.h"
 #include "ccTypes.h"
+#include "cocoa/CCGeometry.h"
+#include "cocoa/CCObject.h"
+#include <string>
 #ifdef EMSCRIPTEN
 #include "base_nodes/CCGLBufferedNode.h"
 #endif // EMSCRIPTEN
@@ -50,38 +50,38 @@ Possible texture pixel formats
 */
 typedef enum {
 
-  //! 32-bit texture: RGBA8888
-  kCCTexture2DPixelFormat_RGBA8888,
-  //! 24-bit texture: RGBA888
-  kCCTexture2DPixelFormat_RGB888,
-  //! 16-bit texture without Alpha channel
-  kCCTexture2DPixelFormat_RGB565,
-  //! 8-bit textures used as masks
-  kCCTexture2DPixelFormat_A8,
-  //! 8-bit intensity texture
-  kCCTexture2DPixelFormat_I8,
-  //! 16-bit textures used as masks
-  kCCTexture2DPixelFormat_AI88,
-  //! 16-bit textures: RGBA4444
-  kCCTexture2DPixelFormat_RGBA4444,
-  //! 16-bit textures: RGB5A1
-  kCCTexture2DPixelFormat_RGB5A1,
-  //! 4-bit PVRTC-compressed texture: PVRTC4
-  kCCTexture2DPixelFormat_PVRTC4,
-  //! 2-bit PVRTC-compressed texture: PVRTC2
-  kCCTexture2DPixelFormat_PVRTC2,
+    //! 32-bit texture: RGBA8888
+    kCCTexture2DPixelFormat_RGBA8888,
+    //! 24-bit texture: RGBA888
+    kCCTexture2DPixelFormat_RGB888,
+    //! 16-bit texture without Alpha channel
+    kCCTexture2DPixelFormat_RGB565,
+    //! 8-bit textures used as masks
+    kCCTexture2DPixelFormat_A8,
+    //! 8-bit intensity texture
+    kCCTexture2DPixelFormat_I8,
+    //! 16-bit textures used as masks
+    kCCTexture2DPixelFormat_AI88,
+    //! 16-bit textures: RGBA4444
+    kCCTexture2DPixelFormat_RGBA4444,
+    //! 16-bit textures: RGB5A1
+    kCCTexture2DPixelFormat_RGB5A1,
+    //! 4-bit PVRTC-compressed texture: PVRTC4
+    kCCTexture2DPixelFormat_PVRTC4,
+    //! 2-bit PVRTC-compressed texture: PVRTC2
+    kCCTexture2DPixelFormat_PVRTC2,
 
-  //! Default texture format: RGBA8888
-  kCCTexture2DPixelFormat_Default = kCCTexture2DPixelFormat_RGBA8888,
+    //! Default texture format: RGBA8888
+    kCCTexture2DPixelFormat_Default = kCCTexture2DPixelFormat_RGBA8888,
 
-  // backward compatibility stuff
-  kTexture2DPixelFormat_RGBA8888 = kCCTexture2DPixelFormat_RGBA8888,
-  kTexture2DPixelFormat_RGB888 = kCCTexture2DPixelFormat_RGB888,
-  kTexture2DPixelFormat_RGB565 = kCCTexture2DPixelFormat_RGB565,
-  kTexture2DPixelFormat_A8 = kCCTexture2DPixelFormat_A8,
-  kTexture2DPixelFormat_RGBA4444 = kCCTexture2DPixelFormat_RGBA4444,
-  kTexture2DPixelFormat_RGB5A1 = kCCTexture2DPixelFormat_RGB5A1,
-  kTexture2DPixelFormat_Default = kCCTexture2DPixelFormat_Default
+    // backward compatibility stuff
+    kTexture2DPixelFormat_RGBA8888 = kCCTexture2DPixelFormat_RGBA8888,
+    kTexture2DPixelFormat_RGB888 = kCCTexture2DPixelFormat_RGB888,
+    kTexture2DPixelFormat_RGB565 = kCCTexture2DPixelFormat_RGB565,
+    kTexture2DPixelFormat_A8 = kCCTexture2DPixelFormat_A8,
+    kTexture2DPixelFormat_RGBA4444 = kCCTexture2DPixelFormat_RGBA4444,
+    kTexture2DPixelFormat_RGB5A1 = kCCTexture2DPixelFormat_RGB5A1,
+    kTexture2DPixelFormat_Default = kCCTexture2DPixelFormat_Default
 
 } CCTexture2DPixelFormat;
 
@@ -97,10 +97,10 @@ class CCGLProgram;
 Extension to set the Min / Mag filter
 */
 typedef struct _ccTexParams {
-  GLuint minFilter;
-  GLuint magFilter;
-  GLuint wrapS;
-  GLuint wrapT;
+    GLuint minFilter;
+    GLuint magFilter;
+    GLuint wrapS;
+    GLuint wrapT;
 } ccTexParams;
 
 // CLASS INTERFACES:
@@ -115,85 +115,85 @@ typedef struct _ccTexParams {
 * Be aware that the content of the generated textures will be upside-down!
 */
 
-class CC_DLL CCTexture2D : public CCObject
+class CC_DLL CCTexture2D
+    : public CCObject
 #ifdef EMSCRIPTEN
-                           ,
-                           public CCGLBufferedNode
+    , public CCGLBufferedNode
 #endif // EMSCRIPTEN
 {
 public:
-  /**
+    /**
    * @js ctor
    */
-  CCTexture2D();
-  /**
+    CCTexture2D();
+    /**
    * @js NA
    * @lua NA
    */
-  virtual ~CCTexture2D();
-  /**
+    virtual ~CCTexture2D();
+    /**
    *  @js NA
    *  @lua NA
    */
-  const char *description(void);
+    const char* description(void);
 
-  /** These functions are needed to create mutable textures
+    /** These functions are needed to create mutable textures
    * @js NA
    */
-  void releaseData(void *data);
-  /**
+    void releaseData(void* data);
+    /**
    * @js NA
    */
-  void *keepData(void *data, unsigned int length);
+    void* keepData(void* data, unsigned int length);
 
-  /** Initializes with a texture2d with data
+    /** Initializes with a texture2d with data
    * @js NA
    * @lua NA
    */
-  bool initWithData(const void *data, CCTexture2DPixelFormat pixelFormat,
-                    unsigned int pixelsWide, unsigned int pixelsHigh,
-                    const CCSize &contentSize);
+    bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat,
+        unsigned int pixelsWide, unsigned int pixelsHigh,
+        const CCSize& contentSize);
 
-  /**
+    /**
   Drawing extensions to make it easy to draw basic quads using a CCTexture2D
   object.
   These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and
   GL_TEXTURE_COORD_ARRAY client states to be enabled.
   */
-  /** draws a texture at a given point */
-  void drawAtPoint(const CCPoint &point);
-  /** draws a texture inside a rect */
-  void drawInRect(const CCRect &rect);
+    /** draws a texture at a given point */
+    void drawAtPoint(const CCPoint& point);
+    /** draws a texture inside a rect */
+    void drawInRect(const CCRect& rect);
 
-  /**
+    /**
   Extensions to make it easy to create a CCTexture2D object from an image file.
   Note that RGBA type textures will have their alpha premultiplied - use the
   blending mode (GL_ONE, GL_ONE_MINUS_SRC_ALPHA).
   */
-  /** Initializes a texture from a UIImage object */
+    /** Initializes a texture from a UIImage object */
 
-  bool initWithImage(CCImage *uiImage);
+    bool initWithImage(CCImage* uiImage);
 
-  /** Initializes a texture from a string with dimensions, alignment, font name
+    /** Initializes a texture from a string with dimensions, alignment, font name
    * and font size */
-  bool initWithString(const char *text, const char *fontName, float fontSize,
-                      const CCSize &dimensions, CCTextAlignment hAlignment,
-                      CCVerticalTextAlignment vAlignment);
-  /** Initializes a texture from a string with font name and font size */
-  bool initWithString(const char *text, const char *fontName, float fontSize);
-  /** Initializes a texture from a string using a text definition*/
-  bool initWithString(const char *text, ccFontDefinition *textDefinition);
+    bool initWithString(const char* text, const char* fontName, float fontSize,
+        const CCSize& dimensions, CCTextAlignment hAlignment,
+        CCVerticalTextAlignment vAlignment);
+    /** Initializes a texture from a string with font name and font size */
+    bool initWithString(const char* text, const char* fontName, float fontSize);
+    /** Initializes a texture from a string using a text definition*/
+    bool initWithString(const char* text, ccFontDefinition* textDefinition);
 
-  /** Initializes a texture from a PVR file */
-  bool initWithPVRFile(const char *file);
-  bool initWithPVR(const unsigned char *data, size_t len,
-                   CCTexturePVR::Compression compression);
-  void initWithPVR(CCTexturePVR *pvr);
+    /** Initializes a texture from a PVR file */
+    bool initWithPVRFile(const char* file);
+    bool initWithPVR(const unsigned char* data, size_t len,
+        CCTexturePVR::Compression compression);
+    void initWithPVR(CCTexturePVR* pvr);
 
-  /** Initializes a texture from a ETC file */
-  bool initWithETCFile(const char *file);
+    /** Initializes a texture from a ETC file */
+    bool initWithETCFile(const char* file);
 
-  /** sets the min filter, mag filter, wrap s and wrap t texture parameters.
+    /** sets the min filter, mag filter, wrap s and wrap t texture parameters.
   If the texture size is NPOT (non power of 2), then in can only use
   GL_CLAMP_TO_EDGE in GL_TEXTURE_WRAP_{S,T}.
 
@@ -205,9 +205,9 @@ public:
   js: var setTexParameters(var minFilter, var magFilter, var wrapS, var wrapT)
   @endcode
   */
-  void setTexParameters(ccTexParams *texParams);
+    void setTexParameters(ccTexParams* texParams);
 
-  /** sets antialias texture parameters:
+    /** sets antialias texture parameters:
   - GL_TEXTURE_MIN_FILTER = GL_LINEAR
   - GL_TEXTURE_MAG_FILTER = GL_LINEAR
 
@@ -215,9 +215,9 @@ public:
 
   @since v0.8
   */
-  void setAntiAliasTexParameters();
+    void setAntiAliasTexParameters();
 
-  /** sets alias texture parameters:
+    /** sets alias texture parameters:
   - GL_TEXTURE_MIN_FILTER = GL_NEAREST
   - GL_TEXTURE_MAG_FILTER = GL_NEAREST
 
@@ -225,30 +225,30 @@ public:
 
   @since v0.8
   */
-  void setAliasTexParameters();
+    void setAliasTexParameters();
 
-  /** Generates mipmap images for the texture.
+    /** Generates mipmap images for the texture.
   It only works if the texture size is POT (power of 2).
   @since v0.99.0
   */
-  void generateMipmap();
+    void generateMipmap();
 
-  /** returns the pixel format.
+    /** returns the pixel format.
    @since v2.0
    */
-  const char *stringForFormat();
+    const char* stringForFormat();
 
-  /** returns the bits-per-pixel of the in-memory OpenGL texture
+    /** returns the bits-per-pixel of the in-memory OpenGL texture
   @since v1.0
   */
-  unsigned int bitsPerPixelForFormat();
+    unsigned int bitsPerPixelForFormat();
 
-  /** Helper functions that returns bits per pixels for a given format.
+    /** Helper functions that returns bits per pixels for a given format.
    @since v2.0
    */
-  unsigned int bitsPerPixelForFormat(CCTexture2DPixelFormat format);
+    unsigned int bitsPerPixelForFormat(CCTexture2DPixelFormat format);
 
-  /** sets the default pixel format for UIImagescontains alpha channel.
+    /** sets the default pixel format for UIImagescontains alpha channel.
   If the UIImage contains alpha channel, then the options are:
   - generate 32-bit textures: kCCTexture2DPixelFormat_RGBA8888 (default one)
   - generate 24-bit textures: kCCTexture2DPixelFormat_RGB888
@@ -269,15 +269,15 @@ public:
 
   @since v0.8
   */
-  static void setDefaultAlphaPixelFormat(CCTexture2DPixelFormat format);
+    static void setDefaultAlphaPixelFormat(CCTexture2DPixelFormat format);
 
-  /** returns the alpha pixel format
+    /** returns the alpha pixel format
   @since v0.8
   @js getDefaultAlphaPixelFormat
   */
-  static CCTexture2DPixelFormat defaultAlphaPixelFormat();
+    static CCTexture2DPixelFormat defaultAlphaPixelFormat();
 
-  /** treats (or not) PVR files as if they have alpha premultiplied.
+    /** treats (or not) PVR files as if they have alpha premultiplied.
    Since it is impossible to know at runtime if the PVR images have the alpha
    channel premultiplied, it is
    possible load them as if they have (or not) the alpha channel premultiplied.
@@ -286,47 +286,46 @@ public:
 
    @since v0.99.5
    */
-  static void PVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
+    static void PVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
 
-  /** content size */
-  const CCSize &getContentSizeInPixels();
+    /** content size */
+    const CCSize& getContentSizeInPixels();
 
-  bool hasPremultipliedAlpha();
-  bool hasMipmaps();
+    bool hasPremultipliedAlpha();
+    bool hasMipmaps();
 
 private:
-  bool initPremultipliedATextureWithImage(CCImage *image,
-                                          unsigned int pixelsWide,
-                                          unsigned int pixelsHigh);
+    bool initPremultipliedATextureWithImage(
+        CCImage* image, unsigned int pixelsWide, unsigned int pixelsHigh);
 
-  // By default PVR images are treated as if they don't have the alpha channel
-  // premultiplied
-  bool m_bPVRHaveAlphaPremultiplied;
+    // By default PVR images are treated as if they don't have the alpha channel
+    // premultiplied
+    bool m_bPVRHaveAlphaPremultiplied;
 
-  /** pixel format of the texture */
-  CC_PROPERTY_READONLY(CCTexture2DPixelFormat, m_ePixelFormat, PixelFormat)
-  /** width in pixels */
-  CC_PROPERTY_READONLY(unsigned int, m_uPixelsWide, PixelsWide)
-  /** height in pixels */
-  CC_PROPERTY_READONLY(unsigned int, m_uPixelsHigh, PixelsHigh)
+    /** pixel format of the texture */
+    CC_PROPERTY_READONLY(CCTexture2DPixelFormat, m_ePixelFormat, PixelFormat)
+    /** width in pixels */
+    CC_PROPERTY_READONLY(unsigned int, m_uPixelsWide, PixelsWide)
+    /** height in pixels */
+    CC_PROPERTY_READONLY(unsigned int, m_uPixelsHigh, PixelsHigh)
 
-  /** texture name */
-  CC_PROPERTY_READONLY(GLuint, m_uName, Name)
+    /** texture name */
+    CC_PROPERTY_READONLY(GLuint, m_uName, Name)
 
-  /** texture max S */
-  CC_PROPERTY(GLfloat, m_fMaxS, MaxS)
-  /** texture max T */
-  CC_PROPERTY(GLfloat, m_fMaxT, MaxT)
-  /** content size */
-  CC_PROPERTY_READONLY(CCSize, m_tContentSize, ContentSize)
+    /** texture max S */
+    CC_PROPERTY(GLfloat, m_fMaxS, MaxS)
+    /** texture max T */
+    CC_PROPERTY(GLfloat, m_fMaxT, MaxT)
+    /** content size */
+    CC_PROPERTY_READONLY(CCSize, m_tContentSize, ContentSize)
 
-  /** whether or not the texture has their Alpha premultiplied */
-  bool m_bHasPremultipliedAlpha;
+    /** whether or not the texture has their Alpha premultiplied */
+    bool m_bHasPremultipliedAlpha;
 
-  bool m_bHasMipmaps;
+    bool m_bHasMipmaps;
 
-  /** shader program used by drawAtPoint and drawInRect */
-  CC_PROPERTY(CCGLProgram *, m_pShaderProgram, ShaderProgram);
+    /** shader program used by drawAtPoint and drawInRect */
+    CC_PROPERTY(CCGLProgram*, m_pShaderProgram, ShaderProgram);
 };
 
 // end of textures group

@@ -25,7 +25,7 @@ CCString::CCString(const CCString& str)
 {}
 
 CCString::~CCString()
-{ 
+{
     m_sString.clear();
 }
 
@@ -79,7 +79,7 @@ unsigned int CCString::uintValue() const
     {
         return 0;
     }
-    return (unsigned int)atoi(m_sString.c_str());
+    return (unsigned int)atoll(m_sString.c_str());
 }
 
 float CCString::floatValue() const
@@ -121,7 +121,7 @@ const char* CCString::getCString() const
 
 unsigned int CCString::length() const
 {
-    return m_sString.length();
+    return static_cast<unsigned int>(m_sString.length());
 }
 
 int CCString::compare(const char * pStr) const
@@ -170,7 +170,7 @@ CCString* CCString::createWithData(const unsigned char* pData, unsigned long nLe
             {
                 memcpy(pStr, pData, nLen);
             }
-            
+
             pRet = CCString::create(pStr);
             free(pStr);
         }

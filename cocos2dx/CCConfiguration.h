@@ -66,43 +66,43 @@ public:
      *  @js NA
      *  @lua NA
      */
-	virtual ~CCConfiguration(void);
+    virtual ~CCConfiguration(void);
 
-    /** OpenGL Max texture size. */
+	/** OpenGL Max texture size. */
 	int getMaxTextureSize(void) const;
 
-    /** OpenGL Max Modelview Stack Depth. */
+	/** OpenGL Max Modelview Stack Depth. */
 	int getMaxModelviewStackDepth(void) const;
 
     /** returns the maximum texture units
      @since v2.0.0
      */
-	int getMaxTextureUnits(void) const;
+    int getMaxTextureUnits(void) const;
 
     /** Whether or not the GPU supports NPOT (Non Power Of Two) textures.
      OpenGL ES 2.0 already supports NPOT (iOS).
-     
+
      @since v0.99.2
      */
-	bool supportsNPOT(void) const;
+    bool supportsNPOT(void) const;
 
-    /** Whether or not PVR Texture Compressed is supported */
+	/** Whether or not PVR Texture Compressed is supported */
 	bool supportsPVRTC(void) const;
 
     /** Whether or not BGRA8888 textures are supported.
      @since v0.99.2
      */
-	bool supportsBGRA8888(void) const;
+    bool supportsBGRA8888(void) const;
 
     /** Whether or not glDiscardFramebufferEXT is supported
      @since v0.99.2
      */
-	bool supportsDiscardFramebuffer(void) const;
+    bool supportsDiscardFramebuffer(void) const;
 
     /** Whether or not shareable VAOs are supported.
      @since v2.0.0
      */
-	bool supportsShareableVAO(void) const;
+    bool supportsShareableVAO(void) const;
 
     /** returns whether or not an OpenGL is supported */
     bool checkForGLExtension(const std::string &searchName) const;
@@ -139,8 +139,8 @@ public:
 private:
     CCConfiguration(void);
     static CCConfiguration *s_gSharedConfiguration;
-	static std::string		s_sConfigfile;
-    
+    static std::string		s_sConfigfile;
+
 protected:
     GLint           m_nMaxTextureSize;
     GLint           m_nMaxModelviewStackDepth;
@@ -151,9 +151,9 @@ protected:
     bool            m_bSupportsShareableVAO;
     GLint           m_nMaxSamplesAllowed;
     GLint           m_nMaxTextureUnits;
-    char *          m_pGlExtensions;
-	
-	CCDictionary	*m_pValueDict;
+    const char *    m_pGlExtensions;
+
+    CCDictionary	*m_pValueDict;
 };
 
 // end of global group
