@@ -332,6 +332,7 @@ void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float radiu
 }
 
 void CCDrawNode::drawPolygon(CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor)
+void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor)
 {
 	struct ExtrudeVerts {ccVertex2F offset, n;};
 	struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts)*count);

@@ -77,6 +77,7 @@ public:
      */
     void drawPolygon(CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor);
     
+    void drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor);
     /** Clear the geometry in the node's buffer. */
     void clear();
     /**
