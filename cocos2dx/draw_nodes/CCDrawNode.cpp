@@ -161,7 +161,7 @@ bool CCDrawNode::init()
 
     setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionLengthTexureColor));
 
-    ensureCapacity(512);
+    ensureCapacity(4);
 
 #if CC_TEXTURE_ATLAS_USE_VAO
     glGenVertexArrays(1, &m_uVao);
