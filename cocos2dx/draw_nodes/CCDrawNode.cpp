@@ -33,6 +33,9 @@ NS_CC_BEGIN
 // that's why the "v2f" functions are needed
 static ccVertex2F v2fzero = {0.0f,0.0f};
 
+const ccColor4F CCDrawNode::NO_COLORF{0.f, 0.f, 0.f, 0.f};
+const ccColor4B CCDrawNode::NO_COLOR{0, 0, 0, 0};
+
 static inline ccVertex2F v2f(float x, float y)
 {
 	ccVertex2F ret = {x, y};
@@ -239,13 +242,18 @@ void CCDrawNode::draw()
 
 void CCDrawNode::drawDot(const CCPoint &pos, float radius, const ccColor4F &color)
 {
+    drawDot(pos, radius, ccc4BFromccc4F(color));    
+}
+
+void CCDrawNode::drawDot(const CCPoint &pos, float radius, const ccColor4B &color)
+{
     unsigned int vertex_count = 2*3;
     ensureCapacity(vertex_count);
 
-	ccV2F_C4B_T2F a = {{pos.x - radius, pos.y - radius}, ccc4BFromccc4F(color), {-1.0, -1.0} };
-	ccV2F_C4B_T2F b = {{pos.x - radius, pos.y + radius}, ccc4BFromccc4F(color), {-1.0,  1.0} };
-	ccV2F_C4B_T2F c = {{pos.x + radius, pos.y + radius}, ccc4BFromccc4F(color), { 1.0,  1.0} };
-	ccV2F_C4B_T2F d = {{pos.x + radius, pos.y - radius}, ccc4BFromccc4F(color), { 1.0, -1.0} };
+	ccV2F_C4B_T2F a = {{pos.x - radius, pos.y - radius}, color, {-1.0, -1.0} };
+	ccV2F_C4B_T2F b = {{pos.x - radius, pos.y + radius}, color, {-1.0,  1.0} };
+	ccV2F_C4B_T2F c = {{pos.x + radius, pos.y + radius}, color, { 1.0,  1.0} };
+	ccV2F_C4B_T2F d = {{pos.x + radius, pos.y - radius}, color, { 1.0, -1.0} };
 
     ccV2F_C4B_T2F_Triangle *triangles = (ccV2F_C4B_T2F_Triangle *)(m_pBuffer + m_nBufferCount);
     ccV2F_C4B_T2F_Triangle triangle0 = {a, b, c};
@@ -260,6 +268,21 @@ void CCDrawNode::drawDot(const CCPoint &pos, float radius, const ccColor4F &colo
 
 void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4F &color)
 {
+	drawSegment(from, to, radius, ccc4BFromccc4F(color));
+}
+
+void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4B &color)
+{
+	drawSegment(from, to, radius, radius, color);
+}
+
+void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4F &color)
+{
+	drawSegment(from, to, width, height, ccc4BFromccc4F(color));
+}
+
+void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4B &color)
+{
     unsigned int vertex_count = 6*3;
     ensureCapacity(vertex_count);
 
@@ -270,8 +293,8 @@ void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float radiu
 	ccVertex2F n = v2fnormalize(v2fperp(v2fsub(b, a)));
 	ccVertex2F t = v2fperp(n);
 
-	ccVertex2F nw = v2fmult(n, radius);
-	ccVertex2F tw = v2fmult(t, radius);
+	ccVertex2F nw = v2fmult(n, height);
+	ccVertex2F tw = v2fmult(t, width);
 	ccVertex2F v0 = v2fsub(b, v2fadd(nw, tw));
 	ccVertex2F v1 = v2fadd(b, v2fsub(nw, tw));
 	ccVertex2F v2 = v2fsub(b, nw);
@@ -281,50 +304,49 @@ void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float radiu
 	ccVertex2F v6 = v2fsub(a, v2fsub(nw, tw));
 	ccVertex2F v7 = v2fadd(a, v2fadd(nw, tw));
 
-
 	ccV2F_C4B_T2F_Triangle *triangles = (ccV2F_C4B_T2F_Triangle *)(m_pBuffer + m_nBufferCount);
 
-    ccV2F_C4B_T2F_Triangle triangles0 = {
-        {v0, ccc4BFromccc4F(color), __t(v2fneg(v2fadd(n, t)))},
-        {v1, ccc4BFromccc4F(color), __t(v2fsub(n, t))},
-        {v2, ccc4BFromccc4F(color), __t(v2fneg(n))},
+	ccVertex2F negn = v2fneg(n);	
+	ccVertex2F nplust = v2fadd(n, t);
+	ccVertex2F negnplust = v2fneg(nplust);
+	ccVertex2F nminust = v2fsub(n, t);
+	ccVertex2F tminusn = v2fsub(t, n);
+    
+    triangles[0]  = {
+        {v0, color, __t(negnplust)},
+        {v1, color, __t(nminust)},
+        {v2, color, __t(negn)},
     };
-    triangles[0] = triangles0;
 
-    ccV2F_C4B_T2F_Triangle triangles1 = {
-        {v3, ccc4BFromccc4F(color), __t(n)},
-        {v1, ccc4BFromccc4F(color), __t(v2fsub(n, t))},
-        {v2, ccc4BFromccc4F(color), __t(v2fneg(n))},
+    triangles[1] = {
+        {v3, color, __t(n)},
+        {v1, color, __t(nminust)},
+        {v2, color, __t(negn)},
     };
-    triangles[1] = triangles1;
 
-    ccV2F_C4B_T2F_Triangle triangles2 = {
-        {v3, ccc4BFromccc4F(color), __t(n)},
-        {v4, ccc4BFromccc4F(color), __t(v2fneg(n))},
-        {v2, ccc4BFromccc4F(color), __t(v2fneg(n))},
+   triangles[2] = {
+        {v3, color, __t(n)},
+        {v4, color, __t(negn)},
+        {v2, color, __t(negn)},
     };
-    triangles[2] = triangles2;
 
-    ccV2F_C4B_T2F_Triangle triangles3 = {
-        {v3, ccc4BFromccc4F(color), __t(n)},
-        {v4, ccc4BFromccc4F(color), __t(v2fneg(n))},
-        {v5, ccc4BFromccc4F(color), __t(n) },
+    triangles[3] = {
+        {v3, color, __t(n)},
+        {v4, color, __t(negn)},
+        {v5, color, __t(n)},
     };
-    triangles[3] = triangles3;
 
-    ccV2F_C4B_T2F_Triangle triangles4 = {
-        {v6, ccc4BFromccc4F(color), __t(v2fsub(t, n))},
-        {v4, ccc4BFromccc4F(color), __t(v2fneg(n)) },
-        {v5, ccc4BFromccc4F(color), __t(n)},
+    triangles[4] = {
+        {v6, color, __t(tminusn)},
+        {v4, color, __t(negn)},
+        {v5, color, __t(n)},
     };
-    triangles[4] = triangles4;
 
-    ccV2F_C4B_T2F_Triangle triangles5 = {
-        {v6, ccc4BFromccc4F(color), __t(v2fsub(t, n))},
-        {v7, ccc4BFromccc4F(color), __t(v2fadd(n, t))},
-        {v5, ccc4BFromccc4F(color), __t(n)},
+    triangles[5] = {
+        {v6, color, __t(tminusn)},
+        {v7, color, __t(nplust)},
+        {v5, color, __t(n)},
     };
-    triangles[5] = triangles5;
 
 	m_nBufferCount += vertex_count;
 
@@ -332,6 +354,11 @@ void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float radiu
 }
 
 void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor)
+{
+	drawPolygon(verts, count, ccc4BFromccc4F(fillColor), borderWidth, ccc4BFromccc4F(borderColor));
+}
+
+void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4B &fillColor, float borderWidth, const ccColor4B &borderColor)
 {
 	struct ExtrudeVerts {ccVertex2F offset, n;};
 	struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts)*count);
@@ -351,7 +378,7 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
         extrude[i] = tmp;
     }
 
-	bool outline = (borderColor.a > 0.0 && borderWidth > 0.0);
+	bool outline = (borderColor.a > 0 && borderWidth > 0.f);
 
 	unsigned int triangle_count = 3*count - 2;
 	unsigned int vertex_count = 3*triangle_count;
@@ -360,7 +387,7 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
 	ccV2F_C4B_T2F_Triangle *triangles = (ccV2F_C4B_T2F_Triangle *)(m_pBuffer + m_nBufferCount);
 	ccV2F_C4B_T2F_Triangle *cursor = triangles;
 
-	float inset = (outline == 0.0 ? 0.5 : 0.0);
+	float inset = (outline == 0.f ? 0.5f : 0.f);
 	for(unsigned int i = 0; i < count-2; i++)
 	{
 		ccVertex2F v0 = v2fsub(__v2f(verts[0  ]), v2fmult(extrude[0  ].offset, inset));
@@ -368,9 +395,9 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
 		ccVertex2F v2 = v2fsub(__v2f(verts[i+2]), v2fmult(extrude[i+2].offset, inset));
 
         ccV2F_C4B_T2F_Triangle tmp = {
-            {v0, ccc4BFromccc4F(fillColor), __t(v2fzero)},
-            {v1, ccc4BFromccc4F(fillColor), __t(v2fzero)},
-            {v2, ccc4BFromccc4F(fillColor), __t(v2fzero)},
+            {v0, fillColor, __t(v2fzero)},
+            {v1, fillColor, __t(v2fzero)},
+            {v2, fillColor, __t(v2fzero)},
         };
 
 		*cursor++ = tmp;
@@ -395,16 +422,16 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
             ccVertex2F outer1 = v2fadd(v1, v2fmult(offset1, borderWidth));
 
             ccV2F_C4B_T2F_Triangle tmp1 = {
-                {inner0, ccc4BFromccc4F(borderColor), __t(v2fneg(n0))},
-                {inner1, ccc4BFromccc4F(borderColor), __t(v2fneg(n0))},
-                {outer1, ccc4BFromccc4F(borderColor), __t(n0)}
+                {inner0, borderColor, __t(v2fneg(n0))},
+                {inner1, borderColor, __t(v2fneg(n0))},
+                {outer1, borderColor, __t(n0)}
             };
             *cursor++ = tmp1;
 
             ccV2F_C4B_T2F_Triangle tmp2 = {
-                {inner0, ccc4BFromccc4F(borderColor), __t(v2fneg(n0))},
-                {outer0, ccc4BFromccc4F(borderColor), __t(n0)},
-                {outer1, ccc4BFromccc4F(borderColor), __t(n0)}
+                {inner0, borderColor, __t(v2fneg(n0))},
+                {outer0, borderColor, __t(n0)},
+                {outer1, borderColor, __t(n0)}
             };
             *cursor++ = tmp2;
         }
@@ -415,16 +442,16 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
             ccVertex2F outer1 = v2fadd(v1, v2fmult(offset1, 0.5));
 
             ccV2F_C4B_T2F_Triangle tmp1 = {
-                {inner0, ccc4BFromccc4F(fillColor), __t(v2fzero)},
-                {inner1, ccc4BFromccc4F(fillColor), __t(v2fzero)},
-                {outer1, ccc4BFromccc4F(fillColor), __t(n0)}
+                {inner0, fillColor, __t(v2fzero)},
+                {inner1, fillColor, __t(v2fzero)},
+                {outer1, fillColor, __t(n0)}
             };
             *cursor++ = tmp1;
 
             ccV2F_C4B_T2F_Triangle tmp2 = {
-                {inner0, ccc4BFromccc4F(fillColor), __t(v2fzero)},
-                {outer0, ccc4BFromccc4F(fillColor), __t(n0)},
-                {outer1, ccc4BFromccc4F(fillColor), __t(n0)}
+                {inner0, fillColor, __t(v2fzero)},
+                {outer0, fillColor, __t(n0)},
+                {outer1, fillColor, __t(n0)}
             };
             *cursor++ = tmp2;
         }
@@ -435,6 +462,57 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
 	m_bDirty = true;
 
 	free(extrude);
+}
+
+void CCDrawNode::drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4F &borderColor, const ccColor4F &fillColor)
+{
+	drawPolygon(vert, count, borderWidth, borderHeight, ccc4BFromccc4F(borderColor), ccc4BFromccc4F(fillColor));	
+}
+
+void CCDrawNode::drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4B &borderColor, const ccColor4B &fillColor)
+{
+	if (count == 0)
+		return;
+
+	if (vert[count - 1].equals(vert[0]))
+		count--;
+
+	if (count == 0)
+		return;
+
+	if (fabs(borderWidth - borderHeight) >= FLT_EPSILON)
+	{
+		if (fillColor.a > 0)
+			drawPolygon(vert, count, fillColor, 0.f, borderColor);
+
+		for (unsigned i = 0; i < count; i++)
+		{
+			unsigned next = i + 1;
+			if (next == count)
+				next = 0;
+
+			auto &p1 = vert[i];
+			auto &p2 = vert[next];
+
+			auto p3 = p2 - p1;
+
+			int angle = int(kmRadiansToDegrees(p3.getAngle()));
+			if (angle < 0)
+				angle = 360 - (-angle % 360);
+			else if (angle > 360)
+				angle = angle % 360;
+
+			bool horizontal = angle <= 45 || angle >= 360 - 45 ||
+				(angle >= 180 - 45 && angle <= 180 + 45);
+
+			float w = horizontal ? borderWidth : borderHeight;
+			float h = horizontal ? borderHeight : borderWidth;
+			drawSegment(p1, p2, w, h, borderColor);
+		}
+	} else
+	{
+		drawPolygon(vert, count, fillColor, borderWidth, borderColor);
+	}
 }
 
 void CCDrawNode::clear()
