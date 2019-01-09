@@ -24,28 +24,63 @@ THE SOFTWARE.
 
 #include "platform.h"
 
-#include "CCStdC.h"
-
 NS_CC_BEGIN
 
-int CCTime::gettimeofdayCocos2d(struct cc_timeval *tp, void *tzp)
+int CCTime::gettimeofdayCocos2d(struct cc_timeval *tp)
 {
-    CC_UNUSED_PARAM(tzp);
-    if (tp)
+    return gettimeofday((struct timeval *)tp, NULL);   
+}
+
+int64_t CCTime::currentTimeMicros()
+{
+	struct cc_timeval now;
+
+	gettimeofdayCocos2d(&now);
+
+	return int64_t(now.tv_sec) * 1000000 + now.tv_usec;
+}
+
+double CCTime::currentTimeSeconds()
+{
+	struct cc_timeval now;
+
+	gettimeofdayCocos2d(&now);
+
+	return now.tv_sec + now.tv_usec / 1000000.0;
+}
+
+float CCTime::currentTimeSecondsF()
+{
+	struct cc_timeval now;
+
+	gettimeofdayCocos2d(&now);
+
+	return now.tv_sec + now.tv_usec / 1000000.f;
+}
+
+double CCTime::deltaTime(cc_timeval *start, cc_timeval *end)
+{
+    if (!start || !end)
     {
-        gettimeofday((struct timeval *)tp,  0);
+        return 0.0;
     }
-    return 0;
+    
+    return (end->tv_sec - start->tv_sec) + (end->tv_usec - start->tv_usec) / 1000000.0;
+}
+
+float CCTime::deltaTimeF(cc_timeval *start, cc_timeval *end)
+{
+    if (!start || !end)
+    {
+        return 0.f;
+    }
+    
+    return (end->tv_sec - start->tv_sec) + (end->tv_usec - start->tv_usec) / 1000000.f;
 }
 
 double CCTime::timersubCocos2d(struct cc_timeval *start, struct cc_timeval *end)
-{
-    if (! start || ! end)
-    {
-        return 0;
-    }
-    
-    return ((end->tv_sec*1000.0+end->tv_usec/1000.0) - (start->tv_sec*1000.0+start->tv_usec/1000.0));
+{  
+    return deltaTime(start, end) * 1000.0;
 }
 
 NS_CC_END

@@ -28,16 +28,20 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-int gettimeofday(struct timeval * val, struct timezone *)
+int gettimeofday(struct timeval * val, struct timezone *tz)
 {
-    if (val)
-    {
-        LARGE_INTEGER liTime, liFreq;
-        QueryPerformanceFrequency( &liFreq );
-        QueryPerformanceCounter( &liTime );
-        val->tv_sec     = (long)( liTime.QuadPart / liFreq.QuadPart );
-        val->tv_usec    = (long)( liTime.QuadPart * 1000000.0 / liFreq.QuadPart - val->tv_sec * 1000000.0 );
-    }
+    if (!val)
+        return -1;
+    
+    if (tz)
+        return -1;
+    
+    LARGE_INTEGER liTime, liFreq;
+    QueryPerformanceFrequency( &liFreq );
+    QueryPerformanceCounter( &liTime );
+    val->tv_sec     = (long)( liTime.QuadPart / liFreq.QuadPart );
+    val->tv_usec    = (long)( liTime.QuadPart * 1000000.0 / liFreq.QuadPart - int64_t(val->tv_sec * 1000000));
+    
     return 0;
 }
 

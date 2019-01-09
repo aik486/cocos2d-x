@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include "CCThread.h"
 #include "CCPlatformMacros.h"
 
+#include "CCStdC.h"
+
 NS_CC_BEGIN
 
 /**
@@ -37,19 +39,20 @@ NS_CC_BEGIN
 
 struct CC_DLL cc_timeval
 {
-#ifdef __native_client__
-    time_t    tv_sec;        // seconds
-#else
-    long    tv_sec;        // seconds
-#endif
-    int tv_usec;    // microSeconds
+    cc_time_t tv_sec;        // seconds
+    int32_t tv_usec;    // microSeconds
 };
 
 class CC_DLL CCTime
 {
 public:
-    static int gettimeofdayCocos2d(struct cc_timeval *tp, void *tzp);
-    static double timersubCocos2d(struct cc_timeval *start, struct cc_timeval *end);
+    static int gettimeofdayCocos2d(struct cc_timeval *tp);
+    static int64_t currentTimeMicros();
+    static double currentTimeSeconds();
+    static float currentTimeSecondsF();
+    static double deltaTime(struct cc_timeval *start, struct cc_timeval *end);
+    static float deltaTimeF(struct cc_timeval *start, struct cc_timeval *end);
+    CC_DEPRECATED_ATTRIBUTE static double timersubCocos2d(struct cc_timeval *start, struct cc_timeval *end);
 };
 
 // end of platform group

@@ -99,6 +99,7 @@ int CC_DLL gettimeofday(struct timeval *, struct timezone *);
 
 NS_CC_END
 
+
 #else
 
 #include <winsock.h>
@@ -108,5 +109,7 @@ NS_CC_END
 #undef min
 #undef max
 
+
+typedef decltype(timeval::tv_sec) cc_time_t;
 #endif  // __CC_STD_C_H__
 

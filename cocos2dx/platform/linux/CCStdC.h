@@ -51,4 +51,6 @@ THE SOFTWARE.
 #define cosf cos
 #define sinf sin
 
+typedef time_t cc_time_t;
+
 #endif  // __CC_STD_C_H__

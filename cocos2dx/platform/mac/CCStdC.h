@@ -45,4 +45,6 @@ THE SOFTWARE.
 #define MAX(x,y) (((x) < (y)) ? (y) : (x))
 #endif  // MAX
 
+typedef time_t cc_time_t;
+
 #endif  // __CC_STD_C_H__

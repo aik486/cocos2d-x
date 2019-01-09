@@ -159,4 +159,6 @@ int CC_DLL gettimeofday(struct timeval *, struct timezone *);
 
 #endif  // CC_TARGET_PLATFORM == CC_PLATFORM_BADA
 
+typedef long cc_time_t;
+
 #endif  // __CC_STD_C_H__
