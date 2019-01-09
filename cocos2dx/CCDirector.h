@@ -324,6 +324,9 @@ public:
     */
     void setContentScaleFactor(float scaleFactor);
     float getContentScaleFactor(void);
+    
+    int64_t frameStartTimeMicros() const;
+    double frameStartTimeSeconds() const;
 
 public:
     /** CCScheduler associated with this director

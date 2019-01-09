@@ -954,6 +954,16 @@ float CCDirector::getContentScaleFactor(void)
     return m_fContentScaleFactor;
 }
 
+int64_t CCDirector::frameStartTimeMicros() const
+{
+    return int64_t(m_pLastUpdate->tv_sec) * 1000000 + m_pLastUpdate->tv_usec;
+}
+
+double CCDirector::frameStartTimeSeconds() const
+{
+    return m_pLastUpdate->tv_sec + m_pLastUpdate->tv_usec / 1000000.0;
+}
+
 void CCDirector::setContentScaleFactor(float scaleFactor)
 {
     if (scaleFactor != m_fContentScaleFactor)
