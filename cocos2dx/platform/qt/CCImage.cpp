@@ -41,7 +41,7 @@ bool CCImage::initWithImageFileThreadSafe(
 		CCFileUtils::sharedFileUtils()->getFileData(fullPath, "rb", &nSize);
 	if (pBuffer != NULL && nSize > 0)
 	{
-		bRet = initWithImageData(pBuffer, nSize, imageType);
+		bRet = initWithImageData(pBuffer, int(nSize), imageType);
 	}
 	CC_SAFE_DELETE_ARRAY(pBuffer);
 	return bRet;
@@ -102,7 +102,7 @@ bool CCImage::initWithImageData(void *pData, int nDataLen, EImageFormat eFmt,
 	}
 
 	*m_pImage = qimage;
-	m_pData = qimage.bits();
+	m_pData = m_pImage->bits();
 	m_nWidth = quint16(qimage.width());
 	m_nHeight = quint16(qimage.height());
 	m_nBitsPerComponent = 8;
