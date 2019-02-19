@@ -90,5 +90,7 @@ struct timezone
 
 int CC_DLL gettimeofday(struct timeval *, struct timezone *);
 
+typedef long cc_time_t;
+
 #endif  // __CC_STD_C_H__
 

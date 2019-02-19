@@ -1390,7 +1390,7 @@ void CCNodeRGBA::setOpacity(GLubyte opacity)
 
 void CCNodeRGBA::updateDisplayedOpacity(GLubyte parentOpacity)
 {
-	_displayedOpacity = _realOpacity * parentOpacity/255.0;
+	_displayedOpacity = GLubyte((_realOpacity * parentOpacity) / 255);
 	
     if (_cascadeOpacityEnabled)
     {
@@ -1445,9 +1445,9 @@ void CCNodeRGBA::setColor(const ccColor3B& color)
 
 void CCNodeRGBA::updateDisplayedColor(const ccColor3B& parentColor)
 {
-	_displayedColor.r = _realColor.r * parentColor.r/255.0;
-	_displayedColor.g = _realColor.g * parentColor.g/255.0;
-	_displayedColor.b = _realColor.b * parentColor.b/255.0;
+	_displayedColor.r = GLubyte((_realColor.r * parentColor.r) / 255);
+	_displayedColor.g = GLubyte((_realColor.g * parentColor.g) / 255);
+	_displayedColor.b = GLubyte((_realColor.b * parentColor.b) / 255);
     
     if (_cascadeColorEnabled)
     {

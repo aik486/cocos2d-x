@@ -57,6 +57,9 @@ protected:
     bool            m_bDirty;
     
 public:
+    static const ccColor4F NO_COLORF;
+    static const ccColor4B NO_COLOR;
+    
     static CCDrawNode* create();
     virtual ~CCDrawNode();
     
@@ -65,9 +68,17 @@ public:
     
     /** draw a dot at a position, with a given radius and color */
     void drawDot(const CCPoint &pos, float radius, const ccColor4F &color);
+    /** draw a dot at a position, with a given radius and color */
+    void drawDot(const CCPoint &pos, float radius, const ccColor4B &color);
     
     /** draw a segment with a radius and color */
-    void drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4F &color);
+    void drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4F &color);    
+    /** draw a segment with a radius and color */
+    void drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4B &color);
+    /** draw a segment with a border width and height and color */
+    void drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4F &color);
+	/** draw a segment with a border width and height and color */
+	void drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4B &color);
     
     /** draw a polygon with a fill color and line color 
      * @code
@@ -75,8 +86,14 @@ public:
      * js:var drawPolygon(var verts, var fillColor,var borderWidth,var borderColor)
      * @endcode
      */
-    void drawPolygon(CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor);
-    
+    void drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor);
+    /** draw a polygon with a fill color and line color */
+    void drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4B &fillColor, float borderWidth, const ccColor4B &borderColor);
+    /** draw a polygon with a fill color and line color and border width and height */
+    void drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4F &borderColor, const ccColor4F &fillColor);
+    /** draw a polygon with a fill color and line color and border width and height */
+    void drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4B &borderColor, const ccColor4B &fillColor);
+
     /** Clear the geometry in the node's buffer. */
     void clear();
     /**

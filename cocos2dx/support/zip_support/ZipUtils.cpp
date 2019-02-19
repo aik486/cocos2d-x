@@ -142,7 +142,7 @@ int ZipUtils::ccInflateGZipBuffer(const unsigned char* data, size_t len,
     size_t uncompLength = full_length;
 
     z_stream strm;
-    strm.next_in = data;
+    strm.next_in = const_cast<unsigned char*>(data);
     strm.avail_in = uInt(len);
     strm.total_out = 0;
     strm.zalloc = Z_NULL;
@@ -206,7 +206,7 @@ int ZipUtils::ccInflateMemoryWithHint(const unsigned char* in,
     d_stream.zfree = (free_func)0;
     d_stream.opaque = (voidpf)0;
 
-    d_stream.next_in = in;
+    d_stream.next_in = const_cast<unsigned char*>(in);
     d_stream.avail_in = inLength;
     d_stream.next_out = *out;
     d_stream.avail_out = bufferSize;

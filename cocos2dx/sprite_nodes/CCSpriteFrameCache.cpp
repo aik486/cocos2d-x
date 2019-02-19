@@ -388,7 +388,7 @@ void CCSpriteFrameCache::removeSpriteFramesFromTexture(CCTexture2D* texture)
     CCDICT_FOREACH(m_pSpriteFrames, pElement)
     {
         string key = pElement->getStrKey();
-        CCSpriteFrame* frame = (CCSpriteFrame*)m_pSpriteFrames->objectForKey(key.c_str());
+        CCSpriteFrame* frame = (CCSpriteFrame*)pElement->getObject();
         if (frame && (frame->getTexture() == texture))
         {
             keysToRemove->addObject(CCString::create(pElement->getStrKey()));

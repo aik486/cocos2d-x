@@ -305,7 +305,7 @@ void CCDirector::calculateDeltaTime(void)
 {
     struct cc_timeval now;
 
-    if (CCTime::gettimeofdayCocos2d(&now, NULL) != 0)
+    if (CCTime::gettimeofdayCocos2d(&now) != 0)
     {
         CCLOG("error in gettimeofday");
         m_fDeltaTime = 0;
@@ -320,7 +320,7 @@ void CCDirector::calculateDeltaTime(void)
     }
     else
     {
-        m_fDeltaTime = (now.tv_sec - m_pLastUpdate->tv_sec) + (now.tv_usec - m_pLastUpdate->tv_usec) / 1000000.0f;
+        m_fDeltaTime = CCTime::deltaTimeF(m_pLastUpdate, &now);
         m_fDeltaTime = MAX(0, m_fDeltaTime);
     }
 
@@ -814,7 +814,7 @@ void CCDirector::resume(void)
 
     setAnimationInterval(m_dOldAnimationInterval);
 
-    if (CCTime::gettimeofdayCocos2d(m_pLastUpdate, NULL) != 0)
+    if (CCTime::gettimeofdayCocos2d(m_pLastUpdate) != 0)
     {
         CCLOG("cocos2d: Director: Error in gettimeofday");
     }
@@ -862,7 +862,7 @@ void CCDirector::showStats(void)
 void CCDirector::calculateMPF()
 {
     struct cc_timeval now;
-    CCTime::gettimeofdayCocos2d(&now, NULL);
+    CCTime::gettimeofdayCocos2d(&now);
 
     m_fSecondsPerFrame = (now.tv_sec - m_pLastUpdate->tv_sec) + (now.tv_usec - m_pLastUpdate->tv_usec) / 1000000.0f;
 }
@@ -952,6 +952,16 @@ void CCDirector::createStatsLabel()
 float CCDirector::getContentScaleFactor(void)
 {
     return m_fContentScaleFactor;
+}
+
+int64_t CCDirector::frameStartTimeMicros() const
+{
+    return int64_t(m_pLastUpdate->tv_sec) * 1000000 + m_pLastUpdate->tv_usec;
+}
+
+double CCDirector::frameStartTimeSeconds() const
+{
+    return m_pLastUpdate->tv_sec + m_pLastUpdate->tv_usec / 1000000.0;
 }
 
 void CCDirector::setContentScaleFactor(float scaleFactor)
@@ -1065,7 +1075,7 @@ CCAccelerometer* CCDirector::getAccelerometer()
 // so we now only support DisplayLinkDirector
 void CCDisplayLinkDirector::startAnimation(void)
 {
-    if (CCTime::gettimeofdayCocos2d(m_pLastUpdate, NULL) != 0)
+    if (CCTime::gettimeofdayCocos2d(m_pLastUpdate) != 0)
     {
         CCLOG("cocos2d: DisplayLinkDirector: Error on gettimeofday");
     }
