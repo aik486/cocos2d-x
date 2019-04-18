@@ -30,7 +30,7 @@ NS_CC_BEGIN
 
 const char* cocos2dVersion()
 {
-    return "cocos2d-x 2.2.6ac3";
+    return "cocos2d-x 2.2.6ac5";
 }
 
 TypeInfo::~TypeInfo()
