@@ -41,7 +41,7 @@ NS_CC_BEGIN
 class CCTimer;
 class CCLayer;
 class CCMenuItem;
-class CCNotificationCenter;
+class CCNotificationObserver;
 class CCCallFunc;
 class CCAcceleration;
 
@@ -57,27 +57,16 @@ enum ccScriptType {
 class CCScriptHandlerEntry : public CCObject
 {
 public:
-    static CCScriptHandlerEntry* create(int nHandler);
+    static CCScriptHandlerEntry* create(int64_t nHandler);
     ~CCScriptHandlerEntry(void);
-    
-    int getHandler(void) {
-        return m_nHandler;
-    }
     
     int getEntryId(void) {
         return m_nEntryId;
     }
     
 protected:
-    CCScriptHandlerEntry(int nHandler)
-    : m_nHandler(nHandler)
-    {
-        static int newEntryId = 0;
-        newEntryId++;
-        m_nEntryId = newEntryId;
-    }
+    CCScriptHandlerEntry(int64_t nHandler);
     
-    int m_nHandler;
     int m_nEntryId;
 };
 
@@ -92,7 +81,7 @@ class CCSchedulerScriptHandlerEntry : public CCScriptHandlerEntry
 {
 public:
     // nHandler return by tolua_ref_function(), called from LuaCocos2d.cpp
-    static CCSchedulerScriptHandlerEntry* create(int nHandler, float fInterval, bool bPaused);
+    static CCSchedulerScriptHandlerEntry* create(int64_t nHandler, float fInterval, bool bPaused);
     ~CCSchedulerScriptHandlerEntry(void);
     
     cocos2d::CCTimer* getTimer(void) {
@@ -112,7 +101,7 @@ public:
     }
     
 private:
-    CCSchedulerScriptHandlerEntry(int nHandler)
+    CCSchedulerScriptHandlerEntry(int64_t nHandler)
     : CCScriptHandlerEntry(nHandler)
     , m_pTimer(NULL)
     , m_bPaused(false)
@@ -134,7 +123,8 @@ private:
 class CCTouchScriptHandlerEntry : public CCScriptHandlerEntry
 {
 public:
-    static CCTouchScriptHandlerEntry* create(int nHandler, bool bIsMultiTouches, int nPriority, bool bSwallowsTouches);
+    static CCTouchScriptHandlerEntry* create(int64_t nHandler, 
+          bool bIsMultiTouches, int nPriority, bool bSwallowsTouches);
     ~CCTouchScriptHandlerEntry(void);
     
     bool isMultiTouches(void) {
@@ -150,7 +140,7 @@ public:
     }
     
 private:
-    CCTouchScriptHandlerEntry(int nHandler)
+    CCTouchScriptHandlerEntry(int64_t nHandler)
     : CCScriptHandlerEntry(nHandler)
     , m_bIsMultiTouches(false)
     , m_nPriority(0)
@@ -175,19 +165,16 @@ private:
 class CC_DLL CCScriptEngineProtocol
 {
 public:
-    virtual ~CCScriptEngineProtocol() {};
+    virtual ~CCScriptEngineProtocol() {}
     
     /** Get script type */
-    virtual ccScriptType getScriptType() { return kScriptTypeNone; };
+    virtual ccScriptType getScriptType() { return kScriptTypeNone; }
 
     /** Remove script object. */
     virtual void removeScriptObjectByCCObject(CCObject* pObj) = 0;
     
     /** Remove script function handler, only CCLuaEngine class need to implement this function. */
-    virtual void removeScriptHandler(int nHandler) {};
-    
-    /** Reallocate script function handler, only CCLuaEngine class need to implement this function. */
-    virtual int reallocateScriptHandler(int nHandler) { return -1;}
+    virtual void removeScriptHandler(int64_t nHandler) {(void)nHandler;}
     
     /**
      @brief Execute script code contained in the given string.
@@ -221,12 +208,12 @@ public:
     
     virtual int executeMenuItemEvent(CCMenuItem* pMenuItem) = 0;
     /** Execute a notification event function */
-    virtual int executeNotificationEvent(CCNotificationCenter* pNotificationCenter, const char* pszName) = 0;
+    virtual int executeNotificationEvent(CCNotificationObserver* pObserver, const char* pszName) = 0;
     
     /** execute a callfun event */
     virtual int executeCallFuncActionEvent(CCCallFunc* pAction, CCObject* pTarget = NULL) = 0;
     /** execute a schedule function */
-    virtual int executeSchedule(int nHandler, float dt, CCNode* pNode = NULL) = 0;
+    virtual int executeSchedule(int64_t nHandler, float dt, CCNode* pNode = NULL) = 0;
     
     /** functions for executing touch event */
     virtual int executeLayerTouchesEvent(CCLayer* pLayer, int eventType, CCSet *pTouches) = 0;
@@ -239,10 +226,10 @@ public:
     virtual int executeAccelerometerEvent(CCLayer* pLayer, CCAcceleration* pAccelerationValue) = 0;
 
     /** function for common event */
-    virtual int executeEvent(int nHandler, const char* pEventName, CCObject* pEventSource = NULL, const char* pEventSourceClassName = NULL) = 0;
+    virtual int executeEvent(int64_t nHandler, const char* pEventName, CCObject* pEventSource = NULL, const char* pEventSourceClassName = NULL) = 0;
     
     /** function for c++ call back lua funtion */
-    virtual int executeEventWithArgs(int nHandler, CCArray* pArgs) { return 0; }
+    virtual int executeEventWithArgs(int64_t nHandler, CCArray* pArgs) { (void)nHandler; return 0; }
 
     /** called by CCAssert to allow scripting engine to handle failed assertions
      * @return true if the assert was handled by the script engine, false otherwise.

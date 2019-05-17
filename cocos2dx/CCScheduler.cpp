@@ -80,7 +80,6 @@ CCTimer::CCTimer()
 , m_fDelay(0.0f)
 , m_fInterval(0.0f)
 , m_pfnSelector(NULL)
-, m_nScriptHandler(0)
 {
 }
 
@@ -104,7 +103,7 @@ CCTimer* CCTimer::timerWithTarget(CCObject *pTarget, SEL_SCHEDULE pfnSelector, f
     return pTimer;
 }
 
-CCTimer* CCTimer::timerWithScriptHandler(int nHandler, float fSeconds)
+CCTimer* CCTimer::timerWithScriptHandler(int64_t nHandler, float fSeconds)
 {
     CCTimer *pTimer = new CCTimer();
 
@@ -114,9 +113,9 @@ CCTimer* CCTimer::timerWithScriptHandler(int nHandler, float fSeconds)
     return pTimer;
 }
 
-bool CCTimer::initWithScriptHandler(int nHandler, float fSeconds)
+bool CCTimer::initWithScriptHandler(int64_t nHandler, float fSeconds)
 {
-    m_nScriptHandler = nHandler;
+    registerScriptHandler(nHandler);
     m_fElapsed = -1;
     m_fInterval = fSeconds;
 
@@ -625,7 +624,7 @@ void CCScheduler::unscheduleAllForTarget(CCObject *pTarget)
     unscheduleUpdateForTarget(pTarget);
 }
 
-unsigned int CCScheduler::scheduleScriptFunc(unsigned int nHandler, float fInterval, bool bPaused)
+int CCScheduler::scheduleScriptFunc(int64_t nHandler, float fInterval, bool bPaused)
 {
     CCSchedulerScriptHandlerEntry* pEntry = CCSchedulerScriptHandlerEntry::create(nHandler, fInterval, bPaused);
     if (!m_pScriptHandlerEntries)

@@ -882,52 +882,13 @@ public:
      */
     virtual bool isRunning();
 
-    
-    /// @{
-    /// @name Script Bindings for lua
 
-    /**
-     * Registers a script function that will be called in onEnter() & onExit() seires functions.
-     * 
-     * This handler will be removed automatically after onExit() called.
-     * @code
-     * -- lua sample
-     * local function sceneEventHandler(eventType)
-     *     if eventType == kCCNodeOnEnter then
-     *         -- do something
-     *     elseif evetType == kCCNodeOnExit then
-     *         -- do something
-     *     end
-     * end
-     * scene::registerScriptHandler(sceneEventHandler)
-     * @endcode
-     *
-     * @warning This method is for internal usage, don't call it manually.
-     * @todo Perhaps we should rename it to get/set/removeScriptHandler acoording to the function name style.
-     *
-     * @param handler   A number that indicates a lua function. 
-     */
-    virtual void registerScriptHandler(int handler);
-    /**
-     * Unregisters a script function that will be called in onEnter() & onExit() series functions.
-     *
-     * @see registerScriptHandler(int)
-     */
-    virtual void unregisterScriptHandler(void);
-    /**
-     * Gets script handler for onEnter/onExit event.
-     * This is an internal method. g
-     * @see registerScriptHandler(int)
-     *
-     * @return A number that indicates a lua function.
-     */
-    inline int getScriptHandler() { return m_nScriptHandler; };
     
     /** 
      * Schedules for lua script. 
      * @js NA
      */
-    void scheduleUpdateWithPriorityLua(int nHandler, int priority);
+    void scheduleUpdateWithPriorityLua(int64_t nHandler, int priority);
     
     /// @}  end Script Bindings
 
@@ -1458,9 +1419,7 @@ protected:
     
     bool m_bReorderChildDirty;          ///< children order dirty flag
     
-    int m_nScriptHandler;               ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
-    int m_nUpdateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
-    ccScriptType m_eScriptType;         ///< type of script binding, lua or javascript
+    int64_t m_nUpdateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
     
     CCComponentContainer *m_pComponentContainer;        ///< Dictionary of components
 

@@ -295,7 +295,6 @@ public:
      */
     CCCallFunc()
         : m_pSelectorTarget(NULL)
-		, m_nScriptHandler(0)
         , m_pCallFunc(NULL)
     {
     }
@@ -315,7 +314,7 @@ public:
 	/** creates the action with the handler script function 
      * @js NA
      */
-	static CCCallFunc * create(int nHandler);
+	static CCCallFunc * create(int64_t nHandler);
 
 	/** initializes the action with the callback 
     
@@ -355,16 +354,9 @@ public:
             m_pSelectorTarget = pSel; 
         }
     }
-    /**
-     * @lua NA
-     */
-    inline int getScriptHandler() { return m_nScriptHandler; };
 protected:
     /** Target that will be called */
     CCObject*   m_pSelectorTarget;
-
-	int m_nScriptHandler;
-
     union
     {
         SEL_CallFunc    m_pCallFunc;
@@ -408,7 +400,7 @@ public:
     static CCCallFuncN * create(CCObject* pSelectorTarget, SEL_CallFuncN selector);
 
 	/** creates the action with the handler script function*/
-	static CCCallFuncN * create(int nHandler);
+	static CCCallFuncN * create(int64_t nHandler);
 
     /** initializes the action with the callback 
 

@@ -390,12 +390,12 @@ CCCallFunc * CCCallFunc::create(CCObject* pSelectorTarget, SEL_CallFunc selector
     return NULL;
 }
 
-CCCallFunc * CCCallFunc::create(int nHandler)
+CCCallFunc * CCCallFunc::create(int64_t nHandler)
 {
 	CCCallFunc *pRet = new CCCallFunc();
 
 	if (pRet) {
-		pRet->m_nScriptHandler = nHandler;
+		pRet->registerScriptHandler(nHandler);
 		pRet->autorelease();
 	}
 	else{
@@ -420,11 +420,7 @@ bool CCCallFunc::initWithTarget(CCObject* pSelectorTarget) {
 }
 
 CCCallFunc::~CCCallFunc(void)
-{
-    if (m_nScriptHandler)
-    {
-        cocos2d::CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nScriptHandler);
-    }
+{    
     CC_SAFE_RELEASE(m_pSelectorTarget);
 }
 
@@ -443,9 +439,7 @@ CCObject * CCCallFunc::copyWithZone(CCZone *pZone) {
     CCActionInstant::copyWithZone(pZone);
     pRet->initWithTarget(m_pSelectorTarget);
     pRet->m_pCallFunc = m_pCallFunc;
-    if (m_nScriptHandler > 0 ) {
-        pRet->m_nScriptHandler = cocos2d::CCScriptEngineManager::sharedManager()->getScriptEngine()->reallocateScriptHandler(m_nScriptHandler);
-    }
+    CC_ASSERT(m_nScriptHandler == 0);
     CC_SAFE_DELETE(pNewZone);
     return pRet;
 }
@@ -490,12 +484,12 @@ CCCallFuncN * CCCallFuncN::create(CCObject* pSelectorTarget, SEL_CallFuncN selec
     return NULL;
 }
 
-CCCallFuncN * CCCallFuncN::create(int nHandler)
+CCCallFuncN * CCCallFuncN::create(int64_t nHandler)
 {
 	CCCallFuncN *pRet = new CCCallFuncN();
 
 	if (pRet) {
-		pRet->m_nScriptHandler = nHandler;
+		pRet->registerScriptHandler(nHandler);
 		pRet->autorelease();
 	}
 	else{

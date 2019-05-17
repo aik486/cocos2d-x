@@ -87,7 +87,6 @@ CCNode::CCNode(void)
 , m_bVisible(true)
 , m_bIgnoreAnchorPointForPosition(false)
 , m_bReorderChildDirty(false)
-, m_nScriptHandler(0)
 , m_nUpdateScriptHandler(0)
 , m_pComponentContainer(NULL)
 {
@@ -98,16 +97,13 @@ CCNode::CCNode(void)
     m_pScheduler = director->getScheduler();
     m_pScheduler->retain();
 
-    CCScriptEngineProtocol* pEngine = CCScriptEngineManager::sharedManager()->getScriptEngine();
-    m_eScriptType = pEngine != NULL ? pEngine->getScriptType() : kScriptTypeNone;
     m_pComponentContainer = new CCComponentContainer(this);
 }
 
 CCNode::~CCNode(void)
 {
     CCLOGINFO( "cocos2d: deallocing" );
-    
-    unregisterScriptHandler();
+        
     if (m_nUpdateScriptHandler)
     {
         CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nUpdateScriptHandler);
@@ -970,23 +966,6 @@ void CCNode::onExit()
     }
 }
 
-void CCNode::registerScriptHandler(int nHandler)
-{
-    unregisterScriptHandler();
-    m_nScriptHandler = nHandler;
-    LUALOG("[LUA] Add CCNode event handler: %d", m_nScriptHandler);
-}
-
-void CCNode::unregisterScriptHandler(void)
-{
-    if (m_nScriptHandler)
-    {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nScriptHandler);
-        LUALOG("[LUA] Remove CCNode event handler: %d", m_nScriptHandler);
-        m_nScriptHandler = 0;
-    }
-}
-
 void CCNode::setActionManager(CCActionManager* actionManager)
 {
     if( actionManager != m_pActionManager ) {
@@ -1063,7 +1042,7 @@ void CCNode::scheduleUpdateWithPriority(int priority)
     m_pScheduler->scheduleUpdateForTarget(this, priority, !m_bRunning);
 }
 
-void CCNode::scheduleUpdateWithPriorityLua(int nHandler, int priority)
+void CCNode::scheduleUpdateWithPriorityLua(int64_t nHandler, int priority)
 {
     unscheduleUpdate();
     m_nUpdateScriptHandler = nHandler;
