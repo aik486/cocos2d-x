@@ -16,3 +16,6 @@
 [submodule "samples/Cpp/TestCpp/Resources/ccs-res"]
 	path = samples/Cpp/TestCpp/Resources/ccs-res
 	url = https://github.com/dumganhar/ccs-res
+[submodule "external/pthreads4w"]
+	path = external/pthreads4w
+	url = https://git.code.sf.net/p/pthreads4w/code
