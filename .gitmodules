@@ -19,3 +19,6 @@
 [submodule "external/pthreads4w"]
 	path = external/pthreads4w
 	url = https://git.code.sf.net/p/pthreads4w/code
+[submodule "scripting/javascript/qtscript_bindings"]
+	path = scripting/javascript/qtscript_bindings
+	url = https://github.com/kusharami/qtscript_bindings.git
