@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include "cocoa/CCObject.h"
 #include "support/data_support/uthash.h"
+#include <cstdint>
 
 NS_CC_BEGIN
 
@@ -96,6 +97,10 @@ public:
     
     /** Allocates a timer with a script callback function and an interval in seconds. */
     static CCTimer* timerWithScriptHandler(int64_t nHandler, float fSeconds);
+    /**
+     *  @lua NA
+     */
+    inline int64_t getScriptHandler() { return m_nScriptHandler; }
 
 protected:
     CCObject *m_pTarget;
@@ -107,6 +112,8 @@ protected:
     float m_fDelay;
     float m_fInterval;
     SEL_SCHEDULE m_pfnSelector;
+    
+    int64_t m_nScriptHandler;
 };
 
 //
@@ -226,7 +233,7 @@ public:
      return schedule script entry ID, used for unscheduleScriptFunc().
      @js NA
      */
-    int scheduleScriptFunc(int64_t nHandler, float fInterval, bool bPaused);
+    unsigned int scheduleScriptFunc(int64_t nHandler, float fInterval, bool bPaused);
     
     /** Unschedule a script entry. 
      *  @js NA

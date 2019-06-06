@@ -80,6 +80,7 @@ CCTimer::CCTimer()
 , m_fDelay(0.0f)
 , m_fInterval(0.0f)
 , m_pfnSelector(NULL)
+, m_nScriptHandler(0)
 {
 }
 
@@ -115,7 +116,7 @@ CCTimer* CCTimer::timerWithScriptHandler(int64_t nHandler, float fSeconds)
 
 bool CCTimer::initWithScriptHandler(int64_t nHandler, float fSeconds)
 {
-    registerScriptHandler(nHandler);
+    m_nScriptHandler = nHandler;
     m_fElapsed = -1;
     m_fInterval = fSeconds;
 
@@ -624,7 +625,7 @@ void CCScheduler::unscheduleAllForTarget(CCObject *pTarget)
     unscheduleUpdateForTarget(pTarget);
 }
 
-int CCScheduler::scheduleScriptFunc(int64_t nHandler, float fInterval, bool bPaused)
+unsigned int CCScheduler::scheduleScriptFunc(int64_t nHandler, float fInterval, bool bPaused)
 {
     CCSchedulerScriptHandlerEntry* pEntry = CCSchedulerScriptHandlerEntry::create(nHandler, fInterval, bPaused);
     if (!m_pScriptHandlerEntries)
@@ -641,7 +642,7 @@ void CCScheduler::unscheduleScriptEntry(unsigned int uScheduleScriptEntryID)
     for (int i = m_pScriptHandlerEntries->count() - 1; i >= 0; i--)
     {
         CCSchedulerScriptHandlerEntry* pEntry = static_cast<CCSchedulerScriptHandlerEntry*>(m_pScriptHandlerEntries->objectAtIndex(i));
-        if (pEntry->getEntryId() == (int)uScheduleScriptEntryID)
+        if (pEntry->getEntryId() == uScheduleScriptEntryID)
         {
             pEntry->markedForDeletion();
             break;

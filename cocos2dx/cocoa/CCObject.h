@@ -62,15 +62,13 @@ class CC_DLL CCObject : public CCCopying
 public:
     // object id, CCScriptSupport need public m_uID
     unsigned int        m_uID;
-    // Lua reference id
-    int                 m_nLuaID;
+    // Script reference id
+    int m_nLuaID;
 protected:
     // count of references
     unsigned int        m_uReference;
     // count of autorelease
     unsigned int        m_uAutoReleaseCount;
-    int64_t m_nScriptHandler;
-    int m_eScriptType;
 public:
     CCObject(void);
     /**
@@ -88,46 +86,6 @@ public:
 
     virtual void acceptVisitor(CCDataVisitor &visitor);
 
-    /// @{
-    /// @name Script Bindings for lua
-
-    /**
-     * Registers a script function that will be called in onEnter() & onExit() seires functions.
-     * 
-     * This handler will be removed automatically after onExit() called.
-     * @code
-     * -- lua sample
-     * local function sceneEventHandler(eventType)
-     *     if eventType == kCCNodeOnEnter then
-     *         -- do something
-     *     elseif evetType == kCCNodeOnExit then
-     *         -- do something
-     *     end
-     * end
-     * scene::registerScriptHandler(sceneEventHandler)
-     * @endcode
-     *
-     * @warning This method is for internal usage, don't call it manually.
-     * @todo Perhaps we should rename it to get/set/removeScriptHandler acoording to the function name style.
-     *
-     * @param handler   A number that indicates a lua function. 
-     */
-    void registerScriptHandler(int64_t handler);
-    /**
-     * Unregisters a script function that will be called in onEnter() & onExit() series functions.
-     *
-     * @see registerScriptHandler(int)
-     */
-    void unregisterScriptHandler(void);
-    /**
-     * Gets script handler for onEnter/onExit event.
-     * This is an internal method. g
-     * @see registerScriptHandler(int)
-     *
-     * @return A number that indicates a lua function.
-     */
-    inline int64_t getScriptHandler() { return m_nScriptHandler; }
-    
     virtual void update(float dt) {CC_UNUSED_PARAM(dt);}
 
     friend class CCAutoreleasePool;

@@ -87,6 +87,7 @@ CCNode::CCNode(void)
 , m_bVisible(true)
 , m_bIgnoreAnchorPointForPosition(false)
 , m_bReorderChildDirty(false)
+, m_nScriptHandler(0)
 , m_nUpdateScriptHandler(0)
 , m_pComponentContainer(NULL)
 {
@@ -97,13 +98,16 @@ CCNode::CCNode(void)
     m_pScheduler = director->getScheduler();
     m_pScheduler->retain();
 
+    CCScriptEngineProtocol* pEngine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+    m_eScriptType = pEngine != NULL ? pEngine->getScriptType() : kScriptTypeNone;
     m_pComponentContainer = new CCComponentContainer(this);
 }
 
 CCNode::~CCNode(void)
 {
     CCLOGINFO( "cocos2d: deallocing" );
-        
+    
+    unregisterScriptHandler();
     if (m_nUpdateScriptHandler)
     {
         CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nUpdateScriptHandler);
@@ -963,6 +967,23 @@ void CCNode::onExit()
     if ( m_eScriptType != kScriptTypeNone)
     {
         CCScriptEngineManager::sharedManager()->getScriptEngine()->executeNodeEvent(this, kCCNodeOnExit);
+    }
+}
+
+void CCNode::registerScriptHandler(int64_t nHandler)
+{
+    unregisterScriptHandler();
+    m_nScriptHandler = nHandler;
+    LUALOG("[LUA] Add CCNode event handler: %d", m_nScriptHandler);
+}
+
+void CCNode::unregisterScriptHandler(void)
+{
+    if (m_nScriptHandler)
+    {
+        CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nScriptHandler);
+        LUALOG("[LUA] Remove CCNode event handler: %d", m_nScriptHandler);
+        m_nScriptHandler = 0;
     }
 }
 

@@ -46,18 +46,14 @@ CCObject::CCObject(void)
 : m_nLuaID(0)
 , m_uReference(1) // when the object is created, the reference count of it is 1
 , m_uAutoReleaseCount(0)
-, m_nScriptHandler(0)
 {
     static unsigned int uObjectCount = 0;
 
     m_uID = ++uObjectCount;
-    
-    CCScriptEngineProtocol* pEngine = CCScriptEngineManager::sharedManager()->getScriptEngine();
-    m_eScriptType = pEngine ? pEngine->getScriptType() : kScriptTypeNone;
 }
 
 CCObject::~CCObject(void)
-{    
+{
     // if the object is managed, we should remove it
     // from pool manager
     if (m_uAutoReleaseCount > 0)
@@ -65,10 +61,18 @@ CCObject::~CCObject(void)
         CCPoolManager::sharedPoolManager()->removeObject(this);
     }
 
-    if (m_eScriptType != kScriptTypeNone)
+    // if the object is referenced by Lua engine, remove it
+    if (m_nLuaID)
     {
-        unregisterScriptHandler();
         CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptObjectByCCObject(this);
+    }
+    else
+    {
+        CCScriptEngineProtocol* pEngine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (pEngine != NULL && pEngine->getScriptType() == kScriptTypeJavascript)
+        {
+            pEngine->removeScriptObjectByCCObject(this);
+        }
     }
 }
 
@@ -120,23 +124,5 @@ void CCObject::acceptVisitor(CCDataVisitor &visitor)
 {
     visitor.visitObject(this);
 }
-
-void CCObject::registerScriptHandler(int64_t nHandler)
-{
-    unregisterScriptHandler();
-    m_nScriptHandler = nHandler;
-    LUALOG("[LUA] Add CCNode event handler: %ll", nHandler);
-}
-
-void CCObject::unregisterScriptHandler(void)
-{
-    if (m_nScriptHandler)
-    {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nScriptHandler);
-        LUALOG("[LUA] Remove CCNode event handler: %ll", m_nScriptHandler);
-        m_nScriptHandler = 0;
-    }
-}
-
 
 NS_CC_END
