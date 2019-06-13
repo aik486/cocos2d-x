@@ -15,40 +15,40 @@ CONFIG(debug, debug|release) {
     DEFINES += NDEBUG
 }
 
-win32-msvc* {
+msvc {
     QMAKE_CXXFLAGS_WARN_OFF -= -W0
     QMAKE_CXXFLAGS += -W3 /wd4251 /wd4573
     DEFINES += _CRT_SECURE_NO_WARNINGS
     DEFINES += _SCL_SECURE_NO_WARNINGS
     CONFIG += no_batch
-    QMAKE_CXXFLAGS += /wd4005 /wd4244
-}
-
-gcc|clang {
-    QMAKE_CXXFLAGS += \
-        -Wno-unknown-pragmas \
-        -Wno-overloaded-virtual \
-        -Wno-unused-function \
-        -Wno-deprecated-declarations
-
-    clang:QMAKE_CXXFLAGS += \
-        -Wno-unused-private-field \
-        -Wno-unneeded-internal-declaration \
-        -Wno-null-conversion \
-        -Wno-unsequenced \
-        -Wno-nonnull
-    else:gcc:QMAKE_CXXFLAGS += \
-        -Wno-nonnull-compare \
-        -Wno-sequence-point \
-        -Wno-sign-compare \
-        -Wno-misleading-indentation
-
-    INCLUDEPATH += \
-        $$COCOS2DX_PATH/cocos2dx/platform \
-        $$COCOS2DX_PATH/cocos2dx/cocoa \
-        $$COCOS2DX_PATH/cocos2dx/text_input_node \
-        $$COCOS2DX_PATH/cocos2dx/touch_dispatcher
-    DEFINES += USE_FILE32API
+    QMAKE_CXXFLAGS += /wd4005 /wd4244 /bigobj
+} else {
+    clang|gcc {
+        QMAKE_CXXFLAGS += \
+            -Wno-unknown-pragmas \
+            -Wno-overloaded-virtual \
+            -Wno-unused-function \
+            -Wno-deprecated-declarations
+    
+        clang:QMAKE_CXXFLAGS += \
+            -Wno-unused-private-field \
+            -Wno-unneeded-internal-declaration \
+            -Wno-null-conversion \
+            -Wno-unsequenced \
+            -Wno-nonnull
+        else:gcc:QMAKE_CXXFLAGS += \
+            -Wno-nonnull-compare \
+            -Wno-sequence-point \
+            -Wno-sign-compare \
+            -Wno-misleading-indentation
+    
+        INCLUDEPATH += \
+            $$COCOS2DX_PATH/cocos2dx/platform \
+            $$COCOS2DX_PATH/cocos2dx/cocoa \
+            $$COCOS2DX_PATH/cocos2dx/text_input_node \
+            $$COCOS2DX_PATH/cocos2dx/touch_dispatcher
+        DEFINES += USE_FILE32API
+    }
 }
 
 SOURCES +=\
