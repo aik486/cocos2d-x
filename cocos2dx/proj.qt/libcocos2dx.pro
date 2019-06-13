@@ -1,33 +1,47 @@
 include(libcocos2dx.pri)
 
-DESTDIR = $$COCOS2DX_LIB
-
 QT += core gui widgets opengl script
 
+CONFIG += c++11 warn_off
+DESTDIR = $$COCOS2DX_LIB
 TARGET = cocos2dx
 TEMPLATE = lib
 CONFIG += staticlib
 
-unix|win32-g++ {
+CONFIG(debug, debug|release) {
+    DEFINES += COCOS2D_DEBUG=1
+    DEFINES += DEBUG
+} else {
+    DEFINES += NDEBUG
+}
+
+win32-msvc* {
+    QMAKE_CXXFLAGS_WARN_OFF -= -W0
+    QMAKE_CXXFLAGS += -W3 /wd4251 /wd4573
+    DEFINES += _CRT_SECURE_NO_WARNINGS
+    DEFINES += _SCL_SECURE_NO_WARNINGS
+    CONFIG += no_batch
+    QMAKE_CXXFLAGS += /wd4005 /wd4244
+}
+
+gcc|clang {
     QMAKE_CXXFLAGS += \
         -Wno-unknown-pragmas \
         -Wno-overloaded-virtual \
         -Wno-unused-function \
         -Wno-deprecated-declarations
 
-    *-g++ {
-        QMAKE_CXXFLAGS += \
-            -Wno-nonnull-compare \
-            -Wno-sequence-point \
-            -Wno-sign-compare \
-            -Wno-misleading-indentation
-    } else {
-        QMAKE_CXXFLAGS += \
-            -Wno-unneeded-internal-declaration \
-            -Wno-null-conversion \
-            -Wno-unsequenced \
-            -Wno-nonnull
-    }
+    clang:QMAKE_CXXFLAGS += \
+        -Wno-unused-private-field \
+        -Wno-unneeded-internal-declaration \
+        -Wno-null-conversion \
+        -Wno-unsequenced \
+        -Wno-nonnull
+    else:gcc:QMAKE_CXXFLAGS += \
+        -Wno-nonnull-compare \
+        -Wno-sequence-point \
+        -Wno-sign-compare \
+        -Wno-misleading-indentation
 
     INCLUDEPATH += \
         $$COCOS2DX_PATH/cocos2dx/platform \
@@ -35,12 +49,6 @@ unix|win32-g++ {
         $$COCOS2DX_PATH/cocos2dx/text_input_node \
         $$COCOS2DX_PATH/cocos2dx/touch_dispatcher
     DEFINES += USE_FILE32API
-}
-
-win32-msvc* {
-    CONFIG += no_batch
-    QMAKE_CXXFLAGS += /wd4005 /wd4244
-    INCLUDEPATH += $$PTHREADS_PATH
 }
 
 SOURCES +=\
@@ -167,6 +175,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/CCDirector.cpp \
     $$COCOS2DX_PATH/cocos2dx/CCScheduler.cpp \
     $$COCOS2DX_PATH/cocos2dx/cocos2d.cpp \
+    src/js_bindings/generated/qtscript_cocos2dx.cpp \
     src/js_bindings/manual/QtScriptCCObject.cpp
 
 HEADERS += \
@@ -334,6 +343,7 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos2dx/CCDirector.h \
     $$COCOS2DX_PATH/cocos2dx/CCScheduler.h \
     $$COCOS2DX_PATH/cocos2dx/CCObjectHolder.h \
+    src/js_bindings/generated/qtscript_cocos2dx.hpp \
     src/js_bindings/manual/QtScriptCCObject.hpp
 
 
@@ -384,3 +394,8 @@ HEADERS +=\
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCPlatformDefine.h \
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCStdC.h
 }
+
+OTHER_FILES += \
+    src/js_bindings/generated/mac/userconf.ini \
+    src/js_bindings/generated/win32/userconf.ini \
+    src/js_bindings/generated/js_bindings.ini

@@ -109,19 +109,21 @@ typedef struct sCCParticle {
     unsigned int    atlasIndex;
 
     //! Mode A: gravity, direction, radial accel, tangential accel
-    struct {
+    struct ModeA {
         CCPoint        dir;
         float        radialAccel;
         float        tangentialAccel;
-    } modeA;
+    };
+    ModeA modeA;
 
     //! Mode B: radius mode
-    struct {
+    struct ModeB {
         float        angle;
         float        degreesPerSecond;
         float        radius;
         float        deltaRadius;
-    } modeB;
+    };
+    ModeB modeB;
 
 }tCCParticle;
 

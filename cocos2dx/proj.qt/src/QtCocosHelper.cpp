@@ -165,4 +165,68 @@ QPointF getGlobalScaleForNode(CCNode *node)
 
 	return QPointF(x, y);
 }
+
+QPoint ccPointToQPoint(const CCPoint &point)
+{
+	return QPoint(int(point.x), int(point.y));
+}
+
+QPointF ccPointToQPointF(const CCPoint &point)
+{
+	return QPointF(point.x, point.y);
+}
+
+QSize ccSizeToQSize(const CCSize &size)
+{
+	return QSize(int(size.width), int(size.height));
+}
+
+QSizeF ccSizeToQSizeF(const CCSize &size)
+{
+	return QSizeF(size.width, size.height);
+}
+
+CCPoint qPointToCCPoint(const QPoint &point)
+{
+	return CCPoint(float(point.x()), float(point.y()));
+}
+
+CCPoint qPointFToCCPoint(const QPointF &point)
+{
+	return CCPoint(float(point.x()), float(point.y()));
+}
+
+CCSize qSizeToCCSize(const QSize &size)
+{
+	return CCSize(float(size.width()), float(size.height()));
+}
+
+CCSize qSizeFToCCSize(const QSizeF &size)
+{
+	return CCSize(float(size.width()), float(size.height()));
+}
+
+CCRect qRectToCCRect(const QRect &rect)
+{
+	return CCRect(float(rect.x()), float(rect.y()), float(rect.width()),
+		float(rect.height()));
+}
+
+CCRect qRectFToCCRect(const QRectF &rect)
+{
+	return CCRect(float(rect.x()), float(rect.y()), float(rect.width()),
+		float(rect.height()));
+}
+
+QRect ccRectToQRect(const CCRect &rect)
+{
+	return QRect(int(rect.origin.x), int(rect.origin.y), int(rect.size.width),
+		int(rect.size.height));
+}
+
+QRectF ccRectToQRectF(const CCRect &rect)
+{
+	return QRectF(
+		rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
 }

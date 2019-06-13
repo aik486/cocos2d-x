@@ -1,12 +1,13 @@
 #pragma once
 
 #include "js_bindings/manual/QtScriptCCObject.hpp"
+#include "QtScriptBaseClassPrototype.h"
 #include "include/cocos2d.h"
 
 void qtscript_register_all_cocos2dx(QScriptEngine *engine);
 
 namespace cocos2d {
-class QtScriptCCDataVisitor : public QtScriptBaseClassPrototype<CCDataVisitor *>
+class QtScriptCCDataVisitor : public QtScriptBaseClassPrototype<CCDataVisitor *, false>
 {
 	Q_OBJECT
 
@@ -33,7 +34,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCDataVisitor::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCDataVisitor *)
+Q_DECLARE_METATYPE(const cocos2d::CCDataVisitor *)
 
 namespace cocos2d {
 class QtScriptCCPrettyPrinter : public QtScriptCCDataVisitor
@@ -59,9 +62,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCPrettyPrinter *)
+Q_DECLARE_METATYPE(const cocos2d::CCPrettyPrinter *)
 
 namespace cocos2d {
-class QtScriptCCPoint final : public QtScriptBaseClassPrototype<CCPoint>
+class QtScriptCCPoint final : public QtScriptBaseClassPrototype<CCPoint, false>
 {
 	Q_OBJECT
 
@@ -114,9 +118,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCPoint)
 Q_DECLARE_METATYPE(cocos2d::CCPoint *)
+Q_DECLARE_METATYPE(const cocos2d::CCPoint *)
 
 namespace cocos2d {
-class QtScriptCCSize final : public QtScriptBaseClassPrototype<CCSize>
+class QtScriptCCSize final : public QtScriptBaseClassPrototype<CCSize, false>
 {
 	Q_OBJECT
 
@@ -150,9 +155,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCSize)
 Q_DECLARE_METATYPE(cocos2d::CCSize *)
+Q_DECLARE_METATYPE(const cocos2d::CCSize *)
 
 namespace cocos2d {
-class QtScriptCCRect final : public QtScriptBaseClassPrototype<CCRect>
+class QtScriptCCRect final : public QtScriptBaseClassPrototype<CCRect, false>
 {
 	Q_OBJECT
 
@@ -190,6 +196,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCRect)
 Q_DECLARE_METATYPE(cocos2d::CCRect *)
+Q_DECLARE_METATYPE(const cocos2d::CCRect *)
 
 namespace cocos2d {
 class QtScriptCCAction : public QtScriptCCObject
@@ -220,7 +227,6 @@ public:
 	Q_INVOKABLE void step(float dt);
 	void setTag(int nTag);
 	int getTag();
-	Q_INVOKABLE cocos2d::CCAction* copy();
 	Q_INVOKABLE bool isDone();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -228,6 +234,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAction *)
+Q_DECLARE_METATYPE(const cocos2d::CCAction *)
 
 namespace cocos2d {
 class QtScriptCCFiniteTimeAction : public QtScriptCCAction
@@ -254,6 +261,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFiniteTimeAction *)
+Q_DECLARE_METATYPE(const cocos2d::CCFiniteTimeAction *)
 
 namespace cocos2d {
 class QtScriptCCSpeed : public QtScriptCCAction
@@ -278,7 +286,6 @@ public:
 	void setSpeed(float fSpeed);
 	Q_INVOKABLE bool initWithAction(cocos2d::CCActionInterval* pAction, float fSpeed);
 	cocos2d::CCActionInterval* getInnerAction();
-	Q_INVOKABLE cocos2d::CCSpeed* copy();
 	Q_INVOKABLE cocos2d::CCActionInterval* reverse();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -286,6 +293,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSpeed *)
+Q_DECLARE_METATYPE(const cocos2d::CCSpeed *)
 
 namespace cocos2d {
 class QtScriptCCFollow : public QtScriptCCAction
@@ -304,7 +312,6 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_PROPERTY(bool boundarySet READ isBoundarySet WRITE setBoundarySet)
-	Q_INVOKABLE cocos2d::CCFollow* copy();
 	Q_INVOKABLE bool initWithTarget(cocos2d::CCNode* pFollowedNode);
 	Q_INVOKABLE bool initWithTarget(cocos2d::CCNode* pFollowedNode, const cocos2d::CCRect& rect);
 	void setBoundarySet(bool bValue);
@@ -315,9 +322,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFollow *)
+Q_DECLARE_METATYPE(const cocos2d::CCFollow *)
 
 namespace cocos2d {
-class QtScriptCCAffineTransform final : public QtScriptBaseClassPrototype<CCAffineTransform>
+class QtScriptCCAffineTransform final : public QtScriptBaseClassPrototype<CCAffineTransform, false>
 {
 	Q_OBJECT
 
@@ -356,70 +364,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCAffineTransform)
 Q_DECLARE_METATYPE(cocos2d::CCAffineTransform *)
-
-namespace cocos2d {
-class QtScript_ccArray final : public QtScriptBaseClassPrototype<_ccArray>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScript_ccArray(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScript_ccArray(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(unsigned int num READ _public_field_get_num WRITE _public_field_set_num)
-	unsigned int _public_field_get_num() const;
-	void _public_field_set_num(unsigned int value);
-	Q_PROPERTY(unsigned int max READ _public_field_get_max WRITE _public_field_set_max)
-	unsigned int _public_field_get_max() const;
-	void _public_field_set_max(unsigned int value);
-	Q_PROPERTY(cocos2d::CCObject** arr READ _public_field_get_arr WRITE _public_field_set_arr)
-	cocos2d::CCObject** _public_field_get_arr() const;
-	void _public_field_set_arr(cocos2d::CCObject** value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::_ccArray)
-Q_DECLARE_METATYPE(cocos2d::_ccArray *)
-
-namespace cocos2d {
-class QtScript_ccCArray final : public QtScriptBaseClassPrototype<_ccCArray>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScript_ccCArray(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScript_ccCArray(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(unsigned int num READ _public_field_get_num WRITE _public_field_set_num)
-	unsigned int _public_field_get_num() const;
-	void _public_field_set_num(unsigned int value);
-	Q_PROPERTY(unsigned int max READ _public_field_get_max WRITE _public_field_set_max)
-	unsigned int _public_field_get_max() const;
-	void _public_field_set_max(unsigned int value);
-	Q_PROPERTY(void** arr READ _public_field_get_arr WRITE _public_field_set_arr)
-	void** _public_field_get_arr() const;
-	void _public_field_set_arr(void** value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::_ccCArray)
-Q_DECLARE_METATYPE(cocos2d::_ccCArray *)
+Q_DECLARE_METATYPE(const cocos2d::CCAffineTransform *)
 
 namespace cocos2d {
 class QtScriptCCArray : public QtScriptCCObject
@@ -459,7 +404,6 @@ public:
 	Q_INVOKABLE cocos2d::CCObject* randomObject();
 	Q_INVOKABLE void reduceMemoryFootprint();
 	Q_INVOKABLE bool isEqualToArray(cocos2d::CCArray* pOtherArray);
-	Q_INVOKABLE cocos2d::CCArray* copy();
 	Q_INVOKABLE unsigned int count();
 	Q_INVOKABLE bool initWithObject(cocos2d::CCObject* pObject);
 	Q_INVOKABLE void removeObjectAtIndex(unsigned int index);
@@ -475,14 +419,12 @@ public:
 	static QScriptValue createWithObject(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithContentsOfFileThreadSafe(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
-	Q_PROPERTY(cocos2d::_ccArray* data READ _public_field_get_data WRITE _public_field_set_data)
-	cocos2d::_ccArray* _public_field_get_data() const;
-	void _public_field_set_data(cocos2d::_ccArray* value);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCArray *)
+Q_DECLARE_METATYPE(const cocos2d::CCArray *)
 
 namespace cocos2d {
 class QtScriptCCGLProgram : public QtScriptCCObject
@@ -526,9 +468,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCGLProgram *)
+Q_DECLARE_METATYPE(const cocos2d::CCGLProgram *)
 
 namespace cocos2d {
-class QtScriptCCAcceleration final : public QtScriptBaseClassPrototype<CCAcceleration>
+class QtScriptCCAcceleration final : public QtScriptBaseClassPrototype<CCAcceleration, false>
 {
 	Q_OBJECT
 
@@ -561,9 +504,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCAcceleration)
 Q_DECLARE_METATYPE(cocos2d::CCAcceleration *)
+Q_DECLARE_METATYPE(const cocos2d::CCAcceleration *)
 
 namespace cocos2d {
-class QtScriptCCAccelerometerDelegate final : public QtScriptBaseClassPrototype<CCAccelerometerDelegate>
+class QtScriptCCAccelerometerDelegate final : public QtScriptBaseClassPrototype<CCAccelerometerDelegate, false>
 {
 	Q_OBJECT
 
@@ -585,6 +529,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCAccelerometerDelegate)
 Q_DECLARE_METATYPE(cocos2d::CCAccelerometerDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCAccelerometerDelegate *)
 
 namespace cocos2d {
 class QtScriptCCTouch : public QtScriptCCObject
@@ -616,6 +561,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTouch *)
+Q_DECLARE_METATYPE(const cocos2d::CCTouch *)
 
 namespace cocos2d {
 class QtScriptCCEvent : public QtScriptCCObject
@@ -638,6 +584,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEvent *)
+Q_DECLARE_METATYPE(const cocos2d::CCEvent *)
 
 namespace cocos2d {
 class QtScriptCCSet : public QtScriptCCObject
@@ -660,7 +607,6 @@ public:
 	Q_INVOKABLE cocos2d::CCObject* anyObject();
 	Q_INVOKABLE void removeAllObjects();
 	Q_INVOKABLE void removeObject(cocos2d::CCObject* pObject);
-	Q_INVOKABLE cocos2d::CCSet* copy();
 	Q_INVOKABLE bool containsObject(cocos2d::CCObject* pObject);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -668,6 +614,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSet *)
+Q_DECLARE_METATYPE(const cocos2d::CCSet *)
 
 namespace cocos2d {
 class QtScriptCCScriptHandlerEntry : public QtScriptCCObject
@@ -693,6 +640,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCScriptHandlerEntry *)
+Q_DECLARE_METATYPE(const cocos2d::CCScriptHandlerEntry *)
 
 namespace cocos2d {
 class QtScriptCCSchedulerScriptHandlerEntry : public QtScriptCCScriptHandlerEntry
@@ -720,6 +668,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSchedulerScriptHandlerEntry *)
+Q_DECLARE_METATYPE(const cocos2d::CCSchedulerScriptHandlerEntry *)
 
 namespace cocos2d {
 class QtScriptCCTouchScriptHandlerEntry : public QtScriptCCScriptHandlerEntry
@@ -746,9 +695,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTouchScriptHandlerEntry *)
+Q_DECLARE_METATYPE(const cocos2d::CCTouchScriptHandlerEntry *)
 
 namespace cocos2d {
-class QtScript_ccColor3B final : public QtScriptBaseClassPrototype<_ccColor3B>
+class QtScript_ccColor3B final : public QtScriptBaseClassPrototype<_ccColor3B, false>
 {
 	Q_OBJECT
 
@@ -778,9 +728,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccColor3B)
 Q_DECLARE_METATYPE(cocos2d::_ccColor3B *)
+Q_DECLARE_METATYPE(const cocos2d::_ccColor3B *)
 
 namespace cocos2d {
-class QtScript_ccColor4B final : public QtScriptBaseClassPrototype<_ccColor4B>
+class QtScript_ccColor4B final : public QtScriptBaseClassPrototype<_ccColor4B, false>
 {
 	Q_OBJECT
 
@@ -813,9 +764,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccColor4B)
 Q_DECLARE_METATYPE(cocos2d::_ccColor4B *)
+Q_DECLARE_METATYPE(const cocos2d::_ccColor4B *)
 
 namespace cocos2d {
-class QtScript_ccColor4F final : public QtScriptBaseClassPrototype<_ccColor4F>
+class QtScript_ccColor4F final : public QtScriptBaseClassPrototype<_ccColor4F, false>
 {
 	Q_OBJECT
 
@@ -848,9 +800,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccColor4F)
 Q_DECLARE_METATYPE(cocos2d::_ccColor4F *)
+Q_DECLARE_METATYPE(const cocos2d::_ccColor4F *)
 
 namespace cocos2d {
-class QtScript_ccVertex2F final : public QtScriptBaseClassPrototype<_ccVertex2F>
+class QtScript_ccVertex2F final : public QtScriptBaseClassPrototype<_ccVertex2F, false>
 {
 	Q_OBJECT
 
@@ -877,9 +830,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccVertex2F)
 Q_DECLARE_METATYPE(cocos2d::_ccVertex2F *)
+Q_DECLARE_METATYPE(const cocos2d::_ccVertex2F *)
 
 namespace cocos2d {
-class QtScript_ccVertex3F final : public QtScriptBaseClassPrototype<_ccVertex3F>
+class QtScript_ccVertex3F final : public QtScriptBaseClassPrototype<_ccVertex3F, false>
 {
 	Q_OBJECT
 
@@ -909,9 +863,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccVertex3F)
 Q_DECLARE_METATYPE(cocos2d::_ccVertex3F *)
+Q_DECLARE_METATYPE(const cocos2d::_ccVertex3F *)
 
 namespace cocos2d {
-class QtScript_ccTex2F final : public QtScriptBaseClassPrototype<_ccTex2F>
+class QtScript_ccTex2F final : public QtScriptBaseClassPrototype<_ccTex2F, false>
 {
 	Q_OBJECT
 
@@ -938,9 +893,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccTex2F)
 Q_DECLARE_METATYPE(cocos2d::_ccTex2F *)
+Q_DECLARE_METATYPE(const cocos2d::_ccTex2F *)
 
 namespace cocos2d {
-class QtScript_ccPointSprite final : public QtScriptBaseClassPrototype<_ccPointSprite>
+class QtScript_ccPointSprite final : public QtScriptBaseClassPrototype<_ccPointSprite, false>
 {
 	Q_OBJECT
 
@@ -970,9 +926,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccPointSprite)
 Q_DECLARE_METATYPE(cocos2d::_ccPointSprite *)
+Q_DECLARE_METATYPE(const cocos2d::_ccPointSprite *)
 
 namespace cocos2d {
-class QtScript_ccQuad2 final : public QtScriptBaseClassPrototype<_ccQuad2>
+class QtScript_ccQuad2 final : public QtScriptBaseClassPrototype<_ccQuad2, false>
 {
 	Q_OBJECT
 
@@ -1005,9 +962,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccQuad2)
 Q_DECLARE_METATYPE(cocos2d::_ccQuad2 *)
+Q_DECLARE_METATYPE(const cocos2d::_ccQuad2 *)
 
 namespace cocos2d {
-class QtScript_ccQuad3 final : public QtScriptBaseClassPrototype<_ccQuad3>
+class QtScript_ccQuad3 final : public QtScriptBaseClassPrototype<_ccQuad3, false>
 {
 	Q_OBJECT
 
@@ -1040,9 +998,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccQuad3)
 Q_DECLARE_METATYPE(cocos2d::_ccQuad3 *)
+Q_DECLARE_METATYPE(const cocos2d::_ccQuad3 *)
 
 namespace cocos2d {
-class QtScript_ccV2F_C4B_T2F final : public QtScriptBaseClassPrototype<_ccV2F_C4B_T2F>
+class QtScript_ccV2F_C4B_T2F final : public QtScriptBaseClassPrototype<_ccV2F_C4B_T2F, false>
 {
 	Q_OBJECT
 
@@ -1072,9 +1031,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4B_T2F)
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4B_T2F *)
+Q_DECLARE_METATYPE(const cocos2d::_ccV2F_C4B_T2F *)
 
 namespace cocos2d {
-class QtScript_ccV2F_C4F_T2F final : public QtScriptBaseClassPrototype<_ccV2F_C4F_T2F>
+class QtScript_ccV2F_C4F_T2F final : public QtScriptBaseClassPrototype<_ccV2F_C4F_T2F, false>
 {
 	Q_OBJECT
 
@@ -1104,9 +1064,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4F_T2F)
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4F_T2F *)
+Q_DECLARE_METATYPE(const cocos2d::_ccV2F_C4F_T2F *)
 
 namespace cocos2d {
-class QtScript_ccV3F_C4B_T2F final : public QtScriptBaseClassPrototype<_ccV3F_C4B_T2F>
+class QtScript_ccV3F_C4B_T2F final : public QtScriptBaseClassPrototype<_ccV3F_C4B_T2F, false>
 {
 	Q_OBJECT
 
@@ -1136,9 +1097,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccV3F_C4B_T2F)
 Q_DECLARE_METATYPE(cocos2d::_ccV3F_C4B_T2F *)
+Q_DECLARE_METATYPE(const cocos2d::_ccV3F_C4B_T2F *)
 
 namespace cocos2d {
-class QtScript_ccV2F_C4B_T2F_Triangle final : public QtScriptBaseClassPrototype<_ccV2F_C4B_T2F_Triangle>
+class QtScript_ccV2F_C4B_T2F_Triangle final : public QtScriptBaseClassPrototype<_ccV2F_C4B_T2F_Triangle, false>
 {
 	Q_OBJECT
 
@@ -1168,9 +1130,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4B_T2F_Triangle)
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4B_T2F_Triangle *)
+Q_DECLARE_METATYPE(const cocos2d::_ccV2F_C4B_T2F_Triangle *)
 
 namespace cocos2d {
-class QtScript_ccV2F_C4B_T2F_Quad final : public QtScriptBaseClassPrototype<_ccV2F_C4B_T2F_Quad>
+class QtScript_ccV2F_C4B_T2F_Quad final : public QtScriptBaseClassPrototype<_ccV2F_C4B_T2F_Quad, false>
 {
 	Q_OBJECT
 
@@ -1203,9 +1166,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4B_T2F_Quad)
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4B_T2F_Quad *)
+Q_DECLARE_METATYPE(const cocos2d::_ccV2F_C4B_T2F_Quad *)
 
 namespace cocos2d {
-class QtScript_ccV3F_C4B_T2F_Quad final : public QtScriptBaseClassPrototype<_ccV3F_C4B_T2F_Quad>
+class QtScript_ccV3F_C4B_T2F_Quad final : public QtScriptBaseClassPrototype<_ccV3F_C4B_T2F_Quad, false>
 {
 	Q_OBJECT
 
@@ -1238,9 +1202,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccV3F_C4B_T2F_Quad)
 Q_DECLARE_METATYPE(cocos2d::_ccV3F_C4B_T2F_Quad *)
+Q_DECLARE_METATYPE(const cocos2d::_ccV3F_C4B_T2F_Quad *)
 
 namespace cocos2d {
-class QtScript_ccV2F_C4F_T2F_Quad final : public QtScriptBaseClassPrototype<_ccV2F_C4F_T2F_Quad>
+class QtScript_ccV2F_C4F_T2F_Quad final : public QtScriptBaseClassPrototype<_ccV2F_C4F_T2F_Quad, false>
 {
 	Q_OBJECT
 
@@ -1273,9 +1238,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4F_T2F_Quad)
 Q_DECLARE_METATYPE(cocos2d::_ccV2F_C4F_T2F_Quad *)
+Q_DECLARE_METATYPE(const cocos2d::_ccV2F_C4F_T2F_Quad *)
 
 namespace cocos2d {
-class QtScript_ccBlendFunc final : public QtScriptBaseClassPrototype<_ccBlendFunc>
+class QtScript_ccBlendFunc final : public QtScriptBaseClassPrototype<_ccBlendFunc, false>
 {
 	Q_OBJECT
 
@@ -1302,9 +1268,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccBlendFunc)
 Q_DECLARE_METATYPE(cocos2d::_ccBlendFunc *)
+Q_DECLARE_METATYPE(const cocos2d::_ccBlendFunc *)
 
 namespace cocos2d {
-class QtScript_ccT2F_Quad final : public QtScriptBaseClassPrototype<_ccT2F_Quad>
+class QtScript_ccT2F_Quad final : public QtScriptBaseClassPrototype<_ccT2F_Quad, false>
 {
 	Q_OBJECT
 
@@ -1337,21 +1304,22 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccT2F_Quad)
 Q_DECLARE_METATYPE(cocos2d::_ccT2F_Quad *)
+Q_DECLARE_METATYPE(const cocos2d::_ccT2F_Quad *)
 
 namespace cocos2d {
-class QtScript : public QtScriptBaseClassPrototype< *>
+class QtScriptccAnimationFrameData final : public QtScriptBaseClassPrototype<ccAnimationFrameData, false>
 {
 	Q_OBJECT
 
 protected:
-	explicit QtScript(QScriptEngine *engine, const QByteArray &className);
+	explicit QtScriptccAnimationFrameData(QScriptEngine *engine, const QByteArray &className);
 
 	virtual int constructorArgumentCountMin() const override;
 	virtual int constructorArgumentCountMax() const override;
 	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
 
 public:
-	explicit QtScript(QScriptEngine *engine);
+	explicit QtScriptccAnimationFrameData(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_PROPERTY(cocos2d::_ccT2F_Quad texCoords READ _public_field_get_texCoords WRITE _public_field_set_texCoords)
@@ -1367,10 +1335,12 @@ public:
 
 } // end of cocos2d
 
-Q_DECLARE_METATYPE(cocos2d:: *)
+Q_DECLARE_METATYPE(cocos2d::ccAnimationFrameData)
+Q_DECLARE_METATYPE(cocos2d::ccAnimationFrameData *)
+Q_DECLARE_METATYPE(const cocos2d::ccAnimationFrameData *)
 
 namespace cocos2d {
-class QtScript_ccFontShadow final : public QtScriptBaseClassPrototype<_ccFontShadow>
+class QtScript_ccFontShadow final : public QtScriptBaseClassPrototype<_ccFontShadow, false>
 {
 	Q_OBJECT
 
@@ -1403,9 +1373,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccFontShadow)
 Q_DECLARE_METATYPE(cocos2d::_ccFontShadow *)
+Q_DECLARE_METATYPE(const cocos2d::_ccFontShadow *)
 
 namespace cocos2d {
-class QtScript_ccFontStroke final : public QtScriptBaseClassPrototype<_ccFontStroke>
+class QtScript_ccFontStroke final : public QtScriptBaseClassPrototype<_ccFontStroke, false>
 {
 	Q_OBJECT
 
@@ -1435,9 +1406,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccFontStroke)
 Q_DECLARE_METATYPE(cocos2d::_ccFontStroke *)
+Q_DECLARE_METATYPE(const cocos2d::_ccFontStroke *)
 
 namespace cocos2d {
-class QtScript_ccFontDefinition final : public QtScriptBaseClassPrototype<_ccFontDefinition>
+class QtScript_ccFontDefinition final : public QtScriptBaseClassPrototype<_ccFontDefinition, false>
 {
 	Q_OBJECT
 
@@ -1482,38 +1454,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccFontDefinition)
 Q_DECLARE_METATYPE(cocos2d::_ccFontDefinition *)
+Q_DECLARE_METATYPE(const cocos2d::_ccFontDefinition *)
 
 namespace cocos2d {
-class QtScriptCCPVRMipmap final : public QtScriptBaseClassPrototype<CCPVRMipmap>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptCCPVRMipmap(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptCCPVRMipmap(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(QByteArray address READ _public_field_get_address WRITE _public_field_set_address)
-	QByteArray _public_field_get_address() const;
-	void _public_field_set_address(QByteArray value);
-	Q_PROPERTY(unsigned int len READ _public_field_get_len WRITE _public_field_set_len)
-	unsigned int _public_field_get_len() const;
-	void _public_field_set_len(unsigned int value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::CCPVRMipmap)
-Q_DECLARE_METATYPE(cocos2d::CCPVRMipmap *)
-
-namespace cocos2d {
-class QtScript_ccPVRTexturePixelFormatInfo final : public QtScriptBaseClassPrototype<_ccPVRTexturePixelFormatInfo>
+class QtScript_ccPVRTexturePixelFormatInfo final : public QtScriptBaseClassPrototype<_ccPVRTexturePixelFormatInfo, false>
 {
 	Q_OBJECT
 
@@ -1555,6 +1499,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccPVRTexturePixelFormatInfo)
 Q_DECLARE_METATYPE(cocos2d::_ccPVRTexturePixelFormatInfo *)
+Q_DECLARE_METATYPE(const cocos2d::_ccPVRTexturePixelFormatInfo *)
 
 namespace cocos2d {
 class QtScriptCCTexturePVR : public QtScriptCCObject
@@ -1591,9 +1536,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTexturePVR *)
+Q_DECLARE_METATYPE(const cocos2d::CCTexturePVR *)
 
 namespace cocos2d {
-class QtScript_ccTexParams final : public QtScriptBaseClassPrototype<_ccTexParams>
+class QtScript_ccTexParams final : public QtScriptBaseClassPrototype<_ccTexParams, false>
 {
 	Q_OBJECT
 
@@ -1626,6 +1572,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccTexParams)
 Q_DECLARE_METATYPE(cocos2d::_ccTexParams *)
+Q_DECLARE_METATYPE(const cocos2d::_ccTexParams *)
 
 namespace cocos2d {
 class QtScriptCCTexture2D : public QtScriptCCObject
@@ -1692,9 +1639,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTexture2D *)
+Q_DECLARE_METATYPE(const cocos2d::CCTexture2D *)
 
 namespace cocos2d {
-class QtScriptCCDirectorDelegate : public QtScriptBaseClassPrototype<CCDirectorDelegate *>
+class QtScriptCCDirectorDelegate : public QtScriptBaseClassPrototype<CCDirectorDelegate *, false>
 {
 	Q_OBJECT
 
@@ -1713,7 +1661,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCDirectorDelegate::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCDirectorDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCDirectorDelegate *)
 
 namespace cocos2d {
 class QtScriptCCNode : public QtScriptCCObject
@@ -1879,6 +1829,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCNode *)
+Q_DECLARE_METATYPE(const cocos2d::CCNode *)
 
 namespace cocos2d {
 class QtScriptCCNodeRGBA : public QtScriptCCNode
@@ -1921,6 +1872,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCNodeRGBA *)
+Q_DECLARE_METATYPE(const cocos2d::CCNodeRGBA *)
 
 namespace cocos2d {
 class QtScriptCCSpriteFrame : public QtScriptCCObject
@@ -1954,8 +1906,6 @@ public:
 	cocos2d::CCRect getRect();
 	void setOffsetInPixels(const cocos2d::CCPoint& offsetInPixels);
 	cocos2d::CCRect getRectInPixels();
-	Q_INVOKABLE bool initWithTextureFilename(const QByteArray& filename, const cocos2d::CCRect& rect);
-	Q_INVOKABLE bool initWithTextureFilename(const QByteArray& filename, const cocos2d::CCRect& rect, bool rotated, const cocos2d::CCPoint& offset, const cocos2d::CCSize& originalSize);
 	void setOriginalSize(const cocos2d::CCSize& sizeInPixels);
 	cocos2d::CCSize getOriginalSizeInPixels();
 	void setOriginalSizeInPixels(const cocos2d::CCSize& sizeInPixels);
@@ -1963,7 +1913,8 @@ public:
 	Q_INVOKABLE bool initWithTexture(cocos2d::CCTexture2D* pobTexture, const cocos2d::CCRect& rect);
 	Q_INVOKABLE bool initWithTexture(cocos2d::CCTexture2D* pobTexture, const cocos2d::CCRect& rect, bool rotated, const cocos2d::CCPoint& offset, const cocos2d::CCSize& originalSize);
 	bool isRotated();
-	Q_INVOKABLE cocos2d::CCSpriteFrame* copy();
+	Q_INVOKABLE bool initWithTextureFilename(const QByteArray& filename, const cocos2d::CCRect& rect);
+	Q_INVOKABLE bool initWithTextureFilename(const QByteArray& filename, const cocos2d::CCRect& rect, bool rotated, const cocos2d::CCPoint& offset, const cocos2d::CCSize& originalSize);
 	void setRect(const cocos2d::CCRect& rect);
 	cocos2d::CCPoint getOffsetInPixels();
 	cocos2d::CCSize getOriginalSize();
@@ -1974,6 +1925,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSpriteFrame *)
+Q_DECLARE_METATYPE(const cocos2d::CCSpriteFrame *)
 
 namespace cocos2d {
 class QtScriptCCString : public QtScriptCCObject
@@ -1999,7 +1951,6 @@ public:
 	Q_INVOKABLE double doubleValue();
 	Q_INVOKABLE bool boolValue();
 	Q_INVOKABLE unsigned int length();
-	Q_INVOKABLE cocos2d::CCString* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithContentsOfFile(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithData(QScriptContext *context, QScriptEngine* engine);
@@ -2011,6 +1962,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCString *)
+Q_DECLARE_METATYPE(const cocos2d::CCString *)
 
 namespace cocos2d {
 class QtScriptCCDictionary : public QtScriptCCObject
@@ -2034,14 +1986,13 @@ public:
 	Q_INVOKABLE cocos2d::CCObject* objectWithId(intptr_t key);
 	Q_INVOKABLE const cocos2d::CCString* valueWithId(intptr_t key);
 	Q_INVOKABLE void removeObjectWithId(intptr_t key);
-	Q_INVOKABLE bool writeToFile(const QByteArray& fullPath);
 	Q_INVOKABLE cocos2d::CCObject* objectForKey(const QByteArray& key);
 	Q_INVOKABLE cocos2d::CCObject* randomObject();
 	Q_INVOKABLE void removeAllObjects();
 	Q_INVOKABLE void removeObjectsForKeys(cocos2d::CCArray* pKeyArray);
 	Q_INVOKABLE void removeObjectForKey(const QByteArray& key);
 	Q_INVOKABLE const cocos2d::CCString* valueForKey(const QByteArray& key);
-	Q_INVOKABLE cocos2d::CCDictionary* copy();
+	Q_INVOKABLE bool writeToFile(const QByteArray& fullPath);
 	Q_INVOKABLE void removeObjectForElememt(cocos2d::CCDictElement* pElement);
 	Q_INVOKABLE cocos2d::CCArray* allKeys();
 	Q_INVOKABLE cocos2d::CCArray* allKeysForObject(cocos2d::CCObject* object);
@@ -2056,6 +2007,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCDictionary *)
+Q_DECLARE_METATYPE(const cocos2d::CCDictionary *)
 
 namespace cocos2d {
 class QtScriptCCAnimationFrame : public QtScriptCCObject
@@ -2082,13 +2034,13 @@ public:
 	cocos2d::CCSpriteFrame* getSpriteFrame();
 	float getDelayUnits();
 	void setUserInfo(cocos2d::CCDictionary* var);
-	Q_INVOKABLE cocos2d::CCAnimationFrame* copy();
 	Q_INVOKABLE bool initWithSpriteFrame(cocos2d::CCSpriteFrame* spriteFrame, float delayUnits, cocos2d::CCDictionary* userInfo);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAnimationFrame *)
+Q_DECLARE_METATYPE(const cocos2d::CCAnimationFrame *)
 
 namespace cocos2d {
 class QtScriptCCAnimation : public QtScriptCCObject
@@ -2112,7 +2064,6 @@ public:
 	Q_PROPERTY(bool restoreOriginalFrame READ getRestoreOriginalFrame WRITE setRestoreOriginalFrame)
 	Q_INVOKABLE void addSpriteFrameWithFileName(const QByteArray& pszFileName);
 	void setFrames(cocos2d::CCArray* var);
-	float getDelayPerUnit();
 	unsigned int getLoops();
 	cocos2d::CCArray* getFrames();
 	Q_INVOKABLE void addSpriteFrame(cocos2d::CCSpriteFrame* pFrame);
@@ -2125,7 +2076,7 @@ public:
 	void setDelayPerUnit(float var);
 	void setRestoreOriginalFrame(bool var);
 	Q_INVOKABLE float getTotalDelayUnits();
-	Q_INVOKABLE cocos2d::CCAnimation* copy();
+	float getDelayPerUnit();
 	bool getRestoreOriginalFrame();
 	Q_INVOKABLE void addSpriteFrameWithTexture(cocos2d::CCTexture2D* pobTexture, const cocos2d::CCRect& rect);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -2135,6 +2086,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAnimation *)
+Q_DECLARE_METATYPE(const cocos2d::CCAnimation *)
 
 namespace cocos2d {
 class QtScriptCCActionInterval : public QtScriptCCFiniteTimeAction
@@ -2154,9 +2106,8 @@ public:
 
 	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	void setAmplitudeRate(float amp);
-	Q_INVOKABLE bool initWithDuration(float d);
 	float getAmplitudeRate();
-	Q_INVOKABLE cocos2d::CCActionInterval* copy();
+	Q_INVOKABLE bool initWithDuration(float d);
 	Q_INVOKABLE float getElapsed();
 	Q_INVOKABLE cocos2d::CCActionInterval* reverse();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -2165,6 +2116,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCActionInterval *)
+Q_DECLARE_METATYPE(const cocos2d::CCActionInterval *)
 
 namespace cocos2d {
 class QtScriptCCSequence : public QtScriptCCActionInterval
@@ -2182,7 +2134,6 @@ public:
 	explicit QtScriptCCSequence(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCSequence* copy();
 	Q_INVOKABLE bool initWithTwoActions(cocos2d::CCFiniteTimeAction* pActionOne, cocos2d::CCFiniteTimeAction* pActionTwo);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithTwoActions(QScriptContext *context, QScriptEngine* engine);
@@ -2191,6 +2142,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSequence *)
+Q_DECLARE_METATYPE(const cocos2d::CCSequence *)
 
 namespace cocos2d {
 class QtScriptCCRepeat : public QtScriptCCActionInterval
@@ -2211,7 +2163,6 @@ public:
 	Q_PROPERTY(cocos2d::CCFiniteTimeAction* innerAction READ getInnerAction WRITE setInnerAction)
 	void setInnerAction(cocos2d::CCFiniteTimeAction* pAction);
 	Q_INVOKABLE bool initWithAction(cocos2d::CCFiniteTimeAction* pAction, unsigned int times);
-	Q_INVOKABLE cocos2d::CCRepeat* copy();
 	cocos2d::CCFiniteTimeAction* getInnerAction();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2219,6 +2170,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCRepeat *)
+Q_DECLARE_METATYPE(const cocos2d::CCRepeat *)
 
 namespace cocos2d {
 class QtScriptCCRepeatForever : public QtScriptCCActionInterval
@@ -2239,7 +2191,6 @@ public:
 	Q_PROPERTY(cocos2d::CCActionInterval* innerAction READ getInnerAction WRITE setInnerAction)
 	void setInnerAction(cocos2d::CCActionInterval* pAction);
 	Q_INVOKABLE bool initWithAction(cocos2d::CCActionInterval* pAction);
-	Q_INVOKABLE cocos2d::CCRepeatForever* copy();
 	cocos2d::CCActionInterval* getInnerAction();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2247,6 +2198,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCRepeatForever *)
+Q_DECLARE_METATYPE(const cocos2d::CCRepeatForever *)
 
 namespace cocos2d {
 class QtScriptCCSpawn : public QtScriptCCActionInterval
@@ -2264,7 +2216,6 @@ public:
 	explicit QtScriptCCSpawn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCSpawn* copy();
 	Q_INVOKABLE bool initWithTwoActions(cocos2d::CCFiniteTimeAction* pAction1, cocos2d::CCFiniteTimeAction* pAction2);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithTwoActions(QScriptContext *context, QScriptEngine* engine);
@@ -2273,6 +2224,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSpawn *)
+Q_DECLARE_METATYPE(const cocos2d::CCSpawn *)
 
 namespace cocos2d {
 class QtScriptCCRotateTo : public QtScriptCCActionInterval
@@ -2290,7 +2242,6 @@ public:
 	explicit QtScriptCCRotateTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCRotateTo* copy();
 	Q_INVOKABLE bool initWithDuration(float fDuration, float fDeltaAngle);
 	Q_INVOKABLE bool initWithDuration(float fDuration, float fDeltaAngleX, float fDeltaAngleY);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -2299,6 +2250,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCRotateTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCRotateTo *)
 
 namespace cocos2d {
 class QtScriptCCRotateBy : public QtScriptCCActionInterval
@@ -2316,7 +2268,6 @@ public:
 	explicit QtScriptCCRotateBy(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCRotateBy* copy();
 	Q_INVOKABLE bool initWithDuration(float fDuration, float fDeltaAngle);
 	Q_INVOKABLE bool initWithDuration(float fDuration, float fDeltaAngleX, float fDeltaAngleY);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -2325,6 +2276,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCRotateBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCRotateBy *)
 
 namespace cocos2d {
 class QtScriptCCMoveBy : public QtScriptCCActionInterval
@@ -2342,7 +2294,6 @@ public:
 	explicit QtScriptCCMoveBy(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCMoveBy* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCPoint& deltaPosition);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2350,6 +2301,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMoveBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCMoveBy *)
 
 namespace cocos2d {
 class QtScriptCCMoveTo : public QtScriptCCMoveBy
@@ -2367,7 +2319,6 @@ public:
 	explicit QtScriptCCMoveTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCMoveTo* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCPoint& position);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2375,6 +2326,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMoveTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCMoveTo *)
 
 namespace cocos2d {
 class QtScriptCCSkewTo : public QtScriptCCActionInterval
@@ -2392,7 +2344,6 @@ public:
 	explicit QtScriptCCSkewTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCSkewTo* copy();
 	Q_INVOKABLE bool initWithDuration(float t, float sx, float sy);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2400,6 +2351,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSkewTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCSkewTo *)
 
 namespace cocos2d {
 class QtScriptCCSkewBy : public QtScriptCCSkewTo
@@ -2423,6 +2375,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSkewBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCSkewBy *)
 
 namespace cocos2d {
 class QtScriptCCJumpBy : public QtScriptCCActionInterval
@@ -2440,7 +2393,6 @@ public:
 	explicit QtScriptCCJumpBy(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCJumpBy* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCPoint& position, float height, unsigned int jumps);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2448,6 +2400,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCJumpBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCJumpBy *)
 
 namespace cocos2d {
 class QtScriptCCJumpTo : public QtScriptCCJumpBy
@@ -2465,16 +2418,16 @@ public:
 	explicit QtScriptCCJumpTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCJumpTo* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCJumpTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCJumpTo *)
 
 namespace cocos2d {
-class QtScript_ccBezierConfig final : public QtScriptBaseClassPrototype<_ccBezierConfig>
+class QtScript_ccBezierConfig final : public QtScriptBaseClassPrototype<_ccBezierConfig, false>
 {
 	Q_OBJECT
 
@@ -2504,6 +2457,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_ccBezierConfig)
 Q_DECLARE_METATYPE(cocos2d::_ccBezierConfig *)
+Q_DECLARE_METATYPE(const cocos2d::_ccBezierConfig *)
 
 namespace cocos2d {
 class QtScriptCCBezierBy : public QtScriptCCActionInterval
@@ -2521,7 +2475,6 @@ public:
 	explicit QtScriptCCBezierBy(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCBezierBy* copy();
 	Q_INVOKABLE bool initWithDuration(float t, const cocos2d::_ccBezierConfig& c);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2529,6 +2482,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCBezierBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCBezierBy *)
 
 namespace cocos2d {
 class QtScriptCCBezierTo : public QtScriptCCBezierBy
@@ -2546,7 +2500,6 @@ public:
 	explicit QtScriptCCBezierTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCBezierTo* copy();
 	Q_INVOKABLE bool initWithDuration(float t, const cocos2d::_ccBezierConfig& c);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2554,6 +2507,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCBezierTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCBezierTo *)
 
 namespace cocos2d {
 class QtScriptCCScaleTo : public QtScriptCCActionInterval
@@ -2571,7 +2525,6 @@ public:
 	explicit QtScriptCCScaleTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCScaleTo* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, float s);
 	Q_INVOKABLE bool initWithDuration(float duration, float sx, float sy);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -2580,6 +2533,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCScaleTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCScaleTo *)
 
 namespace cocos2d {
 class QtScriptCCScaleBy : public QtScriptCCScaleTo
@@ -2597,13 +2551,13 @@ public:
 	explicit QtScriptCCScaleBy(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCScaleBy* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCScaleBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCScaleBy *)
 
 namespace cocos2d {
 class QtScriptCCBlink : public QtScriptCCActionInterval
@@ -2621,7 +2575,6 @@ public:
 	explicit QtScriptCCBlink(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCBlink* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, unsigned int uBlinks);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2629,6 +2582,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCBlink *)
+Q_DECLARE_METATYPE(const cocos2d::CCBlink *)
 
 namespace cocos2d {
 class QtScriptCCFadeIn : public QtScriptCCActionInterval
@@ -2646,13 +2600,13 @@ public:
 	explicit QtScriptCCFadeIn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCFadeIn* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFadeIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCFadeIn *)
 
 namespace cocos2d {
 class QtScriptCCFadeOut : public QtScriptCCActionInterval
@@ -2670,13 +2624,13 @@ public:
 	explicit QtScriptCCFadeOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCFadeOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFadeOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCFadeOut *)
 
 namespace cocos2d {
 class QtScriptCCFadeTo : public QtScriptCCActionInterval
@@ -2694,7 +2648,6 @@ public:
 	explicit QtScriptCCFadeTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCFadeTo* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, unsigned char opacity);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2702,6 +2655,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFadeTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCFadeTo *)
 
 namespace cocos2d {
 class QtScriptCCTintTo : public QtScriptCCActionInterval
@@ -2719,7 +2673,6 @@ public:
 	explicit QtScriptCCTintTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCTintTo* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, unsigned char red, unsigned char green, unsigned char blue);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2727,6 +2680,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTintTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCTintTo *)
 
 namespace cocos2d {
 class QtScriptCCTintBy : public QtScriptCCActionInterval
@@ -2744,7 +2698,6 @@ public:
 	explicit QtScriptCCTintBy(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCTintBy* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, short deltaRed, short deltaGreen, short deltaBlue);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2752,6 +2705,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTintBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCTintBy *)
 
 namespace cocos2d {
 class QtScriptCCDelayTime : public QtScriptCCActionInterval
@@ -2769,13 +2723,13 @@ public:
 	explicit QtScriptCCDelayTime(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCDelayTime* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCDelayTime *)
+Q_DECLARE_METATYPE(const cocos2d::CCDelayTime *)
 
 namespace cocos2d {
 class QtScriptCCReverseTime : public QtScriptCCActionInterval
@@ -2794,13 +2748,13 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool initWithAction(cocos2d::CCFiniteTimeAction* pAction);
-	Q_INVOKABLE cocos2d::CCReverseTime* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCReverseTime *)
+Q_DECLARE_METATYPE(const cocos2d::CCReverseTime *)
 
 namespace cocos2d {
 class QtScriptCCAnimate : public QtScriptCCActionInterval
@@ -2820,7 +2774,6 @@ public:
 
 	Q_PROPERTY(cocos2d::CCAnimation* animation READ getAnimation WRITE setAnimation)
 	cocos2d::CCAnimation* getAnimation();
-	Q_INVOKABLE cocos2d::CCAnimate* copy();
 	Q_INVOKABLE bool initWithAnimation(cocos2d::CCAnimation* pAnimation);
 	void setAnimation(cocos2d::CCAnimation* var);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -2829,6 +2782,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAnimate *)
+Q_DECLARE_METATYPE(const cocos2d::CCAnimate *)
 
 namespace cocos2d {
 class QtScriptCCTargetedAction : public QtScriptCCActionInterval
@@ -2848,7 +2802,6 @@ public:
 
 	Q_PROPERTY(cocos2d::CCNode* forcedTarget READ getForcedTarget WRITE setForcedTarget)
 	cocos2d::CCNode* getForcedTarget();
-	Q_INVOKABLE cocos2d::CCTargetedAction* copy();
 	Q_INVOKABLE bool initWithTarget(cocos2d::CCNode* pTarget, cocos2d::CCFiniteTimeAction* pAction);
 	void setForcedTarget(cocos2d::CCNode* var);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -2857,6 +2810,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTargetedAction *)
+Q_DECLARE_METATYPE(const cocos2d::CCTargetedAction *)
 
 namespace cocos2d {
 class QtScriptCCActionCamera : public QtScriptCCActionInterval
@@ -2879,6 +2833,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCActionCamera *)
+Q_DECLARE_METATYPE(const cocos2d::CCActionCamera *)
 
 namespace cocos2d {
 class QtScriptCCOrbitCamera : public QtScriptCCActionCamera
@@ -2896,7 +2851,6 @@ public:
 	explicit QtScriptCCOrbitCamera(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCOrbitCamera* copy();
 	Q_INVOKABLE bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2904,6 +2858,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCOrbitCamera *)
+Q_DECLARE_METATYPE(const cocos2d::CCOrbitCamera *)
 
 namespace cocos2d {
 class QtScriptCCActionManager : public QtScriptCCObject
@@ -2937,6 +2892,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCActionManager *)
+Q_DECLARE_METATYPE(const cocos2d::CCActionManager *)
 
 namespace cocos2d {
 class QtScriptCCActionEase : public QtScriptCCActionInterval
@@ -2955,7 +2911,6 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool initWithAction(cocos2d::CCActionInterval* pAction);
-	Q_INVOKABLE cocos2d::CCActionEase* copy();
 	Q_INVOKABLE cocos2d::CCActionInterval* getInnerAction();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2963,6 +2918,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCActionEase *)
+Q_DECLARE_METATYPE(const cocos2d::CCActionEase *)
 
 namespace cocos2d {
 class QtScriptCCEaseRateAction : public QtScriptCCActionEase
@@ -2983,7 +2939,6 @@ public:
 	Q_PROPERTY(float rate READ getRate WRITE setRate)
 	void setRate(float rate);
 	Q_INVOKABLE bool initWithAction(cocos2d::CCActionInterval* pAction, float fRate);
-	Q_INVOKABLE cocos2d::CCEaseRateAction* copy();
 	float getRate();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -2991,6 +2946,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseRateAction *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseRateAction *)
 
 namespace cocos2d {
 class QtScriptCCEaseIn : public QtScriptCCEaseRateAction
@@ -3008,13 +2964,13 @@ public:
 	explicit QtScriptCCEaseIn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseIn* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseIn *)
 
 namespace cocos2d {
 class QtScriptCCEaseOut : public QtScriptCCEaseRateAction
@@ -3032,13 +2988,13 @@ public:
 	explicit QtScriptCCEaseOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseInOut : public QtScriptCCEaseRateAction
@@ -3056,13 +3012,13 @@ public:
 	explicit QtScriptCCEaseInOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseInOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseInOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseInOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseExponentialIn : public QtScriptCCActionEase
@@ -3080,13 +3036,13 @@ public:
 	explicit QtScriptCCEaseExponentialIn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseExponentialIn* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseExponentialIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseExponentialIn *)
 
 namespace cocos2d {
 class QtScriptCCEaseExponentialOut : public QtScriptCCActionEase
@@ -3104,13 +3060,13 @@ public:
 	explicit QtScriptCCEaseExponentialOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseExponentialOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseExponentialOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseExponentialOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseExponentialInOut : public QtScriptCCActionEase
@@ -3128,13 +3084,13 @@ public:
 	explicit QtScriptCCEaseExponentialInOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseExponentialInOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseExponentialInOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseExponentialInOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseSineIn : public QtScriptCCActionEase
@@ -3152,13 +3108,13 @@ public:
 	explicit QtScriptCCEaseSineIn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseSineIn* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseSineIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseSineIn *)
 
 namespace cocos2d {
 class QtScriptCCEaseSineOut : public QtScriptCCActionEase
@@ -3176,13 +3132,13 @@ public:
 	explicit QtScriptCCEaseSineOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseSineOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseSineOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseSineOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseSineInOut : public QtScriptCCActionEase
@@ -3200,13 +3156,13 @@ public:
 	explicit QtScriptCCEaseSineInOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseSineInOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseSineInOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseSineInOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseElastic : public QtScriptCCActionEase
@@ -3226,7 +3182,6 @@ public:
 
 	Q_PROPERTY(float period READ getPeriod WRITE setPeriod)
 	void setPeriod(float fPeriod);
-	Q_INVOKABLE cocos2d::CCEaseElastic* copy();
 	Q_INVOKABLE bool initWithAction(cocos2d::CCActionInterval* pAction);
 	Q_INVOKABLE bool initWithAction(cocos2d::CCActionInterval* pAction, float fPeriod);
 	float getPeriod();
@@ -3236,6 +3191,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseElastic *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseElastic *)
 
 namespace cocos2d {
 class QtScriptCCEaseElasticIn : public QtScriptCCEaseElastic
@@ -3253,13 +3209,13 @@ public:
 	explicit QtScriptCCEaseElasticIn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseElasticIn* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseElasticIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseElasticIn *)
 
 namespace cocos2d {
 class QtScriptCCEaseElasticOut : public QtScriptCCEaseElastic
@@ -3277,13 +3233,13 @@ public:
 	explicit QtScriptCCEaseElasticOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseElasticOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseElasticOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseElasticOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseElasticInOut : public QtScriptCCEaseElastic
@@ -3301,13 +3257,13 @@ public:
 	explicit QtScriptCCEaseElasticInOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseElasticInOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseElasticInOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseElasticInOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseBounce : public QtScriptCCActionEase
@@ -3326,13 +3282,13 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE float bounceTime(float time);
-	Q_INVOKABLE cocos2d::CCEaseBounce* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseBounce *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseBounce *)
 
 namespace cocos2d {
 class QtScriptCCEaseBounceIn : public QtScriptCCEaseBounce
@@ -3350,13 +3306,13 @@ public:
 	explicit QtScriptCCEaseBounceIn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseBounceIn* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseBounceIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseBounceIn *)
 
 namespace cocos2d {
 class QtScriptCCEaseBounceOut : public QtScriptCCEaseBounce
@@ -3374,13 +3330,13 @@ public:
 	explicit QtScriptCCEaseBounceOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseBounceOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseBounceOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseBounceOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseBounceInOut : public QtScriptCCEaseBounce
@@ -3398,13 +3354,13 @@ public:
 	explicit QtScriptCCEaseBounceInOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseBounceInOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseBounceInOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseBounceInOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseBackIn : public QtScriptCCActionEase
@@ -3422,13 +3378,13 @@ public:
 	explicit QtScriptCCEaseBackIn(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseBackIn* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseBackIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseBackIn *)
 
 namespace cocos2d {
 class QtScriptCCEaseBackOut : public QtScriptCCActionEase
@@ -3446,13 +3402,13 @@ public:
 	explicit QtScriptCCEaseBackOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseBackOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseBackOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseBackOut *)
 
 namespace cocos2d {
 class QtScriptCCEaseBackInOut : public QtScriptCCActionEase
@@ -3470,16 +3426,16 @@ public:
 	explicit QtScriptCCEaseBackInOut(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCEaseBackInOut* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEaseBackInOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCEaseBackInOut *)
 
 namespace cocos2d {
-class QtScriptTypeInfo : public QtScriptBaseClassPrototype<TypeInfo *>
+class QtScriptTypeInfo : public QtScriptBaseClassPrototype<TypeInfo *, false>
 {
 	Q_OBJECT
 
@@ -3498,7 +3454,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptTypeInfo::StorageType)
 Q_DECLARE_METATYPE(cocos2d::TypeInfo *)
+Q_DECLARE_METATYPE(const cocos2d::TypeInfo *)
 
 namespace cocos2d {
 class QtScriptCCActionInstant : public QtScriptCCFiniteTimeAction
@@ -3516,12 +3474,12 @@ public:
 	explicit QtScriptCCActionInstant(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCActionInstant* copy();
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCActionInstant *)
+Q_DECLARE_METATYPE(const cocos2d::CCActionInstant *)
 
 namespace cocos2d {
 class QtScriptCCShow : public QtScriptCCActionInstant
@@ -3539,13 +3497,13 @@ public:
 	explicit QtScriptCCShow(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCShow* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCShow *)
+Q_DECLARE_METATYPE(const cocos2d::CCShow *)
 
 namespace cocos2d {
 class QtScriptCCHide : public QtScriptCCActionInstant
@@ -3563,13 +3521,13 @@ public:
 	explicit QtScriptCCHide(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCHide* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCHide *)
+Q_DECLARE_METATYPE(const cocos2d::CCHide *)
 
 namespace cocos2d {
 class QtScriptCCToggleVisibility : public QtScriptCCActionInstant
@@ -3587,13 +3545,13 @@ public:
 	explicit QtScriptCCToggleVisibility(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCToggleVisibility* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCToggleVisibility *)
+Q_DECLARE_METATYPE(const cocos2d::CCToggleVisibility *)
 
 namespace cocos2d {
 class QtScriptCCRemoveSelf : public QtScriptCCActionInstant
@@ -3612,13 +3570,13 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool init(bool isNeedCleanUp);
-	Q_INVOKABLE cocos2d::CCRemoveSelf* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCRemoveSelf *)
+Q_DECLARE_METATYPE(const cocos2d::CCRemoveSelf *)
 
 namespace cocos2d {
 class QtScriptCCFlipX : public QtScriptCCActionInstant
@@ -3637,13 +3595,13 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool initWithFlipX(bool x);
-	Q_INVOKABLE cocos2d::CCFlipX* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFlipX *)
+Q_DECLARE_METATYPE(const cocos2d::CCFlipX *)
 
 namespace cocos2d {
 class QtScriptCCFlipY : public QtScriptCCActionInstant
@@ -3662,13 +3620,13 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool initWithFlipY(bool y);
-	Q_INVOKABLE cocos2d::CCFlipY* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFlipY *)
+Q_DECLARE_METATYPE(const cocos2d::CCFlipY *)
 
 namespace cocos2d {
 class QtScriptCCPlace : public QtScriptCCActionInstant
@@ -3686,7 +3644,6 @@ public:
 	explicit QtScriptCCPlace(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCPlace* copy();
 	Q_INVOKABLE bool initWithPosition(const cocos2d::CCPoint& pos);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -3694,6 +3651,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCPlace *)
+Q_DECLARE_METATYPE(const cocos2d::CCPlace *)
 
 namespace cocos2d {
 class QtScriptCCCallFunc : public QtScriptCCActionInstant
@@ -3715,7 +3673,6 @@ public:
 	Q_INVOKABLE void execute();
 	Q_INVOKABLE bool initWithTarget(cocos2d::CCObject* pSelectorTarget);
 	cocos2d::CCObject* getTargetCallback();
-	Q_INVOKABLE cocos2d::CCCallFunc* copy();
 	Q_INVOKABLE void setHandler(const QScriptValue& arg0);
 	void setTargetCallback(cocos2d::CCObject* pSel);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -3724,6 +3681,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCallFunc *)
+Q_DECLARE_METATYPE(const cocos2d::CCCallFunc *)
 
 namespace cocos2d {
 class QtScriptCCCallFuncN : public QtScriptCCCallFunc
@@ -3742,13 +3700,13 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE long getClassTypeInfo();
-	Q_INVOKABLE cocos2d::CCCallFuncN* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCallFuncN *)
+Q_DECLARE_METATYPE(const cocos2d::CCCallFuncN *)
 
 namespace cocos2d {
 class QtScriptCCCallFuncND : public QtScriptCCCallFuncN
@@ -3766,12 +3724,12 @@ public:
 	explicit QtScriptCCCallFuncND(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCCallFuncND* copy();
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCallFuncND *)
+Q_DECLARE_METATYPE(const cocos2d::CCCallFuncND *)
 
 namespace cocos2d {
 class QtScriptCCCallFuncO : public QtScriptCCCallFunc
@@ -3792,13 +3750,13 @@ public:
 	Q_PROPERTY(cocos2d::CCObject* object READ getObject WRITE setObject)
 	Q_INVOKABLE long getClassTypeInfo();
 	cocos2d::CCObject* getObject();
-	Q_INVOKABLE cocos2d::CCCallFuncO* copy();
 	void setObject(cocos2d::CCObject* pObj);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCallFuncO *)
+Q_DECLARE_METATYPE(const cocos2d::CCCallFuncO *)
 
 namespace cocos2d {
 class QtScriptCCGridAction : public QtScriptCCActionInterval
@@ -3816,7 +3774,6 @@ public:
 	explicit QtScriptCCGridAction(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCGridAction* copy();
 	Q_INVOKABLE cocos2d::CCGridBase* getGrid();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -3825,6 +3782,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCGridAction *)
+Q_DECLARE_METATYPE(const cocos2d::CCGridAction *)
 
 namespace cocos2d {
 class QtScriptCCGrid3DAction : public QtScriptCCGridAction
@@ -3851,6 +3809,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCGrid3DAction *)
+Q_DECLARE_METATYPE(const cocos2d::CCGrid3DAction *)
 
 namespace cocos2d {
 class QtScriptCCTiledGrid3DAction : public QtScriptCCGridAction
@@ -3877,6 +3836,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTiledGrid3DAction *)
+Q_DECLARE_METATYPE(const cocos2d::CCTiledGrid3DAction *)
 
 namespace cocos2d {
 class QtScriptCCAccelDeccelAmplitude : public QtScriptCCActionInterval
@@ -3904,6 +3864,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAccelDeccelAmplitude *)
+Q_DECLARE_METATYPE(const cocos2d::CCAccelDeccelAmplitude *)
 
 namespace cocos2d {
 class QtScriptCCAccelAmplitude : public QtScriptCCActionInterval
@@ -3931,6 +3892,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAccelAmplitude *)
+Q_DECLARE_METATYPE(const cocos2d::CCAccelAmplitude *)
 
 namespace cocos2d {
 class QtScriptCCDeccelAmplitude : public QtScriptCCActionInterval
@@ -3958,6 +3920,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCDeccelAmplitude *)
+Q_DECLARE_METATYPE(const cocos2d::CCDeccelAmplitude *)
 
 namespace cocos2d {
 class QtScriptCCStopGrid : public QtScriptCCActionInstant
@@ -3981,6 +3944,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCStopGrid *)
+Q_DECLARE_METATYPE(const cocos2d::CCStopGrid *)
 
 namespace cocos2d {
 class QtScriptCCReuseGrid : public QtScriptCCActionInstant
@@ -4005,6 +3969,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCReuseGrid *)
+Q_DECLARE_METATYPE(const cocos2d::CCReuseGrid *)
 
 namespace cocos2d {
 class QtScriptCCWaves3D : public QtScriptCCGrid3DAction
@@ -4022,20 +3987,20 @@ public:
 	explicit QtScriptCCWaves3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	Q_PROPERTY(float amplitude READ getAmplitude WRITE setAmplitude)
-	void setAmplitudeRate(float fAmplitudeRate);
-	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude);
+	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	float getAmplitudeRate();
 	void setAmplitude(float fAmplitude);
+	void setAmplitudeRate(float fAmplitudeRate);
+	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude);
 	float getAmplitude();
-	Q_INVOKABLE cocos2d::CCWaves3D* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCWaves3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCWaves3D *)
 
 namespace cocos2d {
 class QtScriptCCFlipX3D : public QtScriptCCGrid3DAction
@@ -4054,7 +4019,6 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool initWithSize(const cocos2d::CCSize& gridSize, float duration);
-	Q_INVOKABLE cocos2d::CCFlipX3D* copy();
 	Q_INVOKABLE bool initWithDuration(float duration);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4062,6 +4026,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFlipX3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCFlipX3D *)
 
 namespace cocos2d {
 class QtScriptCCFlipY3D : public QtScriptCCFlipX3D
@@ -4079,13 +4044,13 @@ public:
 	explicit QtScriptCCFlipY3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCFlipY3D* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFlipY3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCFlipY3D *)
 
 namespace cocos2d {
 class QtScriptCCLens3D : public QtScriptCCGrid3DAction
@@ -4110,7 +4075,6 @@ public:
 	void setLensEffect(float fLensEffect);
 	float getLensEffect();
 	void setPosition(const cocos2d::CCPoint& position);
-	Q_INVOKABLE cocos2d::CCLens3D* copy();
 	cocos2d::CCPoint getPosition();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4118,6 +4082,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLens3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCLens3D *)
 
 namespace cocos2d {
 class QtScriptCCRipple3D : public QtScriptCCGrid3DAction
@@ -4144,7 +4109,6 @@ public:
 	void setAmplitude(float fAmplitude);
 	float getAmplitude();
 	void setPosition(const cocos2d::CCPoint& position);
-	Q_INVOKABLE cocos2d::CCRipple3D* copy();
 	cocos2d::CCPoint getPosition();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4152,6 +4116,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCRipple3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCRipple3D *)
 
 namespace cocos2d {
 class QtScriptCCShaky3D : public QtScriptCCGrid3DAction
@@ -4169,7 +4134,6 @@ public:
 	explicit QtScriptCCShaky3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCShaky3D* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, int range, bool shakeZ);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4177,6 +4141,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCShaky3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCShaky3D *)
 
 namespace cocos2d {
 class QtScriptCCLiquid : public QtScriptCCGrid3DAction
@@ -4194,20 +4159,20 @@ public:
 	explicit QtScriptCCLiquid(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	Q_PROPERTY(float amplitude READ getAmplitude WRITE setAmplitude)
-	void setAmplitudeRate(float fAmplitudeRate);
-	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude);
+	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	float getAmplitudeRate();
 	void setAmplitude(float fAmplitude);
+	void setAmplitudeRate(float fAmplitudeRate);
+	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude);
 	float getAmplitude();
-	Q_INVOKABLE cocos2d::CCLiquid* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLiquid *)
+Q_DECLARE_METATYPE(const cocos2d::CCLiquid *)
 
 namespace cocos2d {
 class QtScriptCCWaves : public QtScriptCCGrid3DAction
@@ -4225,20 +4190,20 @@ public:
 	explicit QtScriptCCWaves(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	Q_PROPERTY(float amplitude READ getAmplitude WRITE setAmplitude)
-	void setAmplitudeRate(float fAmplitudeRate);
-	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical);
+	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	float getAmplitudeRate();
 	void setAmplitude(float fAmplitude);
+	void setAmplitudeRate(float fAmplitudeRate);
+	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical);
 	float getAmplitude();
-	Q_INVOKABLE cocos2d::CCWaves* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCWaves *)
+Q_DECLARE_METATYPE(const cocos2d::CCWaves *)
 
 namespace cocos2d {
 class QtScriptCCTwirl : public QtScriptCCGrid3DAction
@@ -4265,7 +4230,6 @@ public:
 	void setAmplitude(float fAmplitude);
 	float getAmplitude();
 	void setPosition(const cocos2d::CCPoint& position);
-	Q_INVOKABLE cocos2d::CCTwirl* copy();
 	cocos2d::CCPoint getPosition();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4273,6 +4237,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTwirl *)
+Q_DECLARE_METATYPE(const cocos2d::CCTwirl *)
 
 namespace cocos2d {
 class QtScriptCCPageTurn3D : public QtScriptCCGrid3DAction
@@ -4296,6 +4261,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCPageTurn3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCPageTurn3D *)
 
 namespace cocos2d {
 class QtScriptCCProgressTo : public QtScriptCCActionInterval
@@ -4313,7 +4279,6 @@ public:
 	explicit QtScriptCCProgressTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCProgressTo* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, float fPercent);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4321,6 +4286,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCProgressTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCProgressTo *)
 
 namespace cocos2d {
 class QtScriptCCProgressFromTo : public QtScriptCCActionInterval
@@ -4338,7 +4304,6 @@ public:
 	explicit QtScriptCCProgressFromTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCProgressFromTo* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, float fFromPercentage, float fToPercentage);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4346,6 +4311,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCProgressFromTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCProgressFromTo *)
 
 namespace cocos2d {
 class QtScriptCCShakyTiles3D : public QtScriptCCTiledGrid3DAction
@@ -4363,7 +4329,6 @@ public:
 	explicit QtScriptCCShakyTiles3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCShakyTiles3D* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, int nRange, bool bShakeZ);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4371,6 +4336,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCShakyTiles3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCShakyTiles3D *)
 
 namespace cocos2d {
 class QtScriptCCShatteredTiles3D : public QtScriptCCTiledGrid3DAction
@@ -4388,7 +4354,6 @@ public:
 	explicit QtScriptCCShatteredTiles3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCShatteredTiles3D* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, int nRange, bool bShatterZ);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4396,6 +4361,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCShatteredTiles3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCShatteredTiles3D *)
 
 namespace cocos2d {
 class QtScriptCCShuffleTiles : public QtScriptCCTiledGrid3DAction
@@ -4413,7 +4379,6 @@ public:
 	explicit QtScriptCCShuffleTiles(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCShuffleTiles* copy();
 	Q_INVOKABLE void placeTile(const cocos2d::CCPoint& pos, const cocos2d::Tile& t);
 	Q_INVOKABLE cocos2d::CCSize getDelta(const cocos2d::CCSize& pos);
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int seed);
@@ -4423,6 +4388,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCShuffleTiles *)
+Q_DECLARE_METATYPE(const cocos2d::CCShuffleTiles *)
 
 namespace cocos2d {
 class QtScriptCCFadeOutTRTiles : public QtScriptCCTiledGrid3DAction
@@ -4450,6 +4416,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFadeOutTRTiles *)
+Q_DECLARE_METATYPE(const cocos2d::CCFadeOutTRTiles *)
 
 namespace cocos2d {
 class QtScriptCCFadeOutBLTiles : public QtScriptCCFadeOutTRTiles
@@ -4473,6 +4440,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFadeOutBLTiles *)
+Q_DECLARE_METATYPE(const cocos2d::CCFadeOutBLTiles *)
 
 namespace cocos2d {
 class QtScriptCCFadeOutUpTiles : public QtScriptCCFadeOutTRTiles
@@ -4496,6 +4464,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFadeOutUpTiles *)
+Q_DECLARE_METATYPE(const cocos2d::CCFadeOutUpTiles *)
 
 namespace cocos2d {
 class QtScriptCCFadeOutDownTiles : public QtScriptCCFadeOutUpTiles
@@ -4519,6 +4488,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFadeOutDownTiles *)
+Q_DECLARE_METATYPE(const cocos2d::CCFadeOutDownTiles *)
 
 namespace cocos2d {
 class QtScriptCCTurnOffTiles : public QtScriptCCTiledGrid3DAction
@@ -4537,7 +4507,6 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE void turnOnTile(const cocos2d::CCPoint& pos);
-	Q_INVOKABLE cocos2d::CCTurnOffTiles* copy();
 	Q_INVOKABLE void turnOffTile(const cocos2d::CCPoint& pos);
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int seed);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -4546,6 +4515,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTurnOffTiles *)
+Q_DECLARE_METATYPE(const cocos2d::CCTurnOffTiles *)
 
 namespace cocos2d {
 class QtScriptCCWavesTiles3D : public QtScriptCCTiledGrid3DAction
@@ -4563,20 +4533,20 @@ public:
 	explicit QtScriptCCWavesTiles3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	Q_PROPERTY(float amplitude READ getAmplitude WRITE setAmplitude)
-	void setAmplitudeRate(float fAmplitudeRate);
-	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude);
+	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	float getAmplitudeRate();
 	void setAmplitude(float fAmplitude);
+	void setAmplitudeRate(float fAmplitudeRate);
+	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int waves, float amplitude);
 	float getAmplitude();
-	Q_INVOKABLE cocos2d::CCWavesTiles3D* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCWavesTiles3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCWavesTiles3D *)
 
 namespace cocos2d {
 class QtScriptCCJumpTiles3D : public QtScriptCCTiledGrid3DAction
@@ -4594,20 +4564,20 @@ public:
 	explicit QtScriptCCJumpTiles3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	Q_PROPERTY(float amplitude READ getAmplitude WRITE setAmplitude)
-	void setAmplitudeRate(float fAmplitudeRate);
-	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int numberOfJumps, float amplitude);
+	Q_PROPERTY(float amplitudeRate READ getAmplitudeRate WRITE setAmplitudeRate)
 	float getAmplitudeRate();
 	void setAmplitude(float fAmplitude);
+	void setAmplitudeRate(float fAmplitudeRate);
+	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::CCSize& gridSize, unsigned int numberOfJumps, float amplitude);
 	float getAmplitude();
-	Q_INVOKABLE cocos2d::CCJumpTiles3D* copy();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCJumpTiles3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCJumpTiles3D *)
 
 namespace cocos2d {
 class QtScriptCCSplitRows : public QtScriptCCTiledGrid3DAction
@@ -4625,7 +4595,6 @@ public:
 	explicit QtScriptCCSplitRows(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCSplitRows* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, unsigned int nRows);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4633,6 +4602,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSplitRows *)
+Q_DECLARE_METATYPE(const cocos2d::CCSplitRows *)
 
 namespace cocos2d {
 class QtScriptCCSplitCols : public QtScriptCCTiledGrid3DAction
@@ -4650,7 +4620,6 @@ public:
 	explicit QtScriptCCSplitCols(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE cocos2d::CCSplitCols* copy();
 	Q_INVOKABLE bool initWithDuration(float duration, unsigned int nCols);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4658,9 +4627,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSplitCols *)
+Q_DECLARE_METATYPE(const cocos2d::CCSplitCols *)
 
 namespace cocos2d {
-class QtScriptCCActionTweenDelegate : public QtScriptBaseClassPrototype<CCActionTweenDelegate *>
+class QtScriptCCActionTweenDelegate : public QtScriptBaseClassPrototype<CCActionTweenDelegate *, false>
 {
 	Q_OBJECT
 
@@ -4679,7 +4649,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCActionTweenDelegate::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCActionTweenDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCActionTweenDelegate *)
 
 namespace cocos2d {
 class QtScriptCCActionTween : public QtScriptCCActionInterval
@@ -4716,6 +4688,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCActionTween *)
+Q_DECLARE_METATYPE(const cocos2d::CCActionTween *)
 
 namespace cocos2d {
 class QtScriptCCPointArray : public QtScriptCCObject
@@ -4734,21 +4707,21 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE unsigned int count();
-	Q_INVOKABLE void insertControlPoint(cocos2d::CCPoint& controlPoint, unsigned int index);
+	Q_INVOKABLE void insert(const cocos2d::CCPoint& controlPoint, unsigned int index);
 	Q_INVOKABLE cocos2d::CCPointArray* reverse();
-	Q_INVOKABLE bool initWithCapacity(unsigned int capacity);
-	Q_INVOKABLE void removeControlPointAtIndex(unsigned int index);
-	Q_INVOKABLE void replaceControlPoint(cocos2d::CCPoint& controlPoint, unsigned int index);
-	Q_INVOKABLE void addControlPoint(cocos2d::CCPoint controlPoint);
-	Q_INVOKABLE cocos2d::CCPoint getControlPointAtIndex(unsigned int index);
-	Q_INVOKABLE cocos2d::CCPointArray* copy();
+	Q_INVOKABLE bool initWithCapacity(unsigned int cap);
+	Q_INVOKABLE void remove(unsigned int index);
+	Q_INVOKABLE void replace(const cocos2d::CCPoint& controlPoint, unsigned int index);
+	Q_INVOKABLE cocos2d::CCPoint at(unsigned int index);
 	Q_INVOKABLE void reverseInline();
+	Q_INVOKABLE void append(const cocos2d::CCPoint& controlPoint);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCPointArray *)
+Q_DECLARE_METATYPE(const cocos2d::CCPointArray *)
 
 namespace cocos2d {
 class QtScriptCCCardinalSplineTo : public QtScriptCCActionInterval
@@ -4770,7 +4743,6 @@ public:
 	cocos2d::CCPointArray* getPoints();
 	void setPoints(cocos2d::CCPointArray* points);
 	Q_INVOKABLE void updatePosition(cocos2d::CCPoint& newPos);
-	Q_INVOKABLE cocos2d::CCCardinalSplineTo* copyWithZone(cocos2d::CCZone* pZone);
 	Q_INVOKABLE bool initWithDuration(float duration, cocos2d::CCPointArray* points, float tension);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4778,6 +4750,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCardinalSplineTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCCardinalSplineTo *)
 
 namespace cocos2d {
 class QtScriptCCCardinalSplineBy : public QtScriptCCCardinalSplineTo
@@ -4801,6 +4774,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCardinalSplineBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCCardinalSplineBy *)
 
 namespace cocos2d {
 class QtScriptCCCatmullRomTo : public QtScriptCCCardinalSplineTo
@@ -4825,6 +4799,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCatmullRomTo *)
+Q_DECLARE_METATYPE(const cocos2d::CCCatmullRomTo *)
 
 namespace cocos2d {
 class QtScriptCCCatmullRomBy : public QtScriptCCCardinalSplineBy
@@ -4849,6 +4824,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCatmullRomBy *)
+Q_DECLARE_METATYPE(const cocos2d::CCCatmullRomBy *)
 
 namespace cocos2d {
 class QtScriptCCAtlasNode : public QtScriptCCNodeRGBA
@@ -4896,6 +4872,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAtlasNode *)
+Q_DECLARE_METATYPE(const cocos2d::CCAtlasNode *)
 
 namespace cocos2d {
 class QtScriptCCAutoreleasePool : public QtScriptCCObject
@@ -4921,9 +4898,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAutoreleasePool *)
+Q_DECLARE_METATYPE(const cocos2d::CCAutoreleasePool *)
 
 namespace cocos2d {
-class QtScriptCCPoolManager final : public QtScriptBaseClassPrototype<CCPoolManager>
+class QtScriptCCPoolManager final : public QtScriptBaseClassPrototype<CCPoolManager, false>
 {
 	Q_OBJECT
 
@@ -4951,6 +4929,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCPoolManager)
 Q_DECLARE_METATYPE(cocos2d::CCPoolManager *)
+Q_DECLARE_METATYPE(const cocos2d::CCPoolManager *)
 
 namespace cocos2d {
 class QtScriptCCInteger : public QtScriptCCObject
@@ -4975,6 +4954,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCInteger *)
+Q_DECLARE_METATYPE(const cocos2d::CCInteger *)
 
 namespace cocos2d {
 class QtScriptCCFloat : public QtScriptCCObject
@@ -4999,6 +4979,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFloat *)
+Q_DECLARE_METATYPE(const cocos2d::CCFloat *)
 
 namespace cocos2d {
 class QtScriptCCDouble : public QtScriptCCObject
@@ -5023,6 +5004,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCDouble *)
+Q_DECLARE_METATYPE(const cocos2d::CCDouble *)
 
 namespace cocos2d {
 class QtScriptCCBool : public QtScriptCCObject
@@ -5047,9 +5029,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCBool *)
+Q_DECLARE_METATYPE(const cocos2d::CCBool *)
 
 namespace cocos2d {
-class QtScriptCCZone final : public QtScriptBaseClassPrototype<CCZone>
+class QtScriptCCZone final : public QtScriptBaseClassPrototype<CCZone, false>
 {
 	Q_OBJECT
 
@@ -5073,6 +5056,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCZone)
 Q_DECLARE_METATYPE(cocos2d::CCZone *)
+Q_DECLARE_METATYPE(const cocos2d::CCZone *)
 
 namespace cocos2d {
 class QtScriptCCDrawNode : public QtScriptCCNode
@@ -5106,6 +5090,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCDrawNode *)
+Q_DECLARE_METATYPE(const cocos2d::CCDrawNode *)
 
 namespace cocos2d {
 class QtScriptCCConfiguration : public QtScriptCCObject
@@ -5151,6 +5136,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCConfiguration *)
+Q_DECLARE_METATYPE(const cocos2d::CCConfiguration *)
 
 namespace cocos2d {
 class QtScriptCCGrabber : public QtScriptCCObject
@@ -5176,6 +5162,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCGrabber *)
+Q_DECLARE_METATYPE(const cocos2d::CCGrabber *)
 
 namespace cocos2d {
 class QtScriptCCCamera : public QtScriptCCObject
@@ -5212,6 +5199,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCCamera *)
+Q_DECLARE_METATYPE(const cocos2d::CCCamera *)
 
 namespace cocos2d {
 class QtScriptCCLabelAtlas : public QtScriptCCAtlasNode
@@ -5240,6 +5228,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLabelAtlas *)
+Q_DECLARE_METATYPE(const cocos2d::CCLabelAtlas *)
 
 namespace cocos2d {
 class QtScriptCCDirector : public QtScriptCCObject
@@ -5334,6 +5323,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCDirector *)
+Q_DECLARE_METATYPE(const cocos2d::CCDirector *)
 
 namespace cocos2d {
 class QtScriptCCDisplayLinkDirector : public QtScriptCCDirector
@@ -5360,6 +5350,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCDisplayLinkDirector *)
+Q_DECLARE_METATYPE(const cocos2d::CCDisplayLinkDirector *)
 
 namespace cocos2d {
 class QtScriptCCGridBase : public QtScriptCCObject
@@ -5406,6 +5397,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCGridBase *)
+Q_DECLARE_METATYPE(const cocos2d::CCGridBase *)
 
 namespace cocos2d {
 class QtScriptCCGrid3D : public QtScriptCCGridBase
@@ -5432,6 +5424,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCGrid3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCGrid3D *)
 
 namespace cocos2d {
 class QtScriptCCTiledGrid3D : public QtScriptCCGridBase
@@ -5458,9 +5451,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTiledGrid3D *)
+Q_DECLARE_METATYPE(const cocos2d::CCTiledGrid3D *)
 
 namespace cocos2d {
-class QtScriptCCKeypadDelegate final : public QtScriptBaseClassPrototype<CCKeypadDelegate>
+class QtScriptCCKeypadDelegate final : public QtScriptBaseClassPrototype<CCKeypadDelegate, false>
 {
 	Q_OBJECT
 
@@ -5483,6 +5477,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCKeypadDelegate)
 Q_DECLARE_METATYPE(cocos2d::CCKeypadDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCKeypadDelegate *)
 
 namespace cocos2d {
 class QtScriptCCKeypadHandler : public QtScriptCCObject
@@ -5510,6 +5505,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCKeypadHandler *)
+Q_DECLARE_METATYPE(const cocos2d::CCKeypadHandler *)
 
 namespace cocos2d {
 class QtScriptCCKeypadDispatcher : public QtScriptCCObject
@@ -5537,6 +5533,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCKeypadDispatcher *)
+Q_DECLARE_METATYPE(const cocos2d::CCKeypadDispatcher *)
 
 namespace cocos2d {
 class QtScriptCCTextureAtlas : public QtScriptCCObject
@@ -5591,6 +5588,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTextureAtlas *)
+Q_DECLARE_METATYPE(const cocos2d::CCTextureAtlas *)
 
 namespace cocos2d {
 class QtScriptCCSprite : public QtScriptCCNodeRGBA
@@ -5661,6 +5659,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSprite *)
+Q_DECLARE_METATYPE(const cocos2d::CCSprite *)
 
 namespace cocos2d {
 class QtScriptCCLabelTTF : public QtScriptCCSprite
@@ -5721,6 +5720,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLabelTTF *)
+Q_DECLARE_METATYPE(const cocos2d::CCLabelTTF *)
 
 namespace cocos2d {
 class QtScriptCCSpriteBatchNode : public QtScriptCCNode
@@ -5767,9 +5767,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSpriteBatchNode *)
+Q_DECLARE_METATYPE(const cocos2d::CCSpriteBatchNode *)
 
 namespace cocos2d {
-class QtScript_BMFontDef final : public QtScriptBaseClassPrototype<_BMFontDef>
+class QtScript_BMFontDef final : public QtScriptBaseClassPrototype<_BMFontDef, false>
 {
 	Q_OBJECT
 
@@ -5805,9 +5806,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_BMFontDef)
 Q_DECLARE_METATYPE(cocos2d::_BMFontDef *)
+Q_DECLARE_METATYPE(const cocos2d::_BMFontDef *)
 
 namespace cocos2d {
-class QtScript_BMFontPadding final : public QtScriptBaseClassPrototype<_BMFontPadding>
+class QtScript_BMFontPadding final : public QtScriptBaseClassPrototype<_BMFontPadding, false>
 {
 	Q_OBJECT
 
@@ -5840,9 +5842,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_BMFontPadding)
 Q_DECLARE_METATYPE(cocos2d::_BMFontPadding *)
+Q_DECLARE_METATYPE(const cocos2d::_BMFontPadding *)
 
 namespace cocos2d {
-class QtScript_FontDefHashElement final : public QtScriptBaseClassPrototype<_FontDefHashElement>
+class QtScript_FontDefHashElement final : public QtScriptBaseClassPrototype<_FontDefHashElement, false>
 {
 	Q_OBJECT
 
@@ -5872,9 +5875,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_FontDefHashElement)
 Q_DECLARE_METATYPE(cocos2d::_FontDefHashElement *)
+Q_DECLARE_METATYPE(const cocos2d::_FontDefHashElement *)
 
 namespace cocos2d {
-class QtScript_KerningHashElement final : public QtScriptBaseClassPrototype<_KerningHashElement>
+class QtScript_KerningHashElement final : public QtScriptBaseClassPrototype<_KerningHashElement, false>
 {
 	Q_OBJECT
 
@@ -5904,6 +5908,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::_KerningHashElement)
 Q_DECLARE_METATYPE(cocos2d::_KerningHashElement *)
+Q_DECLARE_METATYPE(const cocos2d::_KerningHashElement *)
 
 namespace cocos2d {
 class QtScriptCCBMFontConfiguration : public QtScriptCCObject
@@ -5950,6 +5955,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCBMFontConfiguration *)
+Q_DECLARE_METATYPE(const cocos2d::CCBMFontConfiguration *)
 
 namespace cocos2d {
 class QtScriptCCLabelBMFont : public QtScriptCCSpriteBatchNode
@@ -6011,9 +6017,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLabelBMFont *)
+Q_DECLARE_METATYPE(const cocos2d::CCLabelBMFont *)
 
 namespace cocos2d {
-class QtScriptCCTouchDelegate : public QtScriptBaseClassPrototype<CCTouchDelegate *>
+class QtScriptCCTouchDelegate : public QtScriptBaseClassPrototype<CCTouchDelegate *, false>
 {
 	Q_OBJECT
 
@@ -6040,7 +6047,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCTouchDelegate::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCTouchDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCTouchDelegate *)
 
 namespace cocos2d {
 class QtScriptCCTargetedTouchDelegate : public QtScriptCCTouchDelegate
@@ -6063,6 +6072,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTargetedTouchDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCTargetedTouchDelegate *)
 
 namespace cocos2d {
 class QtScriptCCStandardTouchDelegate : public QtScriptCCTouchDelegate
@@ -6085,6 +6095,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCStandardTouchDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCStandardTouchDelegate *)
 
 namespace cocos2d {
 class QtScriptCCLayer : public QtScriptCCNode
@@ -6139,6 +6150,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLayer *)
+Q_DECLARE_METATYPE(const cocos2d::CCLayer *)
 
 namespace cocos2d {
 class QtScriptCCLayerRGBA : public QtScriptCCLayer
@@ -6181,6 +6193,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLayerRGBA *)
+Q_DECLARE_METATYPE(const cocos2d::CCLayerRGBA *)
 
 namespace cocos2d {
 class QtScriptCCLayerColor : public QtScriptCCLayerRGBA
@@ -6212,6 +6225,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLayerColor *)
+Q_DECLARE_METATYPE(const cocos2d::CCLayerColor *)
 
 namespace cocos2d {
 class QtScriptCCLayerGradient : public QtScriptCCLayerColor
@@ -6255,6 +6269,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLayerGradient *)
+Q_DECLARE_METATYPE(const cocos2d::CCLayerGradient *)
 
 namespace cocos2d {
 class QtScriptCCLayerMultiplex : public QtScriptCCLayer
@@ -6285,6 +6300,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCLayerMultiplex *)
+Q_DECLARE_METATYPE(const cocos2d::CCLayerMultiplex *)
 
 namespace cocos2d {
 class QtScriptCCScene : public QtScriptCCNode
@@ -6308,9 +6324,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCScene *)
+Q_DECLARE_METATYPE(const cocos2d::CCScene *)
 
 namespace cocos2d {
-class QtScriptCCTransitionEaseScene : public QtScriptBaseClassPrototype<CCTransitionEaseScene *>
+class QtScriptCCTransitionEaseScene : public QtScriptBaseClassPrototype<CCTransitionEaseScene *, false>
 {
 	Q_OBJECT
 
@@ -6329,7 +6346,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCTransitionEaseScene::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCTransitionEaseScene *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionEaseScene *)
 
 namespace cocos2d {
 class QtScriptCCTransitionScene : public QtScriptCCScene
@@ -6356,6 +6375,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionScene *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionScene *)
 
 namespace cocos2d {
 class QtScriptCCTransitionSceneOriented : public QtScriptCCTransitionScene
@@ -6380,6 +6400,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionSceneOriented *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionSceneOriented *)
 
 namespace cocos2d {
 class QtScriptCCTransitionRotoZoom : public QtScriptCCTransitionScene
@@ -6403,6 +6424,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionRotoZoom *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionRotoZoom *)
 
 namespace cocos2d {
 class QtScriptCCTransitionJumpZoom : public QtScriptCCTransitionScene
@@ -6426,6 +6448,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionJumpZoom *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionJumpZoom *)
 
 namespace cocos2d {
 class QtScriptCCTransitionMoveInL : public QtScriptCCTransitionScene
@@ -6452,6 +6475,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionMoveInL *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionMoveInL *)
 
 namespace cocos2d {
 class QtScriptCCTransitionMoveInR : public QtScriptCCTransitionMoveInL
@@ -6475,6 +6499,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionMoveInR *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionMoveInR *)
 
 namespace cocos2d {
 class QtScriptCCTransitionMoveInT : public QtScriptCCTransitionMoveInL
@@ -6498,6 +6523,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionMoveInT *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionMoveInT *)
 
 namespace cocos2d {
 class QtScriptCCTransitionMoveInB : public QtScriptCCTransitionMoveInL
@@ -6521,6 +6547,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionMoveInB *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionMoveInB *)
 
 namespace cocos2d {
 class QtScriptCCTransitionSlideInL : public QtScriptCCTransitionScene
@@ -6547,6 +6574,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionSlideInL *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionSlideInL *)
 
 namespace cocos2d {
 class QtScriptCCTransitionSlideInR : public QtScriptCCTransitionSlideInL
@@ -6570,6 +6598,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionSlideInR *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionSlideInR *)
 
 namespace cocos2d {
 class QtScriptCCTransitionSlideInB : public QtScriptCCTransitionSlideInL
@@ -6593,6 +6622,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionSlideInB *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionSlideInB *)
 
 namespace cocos2d {
 class QtScriptCCTransitionSlideInT : public QtScriptCCTransitionSlideInL
@@ -6616,6 +6646,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionSlideInT *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionSlideInT *)
 
 namespace cocos2d {
 class QtScriptCCTransitionShrinkGrow : public QtScriptCCTransitionScene
@@ -6640,6 +6671,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionShrinkGrow *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionShrinkGrow *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFlipX : public QtScriptCCTransitionSceneOriented
@@ -6663,6 +6695,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFlipX *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFlipX *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFlipY : public QtScriptCCTransitionSceneOriented
@@ -6686,6 +6719,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFlipY *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFlipY *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFlipAngular : public QtScriptCCTransitionSceneOriented
@@ -6709,6 +6743,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFlipAngular *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFlipAngular *)
 
 namespace cocos2d {
 class QtScriptCCTransitionZoomFlipX : public QtScriptCCTransitionSceneOriented
@@ -6732,6 +6767,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionZoomFlipX *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionZoomFlipX *)
 
 namespace cocos2d {
 class QtScriptCCTransitionZoomFlipY : public QtScriptCCTransitionSceneOriented
@@ -6755,6 +6791,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionZoomFlipY *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionZoomFlipY *)
 
 namespace cocos2d {
 class QtScriptCCTransitionZoomFlipAngular : public QtScriptCCTransitionSceneOriented
@@ -6778,6 +6815,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionZoomFlipAngular *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionZoomFlipAngular *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFade : public QtScriptCCTransitionScene
@@ -6802,6 +6840,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFade *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFade *)
 
 namespace cocos2d {
 class QtScriptCCTransitionCrossFade : public QtScriptCCTransitionScene
@@ -6825,6 +6864,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionCrossFade *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionCrossFade *)
 
 namespace cocos2d {
 class QtScriptCCTransitionTurnOffTiles : public QtScriptCCTransitionScene
@@ -6849,6 +6889,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionTurnOffTiles *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionTurnOffTiles *)
 
 namespace cocos2d {
 class QtScriptCCTransitionSplitCols : public QtScriptCCTransitionScene
@@ -6874,6 +6915,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionSplitCols *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionSplitCols *)
 
 namespace cocos2d {
 class QtScriptCCTransitionSplitRows : public QtScriptCCTransitionSplitCols
@@ -6897,6 +6939,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionSplitRows *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionSplitRows *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFadeTR : public QtScriptCCTransitionScene
@@ -6922,6 +6965,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFadeTR *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFadeTR *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFadeBL : public QtScriptCCTransitionFadeTR
@@ -6945,6 +6989,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFadeBL *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFadeBL *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFadeUp : public QtScriptCCTransitionFadeTR
@@ -6968,6 +7013,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFadeUp *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFadeUp *)
 
 namespace cocos2d {
 class QtScriptCCTransitionFadeDown : public QtScriptCCTransitionFadeTR
@@ -6991,6 +7037,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionFadeDown *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionFadeDown *)
 
 namespace cocos2d {
 class QtScriptCCTransitionPageTurn : public QtScriptCCTransitionScene
@@ -7016,6 +7063,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionPageTurn *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionPageTurn *)
 
 namespace cocos2d {
 class QtScriptCCTransitionProgress : public QtScriptCCTransitionScene
@@ -7039,6 +7087,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionProgress *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionProgress *)
 
 namespace cocos2d {
 class QtScriptCCTransitionProgressRadialCCW : public QtScriptCCTransitionProgress
@@ -7062,6 +7111,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionProgressRadialCCW *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionProgressRadialCCW *)
 
 namespace cocos2d {
 class QtScriptCCTransitionProgressRadialCW : public QtScriptCCTransitionProgress
@@ -7085,6 +7135,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionProgressRadialCW *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionProgressRadialCW *)
 
 namespace cocos2d {
 class QtScriptCCTransitionProgressHorizontal : public QtScriptCCTransitionProgress
@@ -7108,6 +7159,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionProgressHorizontal *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionProgressHorizontal *)
 
 namespace cocos2d {
 class QtScriptCCTransitionProgressVertical : public QtScriptCCTransitionProgress
@@ -7131,6 +7183,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionProgressVertical *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionProgressVertical *)
 
 namespace cocos2d {
 class QtScriptCCTransitionProgressInOut : public QtScriptCCTransitionProgress
@@ -7154,6 +7207,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionProgressInOut *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionProgressInOut *)
 
 namespace cocos2d {
 class QtScriptCCTransitionProgressOutIn : public QtScriptCCTransitionProgress
@@ -7177,6 +7231,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTransitionProgressOutIn *)
+Q_DECLARE_METATYPE(const cocos2d::CCTransitionProgressOutIn *)
 
 namespace cocos2d {
 class QtScriptCCMenuItem : public QtScriptCCNodeRGBA
@@ -7210,6 +7265,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenuItem *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenuItem *)
 
 namespace cocos2d {
 class QtScriptCCMenuItemLabel : public QtScriptCCMenuItem
@@ -7240,6 +7296,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenuItemLabel *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenuItemLabel *)
 
 namespace cocos2d {
 class QtScriptCCMenuItemAtlasFont : public QtScriptCCMenuItemLabel
@@ -7263,6 +7320,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenuItemAtlasFont *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenuItemAtlasFont *)
 
 namespace cocos2d {
 class QtScriptCCMenuItemFont : public QtScriptCCMenuItemLabel
@@ -7296,6 +7354,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenuItemFont *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenuItemFont *)
 
 namespace cocos2d {
 class QtScriptCCMenuItemSprite : public QtScriptCCMenuItem
@@ -7328,6 +7387,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenuItemSprite *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenuItemSprite *)
 
 namespace cocos2d {
 class QtScriptCCMenuItemImage : public QtScriptCCMenuItemSprite
@@ -7354,6 +7414,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenuItemImage *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenuItemImage *)
 
 namespace cocos2d {
 class QtScriptCCMenuItemToggle : public QtScriptCCMenuItem
@@ -7386,6 +7447,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenuItemToggle *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenuItemToggle *)
 
 namespace cocos2d {
 class QtScriptCCMenu : public QtScriptCCLayerRGBA
@@ -7417,7 +7479,6 @@ public:
 	Q_INVOKABLE void alignItemsInRows(unsigned int rows, QByteArray* args);
 	Q_INVOKABLE void alignItemsInColumns(unsigned int columns, QByteArray* args);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue createWithItems(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithArray(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithItem(QScriptContext *context, QScriptEngine* engine);
 };
@@ -7425,6 +7486,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMenu *)
+Q_DECLARE_METATYPE(const cocos2d::CCMenu *)
 
 namespace cocos2d {
 class QtScriptCCClippingNode : public QtScriptCCNode
@@ -7458,6 +7520,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCClippingNode *)
+Q_DECLARE_METATYPE(const cocos2d::CCClippingNode *)
 
 namespace cocos2d {
 class QtScriptCCMotionStreak : public QtScriptCCNodeRGBA
@@ -7496,6 +7559,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCMotionStreak *)
+Q_DECLARE_METATYPE(const cocos2d::CCMotionStreak *)
 
 namespace cocos2d {
 class QtScriptCCProgressTimer : public QtScriptCCNodeRGBA
@@ -7545,6 +7609,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCProgressTimer *)
+Q_DECLARE_METATYPE(const cocos2d::CCProgressTimer *)
 
 namespace cocos2d {
 class QtScriptCCRenderTexture : public QtScriptCCNode
@@ -7602,6 +7667,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCRenderTexture *)
+Q_DECLARE_METATYPE(const cocos2d::CCRenderTexture *)
 
 namespace cocos2d {
 class QtScriptCCParticleBatchNode : public QtScriptCCNode
@@ -7640,9 +7706,79 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleBatchNode *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleBatchNode *)
 
 namespace cocos2d {
-class QtScriptsCCParticle final : public QtScriptBaseClassPrototype<sCCParticle>
+class QtScriptsCCParticle_ModeA final : public QtScriptBaseClassPrototype<sCCParticle::ModeA, false>
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptsCCParticle_ModeA(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptsCCParticle_ModeA(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_PROPERTY(cocos2d::CCPoint dir READ _public_field_get_dir WRITE _public_field_set_dir)
+	cocos2d::CCPoint _public_field_get_dir() const;
+	void _public_field_set_dir(const cocos2d::CCPoint& value);
+	Q_PROPERTY(float radialAccel READ _public_field_get_radialAccel WRITE _public_field_set_radialAccel)
+	float _public_field_get_radialAccel() const;
+	void _public_field_set_radialAccel(float value);
+	Q_PROPERTY(float tangentialAccel READ _public_field_get_tangentialAccel WRITE _public_field_set_tangentialAccel)
+	float _public_field_get_tangentialAccel() const;
+	void _public_field_set_tangentialAccel(float value);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeA)
+Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeA *)
+Q_DECLARE_METATYPE(const cocos2d::sCCParticle::ModeA *)
+
+namespace cocos2d {
+class QtScriptsCCParticle_ModeB final : public QtScriptBaseClassPrototype<sCCParticle::ModeB, false>
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptsCCParticle_ModeB(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptsCCParticle_ModeB(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_PROPERTY(float angle READ _public_field_get_angle WRITE _public_field_set_angle)
+	float _public_field_get_angle() const;
+	void _public_field_set_angle(float value);
+	Q_PROPERTY(float degreesPerSecond READ _public_field_get_degreesPerSecond WRITE _public_field_set_degreesPerSecond)
+	float _public_field_get_degreesPerSecond() const;
+	void _public_field_set_degreesPerSecond(float value);
+	Q_PROPERTY(float radius READ _public_field_get_radius WRITE _public_field_set_radius)
+	float _public_field_get_radius() const;
+	void _public_field_set_radius(float value);
+	Q_PROPERTY(float deltaRadius READ _public_field_get_deltaRadius WRITE _public_field_set_deltaRadius)
+	float _public_field_get_deltaRadius() const;
+	void _public_field_set_deltaRadius(float value);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeB)
+Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeB *)
+Q_DECLARE_METATYPE(const cocos2d::sCCParticle::ModeB *)
+
+namespace cocos2d {
+class QtScriptsCCParticle final : public QtScriptBaseClassPrototype<sCCParticle, false>
 {
 	Q_OBJECT
 
@@ -7687,18 +7823,19 @@ public:
 	Q_PROPERTY(unsigned int atlasIndex READ _public_field_get_atlasIndex WRITE _public_field_set_atlasIndex)
 	unsigned int _public_field_get_atlasIndex() const;
 	void _public_field_set_atlasIndex(unsigned int value);
-	Q_PROPERTY(cocos2d::sCCParticle:: modeA READ _public_field_get_modeA WRITE _public_field_set_modeA)
-	cocos2d::sCCParticle:: _public_field_get_modeA() const;
-	void _public_field_set_modeA(const cocos2d::sCCParticle::& value);
-	Q_PROPERTY(cocos2d::sCCParticle:: modeB READ _public_field_get_modeB WRITE _public_field_set_modeB)
-	cocos2d::sCCParticle:: _public_field_get_modeB() const;
-	void _public_field_set_modeB(const cocos2d::sCCParticle::& value);
+	Q_PROPERTY(cocos2d::sCCParticle::ModeA modeA READ _public_field_get_modeA WRITE _public_field_set_modeA)
+	cocos2d::sCCParticle::ModeA _public_field_get_modeA() const;
+	void _public_field_set_modeA(const cocos2d::sCCParticle::ModeA& value);
+	Q_PROPERTY(cocos2d::sCCParticle::ModeB modeB READ _public_field_get_modeB WRITE _public_field_set_modeB)
+	cocos2d::sCCParticle::ModeB _public_field_get_modeB() const;
+	void _public_field_set_modeB(const cocos2d::sCCParticle::ModeB& value);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::sCCParticle)
 Q_DECLARE_METATYPE(cocos2d::sCCParticle *)
+Q_DECLARE_METATYPE(const cocos2d::sCCParticle *)
 
 namespace cocos2d {
 class QtScriptCCParticleSystem : public QtScriptCCNode
@@ -7881,6 +8018,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleSystem *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleSystem *)
 
 namespace cocos2d {
 class QtScriptCCParticleSystemQuad : public QtScriptCCParticleSystem
@@ -7910,6 +8048,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleSystemQuad *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleSystemQuad *)
 
 namespace cocos2d {
 class QtScriptCCParticleFire : public QtScriptCCParticleSystemQuad
@@ -7934,6 +8073,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleFire *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleFire *)
 
 namespace cocos2d {
 class QtScriptCCParticleFireworks : public QtScriptCCParticleSystemQuad
@@ -7958,6 +8098,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleFireworks *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleFireworks *)
 
 namespace cocos2d {
 class QtScriptCCParticleSun : public QtScriptCCParticleSystemQuad
@@ -7982,6 +8123,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleSun *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleSun *)
 
 namespace cocos2d {
 class QtScriptCCParticleGalaxy : public QtScriptCCParticleSystemQuad
@@ -8006,6 +8148,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleGalaxy *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleGalaxy *)
 
 namespace cocos2d {
 class QtScriptCCParticleFlower : public QtScriptCCParticleSystemQuad
@@ -8030,6 +8173,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleFlower *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleFlower *)
 
 namespace cocos2d {
 class QtScriptCCParticleMeteor : public QtScriptCCParticleSystemQuad
@@ -8054,6 +8198,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleMeteor *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleMeteor *)
 
 namespace cocos2d {
 class QtScriptCCParticleSpiral : public QtScriptCCParticleSystemQuad
@@ -8078,6 +8223,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleSpiral *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleSpiral *)
 
 namespace cocos2d {
 class QtScriptCCParticleExplosion : public QtScriptCCParticleSystemQuad
@@ -8102,6 +8248,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleExplosion *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleExplosion *)
 
 namespace cocos2d {
 class QtScriptCCParticleSmoke : public QtScriptCCParticleSystemQuad
@@ -8126,6 +8273,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleSmoke *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleSmoke *)
 
 namespace cocos2d {
 class QtScriptCCParticleSnow : public QtScriptCCParticleSystemQuad
@@ -8150,6 +8298,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleSnow *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleSnow *)
 
 namespace cocos2d {
 class QtScriptCCParticleRain : public QtScriptCCParticleSystemQuad
@@ -8174,9 +8323,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParticleRain *)
+Q_DECLARE_METATYPE(const cocos2d::CCParticleRain *)
 
 namespace cocos2d {
-class QtScriptCCDevice : public QtScriptBaseClassPrototype<CCDevice *>
+class QtScriptCCDevice : public QtScriptBaseClassPrototype<CCDevice *, false>
 {
 	Q_OBJECT
 
@@ -8196,7 +8346,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCDevice::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCDevice *)
+Q_DECLARE_METATYPE(const cocos2d::CCDevice *)
 
 namespace cocos2d {
 class QtScriptCCFileUtils : public QtScriptTypeInfo
@@ -8243,6 +8395,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCFileUtils *)
+Q_DECLARE_METATYPE(const cocos2d::CCFileUtils *)
 
 namespace cocos2d {
 class QtScriptCCImage : public QtScriptCCObject
@@ -8282,61 +8435,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCImage *)
+Q_DECLARE_METATYPE(const cocos2d::CCImage *)
 
 namespace cocos2d {
-class QtScriptCCSAXDelegator : public QtScriptBaseClassPrototype<CCSAXDelegator *>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptCCSAXDelegator(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptCCSAXDelegator(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::CCSAXDelegator *)
-
-namespace cocos2d {
-class QtScriptCCSAXParser final : public QtScriptBaseClassPrototype<CCSAXParser>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptCCSAXParser(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptCCSAXParser(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_INVOKABLE bool parse(const QByteArray& pszFile);
-	Q_INVOKABLE bool parse(const QByteArray& pXMLData, unsigned int uDataLength);
-	Q_INVOKABLE bool init(const QByteArray& pszEncoding);
-	Q_INVOKABLE void setDelegator(cocos2d::CCSAXDelegator* pDelegator);
-	static QScriptValue startElement(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue textHandler(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue endElement(QScriptContext *context, QScriptEngine* engine);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::CCSAXParser)
-Q_DECLARE_METATYPE(cocos2d::CCSAXParser *)
-
-namespace cocos2d {
-class QtScriptCCThread final : public QtScriptBaseClassPrototype<CCThread>
+class QtScriptCCThread final : public QtScriptBaseClassPrototype<CCThread, false>
 {
 	Q_OBJECT
 
@@ -8358,9 +8460,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCThread)
 Q_DECLARE_METATYPE(cocos2d::CCThread *)
+Q_DECLARE_METATYPE(const cocos2d::CCThread *)
 
 namespace cocos2d {
-class QtScriptcc_timeval final : public QtScriptBaseClassPrototype<cc_timeval>
+class QtScriptcc_timeval final : public QtScriptBaseClassPrototype<cc_timeval, false>
 {
 	Q_OBJECT
 
@@ -8387,9 +8490,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::cc_timeval)
 Q_DECLARE_METATYPE(cocos2d::cc_timeval *)
+Q_DECLARE_METATYPE(const cocos2d::cc_timeval *)
 
 namespace cocos2d {
-class QtScriptCCTime final : public QtScriptBaseClassPrototype<CCTime>
+class QtScriptCCTime final : public QtScriptBaseClassPrototype<CCTime, false>
 {
 	Q_OBJECT
 
@@ -8416,9 +8520,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCTime)
 Q_DECLARE_METATYPE(cocos2d::CCTime *)
+Q_DECLARE_METATYPE(const cocos2d::CCTime *)
 
 namespace cocos2d {
-class QtScriptCCApplicationProtocol : public QtScriptBaseClassPrototype<CCApplicationProtocol *>
+class QtScriptCCApplicationProtocol : public QtScriptBaseClassPrototype<CCApplicationProtocol *, false>
 {
 	Q_OBJECT
 
@@ -8437,7 +8542,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCApplicationProtocol::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCApplicationProtocol *)
+Q_DECLARE_METATYPE(const cocos2d::CCApplicationProtocol *)
 
 namespace cocos2d {
 class QtScriptCCApplication : public QtScriptCCApplicationProtocol
@@ -8468,9 +8575,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCApplication *)
+Q_DECLARE_METATYPE(const cocos2d::CCApplication *)
 
 namespace cocos2d {
-class QtScriptCCEGLViewProtocol : public QtScriptBaseClassPrototype<CCEGLViewProtocol *>
+class QtScriptCCEGLViewProtocol : public QtScriptBaseClassPrototype<CCEGLViewProtocol *, false>
 {
 	Q_OBJECT
 
@@ -8506,7 +8614,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCEGLViewProtocol::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCEGLViewProtocol *)
+Q_DECLARE_METATYPE(const cocos2d::CCEGLViewProtocol *)
 
 namespace cocos2d {
 class QtScriptCCEGLView : public QtScriptCCEGLViewProtocol
@@ -8547,6 +8657,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCEGLView *)
+Q_DECLARE_METATYPE(const cocos2d::CCEGLView *)
 
 namespace cocos2d {
 class QtScriptCCShaderCache : public QtScriptCCObject
@@ -8575,6 +8686,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCShaderCache *)
+Q_DECLARE_METATYPE(const cocos2d::CCShaderCache *)
 
 namespace cocos2d {
 class QtScriptCCAnimationCache : public QtScriptCCObject
@@ -8606,6 +8718,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCAnimationCache *)
+Q_DECLARE_METATYPE(const cocos2d::CCAnimationCache *)
 
 namespace cocos2d {
 class QtScriptCCSpriteFrameCache : public QtScriptCCObject
@@ -8640,6 +8753,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCSpriteFrameCache *)
+Q_DECLARE_METATYPE(const cocos2d::CCSpriteFrameCache *)
 
 namespace cocos2d {
 class QtScriptCCNotificationCenter : public QtScriptCCObject
@@ -8671,6 +8785,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCNotificationCenter *)
+Q_DECLARE_METATYPE(const cocos2d::CCNotificationCenter *)
 
 namespace cocos2d {
 class QtScriptCCNotificationObserver : public QtScriptCCObject
@@ -8700,6 +8815,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCNotificationObserver *)
+Q_DECLARE_METATYPE(const cocos2d::CCNotificationObserver *)
 
 namespace cocos2d {
 class QtScriptCCProfiler : public QtScriptCCObject
@@ -8731,6 +8847,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCProfiler *)
+Q_DECLARE_METATYPE(const cocos2d::CCProfiler *)
 
 namespace cocos2d {
 class QtScriptCCProfilingTimer : public QtScriptCCObject
@@ -8781,9 +8898,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCProfilingTimer *)
+Q_DECLARE_METATYPE(const cocos2d::CCProfilingTimer *)
 
 namespace cocos2d {
-class QtScriptCCUserDefault : public QtScriptBaseClassPrototype<CCUserDefault *>
+class QtScriptCCUserDefault : public QtScriptBaseClassPrototype<CCUserDefault *, false>
 {
 	Q_OBJECT
 
@@ -8822,10 +8940,12 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCUserDefault::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCUserDefault *)
+Q_DECLARE_METATYPE(const cocos2d::CCUserDefault *)
 
 namespace cocos2d {
-class QtScriptCCIMEDelegate : public QtScriptBaseClassPrototype<CCIMEDelegate *>
+class QtScriptCCIMEDelegate : public QtScriptBaseClassPrototype<CCIMEDelegate *, false>
 {
 	Q_OBJECT
 
@@ -8846,10 +8966,12 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCIMEDelegate::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCIMEDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCIMEDelegate *)
 
 namespace cocos2d {
-class QtScriptCCIMEDispatcher : public QtScriptBaseClassPrototype<CCIMEDispatcher *>
+class QtScriptCCIMEDispatcher : public QtScriptBaseClassPrototype<CCIMEDispatcher *, false>
 {
 	Q_OBJECT
 
@@ -8876,10 +8998,12 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCIMEDispatcher::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCIMEDispatcher *)
+Q_DECLARE_METATYPE(const cocos2d::CCIMEDispatcher *)
 
 namespace cocos2d {
-class QtScriptCCTextFieldDelegate final : public QtScriptBaseClassPrototype<CCTextFieldDelegate>
+class QtScriptCCTextFieldDelegate final : public QtScriptBaseClassPrototype<CCTextFieldDelegate, false>
 {
 	Q_OBJECT
 
@@ -8905,6 +9029,7 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::CCTextFieldDelegate)
 Q_DECLARE_METATYPE(cocos2d::CCTextFieldDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::CCTextFieldDelegate *)
 
 namespace cocos2d {
 class QtScriptCCTextFieldTTF : public QtScriptCCLabelTTF
@@ -8945,6 +9070,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTextFieldTTF *)
+Q_DECLARE_METATYPE(const cocos2d::CCTextFieldTTF *)
 
 namespace cocos2d {
 class QtScriptCCTextureCache : public QtScriptCCObject
@@ -8983,6 +9109,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTextureCache *)
+Q_DECLARE_METATYPE(const cocos2d::CCTextureCache *)
 
 namespace cocos2d {
 class QtScriptCCParallaxNode : public QtScriptCCNode
@@ -9000,17 +9127,15 @@ public:
 	explicit QtScriptCCParallaxNode(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(cocos2d::_ccArray* parallaxArray READ getParallaxArray WRITE setParallaxArray)
-	cocos2d::_ccArray* getParallaxArray();
 	Q_INVOKABLE void addChild(cocos2d::CCNode* child, unsigned int zOrder, int tag);
 	Q_INVOKABLE void addChild(cocos2d::CCNode* child, unsigned int z, const cocos2d::CCPoint& parallaxRatio, const cocos2d::CCPoint& positionOffset);
-	void setParallaxArray(cocos2d::_ccArray* var);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCParallaxNode *)
+Q_DECLARE_METATYPE(const cocos2d::CCParallaxNode *)
 
 namespace cocos2d {
 class QtScriptCCTileMapAtlas : public QtScriptCCAtlasNode
@@ -9041,9 +9166,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTileMapAtlas *)
+Q_DECLARE_METATYPE(const cocos2d::CCTileMapAtlas *)
 
 namespace cocos2d {
-class QtScriptccTouchHandlerHelperData final : public QtScriptBaseClassPrototype<ccTouchHandlerHelperData>
+class QtScriptccTouchHandlerHelperData final : public QtScriptBaseClassPrototype<ccTouchHandlerHelperData, false>
 {
 	Q_OBJECT
 
@@ -9067,9 +9193,10 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::ccTouchHandlerHelperData)
 Q_DECLARE_METATYPE(cocos2d::ccTouchHandlerHelperData *)
+Q_DECLARE_METATYPE(const cocos2d::ccTouchHandlerHelperData *)
 
 namespace cocos2d {
-class QtScriptEGLTouchDelegate : public QtScriptBaseClassPrototype<EGLTouchDelegate *>
+class QtScriptEGLTouchDelegate : public QtScriptBaseClassPrototype<EGLTouchDelegate *, false>
 {
 	Q_OBJECT
 
@@ -9088,7 +9215,9 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptEGLTouchDelegate::StorageType)
 Q_DECLARE_METATYPE(cocos2d::EGLTouchDelegate *)
+Q_DECLARE_METATYPE(const cocos2d::EGLTouchDelegate *)
 
 namespace cocos2d {
 class QtScriptCCTouchDispatcher : public QtScriptCCObject
@@ -9126,6 +9255,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTouchDispatcher *)
+Q_DECLARE_METATYPE(const cocos2d::CCTouchDispatcher *)
 
 namespace cocos2d {
 class QtScriptCCTouchHandler : public QtScriptCCObject
@@ -9158,6 +9288,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTouchHandler *)
+Q_DECLARE_METATYPE(const cocos2d::CCTouchHandler *)
 
 namespace cocos2d {
 class QtScriptCCStandardTouchHandler : public QtScriptCCTouchHandler
@@ -9181,6 +9312,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCStandardTouchHandler *)
+Q_DECLARE_METATYPE(const cocos2d::CCStandardTouchHandler *)
 
 namespace cocos2d {
 class QtScriptCCTargetedTouchHandler : public QtScriptCCTouchHandler
@@ -9209,6 +9341,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTargetedTouchHandler *)
+Q_DECLARE_METATYPE(const cocos2d::CCTargetedTouchHandler *)
 
 namespace cocos2d {
 class QtScriptCCTimer : public QtScriptCCObject
@@ -9236,6 +9369,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCTimer *)
+Q_DECLARE_METATYPE(const cocos2d::CCTimer *)
 
 namespace cocos2d {
 class QtScriptCCScheduler : public QtScriptCCObject
@@ -9274,6 +9408,7 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCScheduler *)
+Q_DECLARE_METATYPE(const cocos2d::CCScheduler *)
 
 namespace cocos2d {
 class QtScriptCCComponent : public QtScriptCCObject
@@ -9309,9 +9444,10 @@ public:
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCComponent *)
+Q_DECLARE_METATYPE(const cocos2d::CCComponent *)
 
 namespace cocos2d {
-class QtScriptCCComponentContainer : public QtScriptBaseClassPrototype<CCComponentContainer *>
+class QtScriptCCComponentContainer : public QtScriptBaseClassPrototype<CCComponentContainer *, false>
 {
 	Q_OBJECT
 
@@ -9336,5 +9472,7 @@ public:
 
 } // end of cocos2d
 
+Q_DECLARE_METATYPE(cocos2d::QtScriptCCComponentContainer::StorageType)
 Q_DECLARE_METATYPE(cocos2d::CCComponentContainer *)
+Q_DECLARE_METATYPE(const cocos2d::CCComponentContainer *)
 

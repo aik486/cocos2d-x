@@ -1,22 +1,10 @@
 include(liboutdir.pri)
-
-CONFIG += c++11 warn_off
+include($$QTSCRIPT_BINDINGS_PATH/qtscript_bindings_depend.pri)
 
 DEFINES += QT_COCOS
 
 CONFIG(debug, debug|release) {
     DEFINES += COCOS2D_DEBUG=1
-    DEFINES += DEBUG
-} else {
-    DEFINES += NDEBUG
-}
-
-unix|win32-g++ {
-    QMAKE_CXXFLAGS_WARN_OFF -= -w
-    QMAKE_CXXFLAGS += -Wall
-    *-clang {
-        QMAKE_CXXFLAGS += -Wno-unused-private-field
-    }
 }
 
 macx {
@@ -29,11 +17,8 @@ macx {
 }
 
 win32-msvc* {
-    QMAKE_CXXFLAGS_WARN_OFF -= -W0
-    QMAKE_CXXFLAGS += -W3 /wd4251 /wd4573
-    DEFINES += _CRT_SECURE_NO_WARNINGS
-    DEFINES += _SCL_SECURE_NO_WARNINGS
     LIBS += -lgdi32 -lopengl32 -luser32 -ladvapi32 -lpthreads4w
+    INCLUDEPATH += $$PTHREADS_PATH
 }
 
 win32 {

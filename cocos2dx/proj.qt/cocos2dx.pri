@@ -1,6 +1,6 @@
 include(libcocos2dx.pri)
 
-win32-msvc* {
+msvc {
     PRE_TARGETDEPS += \
         $$COCOS2DX_LIB/cocos2dx.lib \
         $$COCOS2DX_LIB/pthreads4w.lib
@@ -8,4 +8,5 @@ win32-msvc* {
     PRE_TARGETDEPS += $$COCOS2DX_LIB/libcocos2dx.a
 }
 
+LIBS += -L$$COCOS2DX_LIB
 LIBS += -lcocos2dx

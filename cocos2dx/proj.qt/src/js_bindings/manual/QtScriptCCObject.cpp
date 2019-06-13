@@ -3,10 +3,8 @@
 namespace cocos2d
 {
 QtScriptCCObject::QtScriptCCObject(
-	QScriptEngine *engine, const QString &className)
-	: QObject(engine)
-	, QScriptClass(engine)
-	, mClassName(className)
+	QScriptEngine *engine, const QByteArray &className)
+	: QtScriptAbstractClass(engine, className)
 {
 }
 
@@ -17,19 +15,13 @@ QtScriptCCObject::QtScriptCCObject(QScriptEngine *engine)
 
 void QtScriptCCObject::Register(const QScriptValue &targetNamespace)
 {
-	auto ccEngine = QtCocosScriptEngine::instance();
-	Q_ASSERT(ccEngine);
-	auto inherit = ccEngine->propertyById(QtCocosScriptEngine::PROTOTYPE,
-		ccEngine->propertyById(
-			QtCocosScriptEngine::OBJECT, ccEngine->engine()->globalObject()));
-	RegisterT<CCObject, QtScriptCCObject>(targetNamespace, inherit);
+	RegisterT<CCObject, QtScriptCCObject>(targetNamespace, QScriptValue());
 }
 
 QScriptValue QtScriptCCObject::newInstance(CCObject *obj)
 {
 	Q_ASSERT(obj);
-	auto engine = this->engine();
-	auto result = engine->newVariant(QVariant::fromValue(obj));
+	auto result = engine()->newVariant(QVariant::fromValue(obj));
 	result.setScriptClass(this);
 	return result;
 }
@@ -47,16 +39,10 @@ CCObject *QtScriptCCObject::toCCObject(const QScriptValue &value)
 	return v.value<CCObject *>();
 }
 
-QScriptValue QtScriptCCObject::tryConstructCCObject(QScriptContext *ctx)
+QScriptValue QtScriptCCObject::newScriptObject(QScriptContext *context)
 {
-	if (!QtCocosScriptEngine::checkArgumentCount(
-			ctx, constructorArgumentCountMin(), constructorArgumentCountMax()))
-	{
-		return engine()->uncaughtException();
-	}
-
 	CCObject *newObject;
-	if (!constructObject(ctx, newObject))
+	if (!constructObject(context, newObject))
 	{
 		return engine()->uncaughtException();
 	}
@@ -85,24 +71,19 @@ void QtScriptCCObject::update(float dt)
 		ccObject->update(dt);
 }
 
-CCObject *QtScriptCCObject::copy()
+QScriptValue QtScriptCCObject::copy()
 {
+	CCObject *object = nullptr;
 	auto ccObject = thiz<CCObject *>();
 	if (ccObject)
 	{
-		return ccObject->copy();
+		object = ccObject->copy();
 	}
-	return nullptr;
-}
 
-QString QtScriptCCObject::name() const
-{
-	return mClassName;
-}
-
-QScriptValue QtScriptCCObject::prototype() const
-{
-	return mProto;
+	if (!object)
+		return context()->throwError(tr("The object is not copyable"));
+	object->autorelease();
+	return newInstance(object);
 }
 
 int QtScriptCCObject::constructorArgumentCountMin() const
@@ -115,8 +96,7 @@ int QtScriptCCObject::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCObject::constructObject(
-	QScriptContext *, NativeObjectType &out) const
+bool QtScriptCCObject::constructObject(QScriptContext *, CCObject *&out)
 {
 	out = new CCObject;
 	return true;

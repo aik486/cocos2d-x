@@ -65,24 +65,22 @@ CCPointArray* CCPointArray::create(unsigned int capacity)
 }
 
 
-bool CCPointArray::initWithCapacity(unsigned int)
+bool CCPointArray::initWithCapacity(unsigned int cap)
 {
-    m_pControlPoints = new vector<CCPoint*>();
+    if (!m_pControlPoints)
+        m_pControlPoints = new vector<CCPoint>();
+    m_pControlPoints->reserve(cap);
 
     return true;
 }
 
 CCObject* CCPointArray::copyWithZone(cocos2d::CCZone *)
 {
-    vector<CCPoint*> *newArray = new vector<CCPoint*>();
-    vector<CCPoint*>::iterator iter;
-    for (iter = m_pControlPoints->begin(); iter != m_pControlPoints->end(); ++iter)
-    {
-        newArray->push_back(new CCPoint((*iter)->x, (*iter)->y));
-    }
+    vector<CCPoint> *newArray = new vector<CCPoint>();
+    if (m_pControlPoints)
+        *newArray = *m_pControlPoints;
 
     CCPointArray *points = new CCPointArray();
-    points->initWithCapacity(10);
     points->setControlPoints(newArray);
 
     return points;
@@ -90,84 +88,79 @@ CCObject* CCPointArray::copyWithZone(cocos2d::CCZone *)
 
 CCPointArray::~CCPointArray()
 {
-    vector<CCPoint*>::iterator iter;
-    for (iter = m_pControlPoints->begin(); iter != m_pControlPoints->end(); ++iter)
-    {
-        delete *iter;
-    }
     delete m_pControlPoints;
 }
 
 CCPointArray::CCPointArray() :m_pControlPoints(NULL){}
 
-const std::vector<CCPoint*>* CCPointArray::getControlPoints()
+const std::vector<CCPoint> *CCPointArray::getControlPoints()
 {
     return m_pControlPoints;
 }
 
-void CCPointArray::setControlPoints(vector<CCPoint*> *controlPoints)
+void CCPointArray::setControlPoints(std::vector<CCPoint> *controlPoints)
 {
     CCAssert(controlPoints != NULL, "control points should not be NULL");
 
-    // delete old points
-    vector<CCPoint*>::iterator iter;
-    for (iter = m_pControlPoints->begin(); iter != m_pControlPoints->end(); ++iter)
-    {
-        delete *iter;
-    }
     delete m_pControlPoints;
 
     m_pControlPoints = controlPoints;
 }
 
-void CCPointArray::addControlPoint(CCPoint controlPoint)
+void CCPointArray::addControlPoint(const CCPoint &controlPoint)
 {
-    m_pControlPoints->push_back(new CCPoint(controlPoint.x, controlPoint.y));
+    m_pControlPoints->push_back(controlPoint);
 }
 
-void CCPointArray::insertControlPoint(CCPoint &controlPoint, unsigned int index)
+void CCPointArray::insertControlPoint(const CCPoint &controlPoint, unsigned int index)
 {
-    CCPoint *temp = new CCPoint(controlPoint.x, controlPoint.y);
-    m_pControlPoints->insert(m_pControlPoints->begin() + index, temp);
+    initWithCapacity(index);
+    m_pControlPoints->insert(m_pControlPoints->begin() + index, controlPoint);
 }
 
 CCPoint CCPointArray::getControlPointAtIndex(unsigned int index)
 {
-    index = MIN(static_cast<unsigned int>(m_pControlPoints->size()-1),
-                MAX(index, 0));
-    return *(m_pControlPoints->at(index));
+    if (!m_pControlPoints || index >= m_pControlPoints->size())
+        return CCPoint();
+
+    return m_pControlPoints->at(index);
 }
 
-void CCPointArray::replaceControlPoint(cocos2d::CCPoint &controlPoint, unsigned int index)
+void CCPointArray::replaceControlPoint(const CCPoint &controlPoint, unsigned int index)
 {
+    if (!m_pControlPoints || index >= m_pControlPoints->size())
+        return;
 
-    CCPoint *temp = m_pControlPoints->at(index);
-    temp->x = controlPoint.x;
-    temp->y = controlPoint.y;
+    m_pControlPoints->at(index) = controlPoint;
 }
 
 void CCPointArray::removeControlPointAtIndex(unsigned int index)
 {
-    vector<CCPoint*>::iterator iter = m_pControlPoints->begin() + index;
-    CCPoint* pRemovedPoint = *iter;
+    if (!m_pControlPoints || index >= m_pControlPoints->size())
+        return;
+
+    auto iter = m_pControlPoints->begin() + index;
     m_pControlPoints->erase(iter);
-    delete pRemovedPoint;
 }
 
 unsigned int CCPointArray::count()
 {
-    return static_cast<unsigned int>(m_pControlPoints->size());
+    return m_pControlPoints
+                ? static_cast<unsigned int>(m_pControlPoints->size())
+                : 0;
 }
 
 CCPointArray* CCPointArray::reverse()
 {
-    vector<CCPoint*> *newArray = new vector<CCPoint*>();
-    vector<CCPoint*>::reverse_iterator iter;
-    CCPoint *point = NULL;
-    for (iter = m_pControlPoints->rbegin(); iter != m_pControlPoints->rend(); ++iter)
+    vector<CCPoint> *newArray = new vector<CCPoint>();
+    if (m_pControlPoints)
     {
-        point = *iter;
-        newArray->push_back(new CCPoint(point->x, point->y));
+        newArray->reserve(m_pControlPoints->size());
+        vector<CCPoint>::reverse_iterator iter;
+        for (iter = m_pControlPoints->rbegin(); iter != m_pControlPoints->rend(); ++iter)
+        {
+            newArray->push_back(*iter);
+        }
     }
     CCPointArray *config = CCPointArray::create(0);
     config->setControlPoints(newArray);
@@ -177,23 +170,12 @@ CCPointArray* CCPointArray::reverse()
 
 void CCPointArray::reverseInline()
 {
+   if (m_pControlPoints)
+       return;
     size_t l = m_pControlPoints->size();
-    CCPoint *p1 = NULL;
-    CCPoint *p2 = NULL;
-    float x, y;
     for (unsigned int i = 0; i < l/2; ++i)
     {
-        p1 = m_pControlPoints->at(i);
-        p2 = m_pControlPoints->at(l-i-1);
-
-        x = p1->x;
-        y = p1->y;
-
-        p1->x = p2->x;
-        p1->y = p2->y;
-
-        p2->x = x;
-        p2->y = y;
+        std::swap(m_pControlPoints->at(i), m_pControlPoints->at(l-i-1));
     }
 }
 

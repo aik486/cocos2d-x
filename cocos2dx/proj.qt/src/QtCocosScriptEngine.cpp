@@ -1,7 +1,12 @@
 #include "QtCocosScriptEngine.h"
 
+Q_DECLARE_METATYPE(std::vector<std::string>)
+
 #include "cocos2dx_qt.h"
-#include "js_bindings/QtScriptCCObject.hpp"
+#include "QtScriptInstall.h"
+#include "js_bindings/manual/QtScriptCCObject.hpp"
+#include "js_bindings/generated/qtscript_cocos2dx.hpp"
+#include "QtCocosHelper.h"
 
 #include <QScriptEngine>
 
@@ -31,6 +36,107 @@ const char *QtCocosScriptEngine::STRING_IDS[] = {
 	"onExitTransitionDidStart", // ON_EXIT_TRANSITION_DID_START,
 };
 
+static QScriptValue stringVecToScriptValue(
+	QScriptEngine *eng, const std::vector<std::string> &cont)
+{
+	QScriptValue a = eng->newArray();
+	auto begin = cont.begin();
+	auto end = cont.end();
+	auto it = begin;
+	quint32 i;
+	for (i = 0; it != end; ++it, ++i)
+		a.setProperty(
+			i, eng->toScriptValue(QByteArray(it->c_str(), int(it->size()))));
+	return a;
+}
+
+static void stringVecFromScriptValue(
+	const QScriptValue &value, std::vector<std::string> &cont)
+{
+	quint32 len = value.property(QLatin1String("length")).toUInt32();
+	cont.reserve(len);
+	for (quint32 i = 0; i < len; ++i)
+	{
+		QScriptValue item = value.property(i);
+		auto ba = qscriptvalue_cast<QByteArray>(item);
+		cont.push_back(std::string(ba.data(), size_t(ba.size())));
+	}
+}
+
+static _ccColor4B ccColor3Bto4B(const _ccColor3B &from)
+{
+	_ccColor4B result;
+	result.r = from.r;
+	result.g = from.g;
+	result.b = from.b;
+	result.a = 255;
+	return result;
+}
+
+static _ccColor3B ccColor4Bto3B(const _ccColor4B &from)
+{
+	_ccColor3B result;
+	result.r = from.r;
+	result.g = from.g;
+	result.b = from.b;
+	return result;
+}
+
+static _ccColor4F ccColor3Bto4F(const _ccColor3B &from)
+{
+	_ccColor4F result;
+	result.r = from.r / 255.f;
+	result.g = from.g / 255.f;
+	result.b = from.b / 255.f;
+	result.a = 1.f;
+	return result;
+}
+
+static _ccColor3B ccColor4Fto3B(const _ccColor4F &from)
+{
+	_ccColor3B result;
+	result.r = GLubyte(std::max(0, std::min(255, int(from.r * 255.f))));
+	result.g = GLubyte(std::max(0, std::min(255, int(from.g * 255.f))));
+	result.b = GLubyte(std::max(0, std::min(255, int(from.b * 255.f))));
+	return result;
+}
+
+static _ccColor4B ccColor4Fto4B(const _ccColor4F &from)
+{
+	_ccColor4B result;
+	result.r = GLubyte(std::max(0, std::min(255, int(from.r * 255.f))));
+	result.g = GLubyte(std::max(0, std::min(255, int(from.g * 255.f))));
+	result.b = GLubyte(std::max(0, std::min(255, int(from.b * 255.f))));
+	result.a = GLubyte(std::max(0, std::min(255, int(from.a * 255.f))));
+	return result;
+}
+
+static _ccColor4F ccColor4Bto4F(const _ccColor4B &from)
+{
+	_ccColor4F result;
+	result.r = from.r / 255.f;
+	result.g = from.g / 255.f;
+	result.b = from.b / 255.f;
+	result.a = from.a / 255.f;
+	return result;
+}
+
+static CCSize ccPointToCCSize(const CCPoint &point)
+{
+	CCSize result;
+	result.width = point.x;
+	result.height = point.y;
+	return result;
+}
+
+static CCPoint ccSizeToCCPoint(const CCSize &size)
+{
+	CCPoint result;
+	result.x = size.width;
+	result.y = size.height;
+	return result;
+}
+
 QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	: mEngine(engine)
 {
@@ -47,7 +153,99 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	engine->globalObject().setProperty(mStringIds[CC], mRootObject,
 		QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
+	qScriptRegisterMetaType<std::vector<std::string>>(
+		engine, stringVecToScriptValue, stringVecFromScriptValue);
+
+	QtScriptInstallQtCore(engine);
 	QtScriptCCObject::Register(mRootObject);
+	qtscript_register_all_cocos2dx(engine);
+
+	static const bool cvtColor3Bto4B =
+		QMetaType::registerConverter<_ccColor3B, _ccColor4B>(ccColor3Bto4B);
+	Q_UNUSED(cvtColor3Bto4B);
+	static const bool cvtColor4Bto3B =
+		QMetaType::registerConverter<_ccColor4B, _ccColor3B>(ccColor4Bto3B);
+	Q_UNUSED(cvtColor4Bto3B);
+	static const bool cvtColor3Bto4F =
+		QMetaType::registerConverter<_ccColor3B, _ccColor4F>(ccColor3Bto4F);
+	Q_UNUSED(cvtColor3Bto4F);
+	static const bool cvtColor4Fto3B =
+		QMetaType::registerConverter<_ccColor4F, _ccColor3B>(ccColor4Fto3B);
+	Q_UNUSED(cvtColor4Fto3B);
+	static const bool cvtColor4Fto4B =
+		QMetaType::registerConverter<_ccColor4F, _ccColor4B>(ccColor4Fto4B);
+	Q_UNUSED(cvtColor4Fto4B);
+	static const bool cvtColor4Bto4F =
+		QMetaType::registerConverter<_ccColor4B, _ccColor4F>(ccColor4Bto4F);
+	Q_UNUSED(cvtColor4Bto4F);
+
+	static const bool cvtColor3BtoQColor =
+		QMetaType::registerConverter<_ccColor3B, QColor>(ccColor3BToQColor);
+	Q_UNUSED(cvtColor3BtoQColor);
+	static const bool cvtColor4BtoQColor =
+		QMetaType::registerConverter<_ccColor4B, QColor>(ccColor4BToQColor);
+	Q_UNUSED(cvtColor4BtoQColor);
+	static const bool cvtColor4FtoQColor =
+		QMetaType::registerConverter<_ccColor4F, QColor>(ccColor4FToQColor);
+	Q_UNUSED(cvtColor4FtoQColor);
+	static const bool cvtQColorToColor3B =
+		QMetaType::registerConverter<QColor, _ccColor3B>(qColorToCcColor3B);
+	Q_UNUSED(cvtQColorToColor3B);
+	static const bool cvtQColorToColor4B =
+		QMetaType::registerConverter<QColor, _ccColor4B>(qColorToCcColor4B);
+	Q_UNUSED(cvtQColorToColor4B);
+	static const bool cvtQColorToColor4F =
+		QMetaType::registerConverter<QColor, _ccColor4F>(qColorToCcColor4F);
+	Q_UNUSED(cvtQColorToColor4F);
+
+	static const bool cvtPointToSize =
+		QMetaType::registerConverter<CCPoint, CCSize>(ccPointToCCSize);
+	Q_UNUSED(cvtPointToSize);
+	static const bool cvtSizeToPoint =
+		QMetaType::registerConverter<CCSize, CCPoint>(ccSizeToCCPoint);
+	Q_UNUSED(cvtSizeToPoint);
+
+	static const bool cvtSizeToQSize =
+		QMetaType::registerConverter<CCSize, QSize>(ccSizeToQSize);
+	Q_UNUSED(cvtSizeToQSize);
+	static const bool cvtSizeToQSizeF =
+		QMetaType::registerConverter<CCSize, QSizeF>(ccSizeToQSizeF);
+	Q_UNUSED(cvtSizeToQSizeF);
+
+	static const bool cvtPointToQPoint =
+		QMetaType::registerConverter<CCPoint, QPoint>(ccPointToQPoint);
+	Q_UNUSED(cvtPointToQPoint);
+	static const bool cvtPointToQPointF =
+		QMetaType::registerConverter<CCPoint, QPointF>(ccPointToQPointF);
+	Q_UNUSED(cvtPointToQPointF);
+
+	static const bool cvtPointToQRect =
+		QMetaType::registerConverter<CCRect, QRect>(ccRectToQRect);
+	Q_UNUSED(cvtPointToQRect);
+	static const bool cvtPointToQRectF =
+		QMetaType::registerConverter<CCRect, QRectF>(ccRectToQRectF);
+	Q_UNUSED(cvtPointToQRectF);
+
+	static const bool cvtQSizeToSize =
+		QMetaType::registerConverter<QSize, CCSize>(qSizeToCCSize);
+	Q_UNUSED(cvtQSizeToSize);
+	static const bool cvtQSizeFToSize =
+		QMetaType::registerConverter<QSizeF, CCSize>(qSizeFToCCSize);
+	Q_UNUSED(cvtQSizeFToSize);
+
+	static const bool cvtQPointToPoint =
+		QMetaType::registerConverter<QPoint, CCPoint>(qPointToCCPoint);
+	Q_UNUSED(cvtQPointToPoint);
+	static const bool cvtQPointFToPoint =
+		QMetaType::registerConverter<QPointF, CCPoint>(qPointFToCCPoint);
+	Q_UNUSED(cvtQPointFToPoint);
+
+	static const bool cvtQRectToRect =
+		QMetaType::registerConverter<QRect, CCRect>(qRectToCCRect);
+	Q_UNUSED(cvtQRectToRect);
+	static const bool cvtQRectFToRect =
+		QMetaType::registerConverter<QRectF, CCRect>(qRectFToCCRect);
+	Q_UNUSED(cvtQRectFToRect);
 }
 
 QtCocosScriptEngine::~QtCocosScriptEngine()
