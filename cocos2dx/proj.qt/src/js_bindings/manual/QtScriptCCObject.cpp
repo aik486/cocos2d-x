@@ -21,18 +21,22 @@ void QtScriptCCObject::Register(const QScriptValue &targetNamespace)
 QScriptValue QtScriptCCObject::newInstance(CCObject *obj)
 {
 	Q_ASSERT(obj);
-	auto result = engine()->newVariant(QVariant::fromValue(obj));
+	auto result = engine()->newObject();
+	result.setData(engine()->newVariant(QVariant::fromValue(obj)));
 	result.setScriptClass(this);
 	return result;
 }
 
 CCObject *QtScriptCCObject::toCCObject(const QScriptValue &value)
 {
-	if (!value.isVariant())
+	if (!value.isObject())
+		return nullptr;
+	auto data = value.data();
+	if (!data.isVariant())
 	{
 		return nullptr;
 	}
-	auto v = value.toVariant();
+	auto v = data.toVariant();
 	if (v.userType() != qMetaTypeId<CCObject *>())
 		return nullptr;
 

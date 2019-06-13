@@ -51,9 +51,7 @@ protected:
 	static void fromScriptValue(const QScriptValue &value, CC_T &out)
 	{
 		auto obj = toCCObject(value);
-		if (obj)
-			Q_ASSERT(dynamic_cast<CC_T>(obj) != nullptr);
-		out = static_cast<CC_T>(obj);
+		out = dynamic_cast<CC_T>(obj);
 	}
 
 	template <typename TT, typename CLS_T>
