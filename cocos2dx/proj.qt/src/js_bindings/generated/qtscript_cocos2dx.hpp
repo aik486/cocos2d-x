@@ -1687,7 +1687,6 @@ public:
 	Q_PROPERTY(float scaleX READ getScaleX WRITE setScaleX)
 	Q_PROPERTY(float skewX READ getSkewX WRITE setSkewX)
 	Q_PROPERTY(float skewY READ getSkewY WRITE setSkewY)
-	Q_PROPERTY(cocos2d::CCNode* parent READ getParent WRITE setParent)
 	Q_PROPERTY(cocos2d::CCPoint position READ getPosition WRITE setPosition)
 	Q_PROPERTY(int gLServerState READ getGLServerState WRITE setGLServerState)
 	Q_PROPERTY(float positionY READ getPositionY WRITE setPositionY)
@@ -1738,7 +1737,6 @@ public:
 	float getRotationY();
 	Q_INVOKABLE QByteArray description();
 	Q_INVOKABLE void unscheduleUpdate();
-	void setParent(cocos2d::CCNode* parent);
 	Q_INVOKABLE cocos2d::CCAffineTransform nodeToParentTransform();
 	Q_INVOKABLE void unscheduleAllSelectors();
 	Q_INVOKABLE void removeAllChildrenWithCleanup(bool cleanup);
@@ -1787,7 +1785,7 @@ public:
 	void setActionManager(cocos2d::CCActionManager* actionManager);
 	cocos2d::CCPoint getPosition();
 	Q_INVOKABLE bool isRunning();
-	cocos2d::CCNode* getParent();
+	Q_INVOKABLE cocos2d::CCNode* getParent();
 	float getPositionY();
 	float getPositionX();
 	Q_INVOKABLE void removeChildByTag(int tag);

@@ -90,6 +90,15 @@ QScriptValue QtScriptCCObject::copy()
 	return newInstance(object);
 }
 
+bool QtScriptCCObject::isEqual(const CCObject *other) const
+{
+	auto ccObject = thiz<CCObject *>();
+	if (ccObject)
+		return ccObject->isEqual(other);
+
+	return false;
+}
+
 int QtScriptCCObject::constructorArgumentCountMin() const
 {
 	return 0;

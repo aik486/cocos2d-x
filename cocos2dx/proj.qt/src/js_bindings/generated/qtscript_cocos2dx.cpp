@@ -6907,15 +6907,6 @@ void QtScriptCCNode::unscheduleUpdate()
 	}
 }
 
-void QtScriptCCNode::setParent(cocos2d::CCNode* parent)
-{
-	auto __o = this->thiz<CCNode *>();
-	if (__o)
-	{
-		__o->setParent(parent);
-	}
-}
-
 cocos2d::CCAffineTransform QtScriptCCNode::nodeToParentTransform()
 {
 	auto __o = this->thiz<CCNode *>();

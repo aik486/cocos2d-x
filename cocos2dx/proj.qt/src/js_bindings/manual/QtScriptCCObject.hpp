@@ -28,6 +28,7 @@ public slots:
 	QString toString() const;
 	void update(float dt);
 	QScriptValue copy();
+	bool isEqual(const CCObject *other) const;
 
 protected:
 	// QtScriptCCObject
