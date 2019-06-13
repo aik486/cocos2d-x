@@ -557,10 +557,11 @@ QScriptValue QtCocosScriptEngine::getRegisteredJSObject(qint64 id) const
 	return it->second;
 }
 
-QScriptValue QtCocosScriptEngine::checkResult(const QScriptValue &value)
+QScriptValue QtCocosScriptEngine::checkResult(QScriptValue value)
 {
-	if (value.isError())
+	if (mEngine->hasUncaughtException())
 	{
+		value = mEngine->uncaughtException();
 		emit log(value);
 		mEngine->clearExceptions();
 	}

@@ -107,7 +107,7 @@ private:
 	static int getTouchFuncId(int eventType);
 	QScriptValue executeScriptFunction(int funcId, const QScriptValue &object,
 		const QScriptValueList &args = QScriptValueList());
-	QScriptValue checkResult(const QScriptValue &value);
+	QScriptValue checkResult(QScriptValue value);
 
 private:
 	QScriptEngine *mEngine;
