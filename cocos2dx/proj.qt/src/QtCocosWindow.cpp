@@ -140,7 +140,7 @@ CCScene *QtCocosWindow::scene() const
 
 QtCocosWindow *QtCocosWindow::instance()
 {
-	return dynamic_cast<QtCocosWindow *>(CCApplication::sharedApplication());
+	return dynamic_cast<QtCocosWindow *>(sm_pSharedApplication);
 }
 
 QColor QtCocosWindow::backgroundColor() const
