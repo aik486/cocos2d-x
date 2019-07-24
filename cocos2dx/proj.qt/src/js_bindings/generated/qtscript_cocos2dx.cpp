@@ -14,8 +14,6 @@ QtScriptCCDataVisitor::QtScriptCCDataVisitor(QScriptEngine *engine)
 
 void QtScriptCCDataVisitor::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCDataVisitor, QtScriptCCDataVisitor>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -596,8 +594,6 @@ QtScriptCCSize::QtScriptCCSize(QScriptEngine *engine)
 
 void QtScriptCCSize::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCSize, QtScriptCCSize>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -772,8 +768,6 @@ QtScriptCCRect::QtScriptCCRect(QScriptEngine *engine)
 
 void QtScriptCCRect::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCRect, QtScriptCCRect>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -1529,8 +1523,6 @@ QtScriptCCAffineTransform::QtScriptCCAffineTransform(QScriptEngine *engine)
 
 void QtScriptCCAffineTransform::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCAffineTransform, QtScriptCCAffineTransform>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -2438,8 +2430,6 @@ QtScriptCCAcceleration::QtScriptCCAcceleration(QScriptEngine *engine)
 
 void QtScriptCCAcceleration::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCAcceleration, QtScriptCCAcceleration>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -2553,8 +2543,6 @@ QtScriptCCAccelerometerDelegate::QtScriptCCAccelerometerDelegate(QScriptEngine *
 
 void QtScriptCCAccelerometerDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCAccelerometerDelegate, QtScriptCCAccelerometerDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3206,8 +3194,6 @@ QtScript_ccColor3B::QtScript_ccColor3B(QScriptEngine *engine)
 
 void QtScript_ccColor3B::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccColor3B, QtScript_ccColor3B>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3302,8 +3288,6 @@ QtScript_ccColor4B::QtScript_ccColor4B(QScriptEngine *engine)
 
 void QtScript_ccColor4B::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccColor4B, QtScript_ccColor4B>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3417,8 +3401,6 @@ QtScript_ccColor4F::QtScript_ccColor4F(QScriptEngine *engine)
 
 void QtScript_ccColor4F::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccColor4F, QtScript_ccColor4F>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3532,8 +3514,6 @@ QtScript_ccVertex2F::QtScript_ccVertex2F(QScriptEngine *engine)
 
 void QtScript_ccVertex2F::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccVertex2F, QtScript_ccVertex2F>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3609,8 +3589,6 @@ QtScript_ccVertex3F::QtScript_ccVertex3F(QScriptEngine *engine)
 
 void QtScript_ccVertex3F::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccVertex3F, QtScript_ccVertex3F>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3705,8 +3683,6 @@ QtScript_ccTex2F::QtScript_ccTex2F(QScriptEngine *engine)
 
 void QtScript_ccTex2F::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccTex2F, QtScript_ccTex2F>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3782,8 +3758,6 @@ QtScript_ccPointSprite::QtScript_ccPointSprite(QScriptEngine *engine)
 
 void QtScript_ccPointSprite::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccPointSprite, QtScript_ccPointSprite>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3878,8 +3852,6 @@ QtScript_ccQuad2::QtScript_ccQuad2(QScriptEngine *engine)
 
 void QtScript_ccQuad2::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccQuad2, QtScript_ccQuad2>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -3993,8 +3965,6 @@ QtScript_ccQuad3::QtScript_ccQuad3(QScriptEngine *engine)
 
 void QtScript_ccQuad3::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccQuad3, QtScript_ccQuad3>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4108,8 +4078,6 @@ QtScript_ccV2F_C4B_T2F::QtScript_ccV2F_C4B_T2F(QScriptEngine *engine)
 
 void QtScript_ccV2F_C4B_T2F::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccV2F_C4B_T2F, QtScript_ccV2F_C4B_T2F>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4204,8 +4172,6 @@ QtScript_ccV2F_C4F_T2F::QtScript_ccV2F_C4F_T2F(QScriptEngine *engine)
 
 void QtScript_ccV2F_C4F_T2F::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccV2F_C4F_T2F, QtScript_ccV2F_C4F_T2F>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4300,8 +4266,6 @@ QtScript_ccV3F_C4B_T2F::QtScript_ccV3F_C4B_T2F(QScriptEngine *engine)
 
 void QtScript_ccV3F_C4B_T2F::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccV3F_C4B_T2F, QtScript_ccV3F_C4B_T2F>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4396,8 +4360,6 @@ QtScript_ccV2F_C4B_T2F_Triangle::QtScript_ccV2F_C4B_T2F_Triangle(QScriptEngine *
 
 void QtScript_ccV2F_C4B_T2F_Triangle::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccV2F_C4B_T2F_Triangle, QtScript_ccV2F_C4B_T2F_Triangle>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4492,8 +4454,6 @@ QtScript_ccV2F_C4B_T2F_Quad::QtScript_ccV2F_C4B_T2F_Quad(QScriptEngine *engine)
 
 void QtScript_ccV2F_C4B_T2F_Quad::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccV2F_C4B_T2F_Quad, QtScript_ccV2F_C4B_T2F_Quad>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4607,8 +4567,6 @@ QtScript_ccV3F_C4B_T2F_Quad::QtScript_ccV3F_C4B_T2F_Quad(QScriptEngine *engine)
 
 void QtScript_ccV3F_C4B_T2F_Quad::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccV3F_C4B_T2F_Quad, QtScript_ccV3F_C4B_T2F_Quad>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4722,8 +4680,6 @@ QtScript_ccV2F_C4F_T2F_Quad::QtScript_ccV2F_C4F_T2F_Quad(QScriptEngine *engine)
 
 void QtScript_ccV2F_C4F_T2F_Quad::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccV2F_C4F_T2F_Quad, QtScript_ccV2F_C4F_T2F_Quad>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4837,8 +4793,6 @@ QtScript_ccBlendFunc::QtScript_ccBlendFunc(QScriptEngine *engine)
 
 void QtScript_ccBlendFunc::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccBlendFunc, QtScript_ccBlendFunc>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -4914,8 +4868,6 @@ QtScript_ccT2F_Quad::QtScript_ccT2F_Quad(QScriptEngine *engine)
 
 void QtScript_ccT2F_Quad::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccT2F_Quad, QtScript_ccT2F_Quad>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -5029,8 +4981,6 @@ QtScriptccAnimationFrameData::QtScriptccAnimationFrameData(QScriptEngine *engine
 
 void QtScriptccAnimationFrameData::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<ccAnimationFrameData, QtScriptccAnimationFrameData>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -5125,8 +5075,6 @@ QtScript_ccFontShadow::QtScript_ccFontShadow(QScriptEngine *engine)
 
 void QtScript_ccFontShadow::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccFontShadow, QtScript_ccFontShadow>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -5256,8 +5204,6 @@ QtScript_ccFontStroke::QtScript_ccFontStroke(QScriptEngine *engine)
 
 void QtScript_ccFontStroke::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccFontStroke, QtScript_ccFontStroke>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -5368,8 +5314,6 @@ QtScript_ccFontDefinition::QtScript_ccFontDefinition(QScriptEngine *engine)
 
 void QtScript_ccFontDefinition::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccFontDefinition, QtScript_ccFontDefinition>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -5575,8 +5519,6 @@ QtScript_ccPVRTexturePixelFormatInfo::QtScript_ccPVRTexturePixelFormatInfo(QScri
 
 void QtScript_ccPVRTexturePixelFormatInfo::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccPVRTexturePixelFormatInfo, QtScript_ccPVRTexturePixelFormatInfo>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -5960,8 +5902,6 @@ QtScript_ccTexParams::QtScript_ccTexParams(QScriptEngine *engine)
 
 void QtScript_ccTexParams::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccTexParams, QtScript_ccTexParams>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -6555,8 +6495,6 @@ QtScriptCCDirectorDelegate::QtScriptCCDirectorDelegate(QScriptEngine *engine)
 
 void QtScriptCCDirectorDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCDirectorDelegate, QtScriptCCDirectorDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -10422,8 +10360,6 @@ QtScript_ccBezierConfig::QtScript_ccBezierConfig(QScriptEngine *engine)
 
 void QtScript_ccBezierConfig::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_ccBezierConfig, QtScript_ccBezierConfig>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -13479,8 +13415,6 @@ QtScriptTypeInfo::QtScriptTypeInfo(QScriptEngine *engine)
 
 void QtScriptTypeInfo::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<TypeInfo, QtScriptTypeInfo>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -17415,8 +17349,6 @@ QtScriptCCActionTweenDelegate::QtScriptCCActionTweenDelegate(QScriptEngine *engi
 
 void QtScriptCCActionTweenDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCActionTweenDelegate, QtScriptCCActionTweenDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -18966,8 +18898,6 @@ QtScriptCCZone::QtScriptCCZone(QScriptEngine *engine)
 
 void QtScriptCCZone::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCZone, QtScriptCCZone>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -21113,8 +21043,6 @@ QtScriptCCKeypadDelegate::QtScriptCCKeypadDelegate(QScriptEngine *engine)
 
 void QtScriptCCKeypadDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCKeypadDelegate, QtScriptCCKeypadDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -22951,8 +22879,6 @@ QtScript_BMFontDef::QtScript_BMFontDef(QScriptEngine *engine)
 
 void QtScript_BMFontDef::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_BMFontDef, QtScript_BMFontDef>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -23085,8 +23011,6 @@ QtScript_BMFontPadding::QtScript_BMFontPadding(QScriptEngine *engine)
 
 void QtScript_BMFontPadding::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_BMFontPadding, QtScript_BMFontPadding>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -23200,8 +23124,6 @@ QtScript_FontDefHashElement::QtScript_FontDefHashElement(QScriptEngine *engine)
 
 void QtScript_FontDefHashElement::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_FontDefHashElement, QtScript_FontDefHashElement>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -23296,8 +23218,6 @@ QtScript_KerningHashElement::QtScript_KerningHashElement(QScriptEngine *engine)
 
 void QtScript_KerningHashElement::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<_KerningHashElement, QtScript_KerningHashElement>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -24058,8 +23978,6 @@ QtScriptCCTouchDelegate::QtScriptCCTouchDelegate(QScriptEngine *engine)
 
 void QtScriptCCTouchDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCTouchDelegate, QtScriptCCTouchDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -25434,8 +25352,6 @@ QtScriptCCTransitionEaseScene::QtScriptCCTransitionEaseScene(QScriptEngine *engi
 
 void QtScriptCCTransitionEaseScene::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCTransitionEaseScene, QtScriptCCTransitionEaseScene>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -30975,8 +30891,6 @@ QtScriptsCCParticle_ModeA::QtScriptsCCParticle_ModeA(QScriptEngine *engine)
 
 void QtScriptsCCParticle_ModeA::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<sCCParticle::ModeA, QtScriptsCCParticle_ModeA>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -31071,8 +30985,6 @@ QtScriptsCCParticle_ModeB::QtScriptsCCParticle_ModeB(QScriptEngine *engine)
 
 void QtScriptsCCParticle_ModeB::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<sCCParticle::ModeB, QtScriptsCCParticle_ModeB>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -31186,8 +31098,6 @@ QtScriptsCCParticle::QtScriptsCCParticle(QScriptEngine *engine)
 
 void QtScriptsCCParticle::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<sCCParticle, QtScriptsCCParticle>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -34460,8 +34370,6 @@ QtScriptCCThread::QtScriptCCThread(QScriptEngine *engine)
 
 void QtScriptCCThread::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCThread, QtScriptCCThread>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -34524,8 +34432,6 @@ QtScriptcc_timeval::QtScriptcc_timeval(QScriptEngine *engine)
 
 void QtScriptcc_timeval::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<cc_timeval, QtScriptcc_timeval>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -34789,8 +34695,6 @@ QtScriptCCApplicationProtocol::QtScriptCCApplicationProtocol(QScriptEngine *engi
 
 void QtScriptCCApplicationProtocol::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCApplicationProtocol, QtScriptCCApplicationProtocol>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -34949,8 +34853,6 @@ QtScriptCCEGLViewProtocol::QtScriptCCEGLViewProtocol(QScriptEngine *engine)
 
 void QtScriptCCEGLViewProtocol::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCEGLViewProtocol, QtScriptCCEGLViewProtocol>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -36782,8 +36684,6 @@ QtScriptCCIMEDelegate::QtScriptCCIMEDelegate(QScriptEngine *engine)
 
 void QtScriptCCIMEDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCIMEDelegate, QtScriptCCIMEDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -36968,8 +36868,6 @@ QtScriptCCTextFieldDelegate::QtScriptCCTextFieldDelegate(QScriptEngine *engine)
 
 void QtScriptCCTextFieldDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCTextFieldDelegate, QtScriptCCTextFieldDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -37776,8 +37674,6 @@ QtScriptccTouchHandlerHelperData::QtScriptccTouchHandlerHelperData(QScriptEngine
 
 void QtScriptccTouchHandlerHelperData::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<ccTouchHandlerHelperData, QtScriptccTouchHandlerHelperData>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -37834,8 +37730,6 @@ QtScriptEGLTouchDelegate::QtScriptEGLTouchDelegate(QScriptEngine *engine)
 
 void QtScriptEGLTouchDelegate::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<EGLTouchDelegate, QtScriptEGLTouchDelegate>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -38812,8 +38706,6 @@ QtScriptCCComponentContainer::QtScriptCCComponentContainer(QScriptEngine *engine
 
 void QtScriptCCComponentContainer::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCComponentContainer, QtScriptCCComponentContainer>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
