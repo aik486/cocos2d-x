@@ -1,4 +1,5 @@
 #include "QtScriptCCObject.hpp"
+#include "QtScriptUtils.h"
 
 namespace cocos2d
 {
@@ -29,14 +30,8 @@ QScriptValue QtScriptCCObject::newInstance(CCObject *obj)
 
 CCObject *QtScriptCCObject::toCCObject(const QScriptValue &value)
 {
-	if (!value.isObject())
-		return nullptr;
-	auto data = value.data();
-	if (!data.isVariant())
-	{
-		return nullptr;
-	}
-	auto v = data.toVariant();
+	auto v = QtScriptUtils::scriptValueVariantData(value);
+
 	if (v.userType() != qMetaTypeId<CCObject *>())
 		return nullptr;
 
