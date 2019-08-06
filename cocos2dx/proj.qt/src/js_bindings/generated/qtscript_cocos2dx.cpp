@@ -29,8 +29,9 @@ int QtScriptCCDataVisitor::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCDataVisitor::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCDataVisitor::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCDataVisitor");
 	return false;
@@ -1538,10 +1539,16 @@ int QtScriptCCAffineTransform::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCAffineTransform::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCAffineTransform::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCAffineTransform");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCAffineTransform constructor");
 	return false;
 }
 
@@ -2445,10 +2452,16 @@ int QtScriptCCAcceleration::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCAcceleration::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCAcceleration::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCAcceleration");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCAcceleration constructor");
 	return false;
 }
 
@@ -2525,52 +2538,6 @@ void QtScriptCCAcceleration::_public_field_set_timestamp(double value)
 	if (object)
 	{
 		object->timestamp = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCAccelerometerDelegate::QtScriptCCAccelerometerDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<CCAccelerometerDelegate, false>(engine, className)
-{
-}
-
-QtScriptCCAccelerometerDelegate::QtScriptCCAccelerometerDelegate(QScriptEngine *engine)
-	: QtScriptCCAccelerometerDelegate(engine, "AccelerometerDelegate")
-{
-}
-
-void QtScriptCCAccelerometerDelegate::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<CCAccelerometerDelegate, QtScriptCCAccelerometerDelegate>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptCCAccelerometerDelegate::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCAccelerometerDelegate::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCAccelerometerDelegate::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCAccelerometerDelegate");
-	return false;
-}
-
-void QtScriptCCAccelerometerDelegate::didAccelerate(cocos2d::CCAcceleration* pAccelerationValue)
-{
-	auto __o = this->thiz<CCAccelerometerDelegate *>();
-	if (__o)
-	{
-		__o->didAccelerate(pAccelerationValue);
 	}
 }
 
@@ -2750,10 +2717,16 @@ int QtScriptCCEvent::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEvent::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEvent::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEvent");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEvent;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEvent constructor");
 	return false;
 }
 
@@ -2929,8 +2902,9 @@ int QtScriptCCScriptHandlerEntry::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCScriptHandlerEntry::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCScriptHandlerEntry::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCScriptHandlerEntry");
 	return false;
@@ -3013,8 +2987,9 @@ int QtScriptCCSchedulerScriptHandlerEntry::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCSchedulerScriptHandlerEntry::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCSchedulerScriptHandlerEntry::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCSchedulerScriptHandlerEntry");
 	return false;
@@ -3118,8 +3093,9 @@ int QtScriptCCTouchScriptHandlerEntry::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTouchScriptHandlerEntry::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTouchScriptHandlerEntry::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCTouchScriptHandlerEntry");
 	return false;
@@ -3209,10 +3185,16 @@ int QtScript_ccColor3B::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccColor3B::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccColor3B::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccColor3B");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccColor3B constructor");
 	return false;
 }
 
@@ -3303,10 +3285,16 @@ int QtScript_ccColor4B::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccColor4B::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccColor4B::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccColor4B");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccColor4B constructor");
 	return false;
 }
 
@@ -3416,10 +3404,16 @@ int QtScript_ccColor4F::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccColor4F::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccColor4F::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccColor4F");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccColor4F constructor");
 	return false;
 }
 
@@ -3529,10 +3523,16 @@ int QtScript_ccVertex2F::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccVertex2F::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccVertex2F::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccVertex2F");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccVertex2F constructor");
 	return false;
 }
 
@@ -3604,10 +3604,16 @@ int QtScript_ccVertex3F::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccVertex3F::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccVertex3F::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccVertex3F");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccVertex3F constructor");
 	return false;
 }
 
@@ -3698,10 +3704,16 @@ int QtScript_ccTex2F::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccTex2F::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccTex2F::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccTex2F");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccTex2F constructor");
 	return false;
 }
 
@@ -3773,10 +3785,16 @@ int QtScript_ccPointSprite::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccPointSprite::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccPointSprite::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccPointSprite");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccPointSprite constructor");
 	return false;
 }
 
@@ -3867,10 +3885,16 @@ int QtScript_ccQuad2::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccQuad2::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccQuad2::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccQuad2");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccQuad2 constructor");
 	return false;
 }
 
@@ -3980,10 +4004,16 @@ int QtScript_ccQuad3::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccQuad3::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccQuad3::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccQuad3");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccQuad3 constructor");
 	return false;
 }
 
@@ -4093,10 +4123,16 @@ int QtScript_ccV2F_C4B_T2F::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccV2F_C4B_T2F::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccV2F_C4B_T2F::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccV2F_C4B_T2F");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccV2F_C4B_T2F constructor");
 	return false;
 }
 
@@ -4187,10 +4223,16 @@ int QtScript_ccV2F_C4F_T2F::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccV2F_C4F_T2F::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccV2F_C4F_T2F::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccV2F_C4F_T2F");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccV2F_C4F_T2F constructor");
 	return false;
 }
 
@@ -4281,10 +4323,16 @@ int QtScript_ccV3F_C4B_T2F::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccV3F_C4B_T2F::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccV3F_C4B_T2F::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccV3F_C4B_T2F");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccV3F_C4B_T2F constructor");
 	return false;
 }
 
@@ -4375,10 +4423,16 @@ int QtScript_ccV2F_C4B_T2F_Triangle::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccV2F_C4B_T2F_Triangle::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccV2F_C4B_T2F_Triangle::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccV2F_C4B_T2F_Triangle");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccV2F_C4B_T2F_Triangle constructor");
 	return false;
 }
 
@@ -4469,10 +4523,16 @@ int QtScript_ccV2F_C4B_T2F_Quad::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccV2F_C4B_T2F_Quad::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccV2F_C4B_T2F_Quad::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccV2F_C4B_T2F_Quad");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccV2F_C4B_T2F_Quad constructor");
 	return false;
 }
 
@@ -4582,10 +4642,16 @@ int QtScript_ccV3F_C4B_T2F_Quad::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccV3F_C4B_T2F_Quad::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccV3F_C4B_T2F_Quad::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccV3F_C4B_T2F_Quad");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccV3F_C4B_T2F_Quad constructor");
 	return false;
 }
 
@@ -4695,10 +4761,16 @@ int QtScript_ccV2F_C4F_T2F_Quad::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccV2F_C4F_T2F_Quad::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccV2F_C4F_T2F_Quad::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccV2F_C4F_T2F_Quad");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccV2F_C4F_T2F_Quad constructor");
 	return false;
 }
 
@@ -4808,10 +4880,16 @@ int QtScript_ccBlendFunc::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccBlendFunc::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccBlendFunc::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccBlendFunc");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccBlendFunc constructor");
 	return false;
 }
 
@@ -4883,10 +4961,16 @@ int QtScript_ccT2F_Quad::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccT2F_Quad::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccT2F_Quad::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccT2F_Quad");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccT2F_Quad constructor");
 	return false;
 }
 
@@ -4996,10 +5080,16 @@ int QtScriptccAnimationFrameData::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptccAnimationFrameData::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptccAnimationFrameData::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::ccAnimationFrameData");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::ccAnimationFrameData constructor");
 	return false;
 }
 
@@ -5534,10 +5624,16 @@ int QtScript_ccPVRTexturePixelFormatInfo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccPVRTexturePixelFormatInfo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccPVRTexturePixelFormatInfo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccPVRTexturePixelFormatInfo");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccPVRTexturePixelFormatInfo constructor");
 	return false;
 }
 
@@ -5598,17 +5694,17 @@ void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_type(unsigned int v
 	}
 }
 
-unsigned int QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_bpp() const
+uint32_t QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_bpp() const
 {
 	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
 	if (object)
 	{
 		return object->bpp;
 	}
-	return static_cast<unsigned int>(0);
+	return static_cast<uint32_t>(0);
 }
 
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_bpp(unsigned int value)
+void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_bpp(uint32_t value)
 {
 	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
 	if (object)
@@ -5917,10 +6013,16 @@ int QtScript_ccTexParams::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccTexParams::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccTexParams::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccTexParams");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccTexParams constructor");
 	return false;
 }
 
@@ -6478,43 +6580,6 @@ void QtScriptCCTexture2D::_public_field_set_bHasMipmaps(const bool& value)
 	{
 		object->m_bHasMipmaps = value;
 	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCDirectorDelegate::QtScriptCCDirectorDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<CCDirectorDelegate *, false>(engine, className)
-{
-}
-
-QtScriptCCDirectorDelegate::QtScriptCCDirectorDelegate(QScriptEngine *engine)
-	: QtScriptCCDirectorDelegate(engine, "DirectorDelegate")
-{
-}
-
-void QtScriptCCDirectorDelegate::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<CCDirectorDelegate, QtScriptCCDirectorDelegate>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptCCDirectorDelegate::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCDirectorDelegate::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCDirectorDelegate::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCDirectorDelegate");
-	return false;
 }
 
 } // end of cocos2d
@@ -9229,10 +9294,16 @@ int QtScriptCCActionInterval::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCActionInterval::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCActionInterval::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCActionInterval");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCActionInterval;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCActionInterval constructor");
 	return false;
 }
 
@@ -9346,10 +9417,16 @@ int QtScriptCCSequence::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCSequence::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCSequence::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCSequence");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCSequence;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCSequence constructor");
 	return false;
 }
 
@@ -9442,10 +9519,16 @@ int QtScriptCCRepeat::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCRepeat::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCRepeat::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCRepeat");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCRepeat;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCRepeat constructor");
 	return false;
 }
 
@@ -9649,10 +9732,16 @@ int QtScriptCCSpawn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCSpawn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCSpawn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCSpawn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCSpawn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCSpawn constructor");
 	return false;
 }
 
@@ -9745,10 +9834,16 @@ int QtScriptCCRotateTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCRotateTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCRotateTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCRotateTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCRotateTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCRotateTo constructor");
 	return false;
 }
 
@@ -9837,10 +9932,16 @@ int QtScriptCCRotateBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCRotateBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCRotateBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCRotateBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCRotateBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCRotateBy constructor");
 	return false;
 }
 
@@ -9929,10 +10030,16 @@ int QtScriptCCMoveBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCMoveBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCMoveBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCMoveBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCMoveBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCMoveBy constructor");
 	return false;
 }
 
@@ -10004,10 +10111,16 @@ int QtScriptCCMoveTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCMoveTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCMoveTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCMoveTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCMoveTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCMoveTo constructor");
 	return false;
 }
 
@@ -10171,10 +10284,16 @@ int QtScriptCCSkewBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCSkewBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCSkewBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCSkewBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCSkewBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCSkewBy constructor");
 	return false;
 }
 
@@ -10237,10 +10356,16 @@ int QtScriptCCJumpBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCJumpBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCJumpBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCJumpBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCJumpBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCJumpBy constructor");
 	return false;
 }
 
@@ -10314,10 +10439,16 @@ int QtScriptCCJumpTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCJumpTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCJumpTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCJumpTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCJumpTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCJumpTo constructor");
 	return false;
 }
 
@@ -10375,10 +10506,16 @@ int QtScript_ccBezierConfig::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScript_ccBezierConfig::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScript_ccBezierConfig::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_ccBezierConfig");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::_ccBezierConfig constructor");
 	return false;
 }
 
@@ -10475,10 +10612,16 @@ int QtScriptCCBezierBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCBezierBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCBezierBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCBezierBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCBezierBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCBezierBy constructor");
 	return false;
 }
 
@@ -10550,10 +10693,16 @@ int QtScriptCCBezierTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCBezierTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCBezierTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCBezierTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCBezierTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCBezierTo constructor");
 	return false;
 }
 
@@ -10625,10 +10774,16 @@ int QtScriptCCScaleTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCScaleTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCScaleTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCScaleTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCScaleTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCScaleTo constructor");
 	return false;
 }
 
@@ -10717,10 +10872,16 @@ int QtScriptCCScaleBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCScaleBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCScaleBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCScaleBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCScaleBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCScaleBy constructor");
 	return false;
 }
 
@@ -10789,10 +10950,16 @@ int QtScriptCCBlink::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCBlink::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCBlink::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCBlink");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCBlink;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCBlink constructor");
 	return false;
 }
 
@@ -10864,10 +11031,16 @@ int QtScriptCCFadeIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFadeIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFadeIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFadeIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFadeIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFadeIn constructor");
 	return false;
 }
 
@@ -10928,10 +11101,16 @@ int QtScriptCCFadeOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFadeOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFadeOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFadeOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFadeOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFadeOut constructor");
 	return false;
 }
 
@@ -10992,10 +11171,16 @@ int QtScriptCCFadeTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFadeTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFadeTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFadeTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFadeTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFadeTo constructor");
 	return false;
 }
 
@@ -11067,10 +11252,16 @@ int QtScriptCCTintTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTintTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTintTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTintTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTintTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTintTo constructor");
 	return false;
 }
 
@@ -11144,10 +11335,16 @@ int QtScriptCCTintBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTintBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTintBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTintBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTintBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTintBy constructor");
 	return false;
 }
 
@@ -11221,10 +11418,16 @@ int QtScriptCCDelayTime::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCDelayTime::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCDelayTime::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCDelayTime");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCDelayTime;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCDelayTime constructor");
 	return false;
 }
 
@@ -11902,10 +12105,16 @@ int QtScriptCCActionEase::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCActionEase::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCActionEase::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCActionEase");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCActionEase;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCActionEase constructor");
 	return false;
 }
 
@@ -11986,10 +12195,16 @@ int QtScriptCCEaseRateAction::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseRateAction::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseRateAction::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseRateAction");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseRateAction;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseRateAction constructor");
 	return false;
 }
 
@@ -12080,10 +12295,16 @@ int QtScriptCCEaseIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseIn constructor");
 	return false;
 }
 
@@ -12145,10 +12366,16 @@ int QtScriptCCEaseOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseOut constructor");
 	return false;
 }
 
@@ -12210,10 +12437,16 @@ int QtScriptCCEaseInOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseInOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseInOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseInOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseInOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseInOut constructor");
 	return false;
 }
 
@@ -12275,10 +12508,16 @@ int QtScriptCCEaseExponentialIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseExponentialIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseExponentialIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseExponentialIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseExponentialIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseExponentialIn constructor");
 	return false;
 }
 
@@ -12339,10 +12578,16 @@ int QtScriptCCEaseExponentialOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseExponentialOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseExponentialOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseExponentialOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseExponentialOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseExponentialOut constructor");
 	return false;
 }
 
@@ -12403,10 +12648,16 @@ int QtScriptCCEaseExponentialInOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseExponentialInOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseExponentialInOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseExponentialInOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseExponentialInOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseExponentialInOut constructor");
 	return false;
 }
 
@@ -12467,10 +12718,16 @@ int QtScriptCCEaseSineIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseSineIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseSineIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseSineIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseSineIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseSineIn constructor");
 	return false;
 }
 
@@ -12531,10 +12788,16 @@ int QtScriptCCEaseSineOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseSineOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseSineOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseSineOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseSineOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseSineOut constructor");
 	return false;
 }
 
@@ -12595,10 +12858,16 @@ int QtScriptCCEaseSineInOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseSineInOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseSineInOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseSineInOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseSineInOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseSineInOut constructor");
 	return false;
 }
 
@@ -12659,10 +12928,16 @@ int QtScriptCCEaseElastic::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseElastic::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseElastic::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseElastic");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseElastic;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseElastic constructor");
 	return false;
 }
 
@@ -12768,10 +13043,16 @@ int QtScriptCCEaseElasticIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseElasticIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseElasticIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseElasticIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseElasticIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseElasticIn constructor");
 	return false;
 }
 
@@ -12838,10 +13119,16 @@ int QtScriptCCEaseElasticOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseElasticOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseElasticOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseElasticOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseElasticOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseElasticOut constructor");
 	return false;
 }
 
@@ -12908,10 +13195,16 @@ int QtScriptCCEaseElasticInOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseElasticInOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseElasticInOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseElasticInOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseElasticInOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseElasticInOut constructor");
 	return false;
 }
 
@@ -12978,10 +13271,16 @@ int QtScriptCCEaseBounce::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseBounce::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseBounce::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseBounce");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseBounce;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseBounce constructor");
 	return false;
 }
 
@@ -13052,10 +13351,16 @@ int QtScriptCCEaseBounceIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseBounceIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseBounceIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseBounceIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseBounceIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseBounceIn constructor");
 	return false;
 }
 
@@ -13116,10 +13421,16 @@ int QtScriptCCEaseBounceOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseBounceOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseBounceOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseBounceOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseBounceOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseBounceOut constructor");
 	return false;
 }
 
@@ -13180,10 +13491,16 @@ int QtScriptCCEaseBounceInOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseBounceInOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseBounceInOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseBounceInOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseBounceInOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseBounceInOut constructor");
 	return false;
 }
 
@@ -13244,10 +13561,16 @@ int QtScriptCCEaseBackIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseBackIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseBackIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseBackIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseBackIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseBackIn constructor");
 	return false;
 }
 
@@ -13308,10 +13631,16 @@ int QtScriptCCEaseBackOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseBackOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseBackOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseBackOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseBackOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseBackOut constructor");
 	return false;
 }
 
@@ -13372,10 +13701,16 @@ int QtScriptCCEaseBackInOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEaseBackInOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEaseBackInOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEaseBackInOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCEaseBackInOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCEaseBackInOut constructor");
 	return false;
 }
 
@@ -13430,8 +13765,9 @@ int QtScriptTypeInfo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptTypeInfo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptTypeInfo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::TypeInfo");
 	return false;
@@ -14342,10 +14678,16 @@ int QtScriptCCCallFuncND::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCCallFuncND::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCCallFuncND::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCCallFuncND");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCCallFuncND;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCCallFuncND constructor");
 	return false;
 }
 
@@ -14469,10 +14811,16 @@ int QtScriptCCGridAction::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCGridAction::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCGridAction::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCGridAction");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCGridAction;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCGridAction constructor");
 	return false;
 }
 
@@ -14554,10 +14902,16 @@ int QtScriptCCGrid3DAction::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCGrid3DAction::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCGrid3DAction::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCGrid3DAction");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCGrid3DAction;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCGrid3DAction constructor");
 	return false;
 }
 
@@ -14648,10 +15002,16 @@ int QtScriptCCTiledGrid3DAction::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTiledGrid3DAction::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTiledGrid3DAction::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTiledGrid3DAction");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTiledGrid3DAction;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTiledGrid3DAction constructor");
 	return false;
 }
 
@@ -14742,10 +15102,16 @@ int QtScriptCCAccelDeccelAmplitude::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCAccelDeccelAmplitude::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCAccelDeccelAmplitude::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCAccelDeccelAmplitude");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCAccelDeccelAmplitude;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCAccelDeccelAmplitude constructor");
 	return false;
 }
 
@@ -14836,10 +15202,16 @@ int QtScriptCCAccelAmplitude::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCAccelAmplitude::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCAccelAmplitude::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCAccelAmplitude");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCAccelAmplitude;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCAccelAmplitude constructor");
 	return false;
 }
 
@@ -14930,10 +15302,16 @@ int QtScriptCCDeccelAmplitude::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCDeccelAmplitude::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCDeccelAmplitude::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCDeccelAmplitude");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCDeccelAmplitude;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCDeccelAmplitude constructor");
 	return false;
 }
 
@@ -15024,10 +15402,16 @@ int QtScriptCCStopGrid::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCStopGrid::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCStopGrid::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCStopGrid");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCStopGrid;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCStopGrid constructor");
 	return false;
 }
 
@@ -15087,10 +15471,16 @@ int QtScriptCCReuseGrid::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCReuseGrid::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCReuseGrid::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCReuseGrid");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCReuseGrid;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCReuseGrid constructor");
 	return false;
 }
 
@@ -15161,10 +15551,16 @@ int QtScriptCCWaves3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCWaves3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCWaves3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCWaves3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCWaves3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCWaves3D constructor");
 	return false;
 }
 
@@ -15276,10 +15672,16 @@ int QtScriptCCFlipX3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFlipX3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFlipX3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFlipX3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFlipX3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFlipX3D constructor");
 	return false;
 }
 
@@ -15360,10 +15762,16 @@ int QtScriptCCFlipY3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFlipY3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFlipY3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFlipY3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFlipY3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFlipY3D constructor");
 	return false;
 }
 
@@ -15424,10 +15832,16 @@ int QtScriptCCLens3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCLens3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCLens3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCLens3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCLens3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCLens3D constructor");
 	return false;
 }
 
@@ -15548,10 +15962,16 @@ int QtScriptCCRipple3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCRipple3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCRipple3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCRipple3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCRipple3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCRipple3D constructor");
 	return false;
 }
 
@@ -15684,10 +16104,16 @@ int QtScriptCCShaky3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCShaky3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCShaky3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCShaky3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCShaky3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCShaky3D constructor");
 	return false;
 }
 
@@ -15761,10 +16187,16 @@ int QtScriptCCLiquid::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCLiquid::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCLiquid::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCLiquid");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCLiquid;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCLiquid constructor");
 	return false;
 }
 
@@ -15876,10 +16308,16 @@ int QtScriptCCWaves::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCWaves::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCWaves::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCWaves");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCWaves;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCWaves constructor");
 	return false;
 }
 
@@ -15993,10 +16431,16 @@ int QtScriptCCTwirl::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTwirl::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTwirl::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTwirl");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTwirl;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTwirl constructor");
 	return false;
 }
 
@@ -16128,10 +16572,16 @@ int QtScriptCCPageTurn3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCPageTurn3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCPageTurn3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCPageTurn3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCPageTurn3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCPageTurn3D constructor");
 	return false;
 }
 
@@ -16193,10 +16643,16 @@ int QtScriptCCProgressTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCProgressTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCProgressTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCProgressTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCProgressTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCProgressTo constructor");
 	return false;
 }
 
@@ -16268,10 +16724,16 @@ int QtScriptCCProgressFromTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCProgressFromTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCProgressFromTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCProgressFromTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCProgressFromTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCProgressFromTo constructor");
 	return false;
 }
 
@@ -16344,10 +16806,16 @@ int QtScriptCCShakyTiles3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCShakyTiles3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCShakyTiles3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCShakyTiles3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCShakyTiles3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCShakyTiles3D constructor");
 	return false;
 }
 
@@ -16421,10 +16889,16 @@ int QtScriptCCShatteredTiles3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCShatteredTiles3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCShatteredTiles3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCShatteredTiles3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCShatteredTiles3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCShatteredTiles3D constructor");
 	return false;
 }
 
@@ -16498,10 +16972,16 @@ int QtScriptCCShuffleTiles::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCShuffleTiles::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCShuffleTiles::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCShuffleTiles");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCShuffleTiles;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCShuffleTiles constructor");
 	return false;
 }
 
@@ -16593,10 +17073,16 @@ int QtScriptCCFadeOutTRTiles::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFadeOutTRTiles::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFadeOutTRTiles::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFadeOutTRTiles");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFadeOutTRTiles;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFadeOutTRTiles constructor");
 	return false;
 }
 
@@ -16695,10 +17181,16 @@ int QtScriptCCFadeOutBLTiles::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFadeOutBLTiles::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFadeOutBLTiles::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFadeOutBLTiles");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFadeOutBLTiles;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFadeOutBLTiles constructor");
 	return false;
 }
 
@@ -16760,10 +17252,16 @@ int QtScriptCCFadeOutUpTiles::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFadeOutUpTiles::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFadeOutUpTiles::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFadeOutUpTiles");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFadeOutUpTiles;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFadeOutUpTiles constructor");
 	return false;
 }
 
@@ -16825,10 +17323,16 @@ int QtScriptCCFadeOutDownTiles::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFadeOutDownTiles::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFadeOutDownTiles::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCFadeOutDownTiles");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCFadeOutDownTiles;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCFadeOutDownTiles constructor");
 	return false;
 }
 
@@ -16890,10 +17394,16 @@ int QtScriptCCTurnOffTiles::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTurnOffTiles::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTurnOffTiles::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTurnOffTiles");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTurnOffTiles;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTurnOffTiles constructor");
 	return false;
 }
 
@@ -16990,10 +17500,16 @@ int QtScriptCCWavesTiles3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCWavesTiles3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCWavesTiles3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCWavesTiles3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCWavesTiles3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCWavesTiles3D constructor");
 	return false;
 }
 
@@ -17105,10 +17621,16 @@ int QtScriptCCJumpTiles3D::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCJumpTiles3D::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCJumpTiles3D::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCJumpTiles3D");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCJumpTiles3D;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCJumpTiles3D constructor");
 	return false;
 }
 
@@ -17220,10 +17742,16 @@ int QtScriptCCSplitRows::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCSplitRows::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCSplitRows::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCSplitRows");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCSplitRows;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCSplitRows constructor");
 	return false;
 }
 
@@ -17295,10 +17823,16 @@ int QtScriptCCSplitCols::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCSplitCols::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCSplitCols::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCSplitCols");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCSplitCols;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCSplitCols constructor");
 	return false;
 }
 
@@ -17364,8 +17898,9 @@ int QtScriptCCActionTweenDelegate::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCActionTweenDelegate::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCActionTweenDelegate::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCActionTweenDelegate");
 	return false;
@@ -17407,10 +17942,16 @@ int QtScriptCCActionTween::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCActionTween::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCActionTween::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCActionTween");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCActionTween;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCActionTween constructor");
 	return false;
 }
 
@@ -17928,10 +18469,16 @@ int QtScriptCCCatmullRomTo::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCCatmullRomTo::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCCatmullRomTo::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCCatmullRomTo");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCCatmullRomTo;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCCatmullRomTo constructor");
 	return false;
 }
 
@@ -18003,10 +18550,16 @@ int QtScriptCCCatmullRomBy::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCCatmullRomBy::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCCatmullRomBy::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCCatmullRomBy");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCCatmullRomBy;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCCatmullRomBy constructor");
 	return false;
 }
 
@@ -19163,8 +19716,9 @@ int QtScriptCCConfiguration::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCConfiguration::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCConfiguration::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCConfiguration");
 	return false;
@@ -19855,50 +20409,6 @@ void QtScriptCCDirector::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-int QtScriptCCDirector::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCDirector::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCDirector::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCDirector");
-	return false;
-}
-
-void QtScriptCCDirector::pause()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->pause();
-	}
-}
-
-void QtScriptCCDirector::setDelegate(cocos2d::CCDirectorDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setDelegate(pDelegate);
-	}
-}
-
-void QtScriptCCDirector::setContentScaleFactor(float scaleFactor)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setContentScaleFactor(scaleFactor);
-	}
-}
-
 float QtScriptCCDirector::getContentScaleFactor()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -19929,52 +20439,6 @@ float QtScriptCCDirector::getDeltaTime()
 	return static_cast<float>(0);
 }
 
-void QtScriptCCDirector::setGLDefaultValues()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setGLDefaultValues();
-	}
-}
-
-void QtScriptCCDirector::setActionManager(cocos2d::CCActionManager* var)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setActionManager(var);
-	}
-}
-
-void QtScriptCCDirector::setAlphaBlending(bool bOn)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setAlphaBlending(bOn);
-	}
-}
-
-void QtScriptCCDirector::popToRootScene()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->popToRootScene();
-	}
-}
-
-cocos2d::CCKeypadDispatcher* QtScriptCCDirector::getKeypadDispatcher()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		return __o->getKeypadDispatcher();
-	}
-	return nullptr;
-}
-
 cocos2d::CCNode* QtScriptCCDirector::getNotificationNode()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -19995,13 +20459,14 @@ cocos2d::CCSize QtScriptCCDirector::getWinSize()
 	return cocos2d::CCSize();
 }
 
-void QtScriptCCDirector::end()
+double QtScriptCCDirector::frameStartTimeSeconds()
 {
 	auto __o = this->thiz<CCDirector *>();
 	if (__o)
 	{
-		__o->end();
+		return __o->frameStartTimeSeconds();
 	}
+	return static_cast<double>(0);
 }
 
 bool QtScriptCCDirector::isSendCleanupToScene()
@@ -20024,15 +20489,6 @@ cocos2d::CCPoint QtScriptCCDirector::getVisibleOrigin()
 	return cocos2d::CCPoint();
 }
 
-void QtScriptCCDirector::setDepthTest(bool bOn)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setDepthTest(bOn);
-	}
-}
-
 float QtScriptCCDirector::getSecondsPerFrame()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -20051,61 +20507,6 @@ cocos2d::CCPoint QtScriptCCDirector::convertToUI(const cocos2d::CCPoint& obPoint
 		return __o->convertToUI(obPoint);
 	}
 	return cocos2d::CCPoint();
-}
-
-void QtScriptCCDirector::setAccelerometer(cocos2d::CCAccelerometer* var)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setAccelerometer(var);
-	}
-}
-
-void QtScriptCCDirector::setDefaultValues()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setDefaultValues();
-	}
-}
-
-bool QtScriptCCDirector::init()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		return __o->init();
-	}
-	return false;
-}
-
-void QtScriptCCDirector::setScheduler(cocos2d::CCScheduler* var)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setScheduler(var);
-	}
-}
-
-void QtScriptCCDirector::reshapeProjection(const cocos2d::CCSize& newWindowSize)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->reshapeProjection(newWindowSize);
-	}
-}
-
-void QtScriptCCDirector::setKeypadDispatcher(cocos2d::CCKeypadDispatcher* var)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setKeypadDispatcher(var);
-	}
 }
 
 cocos2d::CCEGLView* QtScriptCCDirector::getOpenGLView()
@@ -20128,34 +20529,6 @@ cocos2d::CCScene* QtScriptCCDirector::getRunningScene()
 	return nullptr;
 }
 
-void QtScriptCCDirector::setViewport()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setViewport();
-	}
-}
-
-void QtScriptCCDirector::popToSceneStackLevel(int level)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->popToSceneStackLevel(level);
-	}
-}
-
-int64_t QtScriptCCDirector::frameStartTimeMicros()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		return __o->frameStartTimeMicros();
-	}
-	return static_cast<int64_t>(0);
-}
-
 int QtScriptCCDirector::getProjection()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -20164,24 +20537,6 @@ int QtScriptCCDirector::getProjection()
 		return int(__o->getProjection());
 	}
 	return 0;
-}
-
-void QtScriptCCDirector::resume()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->resume();
-	}
-}
-
-void QtScriptCCDirector::setTouchDispatcher(cocos2d::CCTouchDispatcher* var)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setTouchDispatcher(var);
-	}
 }
 
 bool QtScriptCCDirector::isNextDeltaTimeZero()
@@ -20194,23 +20549,14 @@ bool QtScriptCCDirector::isNextDeltaTimeZero()
 	return false;
 }
 
-cocos2d::CCDirectorDelegate* QtScriptCCDirector::getDelegate()
+cocos2d::CCScheduler* QtScriptCCDirector::getScheduler()
 {
 	auto __o = this->thiz<CCDirector *>();
 	if (__o)
 	{
-		return __o->getDelegate();
+		return __o->getScheduler();
 	}
 	return nullptr;
-}
-
-void QtScriptCCDirector::setOpenGLView(cocos2d::CCEGLView* pobOpenGLView)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setOpenGLView(pobOpenGLView);
-	}
 }
 
 cocos2d::CCPoint QtScriptCCDirector::convertToGL(const cocos2d::CCPoint& obPoint)
@@ -20223,15 +20569,6 @@ cocos2d::CCPoint QtScriptCCDirector::convertToGL(const cocos2d::CCPoint& obPoint
 	return cocos2d::CCPoint();
 }
 
-void QtScriptCCDirector::purgeCachedData()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->purgeCachedData();
-	}
-}
-
 unsigned int QtScriptCCDirector::getTotalFrames()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -20242,49 +20579,12 @@ unsigned int QtScriptCCDirector::getTotalFrames()
 	return static_cast<unsigned int>(0);
 }
 
-void QtScriptCCDirector::runWithScene(cocos2d::CCScene* pScene)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->runWithScene(pScene);
-	}
-}
-
 void QtScriptCCDirector::setNotificationNode(cocos2d::CCNode* node)
 {
 	auto __o = this->thiz<CCDirector *>();
 	if (__o)
 	{
 		__o->setNotificationNode(node);
-	}
-}
-
-double QtScriptCCDirector::frameStartTimeSeconds()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		return __o->frameStartTimeSeconds();
-	}
-	return static_cast<double>(0);
-}
-
-void QtScriptCCDirector::drawScene()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->drawScene();
-	}
-}
-
-void QtScriptCCDirector::popScene()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->popScene();
 	}
 }
 
@@ -20298,25 +20598,6 @@ bool QtScriptCCDirector::isDisplayStats()
 	return false;
 }
 
-void QtScriptCCDirector::setProjection(int kProjection)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setProjection(cocos2d::ccDirectorProjection(kProjection));
-	}
-}
-
-cocos2d::CCTouchDispatcher* QtScriptCCDirector::getTouchDispatcher()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		return __o->getTouchDispatcher();
-	}
-	return nullptr;
-}
-
 float QtScriptCCDirector::getZEye()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -20327,25 +20608,6 @@ float QtScriptCCDirector::getZEye()
 	return static_cast<float>(0);
 }
 
-void QtScriptCCDirector::setNextDeltaTimeZero(bool bNextDeltaTimeZero)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->setNextDeltaTimeZero(bNextDeltaTimeZero);
-	}
-}
-
-cocos2d::CCAccelerometer* QtScriptCCDirector::getAccelerometer()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		return __o->getAccelerometer();
-	}
-	return nullptr;
-}
-
 cocos2d::CCSize QtScriptCCDirector::getVisibleSize()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -20354,16 +20616,6 @@ cocos2d::CCSize QtScriptCCDirector::getVisibleSize()
 		return __o->getVisibleSize();
 	}
 	return cocos2d::CCSize();
-}
-
-cocos2d::CCScheduler* QtScriptCCDirector::getScheduler()
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		return __o->getScheduler();
-	}
-	return nullptr;
 }
 
 long QtScriptCCDirector::getClassTypeInfo()
@@ -20405,24 +20657,6 @@ void QtScriptCCDirector::setDisplayStats(bool bDisplayStats)
 	}
 }
 
-void QtScriptCCDirector::replaceScene(cocos2d::CCScene* pScene)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->replaceScene(pScene);
-	}
-}
-
-void QtScriptCCDirector::pushScene(cocos2d::CCScene* pScene)
-{
-	auto __o = this->thiz<CCDirector *>();
-	if (__o)
-	{
-		__o->pushScene(pScene);
-	}
-}
-
 cocos2d::CCActionManager* QtScriptCCDirector::getActionManager()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -20451,6 +20685,39 @@ QScriptValue QtScriptCCDirector::sharedDirector(QScriptContext *context, QScript
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::CCDirector::sharedDirector");
 	return __e->uncaughtException();
+}
+
+int QtScriptCCDirector::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptCCDirector::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptCCDirector::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	auto __e = context->engine();
+	Q_UNUSED(__e);
+	bool ok = false;
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			out = new CCDirector();
+			ok = true;
+			break;
+		}
+	}
+	
+	if (!ok)
+	{
+		QtScriptUtils::badArgumentsException(context,
+			"cocos2d::CCDirector constructor");
+	}
+	return ok;
 }
 
 } // end of cocos2d
@@ -20580,10 +20847,16 @@ int QtScriptCCGridBase::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCGridBase::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCGridBase::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCGridBase");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCGridBase;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCGridBase constructor");
 	return false;
 }
 
@@ -21024,255 +21297,6 @@ bool QtScriptCCTiledGrid3D::constructObject(QScriptContext *context, NativeObjec
 	{
 		QtScriptUtils::badArgumentsException(context,
 			"cocos2d::CCTiledGrid3D constructor");
-	}
-	return ok;
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCKeypadDelegate::QtScriptCCKeypadDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<CCKeypadDelegate, false>(engine, className)
-{
-}
-
-QtScriptCCKeypadDelegate::QtScriptCCKeypadDelegate(QScriptEngine *engine)
-	: QtScriptCCKeypadDelegate(engine, "KeypadDelegate")
-{
-}
-
-void QtScriptCCKeypadDelegate::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<CCKeypadDelegate, QtScriptCCKeypadDelegate>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptCCKeypadDelegate::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCKeypadDelegate::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCKeypadDelegate::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCKeypadDelegate");
-	return false;
-}
-
-void QtScriptCCKeypadDelegate::keyBackClicked()
-{
-	auto __o = this->thiz<CCKeypadDelegate *>();
-	if (__o)
-	{
-		__o->keyBackClicked();
-	}
-}
-
-void QtScriptCCKeypadDelegate::keyMenuClicked()
-{
-	auto __o = this->thiz<CCKeypadDelegate *>();
-	if (__o)
-	{
-		__o->keyMenuClicked();
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCKeypadHandler::QtScriptCCKeypadHandler(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCObject(engine, className)
-{
-}
-
-QtScriptCCKeypadHandler::QtScriptCCKeypadHandler(QScriptEngine *engine)
-	: QtScriptCCKeypadHandler(engine, "KeypadHandler")
-{
-}
-
-void QtScriptCCKeypadHandler::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCObject *>());
-	auto ctor = RegisterT<CCKeypadHandler, QtScriptCCKeypadHandler>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("handlerWithDelegate", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCKeypadHandler::handlerWithDelegate)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-}
-
-int QtScriptCCKeypadHandler::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCKeypadHandler::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCKeypadHandler::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCKeypadHandler");
-	return false;
-}
-
-cocos2d::CCKeypadDelegate* QtScriptCCKeypadHandler::getDelegate()
-{
-	auto __o = this->thiz<CCKeypadHandler *>();
-	if (__o)
-	{
-		return __o->getDelegate();
-	}
-	return nullptr;
-}
-
-bool QtScriptCCKeypadHandler::initWithDelegate(cocos2d::CCKeypadDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCKeypadHandler *>();
-	if (__o)
-	{
-		return __o->initWithDelegate(pDelegate);
-	}
-	return false;
-}
-
-void QtScriptCCKeypadHandler::setDelegate(cocos2d::CCKeypadDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCKeypadHandler *>();
-	if (__o)
-	{
-		__o->setDelegate(pDelegate);
-	}
-}
-
-QScriptValue QtScriptCCKeypadHandler::handlerWithDelegate(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::CCKeypadDelegate*>(context->argument(0));
-			return __e->toScriptValue(CCKeypadHandler::handlerWithDelegate(arg0));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCKeypadHandler::handlerWithDelegate");
-	return __e->uncaughtException();
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCKeypadDispatcher::QtScriptCCKeypadDispatcher(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCObject(engine, className)
-{
-}
-
-QtScriptCCKeypadDispatcher::QtScriptCCKeypadDispatcher(QScriptEngine *engine)
-	: QtScriptCCKeypadDispatcher(engine, "KeypadDispatcher")
-{
-}
-
-void QtScriptCCKeypadDispatcher::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCObject *>());
-	auto ctor = RegisterT<CCKeypadDispatcher, QtScriptCCKeypadDispatcher>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-bool QtScriptCCKeypadDispatcher::dispatchKeypadMSG(int nMsgType)
-{
-	auto __o = this->thiz<CCKeypadDispatcher *>();
-	if (__o)
-	{
-		return __o->dispatchKeypadMSG(cocos2d::ccKeypadMSGType(nMsgType));
-	}
-	return false;
-}
-
-void QtScriptCCKeypadDispatcher::forceAddDelegate(cocos2d::CCKeypadDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCKeypadDispatcher *>();
-	if (__o)
-	{
-		__o->forceAddDelegate(pDelegate);
-	}
-}
-
-void QtScriptCCKeypadDispatcher::removeDelegate(cocos2d::CCKeypadDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCKeypadDispatcher *>();
-	if (__o)
-	{
-		__o->removeDelegate(pDelegate);
-	}
-}
-
-void QtScriptCCKeypadDispatcher::forceRemoveDelegate(cocos2d::CCKeypadDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCKeypadDispatcher *>();
-	if (__o)
-	{
-		__o->forceRemoveDelegate(pDelegate);
-	}
-}
-
-void QtScriptCCKeypadDispatcher::addDelegate(cocos2d::CCKeypadDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCKeypadDispatcher *>();
-	if (__o)
-	{
-		__o->addDelegate(pDelegate);
-	}
-}
-
-int QtScriptCCKeypadDispatcher::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCKeypadDispatcher::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCKeypadDispatcher::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			out = new CCKeypadDispatcher();
-			ok = true;
-			break;
-		}
-	}
-	
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCKeypadDispatcher constructor");
 	}
 	return ok;
 }
@@ -22867,439 +22891,6 @@ bool QtScriptCCSpriteBatchNode::constructObject(QScriptContext *context, NativeO
 } // end of cocos2d
 
 namespace cocos2d {
-QtScript_BMFontDef::QtScript_BMFontDef(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<_BMFontDef, false>(engine, className)
-{
-}
-
-QtScript_BMFontDef::QtScript_BMFontDef(QScriptEngine *engine)
-	: QtScript_BMFontDef(engine, "_BMFontDef")
-{
-}
-
-void QtScript_BMFontDef::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<_BMFontDef, QtScript_BMFontDef>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScript_BMFontDef::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScript_BMFontDef::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScript_BMFontDef::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_BMFontDef");
-	return false;
-}
-
-unsigned int QtScript_BMFontDef::_public_field_get_charID() const
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		return object->charID;
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScript_BMFontDef::_public_field_set_charID(unsigned int value)
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		object->charID = value;
-	}
-}
-
-cocos2d::CCRect QtScript_BMFontDef::_public_field_get_rect() const
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		return object->rect;
-	}
-	return cocos2d::CCRect();
-}
-
-void QtScript_BMFontDef::_public_field_set_rect(const cocos2d::CCRect& value)
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		object->rect = value;
-	}
-}
-
-short QtScript_BMFontDef::_public_field_get_xOffset() const
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		return object->xOffset;
-	}
-	return static_cast<short>(0);
-}
-
-void QtScript_BMFontDef::_public_field_set_xOffset(short value)
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		object->xOffset = value;
-	}
-}
-
-short QtScript_BMFontDef::_public_field_get_yOffset() const
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		return object->yOffset;
-	}
-	return static_cast<short>(0);
-}
-
-void QtScript_BMFontDef::_public_field_set_yOffset(short value)
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		object->yOffset = value;
-	}
-}
-
-short QtScript_BMFontDef::_public_field_get_xAdvance() const
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		return object->xAdvance;
-	}
-	return static_cast<short>(0);
-}
-
-void QtScript_BMFontDef::_public_field_set_xAdvance(short value)
-{
-	auto object = thiz<_BMFontDef *>();
-	if (object)
-	{
-		object->xAdvance = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScript_BMFontPadding::QtScript_BMFontPadding(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<_BMFontPadding, false>(engine, className)
-{
-}
-
-QtScript_BMFontPadding::QtScript_BMFontPadding(QScriptEngine *engine)
-	: QtScript_BMFontPadding(engine, "_BMFontPadding")
-{
-}
-
-void QtScript_BMFontPadding::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<_BMFontPadding, QtScript_BMFontPadding>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScript_BMFontPadding::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScript_BMFontPadding::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScript_BMFontPadding::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_BMFontPadding");
-	return false;
-}
-
-int QtScript_BMFontPadding::_public_field_get_left() const
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		return object->left;
-	}
-	return static_cast<int>(0);
-}
-
-void QtScript_BMFontPadding::_public_field_set_left(int value)
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		object->left = value;
-	}
-}
-
-int QtScript_BMFontPadding::_public_field_get_top() const
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		return object->top;
-	}
-	return static_cast<int>(0);
-}
-
-void QtScript_BMFontPadding::_public_field_set_top(int value)
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		object->top = value;
-	}
-}
-
-int QtScript_BMFontPadding::_public_field_get_right() const
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		return object->right;
-	}
-	return static_cast<int>(0);
-}
-
-void QtScript_BMFontPadding::_public_field_set_right(int value)
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		object->right = value;
-	}
-}
-
-int QtScript_BMFontPadding::_public_field_get_bottom() const
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		return object->bottom;
-	}
-	return static_cast<int>(0);
-}
-
-void QtScript_BMFontPadding::_public_field_set_bottom(int value)
-{
-	auto object = thiz<_BMFontPadding *>();
-	if (object)
-	{
-		object->bottom = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScript_FontDefHashElement::QtScript_FontDefHashElement(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<_FontDefHashElement, false>(engine, className)
-{
-}
-
-QtScript_FontDefHashElement::QtScript_FontDefHashElement(QScriptEngine *engine)
-	: QtScript_FontDefHashElement(engine, "_FontDefHashElement")
-{
-}
-
-void QtScript_FontDefHashElement::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<_FontDefHashElement, QtScript_FontDefHashElement>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScript_FontDefHashElement::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScript_FontDefHashElement::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScript_FontDefHashElement::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_FontDefHashElement");
-	return false;
-}
-
-unsigned int QtScript_FontDefHashElement::_public_field_get_key() const
-{
-	auto object = thiz<_FontDefHashElement *>();
-	if (object)
-	{
-		return object->key;
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScript_FontDefHashElement::_public_field_set_key(unsigned int value)
-{
-	auto object = thiz<_FontDefHashElement *>();
-	if (object)
-	{
-		object->key = value;
-	}
-}
-
-cocos2d::_BMFontDef QtScript_FontDefHashElement::_public_field_get_fontDef() const
-{
-	auto object = thiz<_FontDefHashElement *>();
-	if (object)
-	{
-		return object->fontDef;
-	}
-	return cocos2d::_BMFontDef();
-}
-
-void QtScript_FontDefHashElement::_public_field_set_fontDef(const cocos2d::_BMFontDef& value)
-{
-	auto object = thiz<_FontDefHashElement *>();
-	if (object)
-	{
-		object->fontDef = value;
-	}
-}
-
-UT_hash_handle QtScript_FontDefHashElement::_public_field_get_hh() const
-{
-	auto object = thiz<_FontDefHashElement *>();
-	if (object)
-	{
-		return object->hh;
-	}
-	return UT_hash_handle();
-}
-
-void QtScript_FontDefHashElement::_public_field_set_hh(const UT_hash_handle& value)
-{
-	auto object = thiz<_FontDefHashElement *>();
-	if (object)
-	{
-		object->hh = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScript_KerningHashElement::QtScript_KerningHashElement(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<_KerningHashElement, false>(engine, className)
-{
-}
-
-QtScript_KerningHashElement::QtScript_KerningHashElement(QScriptEngine *engine)
-	: QtScript_KerningHashElement(engine, "_KerningHashElement")
-{
-}
-
-void QtScript_KerningHashElement::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<_KerningHashElement, QtScript_KerningHashElement>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScript_KerningHashElement::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScript_KerningHashElement::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScript_KerningHashElement::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::_KerningHashElement");
-	return false;
-}
-
-int QtScript_KerningHashElement::_public_field_get_key() const
-{
-	auto object = thiz<_KerningHashElement *>();
-	if (object)
-	{
-		return object->key;
-	}
-	return static_cast<int>(0);
-}
-
-void QtScript_KerningHashElement::_public_field_set_key(int value)
-{
-	auto object = thiz<_KerningHashElement *>();
-	if (object)
-	{
-		object->key = value;
-	}
-}
-
-int QtScript_KerningHashElement::_public_field_get_amount() const
-{
-	auto object = thiz<_KerningHashElement *>();
-	if (object)
-	{
-		return object->amount;
-	}
-	return static_cast<int>(0);
-}
-
-void QtScript_KerningHashElement::_public_field_set_amount(int value)
-{
-	auto object = thiz<_KerningHashElement *>();
-	if (object)
-	{
-		object->amount = value;
-	}
-}
-
-UT_hash_handle QtScript_KerningHashElement::_public_field_get_hh() const
-{
-	auto object = thiz<_KerningHashElement *>();
-	if (object)
-	{
-		return object->hh;
-	}
-	return UT_hash_handle();
-}
-
-void QtScript_KerningHashElement::_public_field_set_hh(const UT_hash_handle& value)
-{
-	auto object = thiz<_KerningHashElement *>();
-	if (object)
-	{
-		object->hh = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
 QtScriptCCBMFontConfiguration::QtScriptCCBMFontConfiguration(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptCCObject(engine, className)
 {
@@ -23415,120 +23006,6 @@ bool QtScriptCCBMFontConfiguration::constructObject(QScriptContext *context, Nat
 			"cocos2d::CCBMFontConfiguration constructor");
 	}
 	return ok;
-}
-
-cocos2d::_FontDefHashElement* QtScriptCCBMFontConfiguration::_public_field_get_pFontDefDictionary() const
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		return object->m_pFontDefDictionary;
-	}
-	return nullptr;
-}
-
-void QtScriptCCBMFontConfiguration::_public_field_set_pFontDefDictionary(cocos2d::_FontDefHashElement* value)
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		object->m_pFontDefDictionary = value;
-	}
-}
-
-int QtScriptCCBMFontConfiguration::_public_field_get_nCommonHeight() const
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		return object->m_nCommonHeight;
-	}
-	return static_cast<int>(0);
-}
-
-void QtScriptCCBMFontConfiguration::_public_field_set_nCommonHeight(int value)
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		object->m_nCommonHeight = value;
-	}
-}
-
-cocos2d::_BMFontPadding QtScriptCCBMFontConfiguration::_public_field_get_tPadding() const
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		return object->m_tPadding;
-	}
-	return cocos2d::_BMFontPadding();
-}
-
-void QtScriptCCBMFontConfiguration::_public_field_set_tPadding(const cocos2d::_BMFontPadding& value)
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		object->m_tPadding = value;
-	}
-}
-
-QByteArray QtScriptCCBMFontConfiguration::_public_field_get_sAtlasName() const
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		return QByteArray(object->m_sAtlasName.c_str(), int(object->m_sAtlasName.size()));
-	}
-	return QByteArray();
-}
-
-void QtScriptCCBMFontConfiguration::_public_field_set_sAtlasName(const QByteArray& value)
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		object->m_sAtlasName = std::string(value.data(), size_t(value.size()));
-	}
-}
-
-cocos2d::_KerningHashElement* QtScriptCCBMFontConfiguration::_public_field_get_pKerningDictionary() const
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		return object->m_pKerningDictionary;
-	}
-	return nullptr;
-}
-
-void QtScriptCCBMFontConfiguration::_public_field_set_pKerningDictionary(cocos2d::_KerningHashElement* value)
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		object->m_pKerningDictionary = value;
-	}
-}
-
-std::set<unsigned int>* QtScriptCCBMFontConfiguration::_public_field_get_pCharacterSet() const
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		return object->m_pCharacterSet;
-	}
-	return nullptr;
-}
-
-void QtScriptCCBMFontConfiguration::_public_field_set_pCharacterSet(std::set<unsigned int>* value)
-{
-	auto object = thiz<CCBMFontConfiguration *>();
-	if (object)
-	{
-		object->m_pCharacterSet = value;
-	}
 }
 
 } // end of cocos2d
@@ -23961,210 +23438,6 @@ bool QtScriptCCLabelBMFont::constructObject(QScriptContext *context, NativeObjec
 			"cocos2d::CCLabelBMFont constructor");
 	}
 	return ok;
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCTouchDelegate::QtScriptCCTouchDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<CCTouchDelegate *, false>(engine, className)
-{
-}
-
-QtScriptCCTouchDelegate::QtScriptCCTouchDelegate(QScriptEngine *engine)
-	: QtScriptCCTouchDelegate(engine, "TouchDelegate")
-{
-}
-
-void QtScriptCCTouchDelegate::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<CCTouchDelegate, QtScriptCCTouchDelegate>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-bool QtScriptCCTouchDelegate::ccTouchBegan(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		return __o->ccTouchBegan(pTouch, pEvent);
-	}
-	return false;
-}
-
-void QtScriptCCTouchDelegate::ccTouchesCancelled(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		__o->ccTouchesCancelled(pTouches, pEvent);
-	}
-}
-
-void QtScriptCCTouchDelegate::ccTouchesEnded(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		__o->ccTouchesEnded(pTouches, pEvent);
-	}
-}
-
-void QtScriptCCTouchDelegate::ccTouchCancelled(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		__o->ccTouchCancelled(pTouch, pEvent);
-	}
-}
-
-void QtScriptCCTouchDelegate::ccTouchEnded(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		__o->ccTouchEnded(pTouch, pEvent);
-	}
-}
-
-void QtScriptCCTouchDelegate::ccTouchesBegan(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		__o->ccTouchesBegan(pTouches, pEvent);
-	}
-}
-
-void QtScriptCCTouchDelegate::ccTouchesMoved(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		__o->ccTouchesMoved(pTouches, pEvent);
-	}
-}
-
-void QtScriptCCTouchDelegate::ccTouchMoved(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDelegate *>();
-	if (__o)
-	{
-		__o->ccTouchMoved(pTouch, pEvent);
-	}
-}
-
-int QtScriptCCTouchDelegate::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCTouchDelegate::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCTouchDelegate::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			out = new CCTouchDelegate();
-			ok = true;
-			break;
-		}
-	}
-	
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTouchDelegate constructor");
-	}
-	return ok;
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCTargetedTouchDelegate::QtScriptCCTargetedTouchDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCTouchDelegate(engine, className)
-{
-}
-
-QtScriptCCTargetedTouchDelegate::QtScriptCCTargetedTouchDelegate(QScriptEngine *engine)
-	: QtScriptCCTargetedTouchDelegate(engine, "TargetedTouchDelegate")
-{
-}
-
-void QtScriptCCTargetedTouchDelegate::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCTouchDelegate *>());
-	auto ctor = RegisterT<CCTargetedTouchDelegate, QtScriptCCTargetedTouchDelegate>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptCCTargetedTouchDelegate::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCTargetedTouchDelegate::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCTargetedTouchDelegate::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTargetedTouchDelegate");
-	return false;
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCStandardTouchDelegate::QtScriptCCStandardTouchDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCTouchDelegate(engine, className)
-{
-}
-
-QtScriptCCStandardTouchDelegate::QtScriptCCStandardTouchDelegate(QScriptEngine *engine)
-	: QtScriptCCStandardTouchDelegate(engine, "StandardTouchDelegate")
-{
-}
-
-void QtScriptCCStandardTouchDelegate::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCTouchDelegate *>());
-	auto ctor = RegisterT<CCStandardTouchDelegate, QtScriptCCStandardTouchDelegate>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptCCStandardTouchDelegate::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCStandardTouchDelegate::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCStandardTouchDelegate::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCStandardTouchDelegate");
-	return false;
 }
 
 } // end of cocos2d
@@ -24904,10 +24177,16 @@ int QtScriptCCLayerGradient::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCLayerGradient::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCLayerGradient::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCLayerGradient");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCLayerGradient;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCLayerGradient constructor");
 	return false;
 }
 
@@ -25367,8 +24646,9 @@ int QtScriptCCTransitionEaseScene::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTransitionEaseScene::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTransitionEaseScene::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCTransitionEaseScene");
 	return false;
@@ -28084,10 +27364,16 @@ int QtScriptCCTransitionProgressRadialCCW::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTransitionProgressRadialCCW::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTransitionProgressRadialCCW::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTransitionProgressRadialCCW");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTransitionProgressRadialCCW;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTransitionProgressRadialCCW constructor");
 	return false;
 }
 
@@ -28149,10 +27435,16 @@ int QtScriptCCTransitionProgressRadialCW::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTransitionProgressRadialCW::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTransitionProgressRadialCW::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTransitionProgressRadialCW");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTransitionProgressRadialCW;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTransitionProgressRadialCW constructor");
 	return false;
 }
 
@@ -28214,10 +27506,16 @@ int QtScriptCCTransitionProgressHorizontal::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTransitionProgressHorizontal::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTransitionProgressHorizontal::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTransitionProgressHorizontal");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTransitionProgressHorizontal;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTransitionProgressHorizontal constructor");
 	return false;
 }
 
@@ -28279,10 +27577,16 @@ int QtScriptCCTransitionProgressVertical::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTransitionProgressVertical::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTransitionProgressVertical::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTransitionProgressVertical");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTransitionProgressVertical;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTransitionProgressVertical constructor");
 	return false;
 }
 
@@ -28344,10 +27648,16 @@ int QtScriptCCTransitionProgressInOut::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTransitionProgressInOut::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTransitionProgressInOut::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTransitionProgressInOut");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTransitionProgressInOut;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTransitionProgressInOut constructor");
 	return false;
 }
 
@@ -28409,10 +27719,16 @@ int QtScriptCCTransitionProgressOutIn::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTransitionProgressOutIn::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTransitionProgressOutIn::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTransitionProgressOutIn");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTransitionProgressOutIn;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTransitionProgressOutIn constructor");
 	return false;
 }
 
@@ -29733,8 +29049,9 @@ int QtScriptCCClippingNode::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCClippingNode::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCClippingNode::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCClippingNode");
 	return false;
@@ -30906,10 +30223,16 @@ int QtScriptsCCParticle_ModeA::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptsCCParticle_ModeA::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptsCCParticle_ModeA::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::sCCParticle::ModeA");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::sCCParticle::ModeA constructor");
 	return false;
 }
 
@@ -31000,10 +30323,16 @@ int QtScriptsCCParticle_ModeB::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptsCCParticle_ModeB::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptsCCParticle_ModeB::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::sCCParticle::ModeB");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::sCCParticle::ModeB constructor");
 	return false;
 }
 
@@ -31113,10 +30442,16 @@ int QtScriptsCCParticle::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptsCCParticle::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptsCCParticle::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::sCCParticle");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::sCCParticle constructor");
 	return false;
 }
 
@@ -33835,8 +33170,9 @@ int QtScriptCCDevice::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCDevice::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCDevice::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCDevice");
 	return false;
@@ -33902,8 +33238,9 @@ int QtScriptCCFileUtils::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCFileUtils::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCFileUtils::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCFileUtils");
 	return false;
@@ -34426,7 +33763,7 @@ QtScriptcc_timeval::QtScriptcc_timeval(QScriptEngine *engine, const QByteArray &
 }
 
 QtScriptcc_timeval::QtScriptcc_timeval(QScriptEngine *engine)
-	: QtScriptcc_timeval(engine, "cc_timeval")
+	: QtScriptcc_timeval(engine, "timeval")
 {
 }
 
@@ -34447,24 +33784,30 @@ int QtScriptcc_timeval::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptcc_timeval::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptcc_timeval::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::cc_timeval");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::cc_timeval constructor");
 	return false;
 }
 
-long QtScriptcc_timeval::_public_field_get_tv_sec() const
+cc_time_t QtScriptcc_timeval::_public_field_get_tv_sec() const
 {
 	auto object = thiz<cc_timeval *>();
 	if (object)
 	{
 		return object->tv_sec;
 	}
-	return static_cast<long>(0);
+	return static_cast<cc_time_t>(0);
 }
 
-void QtScriptcc_timeval::_public_field_set_tv_sec(long value)
+void QtScriptcc_timeval::_public_field_set_tv_sec(cc_time_t value)
 {
 	auto object = thiz<cc_timeval *>();
 	if (object)
@@ -34473,17 +33816,17 @@ void QtScriptcc_timeval::_public_field_set_tv_sec(long value)
 	}
 }
 
-int QtScriptcc_timeval::_public_field_get_tv_usec() const
+int32_t QtScriptcc_timeval::_public_field_get_tv_usec() const
 {
 	auto object = thiz<cc_timeval *>();
 	if (object)
 	{
 		return object->tv_usec;
 	}
-	return static_cast<int>(0);
+	return static_cast<int32_t>(0);
 }
 
-void QtScriptcc_timeval::_public_field_set_tv_usec(int value)
+void QtScriptcc_timeval::_public_field_set_tv_usec(int32_t value)
 {
 	auto object = thiz<cc_timeval *>();
 	if (object)
@@ -34512,29 +33855,17 @@ void QtScriptCCTime::Register(const QScriptValue &targetNamespace)
 	QScriptValue inherit;
 	auto ctor = RegisterT<CCTime, QtScriptCCTime>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("deltaTimeF", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTime::deltaTimeF)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("deltaTime", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTime::deltaTime)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("gettimeofdayCocos2d", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTime::gettimeofdayCocos2d)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	ctor.setProperty("currentTimeSeconds", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptCCTime::currentTimeSeconds)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("currentTimeMicros", engine->newFunction(
+	ctor.setProperty("gettimeofday", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTime::currentTimeMicros)),
+			&QtScriptCCTime::gettimeofday)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("currentTimeSecondsF", engine->newFunction(
+	ctor.setProperty("deltaTime", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTime::currentTimeSecondsF)),
+			&QtScriptCCTime::deltaTime)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
@@ -34548,76 +33879,17 @@ int QtScriptCCTime::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTime::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTime::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTime");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTime constructor");
 	return false;
-}
-
-QScriptValue QtScriptCCTime::deltaTimeF(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 2, 2))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 2:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(1));
-			return __e->toScriptValue(CCTime::deltaTimeF(arg0, arg1));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTime::deltaTimeF");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptCCTime::deltaTime(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 2, 2))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 2:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(1));
-			return __e->toScriptValue(CCTime::deltaTime(arg0, arg1));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTime::deltaTime");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptCCTime::gettimeofdayCocos2d(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(0));
-			return __e->toScriptValue(CCTime::gettimeofdayCocos2d(arg0));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTime::gettimeofdayCocos2d");
-	return __e->uncaughtException();
 }
 
 QScriptValue QtScriptCCTime::currentTimeSeconds(QScriptContext *context, QScriptEngine* __e)
@@ -34640,43 +33912,46 @@ QScriptValue QtScriptCCTime::currentTimeSeconds(QScriptContext *context, QScript
 	return __e->uncaughtException();
 }
 
-QScriptValue QtScriptCCTime::currentTimeMicros(QScriptContext *context, QScriptEngine* __e)
+QScriptValue QtScriptCCTime::gettimeofday(QScriptContext *context, QScriptEngine* __e)
 {
-	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
 	{
 		return __e->uncaughtException();
 	}
 
 	switch (context->argumentCount())
 	{
-		case 0:
+		case 1:
 		{
-			return __e->toScriptValue(CCTime::currentTimeMicros());
+			auto arg0 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(0));
+			return __e->toScriptValue(CCTime::gettimeofdayCocos2d(arg0));
 		}
 	}
 
 	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTime::currentTimeMicros");
+			"cocos2d::CCTime::gettimeofdayCocos2d");
 	return __e->uncaughtException();
 }
 
-QScriptValue QtScriptCCTime::currentTimeSecondsF(QScriptContext *context, QScriptEngine* __e)
+QScriptValue QtScriptCCTime::deltaTime(QScriptContext *context, QScriptEngine* __e)
 {
-	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
+	if (!QtScriptUtils::checkArgumentCount(context, 2, 2))
 	{
 		return __e->uncaughtException();
 	}
 
 	switch (context->argumentCount())
 	{
-		case 0:
+		case 2:
 		{
-			return __e->toScriptValue(CCTime::currentTimeSecondsF());
+			auto arg0 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(0));
+			auto arg1 = qscriptvalue_cast<cocos2d::cc_timeval*>(context->argument(1));
+			return __e->toScriptValue(CCTime::deltaTime(arg0, arg1));
 		}
 	}
 
 	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTime::currentTimeSecondsF");
+			"cocos2d::CCTime::deltaTime");
 	return __e->uncaughtException();
 }
 
@@ -34710,8 +33985,9 @@ int QtScriptCCApplicationProtocol::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCApplicationProtocol::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCApplicationProtocol::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCApplicationProtocol");
 	return false;
@@ -34753,8 +34029,9 @@ int QtScriptCCApplication::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCApplication::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCApplication::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCApplication");
 	return false;
@@ -34769,32 +34046,12 @@ void QtScriptCCApplication::setStartupScriptFilename(const QByteArray& startupSc
 	}
 }
 
-int QtScriptCCApplication::run()
-{
-	auto __o = this->thiz<CCApplication *>();
-	if (__o)
-	{
-		return __o->run();
-	}
-	return 0;
-}
-
 int QtScriptCCApplication::getTargetPlatform()
 {
 	auto __o = this->thiz<CCApplication *>();
 	if (__o)
 	{
 		return int(__o->getTargetPlatform());
-	}
-	return 0;
-}
-
-int QtScriptCCApplication::getCurrentLanguage()
-{
-	auto __o = this->thiz<CCApplication *>();
-	if (__o)
-	{
-		return int(__o->getCurrentLanguage());
 	}
 	return 0;
 }
@@ -34816,6 +34073,16 @@ void QtScriptCCApplication::setAnimationInterval(double interval)
 	{
 		__o->setAnimationInterval(interval);
 	}
+}
+
+int QtScriptCCApplication::getCurrentLanguage()
+{
+	auto __o = this->thiz<CCApplication *>();
+	if (__o)
+	{
+		return int(__o->getCurrentLanguage());
+	}
+	return 0;
 }
 
 QScriptValue QtScriptCCApplication::sharedApplication(QScriptContext *context, QScriptEngine* __e)
@@ -34868,20 +34135,12 @@ int QtScriptCCEGLViewProtocol::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCEGLViewProtocol::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCEGLViewProtocol::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCEGLViewProtocol");
 	return false;
-}
-
-void QtScriptCCEGLViewProtocol::setFrameSize(float width, float height)
-{
-	auto __o = this->thiz<CCEGLViewProtocol *>();
-	if (__o)
-	{
-		__o->setFrameSize(width, height);
-	}
 }
 
 cocos2d::CCRect QtScriptCCEGLViewProtocol::getViewPortRect()
@@ -34953,24 +34212,6 @@ cocos2d::CCSize QtScriptCCEGLViewProtocol::getVisibleSize()
 	return cocos2d::CCSize();
 }
 
-void QtScriptCCEGLViewProtocol::setTouchDelegate(cocos2d::EGLTouchDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCEGLViewProtocol *>();
-	if (__o)
-	{
-		__o->setTouchDelegate(pDelegate);
-	}
-}
-
-void QtScriptCCEGLViewProtocol::setDesignResolutionSize(float width, float height, int resolutionPolicy)
-{
-	auto __o = this->thiz<CCEGLViewProtocol *>();
-	if (__o)
-	{
-		__o->setDesignResolutionSize(width, height, ResolutionPolicy(resolutionPolicy));
-	}
-}
-
 cocos2d::CCSize QtScriptCCEGLViewProtocol::getDesignResolutionSize()
 {
 	auto __o = this->thiz<CCEGLViewProtocol *>();
@@ -34989,24 +34230,6 @@ QByteArray QtScriptCCEGLViewProtocol::getViewName()
 		return QByteArray(__o->getViewName());
 	}
 	return QByteArray();
-}
-
-void QtScriptCCEGLViewProtocol::setScissorInPoints(float x, float y, float w, float h)
-{
-	auto __o = this->thiz<CCEGLViewProtocol *>();
-	if (__o)
-	{
-		__o->setScissorInPoints(x, y, w, h);
-	}
-}
-
-void QtScriptCCEGLViewProtocol::setViewPortInPoints(float x, float y, float w, float h)
-{
-	auto __o = this->thiz<CCEGLViewProtocol *>();
-	if (__o)
-	{
-		__o->setViewPortInPoints(x, y, w, h);
-	}
 }
 
 cocos2d::CCRect QtScriptCCEGLViewProtocol::getScissorRect()
@@ -35055,59 +34278,22 @@ void QtScriptCCEGLView::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-void QtScriptCCEGLView::swapBuffers()
+int QtScriptCCEGLView::constructorArgumentCountMin() const
 {
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->swapBuffers();
-	}
+	return 0;
 }
 
-void QtScriptCCEGLView::end()
+int QtScriptCCEGLView::constructorArgumentCountMax() const
 {
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->end();
-	}
+	return 0;
 }
 
-bool QtScriptCCEGLView::initGL()
+bool QtScriptCCEGLView::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		return __o->initGL();
-	}
+	Q_UNUSED(out);
+	QtScriptUtils::noPublicConstructorException(context,
+		"cocos2d::CCEGLView");
 	return false;
-}
-
-void QtScriptCCEGLView::setHWnd(HWND__* hWnd)
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->setHWnd(hWnd);
-	}
-}
-
-void QtScriptCCEGLView::setFrameZoomFactor(float fZoomFactor)
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->setFrameZoomFactor(fZoomFactor);
-	}
-}
-
-void QtScriptCCEGLView::setMenuResource(const wchar_t* menu)
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->setMenuResource(menu);
-	}
 }
 
 void QtScriptCCEGLView::setIMEKeyboardState(bool bOpen)
@@ -35119,53 +34305,6 @@ void QtScriptCCEGLView::setIMEKeyboardState(bool bOpen)
 	}
 }
 
-float QtScriptCCEGLView::getFrameZoomFactor()
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		return __o->getFrameZoomFactor();
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptCCEGLView::destroyGL()
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->destroyGL();
-	}
-}
-
-void QtScriptCCEGLView::setEditorFrameSize(float width, float height, HWND__* hWnd)
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->setEditorFrameSize(width, height, hWnd);
-	}
-}
-
-void QtScriptCCEGLView::resize(int width, int height)
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->resize(width, height);
-	}
-}
-
-long long QtScriptCCEGLView::WindowProc(unsigned int message, unsigned long long wParam, long long lParam)
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		return __o->WindowProc(message, wParam, lParam);
-	}
-	return static_cast<long long>(0);
-}
-
 bool QtScriptCCEGLView::isOpenGLReady()
 {
 	auto __o = this->thiz<CCEGLView *>();
@@ -35174,25 +34313,6 @@ bool QtScriptCCEGLView::isOpenGLReady()
 		return __o->isOpenGLReady();
 	}
 	return false;
-}
-
-HWND__* QtScriptCCEGLView::getHWnd()
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		return __o->getHWnd();
-	}
-	return nullptr;
-}
-
-void QtScriptCCEGLView::centerWindow()
-{
-	auto __o = this->thiz<CCEGLView *>();
-	if (__o)
-	{
-		__o->centerWindow();
-	}
 }
 
 QScriptValue QtScriptCCEGLView::sharedOpenGLView(QScriptContext *context, QScriptEngine* __e)
@@ -35213,39 +34333,6 @@ QScriptValue QtScriptCCEGLView::sharedOpenGLView(QScriptContext *context, QScrip
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::CCEGLView::sharedOpenGLView");
 	return __e->uncaughtException();
-}
-
-int QtScriptCCEGLView::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCEGLView::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCEGLView::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			out = new CCEGLView();
-			ok = true;
-			break;
-		}
-	}
-	
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCEGLView constructor");
-	}
-	return ok;
 }
 
 } // end of cocos2d
@@ -35598,8 +34685,9 @@ int QtScriptCCSpriteFrameCache::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCSpriteFrameCache::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCSpriteFrameCache::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCSpriteFrameCache");
 	return false;
@@ -35939,8 +35027,9 @@ int QtScriptCCNotificationObserver::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCNotificationObserver::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCNotificationObserver::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCNotificationObserver");
 	return false;
@@ -36040,10 +35129,16 @@ int QtScriptCCProfiler::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCProfiler::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCProfiler::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCProfiler");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCProfiler;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCProfiler constructor");
 	return false;
 }
 
@@ -36427,8 +35522,9 @@ int QtScriptCCUserDefault::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCUserDefault::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCUserDefault::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCUserDefault");
 	return false;
@@ -36699,8 +35795,9 @@ int QtScriptCCIMEDelegate::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCIMEDelegate::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCIMEDelegate::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCIMEDelegate");
 	return false;
@@ -36762,8 +35859,9 @@ int QtScriptCCIMEDispatcher::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCIMEDispatcher::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCIMEDispatcher::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCIMEDispatcher");
 	return false;
@@ -36857,7 +35955,7 @@ QScriptValue QtScriptCCIMEDispatcher::sharedDispatcher(QScriptContext *context, 
 
 namespace cocos2d {
 QtScriptCCTextFieldDelegate::QtScriptCCTextFieldDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<CCTextFieldDelegate, false>(engine, className)
+	: QtScriptBaseClassPrototype<CCTextFieldDelegate *, false>(engine, className)
 {
 }
 
@@ -36883,10 +35981,16 @@ int QtScriptCCTextFieldDelegate::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTextFieldDelegate::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTextFieldDelegate::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTextFieldDelegate");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTextFieldDelegate;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTextFieldDelegate constructor");
 	return false;
 }
 
@@ -37689,10 +36793,16 @@ int QtScriptccTouchHandlerHelperData::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptccTouchHandlerHelperData::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptccTouchHandlerHelperData::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::ccTouchHandlerHelperData");
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::ccTouchHandlerHelperData constructor");
 	return false;
 }
 
@@ -37713,227 +36823,6 @@ void QtScriptccTouchHandlerHelperData::_public_field_set_type(int value)
 	{
 		object->m_type = value;
 	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptEGLTouchDelegate::QtScriptEGLTouchDelegate(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<EGLTouchDelegate *, false>(engine, className)
-{
-}
-
-QtScriptEGLTouchDelegate::QtScriptEGLTouchDelegate(QScriptEngine *engine)
-	: QtScriptEGLTouchDelegate(engine, "EGLTouchDelegate")
-{
-}
-
-void QtScriptEGLTouchDelegate::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<EGLTouchDelegate, QtScriptEGLTouchDelegate>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptEGLTouchDelegate::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptEGLTouchDelegate::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptEGLTouchDelegate::constructObject(QScriptContext *context, NativeObjectType &)
-{
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::EGLTouchDelegate");
-	return false;
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCTouchDispatcher::QtScriptCCTouchDispatcher(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCObject(engine, className)
-{
-}
-
-QtScriptCCTouchDispatcher::QtScriptCCTouchDispatcher(QScriptEngine *engine)
-	: QtScriptCCTouchDispatcher(engine, "TouchDispatcher")
-{
-}
-
-void QtScriptCCTouchDispatcher::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCObject *>());
-	auto ctor = RegisterT<CCTouchDispatcher, QtScriptCCTouchDispatcher>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-void QtScriptCCTouchDispatcher::touches(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent, unsigned int uIndex)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->touches(pTouches, pEvent, uIndex);
-	}
-}
-
-void QtScriptCCTouchDispatcher::touchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->touchesEnded(touches, pEvent);
-	}
-}
-
-void QtScriptCCTouchDispatcher::addStandardDelegate(cocos2d::CCTouchDelegate* pDelegate, int nPriority)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->addStandardDelegate(pDelegate, nPriority);
-	}
-}
-
-bool QtScriptCCTouchDispatcher::isDispatchEvents()
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		return __o->isDispatchEvents();
-	}
-	return false;
-}
-
-void QtScriptCCTouchDispatcher::setPriority(int nPriority, cocos2d::CCTouchDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->setPriority(nPriority, pDelegate);
-	}
-}
-
-void QtScriptCCTouchDispatcher::touchesCancelled(cocos2d::CCSet* touches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->touchesCancelled(touches, pEvent);
-	}
-}
-
-void QtScriptCCTouchDispatcher::setDispatchEvents(bool bDispatchEvents)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->setDispatchEvents(bDispatchEvents);
-	}
-}
-
-void QtScriptCCTouchDispatcher::touchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->touchesMoved(touches, pEvent);
-	}
-}
-
-bool QtScriptCCTouchDispatcher::init()
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		return __o->init();
-	}
-	return false;
-}
-
-void QtScriptCCTouchDispatcher::addTargetedDelegate(cocos2d::CCTouchDelegate* pDelegate, int nPriority, bool bSwallowsTouches)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->addTargetedDelegate(pDelegate, nPriority, bSwallowsTouches);
-	}
-}
-
-cocos2d::CCTouchHandler* QtScriptCCTouchDispatcher::findHandler(cocos2d::CCTouchDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		return __o->findHandler(pDelegate);
-	}
-	return nullptr;
-}
-
-void QtScriptCCTouchDispatcher::touchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->touchesBegan(touches, pEvent);
-	}
-}
-
-void QtScriptCCTouchDispatcher::removeDelegate(cocos2d::CCTouchDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->removeDelegate(pDelegate);
-	}
-}
-
-void QtScriptCCTouchDispatcher::removeAllDelegates()
-{
-	auto __o = this->thiz<CCTouchDispatcher *>();
-	if (__o)
-	{
-		__o->removeAllDelegates();
-	}
-}
-
-int QtScriptCCTouchDispatcher::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCTouchDispatcher::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCTouchDispatcher::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			out = new CCTouchDispatcher();
-			ok = true;
-			break;
-		}
-	}
-	
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTouchDispatcher constructor");
-	}
-	return ok;
 }
 
 } // end of cocos2d
@@ -37972,10 +36861,16 @@ int QtScriptCCTouchHandler::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTouchHandler::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTouchHandler::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTouchHandler");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTouchHandler;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTouchHandler constructor");
 	return false;
 }
 
@@ -38104,10 +36999,16 @@ int QtScriptCCStandardTouchHandler::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCStandardTouchHandler::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCStandardTouchHandler::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCStandardTouchHandler");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCStandardTouchHandler;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCStandardTouchHandler constructor");
 	return false;
 }
 
@@ -38169,10 +37070,16 @@ int QtScriptCCTargetedTouchHandler::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCTargetedTouchHandler::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCTargetedTouchHandler::constructObject(QScriptContext *context, NativeObjectType &out)
 {
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCTargetedTouchHandler");
+	if (context->argumentCount() == 0)
+	{
+		out = new CCTargetedTouchHandler;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::CCTargetedTouchHandler constructor");
 	return false;
 }
 
@@ -38579,8 +37486,9 @@ int QtScriptCCComponent::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCComponent::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCComponent::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCComponent");
 	return false;
@@ -38721,8 +37629,9 @@ int QtScriptCCComponentContainer::constructorArgumentCountMax() const
 	return 0;
 }
 
-bool QtScriptCCComponentContainer::constructObject(QScriptContext *context, NativeObjectType &)
+bool QtScriptCCComponentContainer::constructObject(QScriptContext *context, NativeObjectType &out)
 {
+	Q_UNUSED(out);
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::CCComponentContainer");
 	return false;
@@ -38802,7 +37711,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCSpriteBatchNode::Register(targetNamespace);
 	cocos2d::QtScriptCCLabelBMFont::Register(targetNamespace);
 	cocos2d::QtScriptCCTintBy::Register(targetNamespace);
-	cocos2d::QtScriptCCKeypadDelegate::Register(targetNamespace);
 	cocos2d::QtScriptCCSpriteFrame::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleSystem::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleSystemQuad::Register(targetNamespace);
@@ -38833,9 +37741,8 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCBezierBy::Register(targetNamespace);
 	cocos2d::QtScriptCCProfiler::Register(targetNamespace);
 	cocos2d::QtScriptCCStopGrid::Register(targetNamespace);
-	cocos2d::QtScriptCCDirectorDelegate::Register(targetNamespace);
+	cocos2d::QtScriptCCActionManager::Register(targetNamespace);
 	cocos2d::QtScript_ccFontShadow::Register(targetNamespace);
-	cocos2d::QtScriptCCKeypadHandler::Register(targetNamespace);
 	cocos2d::QtScriptCCFloat::Register(targetNamespace);
 	cocos2d::QtScriptCCActionEase::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseBounce::Register(targetNamespace);
@@ -38855,7 +37762,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCBool::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionSplitCols::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionSplitRows::Register(targetNamespace);
-	cocos2d::QtScript_FontDefHashElement::Register(targetNamespace);
 	cocos2d::QtScriptCCTimer::Register(targetNamespace);
 	cocos2d::QtScriptCCScriptHandlerEntry::Register(targetNamespace);
 	cocos2d::QtScriptCCSchedulerScriptHandlerEntry::Register(targetNamespace);
@@ -38863,18 +37769,13 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScript_ccQuad3::Register(targetNamespace);
 	cocos2d::QtScriptCCActionTweenDelegate::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseBounceOut::Register(targetNamespace);
-	cocos2d::QtScriptCCTouchDelegate::Register(targetNamespace);
-	cocos2d::QtScriptCCTargetedTouchDelegate::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseExponentialIn::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleFireworks::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionCrossFade::Register(targetNamespace);
 	cocos2d::QtScriptCCSpriteFrameCache::Register(targetNamespace);
 	cocos2d::QtScriptCCSkewTo::Register(targetNamespace);
-	cocos2d::QtScriptCCKeypadDispatcher::Register(targetNamespace);
 	cocos2d::QtScriptCCPoolManager::Register(targetNamespace);
 	cocos2d::QtScriptCCEGLViewProtocol::Register(targetNamespace);
-	cocos2d::QtScript_BMFontPadding::Register(targetNamespace);
-	cocos2d::QtScriptCCAccelerometerDelegate::Register(targetNamespace);
 	cocos2d::QtScriptCCLayer::Register(targetNamespace);
 	cocos2d::QtScriptCCLayerRGBA::Register(targetNamespace);
 	cocos2d::QtScriptCCLayerColor::Register(targetNamespace);
@@ -38894,7 +37795,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCTransitionSceneOriented::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionZoomFlipAngular::Register(targetNamespace);
 	cocos2d::QtScriptCCToggleVisibility::Register(targetNamespace);
-	cocos2d::QtScript_KerningHashElement::Register(targetNamespace);
 	cocos2d::QtScriptCCTouchScriptHandlerEntry::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFadeTR::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFadeUp::Register(targetNamespace);
@@ -38977,11 +37877,9 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCDeccelAmplitude::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionMoveInB::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionProgressHorizontal::Register(targetNamespace);
-	cocos2d::QtScriptCCEGLView::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleSnow::Register(targetNamespace);
 	cocos2d::QtScriptCCFollow::Register(targetNamespace);
 	cocos2d::QtScriptCCMenuItemLabel::Register(targetNamespace);
-	cocos2d::QtScriptEGLTouchDelegate::Register(targetNamespace);
 	cocos2d::QtScriptCCCallFuncND::Register(targetNamespace);
 	cocos2d::QtScriptCCCallFuncO::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseSineIn::Register(targetNamespace);
@@ -39000,14 +37898,13 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCProgressTo::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionProgressRadialCW::Register(targetNamespace);
 	cocos2d::QtScript_ccVertex3F::Register(targetNamespace);
-	cocos2d::QtScriptCCStandardTouchDelegate::Register(targetNamespace);
+	cocos2d::QtScriptCCEGLView::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseExponentialInOut::Register(targetNamespace);
 	cocos2d::QtScriptCCFadeTo::Register(targetNamespace);
 	cocos2d::QtScriptCCWavesTiles3D::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseExponentialOut::Register(targetNamespace);
 	cocos2d::QtScriptCCDirector::Register(targetNamespace);
 	cocos2d::QtScript_ccBezierConfig::Register(targetNamespace);
-	cocos2d::QtScriptCCTouchDispatcher::Register(targetNamespace);
 	cocos2d::QtScriptCCWaves3D::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFadeBL::Register(targetNamespace);
 	cocos2d::QtScriptCCUserDefault::Register(targetNamespace);
@@ -39042,10 +37939,8 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCTransitionTurnOffTiles::Register(targetNamespace);
 	cocos2d::QtScript_ccV2F_C4F_T2F_Quad::Register(targetNamespace);
 	cocos2d::QtScriptCCGrabber::Register(targetNamespace);
-	cocos2d::QtScript_BMFontDef::Register(targetNamespace);
 	cocos2d::QtScriptccTouchHandlerHelperData::Register(targetNamespace);
 	cocos2d::QtScriptCCTouch::Register(targetNamespace);
-	cocos2d::QtScriptCCActionManager::Register(targetNamespace);
 	cocos2d::QtScriptCCDelayTime::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseBackIn::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleSpiral::Register(targetNamespace);
