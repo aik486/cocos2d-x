@@ -19982,6 +19982,24 @@ void QtScriptCCDirector::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
+int QtScriptCCDirector::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptCCDirector::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptCCDirector::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	Q_UNUSED(out);
+	QtScriptUtils::noPublicConstructorException(context,
+		"cocos2d::CCDirector");
+	return false;
+}
+
 float QtScriptCCDirector::getContentScaleFactor()
 {
 	auto __o = this->thiz<CCDirector *>();
@@ -20258,39 +20276,6 @@ QScriptValue QtScriptCCDirector::sharedDirector(QScriptContext *context, QScript
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::CCDirector::sharedDirector");
 	return __e->uncaughtException();
-}
-
-int QtScriptCCDirector::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCDirector::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCDirector::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			out = new CCDirector();
-			ok = true;
-			break;
-		}
-	}
-	
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCDirector constructor");
-	}
-	return ok;
 }
 
 } // end of cocos2d
