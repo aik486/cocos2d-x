@@ -45,8 +45,10 @@ static QScriptValue stringVecToScriptValue(
 	auto it = begin;
 	quint32 i;
 	for (i = 0; it != end; ++it, ++i)
+	{
 		a.setProperty(
 			i, eng->toScriptValue(QByteArray(it->c_str(), int(it->size()))));
+	}
 	return a;
 }
 

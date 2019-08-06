@@ -2886,10 +2886,6 @@ void QtScriptCCScriptHandlerEntry::Register(const QScriptValue &targetNamespace)
 	auto inherit = engine->defaultPrototype(qMetaTypeId<CCObject *>());
 	auto ctor = RegisterT<CCScriptHandlerEntry, QtScriptCCScriptHandlerEntry>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("create", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCScriptHandlerEntry::create)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 int QtScriptCCScriptHandlerEntry::constructorArgumentCountMin() const
@@ -2910,16 +2906,6 @@ bool QtScriptCCScriptHandlerEntry::constructObject(QScriptContext *context, Nati
 	return false;
 }
 
-int64_t QtScriptCCScriptHandlerEntry::getHandler()
-{
-	auto __o = this->thiz<CCScriptHandlerEntry *>();
-	if (__o)
-	{
-		return __o->getHandler();
-	}
-	return static_cast<int64_t>(0);
-}
-
 unsigned int QtScriptCCScriptHandlerEntry::getEntryId()
 {
 	auto __o = this->thiz<CCScriptHandlerEntry *>();
@@ -2928,133 +2914,6 @@ unsigned int QtScriptCCScriptHandlerEntry::getEntryId()
 		return __o->getEntryId();
 	}
 	return static_cast<unsigned int>(0);
-}
-
-QScriptValue QtScriptCCScriptHandlerEntry::create(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<int64_t>(context->argument(0));
-			return __e->toScriptValue(CCScriptHandlerEntry::create(arg0));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCScriptHandlerEntry::create");
-	return __e->uncaughtException();
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCSchedulerScriptHandlerEntry::QtScriptCCSchedulerScriptHandlerEntry(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCScriptHandlerEntry(engine, className)
-{
-}
-
-QtScriptCCSchedulerScriptHandlerEntry::QtScriptCCSchedulerScriptHandlerEntry(QScriptEngine *engine)
-	: QtScriptCCSchedulerScriptHandlerEntry(engine, "SchedulerScriptHandlerEntry")
-{
-}
-
-void QtScriptCCSchedulerScriptHandlerEntry::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCScriptHandlerEntry *>());
-	auto ctor = RegisterT<CCSchedulerScriptHandlerEntry, QtScriptCCSchedulerScriptHandlerEntry>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("create", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCSchedulerScriptHandlerEntry::create)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-}
-
-int QtScriptCCSchedulerScriptHandlerEntry::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCSchedulerScriptHandlerEntry::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCSchedulerScriptHandlerEntry::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	Q_UNUSED(out);
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCSchedulerScriptHandlerEntry");
-	return false;
-}
-
-bool QtScriptCCSchedulerScriptHandlerEntry::isMarkedForDeletion()
-{
-	auto __o = this->thiz<CCSchedulerScriptHandlerEntry *>();
-	if (__o)
-	{
-		return __o->isMarkedForDeletion();
-	}
-	return false;
-}
-
-void QtScriptCCSchedulerScriptHandlerEntry::markedForDeletion()
-{
-	auto __o = this->thiz<CCSchedulerScriptHandlerEntry *>();
-	if (__o)
-	{
-		__o->markedForDeletion();
-	}
-}
-
-bool QtScriptCCSchedulerScriptHandlerEntry::isPaused()
-{
-	auto __o = this->thiz<CCSchedulerScriptHandlerEntry *>();
-	if (__o)
-	{
-		return __o->isPaused();
-	}
-	return false;
-}
-
-cocos2d::CCTimer* QtScriptCCSchedulerScriptHandlerEntry::getTimer()
-{
-	auto __o = this->thiz<CCSchedulerScriptHandlerEntry *>();
-	if (__o)
-	{
-		return __o->getTimer();
-	}
-	return nullptr;
-}
-
-QScriptValue QtScriptCCSchedulerScriptHandlerEntry::create(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 3, 3))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 3:
-		{
-			auto arg0 = qscriptvalue_cast<int64_t>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<float>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<bool>(context->argument(2));
-			return __e->toScriptValue(CCSchedulerScriptHandlerEntry::create(arg0, arg1, arg2));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCSchedulerScriptHandlerEntry::create");
-	return __e->uncaughtException();
 }
 
 } // end of cocos2d
@@ -3077,10 +2936,6 @@ void QtScriptCCTouchScriptHandlerEntry::Register(const QScriptValue &targetNames
 	auto inherit = engine->defaultPrototype(qMetaTypeId<CCScriptHandlerEntry *>());
 	auto ctor = RegisterT<CCTouchScriptHandlerEntry, QtScriptCCTouchScriptHandlerEntry>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("create", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTouchScriptHandlerEntry::create)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 int QtScriptCCTouchScriptHandlerEntry::constructorArgumentCountMin() const
@@ -3129,30 +2984,6 @@ int QtScriptCCTouchScriptHandlerEntry::getPriority()
 		return __o->getPriority();
 	}
 	return 0;
-}
-
-QScriptValue QtScriptCCTouchScriptHandlerEntry::create(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 4, 4))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 4:
-		{
-			auto arg0 = qscriptvalue_cast<int64_t>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<bool>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<int>(context->argument(2));
-			auto arg3 = qscriptvalue_cast<bool>(context->argument(3));
-			return __e->toScriptValue(CCTouchScriptHandlerEntry::create(arg0, arg1, arg2, arg3));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTouchScriptHandlerEntry::create");
-	return __e->uncaughtException();
 }
 
 } // end of cocos2d
@@ -5597,182 +5428,6 @@ void QtScript_ccFontDefinition::_public_field_set_stroke(const cocos2d::_ccFontS
 } // end of cocos2d
 
 namespace cocos2d {
-QtScript_ccPVRTexturePixelFormatInfo::QtScript_ccPVRTexturePixelFormatInfo(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<_ccPVRTexturePixelFormatInfo, false>(engine, className)
-{
-}
-
-QtScript_ccPVRTexturePixelFormatInfo::QtScript_ccPVRTexturePixelFormatInfo(QScriptEngine *engine)
-	: QtScript_ccPVRTexturePixelFormatInfo(engine, "PVRTexturePixelFormatInfo")
-{
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<_ccPVRTexturePixelFormatInfo, QtScript_ccPVRTexturePixelFormatInfo>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScript_ccPVRTexturePixelFormatInfo::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScript_ccPVRTexturePixelFormatInfo::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScript_ccPVRTexturePixelFormatInfo::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	if (context->argumentCount() == 0)
-	{
-		Q_UNUSED(out);
-		return true;
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-		"cocos2d::_ccPVRTexturePixelFormatInfo constructor");
-	return false;
-}
-
-unsigned int QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_internalFormat() const
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		return object->internalFormat;
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_internalFormat(unsigned int value)
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		object->internalFormat = value;
-	}
-}
-
-unsigned int QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_format() const
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		return object->format;
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_format(unsigned int value)
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		object->format = value;
-	}
-}
-
-unsigned int QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_type() const
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		return object->type;
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_type(unsigned int value)
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		object->type = value;
-	}
-}
-
-uint32_t QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_bpp() const
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		return object->bpp;
-	}
-	return static_cast<uint32_t>(0);
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_bpp(uint32_t value)
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		object->bpp = value;
-	}
-}
-
-bool QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_compressed() const
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		return object->compressed;
-	}
-	return false;
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_compressed(const bool& value)
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		object->compressed = value;
-	}
-}
-
-bool QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_alpha() const
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		return object->alpha;
-	}
-	return false;
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_alpha(const bool& value)
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		object->alpha = value;
-	}
-}
-
-int QtScript_ccPVRTexturePixelFormatInfo::_public_field_get_ccPixelFormat() const
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		return int(object->ccPixelFormat);
-	}
-	return static_cast<int>(0);
-}
-
-void QtScript_ccPVRTexturePixelFormatInfo::_public_field_set_ccPixelFormat(int value)
-{
-	auto object = thiz<_ccPVRTexturePixelFormatInfo *>();
-	if (object)
-	{
-		object->ccPixelFormat = cocos2d::CCTexture2DPixelFormat(value);
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
 QtScriptCCTexturePVR::QtScriptCCTexturePVR(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptCCObject(engine, className)
 {
@@ -5846,15 +5501,6 @@ unsigned int QtScriptCCTexturePVR::getName()
 	return static_cast<unsigned int>(0);
 }
 
-void QtScriptCCTexturePVR::setRetainName(bool retainName)
-{
-	auto __o = this->thiz<CCTexturePVR *>();
-	if (__o)
-	{
-		__o->setRetainName(retainName);
-	}
-}
-
 bool QtScriptCCTexturePVR::hasAlpha()
 {
 	auto __o = this->thiz<CCTexturePVR *>();
@@ -5903,16 +5549,6 @@ int QtScriptCCTexturePVR::getFormat()
 		return int(__o->getFormat());
 	}
 	return 0;
-}
-
-bool QtScriptCCTexturePVR::isRetainName()
-{
-	auto __o = this->thiz<CCTexturePVR *>();
-	if (__o)
-	{
-		return __o->isRetainName();
-	}
-	return false;
 }
 
 QScriptValue QtScriptCCTexturePVR::create(QScriptContext *context, QScriptEngine* __e)
@@ -6293,15 +5929,6 @@ void QtScriptCCTexture2D::setMaxT(float var)
 	}
 }
 
-void QtScriptCCTexture2D::drawInRect(const cocos2d::CCRect& rect)
-{
-	auto __o = this->thiz<CCTexture2D *>();
-	if (__o)
-	{
-		__o->drawInRect(rect);
-	}
-}
-
 cocos2d::CCSize QtScriptCCTexture2D::getContentSize()
 {
 	auto __o = this->thiz<CCTexture2D *>();
@@ -6416,15 +6043,6 @@ unsigned int QtScriptCCTexture2D::getPixelsWide()
 		return __o->getPixelsWide();
 	}
 	return static_cast<unsigned int>(0);
-}
-
-void QtScriptCCTexture2D::drawAtPoint(const cocos2d::CCPoint& point)
-{
-	auto __o = this->thiz<CCTexture2D *>();
-	if (__o)
-	{
-		__o->drawAtPoint(point);
-	}
 }
 
 bool QtScriptCCTexture2D::hasMipmaps()
@@ -6788,15 +6406,6 @@ int QtScriptCCNode::getTag()
 	return 0;
 }
 
-void QtScriptCCNode::onExit()
-{
-	auto __o = this->thiz<CCNode *>();
-	if (__o)
-	{
-		__o->onExit();
-	}
-}
-
 void QtScriptCCNode::removeChild(cocos2d::CCNode* child)
 {
 	auto __o = this->thiz<CCNode *>();
@@ -6840,15 +6449,6 @@ void QtScriptCCNode::setSkewY(float fSkewY)
 	if (__o)
 	{
 		__o->setSkewY(fSkewY);
-	}
-}
-
-void QtScriptCCNode::onEnterTransitionDidFinish()
-{
-	auto __o = this->thiz<CCNode *>();
-	if (__o)
-	{
-		__o->onEnterTransitionDidFinish();
 	}
 }
 
@@ -7058,14 +6658,14 @@ void QtScriptCCNode::registerEventHandler(const QScriptValue& arg0)
 	}
 }
 
-bool QtScriptCCNode::isVisible()
+cocos2d::CCPoint QtScriptCCNode::getAnchorPointInPoints()
 {
 	auto __o = this->thiz<CCNode *>();
 	if (__o)
 	{
-		return __o->isVisible();
+		return __o->getAnchorPointInPoints();
 	}
-	return false;
+	return cocos2d::CCPoint();
 }
 
 unsigned int QtScriptCCNode::getChildrenCount()
@@ -7084,15 +6684,6 @@ void QtScriptCCNode::setAnchorPoint(const cocos2d::CCPoint& anchorPoint)
 	if (__o)
 	{
 		__o->setAnchorPoint(anchorPoint);
-	}
-}
-
-void QtScriptCCNode::onEnter()
-{
-	auto __o = this->thiz<CCNode *>();
-	if (__o)
-	{
-		__o->onEnter();
 	}
 }
 
@@ -7154,15 +6745,6 @@ float QtScriptCCNode::getRotation()
 	return static_cast<float>(0);
 }
 
-void QtScriptCCNode::resumeSchedulerAndActions()
-{
-	auto __o = this->thiz<CCNode *>();
-	if (__o)
-	{
-		__o->resumeSchedulerAndActions();
-	}
-}
-
 int QtScriptCCNode::getZOrder()
 {
 	auto __o = this->thiz<CCNode *>();
@@ -7173,14 +6755,13 @@ int QtScriptCCNode::getZOrder()
 	return 0;
 }
 
-cocos2d::CCPoint QtScriptCCNode::getAnchorPointInPoints()
+void QtScriptCCNode::resumeSchedulerAndActions()
 {
 	auto __o = this->thiz<CCNode *>();
 	if (__o)
 	{
-		return __o->getAnchorPointInPoints();
+		__o->resumeSchedulerAndActions();
 	}
-	return cocos2d::CCPoint();
 }
 
 void QtScriptCCNode::visit()
@@ -7542,15 +7123,6 @@ void QtScriptCCNode::setGrid(cocos2d::CCGridBase* pGrid)
 	}
 }
 
-void QtScriptCCNode::draw()
-{
-	auto __o = this->thiz<CCNode *>();
-	if (__o)
-	{
-		__o->draw();
-	}
-}
-
 void QtScriptCCNode::transformAncestors()
 {
 	auto __o = this->thiz<CCNode *>();
@@ -7588,6 +7160,16 @@ cocos2d::CCPoint QtScriptCCNode::convertTouchToNodeSpaceAR(cocos2d::CCTouch* tou
 	return cocos2d::CCPoint();
 }
 
+bool QtScriptCCNode::isVisible()
+{
+	auto __o = this->thiz<CCNode *>();
+	if (__o)
+	{
+		return __o->isVisible();
+	}
+	return false;
+}
+
 void QtScriptCCNode::sortAllChildren()
 {
 	auto __o = this->thiz<CCNode *>();
@@ -7605,15 +7187,6 @@ cocos2d::CCPoint QtScriptCCNode::convertToNodeSpace(const cocos2d::CCPoint& worl
 		return __o->convertToNodeSpace(worldPoint);
 	}
 	return cocos2d::CCPoint();
-}
-
-void QtScriptCCNode::onExitTransitionDidStart()
-{
-	auto __o = this->thiz<CCNode *>();
-	if (__o)
-	{
-		__o->onExitTransitionDidStart();
-	}
 }
 
 float QtScriptCCNode::getScale()
@@ -23402,62 +22975,6 @@ void QtScriptCCLayer::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-void QtScriptCCLayer::keyBackClicked()
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->keyBackClicked();
-	}
-}
-
-bool QtScriptCCLayer::ccTouchBegan(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		return __o->ccTouchBegan(pTouch, pEvent);
-	}
-	return false;
-}
-
-bool QtScriptCCLayer::isKeypadEnabled()
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		return __o->isKeypadEnabled();
-	}
-	return false;
-}
-
-void QtScriptCCLayer::ccTouchesCancelled(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->ccTouchesCancelled(pTouches, pEvent);
-	}
-}
-
-void QtScriptCCLayer::didAccelerate(cocos2d::CCAcceleration* pAccelerationValue)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->didAccelerate(pAccelerationValue);
-	}
-}
-
-void QtScriptCCLayer::ccTouchesMoved(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->ccTouchesMoved(pTouches, pEvent);
-	}
-}
-
 void QtScriptCCLayer::unregisterTouchHandler()
 {
 	auto __o = this->thiz<CCLayer *>();
@@ -23486,13 +23003,23 @@ int QtScriptCCLayer::getTouchMode()
 	return 0;
 }
 
-void QtScriptCCLayer::setAccelerometerEnabled(bool value)
+void QtScriptCCLayer::setKeypadEnabled(bool value)
 {
 	auto __o = this->thiz<CCLayer *>();
 	if (__o)
 	{
-		__o->setAccelerometerEnabled(value);
+		__o->setKeypadEnabled(value);
 	}
+}
+
+bool QtScriptCCLayer::isKeypadEnabled()
+{
+	auto __o = this->thiz<CCLayer *>();
+	if (__o)
+	{
+		return __o->isKeypadEnabled();
+	}
+	return false;
 }
 
 bool QtScriptCCLayer::isTouchEnabled()
@@ -23514,39 +23041,12 @@ void QtScriptCCLayer::registerTouchHandler(const QScriptValue& arg0, int arg1, b
 	}
 }
 
-void QtScriptCCLayer::ccTouchMoved(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
+void QtScriptCCLayer::setTouchPriority(int priority)
 {
 	auto __o = this->thiz<CCLayer *>();
 	if (__o)
 	{
-		__o->ccTouchMoved(pTouch, pEvent);
-	}
-}
-
-void QtScriptCCLayer::setTouchEnabled(bool value)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->setTouchEnabled(value);
-	}
-}
-
-void QtScriptCCLayer::setAccelerometerInterval(double interval)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->setAccelerometerInterval(interval);
-	}
-}
-
-void QtScriptCCLayer::ccTouchesEnded(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->ccTouchesEnded(pTouches, pEvent);
+		__o->setTouchPriority(priority);
 	}
 }
 
@@ -23556,61 +23056,6 @@ void QtScriptCCLayer::unregisterKeypadHandler()
 	if (__o)
 	{
 		__o->unregisterScriptKeypadHandler();
-	}
-}
-
-void QtScriptCCLayer::setTouchMode(int mode)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->setTouchMode(cocos2d::ccTouchesMode(mode));
-	}
-}
-
-bool QtScriptCCLayer::isAccelerometerEnabled()
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		return __o->isAccelerometerEnabled();
-	}
-	return false;
-}
-
-void QtScriptCCLayer::ccTouchEnded(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->ccTouchEnded(pTouch, pEvent);
-	}
-}
-
-void QtScriptCCLayer::ccTouchCancelled(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->ccTouchCancelled(pTouch, pEvent);
-	}
-}
-
-void QtScriptCCLayer::ccTouchesBegan(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->ccTouchesBegan(pTouches, pEvent);
-	}
-}
-
-void QtScriptCCLayer::setTouchPriority(int priority)
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->setTouchPriority(priority);
 	}
 }
 
@@ -23624,30 +23069,21 @@ int QtScriptCCLayer::getTouchPriority()
 	return 0;
 }
 
-void QtScriptCCLayer::setKeypadEnabled(bool value)
+void QtScriptCCLayer::setTouchEnabled(bool value)
 {
 	auto __o = this->thiz<CCLayer *>();
 	if (__o)
 	{
-		__o->setKeypadEnabled(value);
+		__o->setTouchEnabled(value);
 	}
 }
 
-void QtScriptCCLayer::registerWithTouchDispatcher()
+void QtScriptCCLayer::setTouchMode(int mode)
 {
 	auto __o = this->thiz<CCLayer *>();
 	if (__o)
 	{
-		__o->registerWithTouchDispatcher();
-	}
-}
-
-void QtScriptCCLayer::keyMenuClicked()
-{
-	auto __o = this->thiz<CCLayer *>();
-	if (__o)
-	{
-		__o->keyMenuClicked();
+		__o->setTouchMode(cocos2d::ccTouchesMode(mode));
 	}
 }
 
@@ -30132,496 +29568,6 @@ bool QtScriptCCParticleBatchNode::constructObject(QScriptContext *context, Nativ
 } // end of cocos2d
 
 namespace cocos2d {
-QtScriptsCCParticle_ModeA::QtScriptsCCParticle_ModeA(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<sCCParticle::ModeA, false>(engine, className)
-{
-}
-
-QtScriptsCCParticle_ModeA::QtScriptsCCParticle_ModeA(QScriptEngine *engine)
-	: QtScriptsCCParticle_ModeA(engine, "Particle_ModeA")
-{
-}
-
-void QtScriptsCCParticle_ModeA::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<sCCParticle::ModeA, QtScriptsCCParticle_ModeA>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptsCCParticle_ModeA::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptsCCParticle_ModeA::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptsCCParticle_ModeA::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	if (context->argumentCount() == 0)
-	{
-		Q_UNUSED(out);
-		return true;
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-		"cocos2d::sCCParticle::ModeA constructor");
-	return false;
-}
-
-cocos2d::CCPoint QtScriptsCCParticle_ModeA::_public_field_get_dir() const
-{
-	auto object = thiz<sCCParticle::ModeA *>();
-	if (object)
-	{
-		return object->dir;
-	}
-	return cocos2d::CCPoint();
-}
-
-void QtScriptsCCParticle_ModeA::_public_field_set_dir(const cocos2d::CCPoint& value)
-{
-	auto object = thiz<sCCParticle::ModeA *>();
-	if (object)
-	{
-		object->dir = value;
-	}
-}
-
-float QtScriptsCCParticle_ModeA::_public_field_get_radialAccel() const
-{
-	auto object = thiz<sCCParticle::ModeA *>();
-	if (object)
-	{
-		return object->radialAccel;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle_ModeA::_public_field_set_radialAccel(float value)
-{
-	auto object = thiz<sCCParticle::ModeA *>();
-	if (object)
-	{
-		object->radialAccel = value;
-	}
-}
-
-float QtScriptsCCParticle_ModeA::_public_field_get_tangentialAccel() const
-{
-	auto object = thiz<sCCParticle::ModeA *>();
-	if (object)
-	{
-		return object->tangentialAccel;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle_ModeA::_public_field_set_tangentialAccel(float value)
-{
-	auto object = thiz<sCCParticle::ModeA *>();
-	if (object)
-	{
-		object->tangentialAccel = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptsCCParticle_ModeB::QtScriptsCCParticle_ModeB(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<sCCParticle::ModeB, false>(engine, className)
-{
-}
-
-QtScriptsCCParticle_ModeB::QtScriptsCCParticle_ModeB(QScriptEngine *engine)
-	: QtScriptsCCParticle_ModeB(engine, "Particle_ModeB")
-{
-}
-
-void QtScriptsCCParticle_ModeB::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<sCCParticle::ModeB, QtScriptsCCParticle_ModeB>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptsCCParticle_ModeB::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptsCCParticle_ModeB::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptsCCParticle_ModeB::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	if (context->argumentCount() == 0)
-	{
-		Q_UNUSED(out);
-		return true;
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-		"cocos2d::sCCParticle::ModeB constructor");
-	return false;
-}
-
-float QtScriptsCCParticle_ModeB::_public_field_get_angle() const
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		return object->angle;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle_ModeB::_public_field_set_angle(float value)
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		object->angle = value;
-	}
-}
-
-float QtScriptsCCParticle_ModeB::_public_field_get_degreesPerSecond() const
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		return object->degreesPerSecond;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle_ModeB::_public_field_set_degreesPerSecond(float value)
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		object->degreesPerSecond = value;
-	}
-}
-
-float QtScriptsCCParticle_ModeB::_public_field_get_radius() const
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		return object->radius;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle_ModeB::_public_field_set_radius(float value)
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		object->radius = value;
-	}
-}
-
-float QtScriptsCCParticle_ModeB::_public_field_get_deltaRadius() const
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		return object->deltaRadius;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle_ModeB::_public_field_set_deltaRadius(float value)
-{
-	auto object = thiz<sCCParticle::ModeB *>();
-	if (object)
-	{
-		object->deltaRadius = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptsCCParticle::QtScriptsCCParticle(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<sCCParticle, false>(engine, className)
-{
-}
-
-QtScriptsCCParticle::QtScriptsCCParticle(QScriptEngine *engine)
-	: QtScriptsCCParticle(engine, "Particle")
-{
-}
-
-void QtScriptsCCParticle::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<sCCParticle, QtScriptsCCParticle>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptsCCParticle::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptsCCParticle::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptsCCParticle::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	if (context->argumentCount() == 0)
-	{
-		Q_UNUSED(out);
-		return true;
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-		"cocos2d::sCCParticle constructor");
-	return false;
-}
-
-cocos2d::CCPoint QtScriptsCCParticle::_public_field_get_pos() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->pos;
-	}
-	return cocos2d::CCPoint();
-}
-
-void QtScriptsCCParticle::_public_field_set_pos(const cocos2d::CCPoint& value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->pos = value;
-	}
-}
-
-cocos2d::CCPoint QtScriptsCCParticle::_public_field_get_startPos() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->startPos;
-	}
-	return cocos2d::CCPoint();
-}
-
-void QtScriptsCCParticle::_public_field_set_startPos(const cocos2d::CCPoint& value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->startPos = value;
-	}
-}
-
-cocos2d::_ccColor4F QtScriptsCCParticle::_public_field_get_color() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->color;
-	}
-	return cocos2d::_ccColor4F();
-}
-
-void QtScriptsCCParticle::_public_field_set_color(const cocos2d::_ccColor4F& value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->color = value;
-	}
-}
-
-cocos2d::_ccColor4F QtScriptsCCParticle::_public_field_get_deltaColor() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->deltaColor;
-	}
-	return cocos2d::_ccColor4F();
-}
-
-void QtScriptsCCParticle::_public_field_set_deltaColor(const cocos2d::_ccColor4F& value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->deltaColor = value;
-	}
-}
-
-float QtScriptsCCParticle::_public_field_get_size() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->size;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle::_public_field_set_size(float value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->size = value;
-	}
-}
-
-float QtScriptsCCParticle::_public_field_get_deltaSize() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->deltaSize;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle::_public_field_set_deltaSize(float value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->deltaSize = value;
-	}
-}
-
-float QtScriptsCCParticle::_public_field_get_rotation() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->rotation;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle::_public_field_set_rotation(float value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->rotation = value;
-	}
-}
-
-float QtScriptsCCParticle::_public_field_get_deltaRotation() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->deltaRotation;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle::_public_field_set_deltaRotation(float value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->deltaRotation = value;
-	}
-}
-
-float QtScriptsCCParticle::_public_field_get_timeToLive() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->timeToLive;
-	}
-	return static_cast<float>(0);
-}
-
-void QtScriptsCCParticle::_public_field_set_timeToLive(float value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->timeToLive = value;
-	}
-}
-
-unsigned int QtScriptsCCParticle::_public_field_get_atlasIndex() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->atlasIndex;
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScriptsCCParticle::_public_field_set_atlasIndex(unsigned int value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->atlasIndex = value;
-	}
-}
-
-cocos2d::sCCParticle::ModeA QtScriptsCCParticle::_public_field_get_modeA() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->modeA;
-	}
-	return cocos2d::sCCParticle::ModeA();
-}
-
-void QtScriptsCCParticle::_public_field_set_modeA(const cocos2d::sCCParticle::ModeA& value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->modeA = value;
-	}
-}
-
-cocos2d::sCCParticle::ModeB QtScriptsCCParticle::_public_field_get_modeB() const
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		return object->modeB;
-	}
-	return cocos2d::sCCParticle::ModeB();
-}
-
-void QtScriptsCCParticle::_public_field_set_modeB(const cocos2d::sCCParticle::ModeB& value)
-{
-	auto object = thiz<sCCParticle *>();
-	if (object)
-	{
-		object->modeB = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
 QtScriptCCParticleSystem::QtScriptCCParticleSystem(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptCCNode(engine, className)
 {
@@ -30755,15 +29701,6 @@ float QtScriptCCParticleSystem::getRadialAccelVar()
 		return __o->getRadialAccelVar();
 	}
 	return static_cast<float>(0);
-}
-
-void QtScriptCCParticleSystem::stopSystem()
-{
-	auto __o = this->thiz<CCParticleSystem *>();
-	if (__o)
-	{
-		__o->stopSystem();
-	}
 }
 
 float QtScriptCCParticleSystem::getEndSizeVar()
@@ -30927,15 +29864,6 @@ cocos2d::CCPoint QtScriptCCParticleSystem::getPosVar()
 	return cocos2d::CCPoint();
 }
 
-void QtScriptCCParticleSystem::updateWithNoTime()
-{
-	auto __o = this->thiz<CCParticleSystem *>();
-	if (__o)
-	{
-		__o->updateWithNoTime();
-	}
-}
-
 bool QtScriptCCParticleSystem::isBlendAdditive()
 {
 	auto __o = this->thiz<CCParticleSystem *>();
@@ -31009,15 +29937,6 @@ void QtScriptCCParticleSystem::setEndColorVar(const cocos2d::_ccColor4F& var)
 	if (__o)
 	{
 		__o->setEndColorVar(var);
-	}
-}
-
-void QtScriptCCParticleSystem::updateQuadWithParticle(cocos2d::sCCParticle* particle, const cocos2d::CCPoint& newPosition)
-{
-	auto __o = this->thiz<CCParticleSystem *>();
-	if (__o)
-	{
-		__o->updateQuadWithParticle(particle, newPosition);
 	}
 }
 
@@ -31143,12 +30062,12 @@ float QtScriptCCParticleSystem::getRotatePerSecond()
 	return static_cast<float>(0);
 }
 
-void QtScriptCCParticleSystem::initParticle(cocos2d::sCCParticle* particle)
+void QtScriptCCParticleSystem::stopSystem()
 {
 	auto __o = this->thiz<CCParticleSystem *>();
 	if (__o)
 	{
-		__o->initParticle(particle);
+		__o->stopSystem();
 	}
 }
 
@@ -31365,15 +30284,6 @@ void QtScriptCCParticleSystem::setGravity(const cocos2d::CCPoint& g)
 	if (__o)
 	{
 		__o->setGravity(g);
-	}
-}
-
-void QtScriptCCParticleSystem::postStep()
-{
-	auto __o = this->thiz<CCParticleSystem *>();
-	if (__o)
-	{
-		__o->postStep();
 	}
 }
 
@@ -31825,24 +30735,6 @@ void QtScriptCCParticleSystemQuad::setTextureWithRect(cocos2d::CCTexture2D* text
 	if (__o)
 	{
 		__o->setTextureWithRect(texture, rect);
-	}
-}
-
-void QtScriptCCParticleSystemQuad::initIndices()
-{
-	auto __o = this->thiz<CCParticleSystemQuad *>();
-	if (__o)
-	{
-		__o->initIndices();
-	}
-}
-
-void QtScriptCCParticleSystemQuad::listenBackToForeground(cocos2d::CCObject* obj)
-{
-	auto __o = this->thiz<CCParticleSystemQuad *>();
-	if (__o)
-	{
-		__o->listenBackToForeground(obj);
 	}
 }
 
@@ -33201,14 +32093,13 @@ void QtScriptCCFileUtils::removeSearchPath(const QByteArray& path)
 	}
 }
 
-QByteArray QtScriptCCFileUtils::fullPathForFilename(const QByteArray& pszFileName)
+void QtScriptCCFileUtils::purgeCachedEntries()
 {
 	auto __o = this->thiz<CCFileUtils *>();
 	if (__o)
 	{
-		return QByteArray(__o->fullPathForFilename(pszFileName.data()).c_str(), int(__o->fullPathForFilename(pszFileName.data()).size()));
+		__o->purgeCachedEntries();
 	}
-	return QByteArray();
 }
 
 QByteArray QtScriptCCFileUtils::fullPathFromRelativeFile(const QByteArray& pszFilename, const QByteArray& pszRelativeFile)
@@ -33217,16 +32108,6 @@ QByteArray QtScriptCCFileUtils::fullPathFromRelativeFile(const QByteArray& pszFi
 	if (__o)
 	{
 		return QByteArray(__o->fullPathFromRelativeFile(pszFilename.data(), pszRelativeFile.data()));
-	}
-	return QByteArray();
-}
-
-QByteArray QtScriptCCFileUtils::getFileData(const QByteArray& pszFileName, const QByteArray& pszMode, unsigned long* pSize)
-{
-	auto __o = this->thiz<CCFileUtils *>();
-	if (__o)
-	{
-		return QByteArray(reinterpret_cast<const char*>(__o->getFileData(pszFileName.data(), pszMode.data(), pSize)));
 	}
 	return QByteArray();
 }
@@ -33258,16 +32139,6 @@ void QtScriptCCFileUtils::addSearchResolutionsOrder(const QByteArray& order)
 	}
 }
 
-QByteArray QtScriptCCFileUtils::getFileDataFromZip(const QByteArray& pszZipFilePath, const QByteArray& pszFileName, unsigned long* pSize)
-{
-	auto __o = this->thiz<CCFileUtils *>();
-	if (__o)
-	{
-		return QByteArray(reinterpret_cast<const char*>(__o->getFileDataFromZip(pszZipFilePath.data(), pszFileName.data(), pSize)));
-	}
-	return QByteArray();
-}
-
 long QtScriptCCFileUtils::getClassTypeInfo()
 {
 	auto __o = this->thiz<CCFileUtils *>();
@@ -33296,13 +32167,14 @@ void QtScriptCCFileUtils::setSearchResolutionsOrder(const std::vector<std::strin
 	}
 }
 
-void QtScriptCCFileUtils::purgeCachedEntries()
+QByteArray QtScriptCCFileUtils::fullPathForFilename(const QByteArray& pszFileName)
 {
 	auto __o = this->thiz<CCFileUtils *>();
 	if (__o)
 	{
-		__o->purgeCachedEntries();
+		return QByteArray(__o->fullPathForFilename(pszFileName.data()).c_str(), int(__o->fullPathForFilename(pszFileName.data()).size()));
 	}
+	return QByteArray();
 }
 
 bool QtScriptCCFileUtils::isAbsolutePath(const QByteArray& strPath)
@@ -33583,16 +32455,6 @@ int QtScriptCCImage::getBitsPerComponent()
 		return __o->getBitsPerComponent();
 	}
 	return 0;
-}
-
-QByteArray QtScriptCCImage::getData()
-{
-	auto __o = this->thiz<CCImage *>();
-	if (__o)
-	{
-		return QByteArray(reinterpret_cast<const char*>(__o->getData()));
-	}
-	return QByteArray();
 }
 
 int QtScriptCCImage::constructorArgumentCountMin() const
@@ -34214,24 +33076,6 @@ void QtScriptCCEGLView::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-int QtScriptCCEGLView::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCEGLView::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCEGLView::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	Q_UNUSED(out);
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::CCEGLView");
-	return false;
-}
-
 void QtScriptCCEGLView::setIMEKeyboardState(bool bOpen)
 {
 	auto __o = this->thiz<CCEGLView *>();
@@ -34269,6 +33113,39 @@ QScriptValue QtScriptCCEGLView::sharedOpenGLView(QScriptContext *context, QScrip
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::CCEGLView::sharedOpenGLView");
 	return __e->uncaughtException();
+}
+
+int QtScriptCCEGLView::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptCCEGLView::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptCCEGLView::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	auto __e = context->engine();
+	Q_UNUSED(__e);
+	bool ok = false;
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			out = new CCEGLView();
+			ok = true;
+			break;
+		}
+	}
+	
+	if (!ok)
+	{
+		QtScriptUtils::badArgumentsException(context,
+			"cocos2d::CCEGLView constructor");
+	}
+	return ok;
 }
 
 } // end of cocos2d
@@ -36764,326 +35641,6 @@ void QtScriptccTouchHandlerHelperData::_public_field_set_type(int value)
 } // end of cocos2d
 
 namespace cocos2d {
-QtScriptCCTouchHandler::QtScriptCCTouchHandler(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCObject(engine, className)
-{
-}
-
-QtScriptCCTouchHandler::QtScriptCCTouchHandler(QScriptEngine *engine)
-	: QtScriptCCTouchHandler(engine, "TouchHandler")
-{
-}
-
-void QtScriptCCTouchHandler::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCObject *>());
-	auto ctor = RegisterT<CCTouchHandler, QtScriptCCTouchHandler>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("handlerWithDelegate", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTouchHandler::handlerWithDelegate)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-}
-
-int QtScriptCCTouchHandler::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCTouchHandler::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCTouchHandler::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	if (context->argumentCount() == 0)
-	{
-		out = new CCTouchHandler;
-		return true;
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-		"cocos2d::CCTouchHandler constructor");
-	return false;
-}
-
-cocos2d::CCTouchDelegate* QtScriptCCTouchHandler::getDelegate()
-{
-	auto __o = this->thiz<CCTouchHandler *>();
-	if (__o)
-	{
-		return __o->getDelegate();
-	}
-	return nullptr;
-}
-
-bool QtScriptCCTouchHandler::initWithDelegate(cocos2d::CCTouchDelegate* pDelegate, int nPriority)
-{
-	auto __o = this->thiz<CCTouchHandler *>();
-	if (__o)
-	{
-		return __o->initWithDelegate(pDelegate, nPriority);
-	}
-	return false;
-}
-
-int QtScriptCCTouchHandler::getPriority()
-{
-	auto __o = this->thiz<CCTouchHandler *>();
-	if (__o)
-	{
-		return __o->getPriority();
-	}
-	return 0;
-}
-
-void QtScriptCCTouchHandler::setPriority(int nPriority)
-{
-	auto __o = this->thiz<CCTouchHandler *>();
-	if (__o)
-	{
-		__o->setPriority(nPriority);
-	}
-}
-
-int QtScriptCCTouchHandler::getEnabledSelectors()
-{
-	auto __o = this->thiz<CCTouchHandler *>();
-	if (__o)
-	{
-		return __o->getEnabledSelectors();
-	}
-	return 0;
-}
-
-void QtScriptCCTouchHandler::setDelegate(cocos2d::CCTouchDelegate* pDelegate)
-{
-	auto __o = this->thiz<CCTouchHandler *>();
-	if (__o)
-	{
-		__o->setDelegate(pDelegate);
-	}
-}
-
-void QtScriptCCTouchHandler::setEnalbedSelectors(int nValue)
-{
-	auto __o = this->thiz<CCTouchHandler *>();
-	if (__o)
-	{
-		__o->setEnalbedSelectors(nValue);
-	}
-}
-
-QScriptValue QtScriptCCTouchHandler::handlerWithDelegate(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 2, 2))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 2:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::CCTouchDelegate*>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
-			return __e->toScriptValue(CCTouchHandler::handlerWithDelegate(arg0, arg1));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTouchHandler::handlerWithDelegate");
-	return __e->uncaughtException();
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCStandardTouchHandler::QtScriptCCStandardTouchHandler(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCTouchHandler(engine, className)
-{
-}
-
-QtScriptCCStandardTouchHandler::QtScriptCCStandardTouchHandler(QScriptEngine *engine)
-	: QtScriptCCStandardTouchHandler(engine, "StandardTouchHandler")
-{
-}
-
-void QtScriptCCStandardTouchHandler::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCTouchHandler *>());
-	auto ctor = RegisterT<CCStandardTouchHandler, QtScriptCCStandardTouchHandler>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("handlerWithDelegate", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCStandardTouchHandler::handlerWithDelegate)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-}
-
-int QtScriptCCStandardTouchHandler::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCStandardTouchHandler::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCStandardTouchHandler::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	if (context->argumentCount() == 0)
-	{
-		out = new CCStandardTouchHandler;
-		return true;
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-		"cocos2d::CCStandardTouchHandler constructor");
-	return false;
-}
-
-QScriptValue QtScriptCCStandardTouchHandler::handlerWithDelegate(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 2, 2))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 2:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::CCTouchDelegate*>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
-			return __e->toScriptValue(CCStandardTouchHandler::handlerWithDelegate(arg0, arg1));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCStandardTouchHandler::handlerWithDelegate");
-	return __e->uncaughtException();
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptCCTargetedTouchHandler::QtScriptCCTargetedTouchHandler(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCTouchHandler(engine, className)
-{
-}
-
-QtScriptCCTargetedTouchHandler::QtScriptCCTargetedTouchHandler(QScriptEngine *engine)
-	: QtScriptCCTargetedTouchHandler(engine, "TargetedTouchHandler")
-{
-}
-
-void QtScriptCCTargetedTouchHandler::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCTouchHandler *>());
-	auto ctor = RegisterT<CCTargetedTouchHandler, QtScriptCCTargetedTouchHandler>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("handlerWithDelegate", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptCCTargetedTouchHandler::handlerWithDelegate)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-}
-
-int QtScriptCCTargetedTouchHandler::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCTargetedTouchHandler::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCTargetedTouchHandler::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	if (context->argumentCount() == 0)
-	{
-		out = new CCTargetedTouchHandler;
-		return true;
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-		"cocos2d::CCTargetedTouchHandler constructor");
-	return false;
-}
-
-bool QtScriptCCTargetedTouchHandler::isSwallowsTouches()
-{
-	auto __o = this->thiz<CCTargetedTouchHandler *>();
-	if (__o)
-	{
-		return __o->isSwallowsTouches();
-	}
-	return false;
-}
-
-cocos2d::CCSet* QtScriptCCTargetedTouchHandler::getClaimedTouches()
-{
-	auto __o = this->thiz<CCTargetedTouchHandler *>();
-	if (__o)
-	{
-		return __o->getClaimedTouches();
-	}
-	return nullptr;
-}
-
-void QtScriptCCTargetedTouchHandler::setSwallowsTouches(bool bSwallowsTouches)
-{
-	auto __o = this->thiz<CCTargetedTouchHandler *>();
-	if (__o)
-	{
-		__o->setSwallowsTouches(bSwallowsTouches);
-	}
-}
-
-bool QtScriptCCTargetedTouchHandler::initWithDelegate(cocos2d::CCTouchDelegate* pDelegate, int nPriority, bool bSwallow)
-{
-	auto __o = this->thiz<CCTargetedTouchHandler *>();
-	if (__o)
-	{
-		return __o->initWithDelegate(pDelegate, nPriority, bSwallow);
-	}
-	return false;
-}
-
-QScriptValue QtScriptCCTargetedTouchHandler::handlerWithDelegate(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 3, 3))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 3:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::CCTouchDelegate*>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<bool>(context->argument(2));
-			return __e->toScriptValue(CCTargetedTouchHandler::handlerWithDelegate(arg0, arg1, arg2));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCTargetedTouchHandler::handlerWithDelegate");
-	return __e->uncaughtException();
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
 QtScriptCCTimer::QtScriptCCTimer(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptCCObject(engine, className)
 {
@@ -37213,25 +35770,6 @@ void QtScriptCCScheduler::Register(const QScriptValue &targetNamespace)
 	Q_ASSERT(ctor.isFunction());
 }
 
-cocos2d::CCSet* QtScriptCCScheduler::pauseAllTargets()
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		return __o->pauseAllTargets();
-	}
-	return nullptr;
-}
-
-void QtScriptCCScheduler::setTimeScale(float fTimeScale)
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		__o->setTimeScale(fTimeScale);
-	}
-}
-
 void QtScriptCCScheduler::unscheduleUpdateForTarget(const cocos2d::CCObject* pTarget)
 {
 	auto __o = this->thiz<CCScheduler *>();
@@ -37260,15 +35798,6 @@ unsigned QtScriptCCScheduler::schedule(const QScriptValue& arg0, float arg1, boo
 	return static_cast<unsigned>(0);
 }
 
-void QtScriptCCScheduler::unscheduleAllWithMinPriority(int nMinPriority)
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		__o->unscheduleAllWithMinPriority(nMinPriority);
-	}
-}
-
 bool QtScriptCCScheduler::isTargetPaused(cocos2d::CCObject* pTarget)
 {
 	auto __o = this->thiz<CCScheduler *>();
@@ -37279,15 +35808,6 @@ bool QtScriptCCScheduler::isTargetPaused(cocos2d::CCObject* pTarget)
 	return false;
 }
 
-void QtScriptCCScheduler::resumeTarget(cocos2d::CCObject* pTarget)
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		__o->resumeTarget(pTarget);
-	}
-}
-
 void QtScriptCCScheduler::unscheduleScriptEntry(unsigned int uScheduleScriptEntryID)
 {
 	auto __o = this->thiz<CCScheduler *>();
@@ -37295,52 +35815,6 @@ void QtScriptCCScheduler::unscheduleScriptEntry(unsigned int uScheduleScriptEntr
 	{
 		__o->unscheduleScriptEntry(uScheduleScriptEntryID);
 	}
-}
-
-void QtScriptCCScheduler::unscheduleAll()
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		__o->unscheduleAll();
-	}
-}
-
-void QtScriptCCScheduler::resumeTargets(cocos2d::CCSet* targetsToResume)
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		__o->resumeTargets(targetsToResume);
-	}
-}
-
-void QtScriptCCScheduler::unscheduleAllForTarget(cocos2d::CCObject* pTarget)
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		__o->unscheduleAllForTarget(pTarget);
-	}
-}
-
-void QtScriptCCScheduler::pauseTarget(cocos2d::CCObject* pTarget)
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		__o->pauseTarget(pTarget);
-	}
-}
-
-cocos2d::CCSet* QtScriptCCScheduler::pauseAllTargetsWithMinPriority(int nMinPriority)
-{
-	auto __o = this->thiz<CCScheduler *>();
-	if (__o)
-	{
-		return __o->pauseAllTargetsWithMinPriority(nMinPriority);
-	}
-	return nullptr;
 }
 
 float QtScriptCCScheduler::getTimeScale()
@@ -37436,24 +35910,6 @@ void QtScriptCCComponent::setEnabled(bool b)
 	if (__o)
 	{
 		__o->setEnabled(b);
-	}
-}
-
-void QtScriptCCComponent::onEnter()
-{
-	auto __o = this->thiz<CCComponent *>();
-	if (__o)
-	{
-		__o->onEnter();
-	}
-}
-
-void QtScriptCCComponent::onExit()
-{
-	auto __o = this->thiz<CCComponent *>();
-	if (__o)
-	{
-		__o->onExit();
 	}
 }
 
@@ -37672,15 +36128,13 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCTransitionSlideInT::Register(targetNamespace);
 	cocos2d::QtScriptCCRipple3D::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleSmoke::Register(targetNamespace);
-	cocos2d::QtScriptCCParticleFire::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleGalaxy::Register(targetNamespace);
 	cocos2d::QtScriptCCBezierBy::Register(targetNamespace);
 	cocos2d::QtScriptCCProfiler::Register(targetNamespace);
 	cocos2d::QtScriptCCStopGrid::Register(targetNamespace);
-	cocos2d::QtScriptCCActionManager::Register(targetNamespace);
+	cocos2d::QtScriptCCActionEase::Register(targetNamespace);
 	cocos2d::QtScript_ccFontShadow::Register(targetNamespace);
 	cocos2d::QtScriptCCFloat::Register(targetNamespace);
-	cocos2d::QtScriptCCActionEase::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseBounce::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseBounceIn::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseRateAction::Register(targetNamespace);
@@ -37699,8 +36153,8 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCTransitionSplitCols::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionSplitRows::Register(targetNamespace);
 	cocos2d::QtScriptCCTimer::Register(targetNamespace);
-	cocos2d::QtScriptCCScriptHandlerEntry::Register(targetNamespace);
-	cocos2d::QtScriptCCSchedulerScriptHandlerEntry::Register(targetNamespace);
+	cocos2d::QtScriptCCEaseElastic::Register(targetNamespace);
+	cocos2d::QtScriptCCEaseElasticIn::Register(targetNamespace);
 	cocos2d::QtScript_ccQuad2::Register(targetNamespace);
 	cocos2d::QtScript_ccQuad3::Register(targetNamespace);
 	cocos2d::QtScriptCCActionTweenDelegate::Register(targetNamespace);
@@ -37723,7 +36177,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCTransitionProgressInOut::Register(targetNamespace);
 	cocos2d::QtScriptCCComponentContainer::Register(targetNamespace);
 	cocos2d::QtScriptCCTwirl::Register(targetNamespace);
-	cocos2d::QtScriptsCCParticle_ModeB::Register(targetNamespace);
 	cocos2d::QtScriptCCLayerMultiplex::Register(targetNamespace);
 	cocos2d::QtScriptCCImage::Register(targetNamespace);
 	cocos2d::QtScriptTypeInfo::Register(targetNamespace);
@@ -37731,6 +36184,7 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCTransitionSceneOriented::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionZoomFlipAngular::Register(targetNamespace);
 	cocos2d::QtScriptCCToggleVisibility::Register(targetNamespace);
+	cocos2d::QtScriptCCScriptHandlerEntry::Register(targetNamespace);
 	cocos2d::QtScriptCCTouchScriptHandlerEntry::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFadeTR::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFadeUp::Register(targetNamespace);
@@ -37772,8 +36226,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCConfiguration::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseSineOut::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseSineInOut::Register(targetNamespace);
-	cocos2d::QtScriptCCTouchHandler::Register(targetNamespace);
-	cocos2d::QtScriptCCTargetedTouchHandler::Register(targetNamespace);
 	cocos2d::QtScriptCCHide::Register(targetNamespace);
 	cocos2d::QtScriptCCIMEDispatcher::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionMoveInR::Register(targetNamespace);
@@ -37786,8 +36238,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCEaseBackInOut::Register(targetNamespace);
 	cocos2d::QtScript_ccV3F_C4B_T2F_Quad::Register(targetNamespace);
 	cocos2d::QtScriptCCAnimationCache::Register(targetNamespace);
-	cocos2d::QtScriptsCCParticle_ModeA::Register(targetNamespace);
-	cocos2d::QtScriptCCEaseElastic::Register(targetNamespace);
 	cocos2d::QtScriptCCBlink::Register(targetNamespace);
 	cocos2d::QtScript_ccPointSprite::Register(targetNamespace);
 	cocos2d::QtScriptCCFlipX3D::Register(targetNamespace);
@@ -37850,10 +36300,10 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCComponent::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleMeteor::Register(targetNamespace);
 	cocos2d::QtScriptCCSequence::Register(targetNamespace);
-	cocos2d::QtScriptCCEaseElasticIn::Register(targetNamespace);
 	cocos2d::QtScriptCCTextureAtlas::Register(targetNamespace);
 	cocos2d::QtScriptCCTurnOffTiles::Register(targetNamespace);
 	cocos2d::QtScriptCCJumpTiles3D::Register(targetNamespace);
+	cocos2d::QtScriptCCParticleFire::Register(targetNamespace);
 	cocos2d::QtScriptCCLens3D::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFadeDown::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionSlideInR::Register(targetNamespace);
@@ -37878,6 +36328,7 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptccTouchHandlerHelperData::Register(targetNamespace);
 	cocos2d::QtScriptCCTouch::Register(targetNamespace);
 	cocos2d::QtScriptCCDelayTime::Register(targetNamespace);
+	cocos2d::QtScriptCCActionManager::Register(targetNamespace);
 	cocos2d::QtScriptCCEaseBackIn::Register(targetNamespace);
 	cocos2d::QtScriptCCParticleSpiral::Register(targetNamespace);
 	cocos2d::QtScriptCCRepeatForever::Register(targetNamespace);
@@ -37903,11 +36354,9 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCTiledGrid3D::Register(targetNamespace);
 	cocos2d::QtScriptCCRotateTo::Register(targetNamespace);
 	cocos2d::QtScript_ccColor3B::Register(targetNamespace);
-	cocos2d::QtScript_ccPVRTexturePixelFormatInfo::Register(targetNamespace);
 	cocos2d::QtScriptCCBezierTo::Register(targetNamespace);
 	cocos2d::QtScriptCCMenuItemAtlasFont::Register(targetNamespace);
 	cocos2d::QtScript_ccTex2F::Register(targetNamespace);
-	cocos2d::QtScriptsCCParticle::Register(targetNamespace);
 	cocos2d::QtScript_ccV2F_C4F_T2F::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionSlideInB::Register(targetNamespace);
 	cocos2d::QtScriptCCString::Register(targetNamespace);
@@ -37915,7 +36364,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptCCNotificationCenter::Register(targetNamespace);
 	cocos2d::QtScriptCCSize::Register(targetNamespace);
 	cocos2d::QtScriptCCFileUtils::Register(targetNamespace);
-	cocos2d::QtScriptCCStandardTouchHandler::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFlipY::Register(targetNamespace);
 	cocos2d::QtScriptCCTransitionFlipX::Register(targetNamespace);
 	cocos2d::QtScript_ccColor4B::Register(targetNamespace);

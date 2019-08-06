@@ -607,43 +607,13 @@ public:
 	explicit QtScriptCCScriptHandlerEntry(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE int64_t getHandler();
 	Q_INVOKABLE unsigned int getEntryId();
-	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
 Q_DECLARE_METATYPE(cocos2d::CCScriptHandlerEntry *)
 Q_DECLARE_METATYPE(const cocos2d::CCScriptHandlerEntry *)
-
-namespace cocos2d {
-class QtScriptCCSchedulerScriptHandlerEntry : public QtScriptCCScriptHandlerEntry
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptCCSchedulerScriptHandlerEntry(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptCCSchedulerScriptHandlerEntry(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_INVOKABLE bool isMarkedForDeletion();
-	Q_INVOKABLE void markedForDeletion();
-	Q_INVOKABLE bool isPaused();
-	Q_INVOKABLE cocos2d::CCTimer* getTimer();
-	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::CCSchedulerScriptHandlerEntry *)
-Q_DECLARE_METATYPE(const cocos2d::CCSchedulerScriptHandlerEntry *)
 
 namespace cocos2d {
 class QtScriptCCTouchScriptHandlerEntry : public QtScriptCCScriptHandlerEntry
@@ -664,7 +634,6 @@ public:
 	Q_INVOKABLE bool isMultiTouches();
 	Q_INVOKABLE bool getSwallowsTouches();
 	Q_INVOKABLE int getPriority();
-	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
@@ -1432,51 +1401,6 @@ Q_DECLARE_METATYPE(cocos2d::_ccFontDefinition *)
 Q_DECLARE_METATYPE(const cocos2d::_ccFontDefinition *)
 
 namespace cocos2d {
-class QtScript_ccPVRTexturePixelFormatInfo final : public QtScriptBaseClassPrototype<_ccPVRTexturePixelFormatInfo, false>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScript_ccPVRTexturePixelFormatInfo(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScript_ccPVRTexturePixelFormatInfo(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(unsigned int internalFormat READ _public_field_get_internalFormat WRITE _public_field_set_internalFormat)
-	unsigned int _public_field_get_internalFormat() const;
-	void _public_field_set_internalFormat(unsigned int value);
-	Q_PROPERTY(unsigned int format READ _public_field_get_format WRITE _public_field_set_format)
-	unsigned int _public_field_get_format() const;
-	void _public_field_set_format(unsigned int value);
-	Q_PROPERTY(unsigned int type READ _public_field_get_type WRITE _public_field_set_type)
-	unsigned int _public_field_get_type() const;
-	void _public_field_set_type(unsigned int value);
-	Q_PROPERTY(uint32_t bpp READ _public_field_get_bpp WRITE _public_field_set_bpp)
-	uint32_t _public_field_get_bpp() const;
-	void _public_field_set_bpp(uint32_t value);
-	Q_PROPERTY(bool compressed READ _public_field_get_compressed WRITE _public_field_set_compressed)
-	bool _public_field_get_compressed() const;
-	void _public_field_set_compressed(const bool& value);
-	Q_PROPERTY(bool alpha READ _public_field_get_alpha WRITE _public_field_set_alpha)
-	bool _public_field_get_alpha() const;
-	void _public_field_set_alpha(const bool& value);
-	Q_PROPERTY(int ccPixelFormat READ _public_field_get_ccPixelFormat WRITE _public_field_set_ccPixelFormat)
-	int _public_field_get_ccPixelFormat() const;
-	void _public_field_set_ccPixelFormat(int value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::_ccPVRTexturePixelFormatInfo)
-Q_DECLARE_METATYPE(cocos2d::_ccPVRTexturePixelFormatInfo *)
-Q_DECLARE_METATYPE(const cocos2d::_ccPVRTexturePixelFormatInfo *)
-
-namespace cocos2d {
 class QtScriptCCTexturePVR : public QtScriptCCObject
 {
 	Q_OBJECT
@@ -1492,19 +1416,16 @@ public:
 	explicit QtScriptCCTexturePVR(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(bool retainName READ isRetainName WRITE setRetainName)
 	Q_INVOKABLE bool initWithData(const QByteArray& data, size_t len, int compression);
 	Q_INVOKABLE bool initWithContentsOfFile(const QByteArray& path);
 	Q_INVOKABLE bool isForcePremultipliedAlpha();
 	Q_INVOKABLE unsigned int getHeight();
 	Q_INVOKABLE unsigned int getName();
-	void setRetainName(bool retainName);
 	Q_INVOKABLE bool hasAlpha();
 	Q_INVOKABLE unsigned int getWidth();
 	Q_INVOKABLE unsigned int getNumberOfMipmaps();
 	Q_INVOKABLE bool hasPremultipliedAlpha();
 	Q_INVOKABLE int getFormat();
-	bool isRetainName();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
@@ -1584,7 +1505,6 @@ public:
 	Q_INVOKABLE bool initWithString(const QByteArray& text, const QByteArray& fontName, float fontSize);
 	Q_INVOKABLE bool initWithString(const QByteArray& text, const QByteArray& fontName, float fontSize, const cocos2d::CCSize& dimensions, int hAlignment, int vAlignment);
 	void setMaxT(float var);
-	Q_INVOKABLE void drawInRect(const cocos2d::CCRect& rect);
 	Q_INVOKABLE cocos2d::CCSize getContentSize();
 	float getMaxT();
 	Q_INVOKABLE void setAliasTexParameters();
@@ -1597,7 +1517,6 @@ public:
 	Q_INVOKABLE bool initWithPVRFile(const QByteArray& file);
 	Q_INVOKABLE cocos2d::CCSize getContentSizeInPixels();
 	Q_INVOKABLE unsigned int getPixelsWide();
-	Q_INVOKABLE void drawAtPoint(const cocos2d::CCPoint& point);
 	Q_INVOKABLE bool hasMipmaps();
 	void setMaxS(float var);
 	static QScriptValue setDefaultAlphaPixelFormat(QScriptContext *context, QScriptEngine* engine);
@@ -1675,13 +1594,11 @@ public:
 	Q_INVOKABLE void scheduleUpdateWithPriority(const QScriptValue& arg0, int arg1);
 	Q_INVOKABLE void removeAllComponents();
 	int getTag();
-	Q_INVOKABLE void onExit();
 	Q_INVOKABLE void removeChild(cocos2d::CCNode* child);
 	Q_INVOKABLE void removeChild(cocos2d::CCNode* child, bool cleanup);
 	Q_INVOKABLE cocos2d::CCPoint convertToWorldSpace(const cocos2d::CCPoint& nodePoint);
 	void setSkewX(float fSkewX);
 	void setSkewY(float fSkewY);
-	Q_INVOKABLE void onEnterTransitionDidFinish();
 	Q_INVOKABLE cocos2d::CCPoint convertTouchToNodeSpace(cocos2d::CCTouch* touch);
 	Q_INVOKABLE void removeAllChildren();
 	float getRotationX();
@@ -1704,19 +1621,17 @@ public:
 	cocos2d::CCPoint getAnchorPoint();
 	Q_INVOKABLE void updateTransform();
 	Q_INVOKABLE void registerEventHandler(const QScriptValue& arg0);
-	bool isVisible();
+	Q_INVOKABLE cocos2d::CCPoint getAnchorPointInPoints();
 	Q_INVOKABLE unsigned int getChildrenCount();
 	void setAnchorPoint(const cocos2d::CCPoint& anchorPoint);
-	Q_INVOKABLE void onEnter();
 	Q_INVOKABLE cocos2d::CCPoint convertToNodeSpaceAR(const cocos2d::CCPoint& worldPoint);
 	Q_INVOKABLE bool addComponent(cocos2d::CCComponent* pComponent);
 	Q_INVOKABLE void unregisterEventHandler();
 	Q_INVOKABLE cocos2d::CCAction* runAction(cocos2d::CCAction* action);
 	void setShaderProgram(cocos2d::CCGLProgram* pShaderProgram);
 	float getRotation();
-	Q_INVOKABLE void resumeSchedulerAndActions();
 	int getZOrder();
-	Q_INVOKABLE cocos2d::CCPoint getAnchorPointInPoints();
+	Q_INVOKABLE void resumeSchedulerAndActions();
 	Q_INVOKABLE void visit();
 	Q_INVOKABLE void transform();
 	void setVertexZ(float vertexZ);
@@ -1755,14 +1670,13 @@ public:
 	Q_INVOKABLE cocos2d::CCComponent* getComponent(const QByteArray& pName);
 	cocos2d::CCSize getContentSize();
 	void setGrid(cocos2d::CCGridBase* pGrid);
-	Q_INVOKABLE void draw();
 	Q_INVOKABLE void transformAncestors();
 	void setUserObject(cocos2d::CCObject* pUserObject);
 	Q_INVOKABLE void removeFromParent();
 	Q_INVOKABLE cocos2d::CCPoint convertTouchToNodeSpaceAR(cocos2d::CCTouch* touch);
+	bool isVisible();
 	Q_INVOKABLE void sortAllChildren();
 	Q_INVOKABLE cocos2d::CCPoint convertToNodeSpace(const cocos2d::CCPoint& worldPoint);
-	Q_INVOKABLE void onExitTransitionDidStart();
 	float getScale();
 	Q_INVOKABLE cocos2d::CCAffineTransform worldToNodeTransform();
 	Q_INVOKABLE cocos2d::CCAffineTransform parentToNodeTransform();
@@ -5692,37 +5606,21 @@ public:
 	explicit QtScriptCCLayer(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(bool accelerometerEnabled READ isAccelerometerEnabled WRITE setAccelerometerEnabled)
-	Q_PROPERTY(bool touchEnabled READ isTouchEnabled WRITE setTouchEnabled)
-	Q_PROPERTY(int touchPriority READ getTouchPriority WRITE setTouchPriority)
 	Q_PROPERTY(bool keypadEnabled READ isKeypadEnabled WRITE setKeypadEnabled)
-	Q_INVOKABLE void keyBackClicked();
-	Q_INVOKABLE bool ccTouchBegan(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent);
-	bool isKeypadEnabled();
-	Q_INVOKABLE void ccTouchesCancelled(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent);
-	Q_INVOKABLE void didAccelerate(cocos2d::CCAcceleration* pAccelerationValue);
-	Q_INVOKABLE void ccTouchesMoved(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent);
+	Q_PROPERTY(int touchPriority READ getTouchPriority WRITE setTouchPriority)
+	Q_PROPERTY(bool touchEnabled READ isTouchEnabled WRITE setTouchEnabled)
 	Q_INVOKABLE void unregisterTouchHandler();
 	Q_INVOKABLE void registerKeypadHandler(const QScriptValue& arg0);
 	Q_INVOKABLE int getTouchMode();
-	void setAccelerometerEnabled(bool value);
+	void setKeypadEnabled(bool value);
+	bool isKeypadEnabled();
 	bool isTouchEnabled();
 	Q_INVOKABLE void registerTouchHandler(const QScriptValue& arg0, int arg1, bool arg2, int arg3);
-	Q_INVOKABLE void ccTouchMoved(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent);
-	void setTouchEnabled(bool value);
-	Q_INVOKABLE void setAccelerometerInterval(double interval);
-	Q_INVOKABLE void ccTouchesEnded(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent);
-	Q_INVOKABLE void unregisterKeypadHandler();
-	Q_INVOKABLE void setTouchMode(int mode);
-	bool isAccelerometerEnabled();
-	Q_INVOKABLE void ccTouchEnded(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent);
-	Q_INVOKABLE void ccTouchCancelled(cocos2d::CCTouch* pTouch, cocos2d::CCEvent* pEvent);
-	Q_INVOKABLE void ccTouchesBegan(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent);
 	void setTouchPriority(int priority);
+	Q_INVOKABLE void unregisterKeypadHandler();
 	int getTouchPriority();
-	void setKeypadEnabled(bool value);
-	Q_INVOKABLE void registerWithTouchDispatcher();
-	Q_INVOKABLE void keyMenuClicked();
+	void setTouchEnabled(bool value);
+	Q_INVOKABLE void setTouchMode(int mode);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
@@ -7288,135 +7186,6 @@ Q_DECLARE_METATYPE(cocos2d::CCParticleBatchNode *)
 Q_DECLARE_METATYPE(const cocos2d::CCParticleBatchNode *)
 
 namespace cocos2d {
-class QtScriptsCCParticle_ModeA final : public QtScriptBaseClassPrototype<sCCParticle::ModeA, false>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptsCCParticle_ModeA(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptsCCParticle_ModeA(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(cocos2d::CCPoint dir READ _public_field_get_dir WRITE _public_field_set_dir)
-	cocos2d::CCPoint _public_field_get_dir() const;
-	void _public_field_set_dir(const cocos2d::CCPoint& value);
-	Q_PROPERTY(float radialAccel READ _public_field_get_radialAccel WRITE _public_field_set_radialAccel)
-	float _public_field_get_radialAccel() const;
-	void _public_field_set_radialAccel(float value);
-	Q_PROPERTY(float tangentialAccel READ _public_field_get_tangentialAccel WRITE _public_field_set_tangentialAccel)
-	float _public_field_get_tangentialAccel() const;
-	void _public_field_set_tangentialAccel(float value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeA)
-Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeA *)
-Q_DECLARE_METATYPE(const cocos2d::sCCParticle::ModeA *)
-
-namespace cocos2d {
-class QtScriptsCCParticle_ModeB final : public QtScriptBaseClassPrototype<sCCParticle::ModeB, false>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptsCCParticle_ModeB(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptsCCParticle_ModeB(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(float angle READ _public_field_get_angle WRITE _public_field_set_angle)
-	float _public_field_get_angle() const;
-	void _public_field_set_angle(float value);
-	Q_PROPERTY(float degreesPerSecond READ _public_field_get_degreesPerSecond WRITE _public_field_set_degreesPerSecond)
-	float _public_field_get_degreesPerSecond() const;
-	void _public_field_set_degreesPerSecond(float value);
-	Q_PROPERTY(float radius READ _public_field_get_radius WRITE _public_field_set_radius)
-	float _public_field_get_radius() const;
-	void _public_field_set_radius(float value);
-	Q_PROPERTY(float deltaRadius READ _public_field_get_deltaRadius WRITE _public_field_set_deltaRadius)
-	float _public_field_get_deltaRadius() const;
-	void _public_field_set_deltaRadius(float value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeB)
-Q_DECLARE_METATYPE(cocos2d::sCCParticle::ModeB *)
-Q_DECLARE_METATYPE(const cocos2d::sCCParticle::ModeB *)
-
-namespace cocos2d {
-class QtScriptsCCParticle final : public QtScriptBaseClassPrototype<sCCParticle, false>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptsCCParticle(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptsCCParticle(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(cocos2d::CCPoint pos READ _public_field_get_pos WRITE _public_field_set_pos)
-	cocos2d::CCPoint _public_field_get_pos() const;
-	void _public_field_set_pos(const cocos2d::CCPoint& value);
-	Q_PROPERTY(cocos2d::CCPoint startPos READ _public_field_get_startPos WRITE _public_field_set_startPos)
-	cocos2d::CCPoint _public_field_get_startPos() const;
-	void _public_field_set_startPos(const cocos2d::CCPoint& value);
-	Q_PROPERTY(cocos2d::_ccColor4F color READ _public_field_get_color WRITE _public_field_set_color)
-	cocos2d::_ccColor4F _public_field_get_color() const;
-	void _public_field_set_color(const cocos2d::_ccColor4F& value);
-	Q_PROPERTY(cocos2d::_ccColor4F deltaColor READ _public_field_get_deltaColor WRITE _public_field_set_deltaColor)
-	cocos2d::_ccColor4F _public_field_get_deltaColor() const;
-	void _public_field_set_deltaColor(const cocos2d::_ccColor4F& value);
-	Q_PROPERTY(float size READ _public_field_get_size WRITE _public_field_set_size)
-	float _public_field_get_size() const;
-	void _public_field_set_size(float value);
-	Q_PROPERTY(float deltaSize READ _public_field_get_deltaSize WRITE _public_field_set_deltaSize)
-	float _public_field_get_deltaSize() const;
-	void _public_field_set_deltaSize(float value);
-	Q_PROPERTY(float rotation READ _public_field_get_rotation WRITE _public_field_set_rotation)
-	float _public_field_get_rotation() const;
-	void _public_field_set_rotation(float value);
-	Q_PROPERTY(float deltaRotation READ _public_field_get_deltaRotation WRITE _public_field_set_deltaRotation)
-	float _public_field_get_deltaRotation() const;
-	void _public_field_set_deltaRotation(float value);
-	Q_PROPERTY(float timeToLive READ _public_field_get_timeToLive WRITE _public_field_set_timeToLive)
-	float _public_field_get_timeToLive() const;
-	void _public_field_set_timeToLive(float value);
-	Q_PROPERTY(unsigned int atlasIndex READ _public_field_get_atlasIndex WRITE _public_field_set_atlasIndex)
-	unsigned int _public_field_get_atlasIndex() const;
-	void _public_field_set_atlasIndex(unsigned int value);
-	Q_PROPERTY(cocos2d::sCCParticle::ModeA modeA READ _public_field_get_modeA WRITE _public_field_set_modeA)
-	cocos2d::sCCParticle::ModeA _public_field_get_modeA() const;
-	void _public_field_set_modeA(const cocos2d::sCCParticle::ModeA& value);
-	Q_PROPERTY(cocos2d::sCCParticle::ModeB modeB READ _public_field_get_modeB WRITE _public_field_set_modeB)
-	cocos2d::sCCParticle::ModeB _public_field_get_modeB() const;
-	void _public_field_set_modeB(const cocos2d::sCCParticle::ModeB& value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::sCCParticle)
-Q_DECLARE_METATYPE(cocos2d::sCCParticle *)
-Q_DECLARE_METATYPE(const cocos2d::sCCParticle *)
-
-namespace cocos2d {
 class QtScriptCCParticleSystem : public QtScriptCCNode
 {
 	Q_OBJECT
@@ -7487,7 +7256,6 @@ public:
 	void setRotatePerSecondVar(float degrees);
 	float getStartSpinVar();
 	float getRadialAccelVar();
-	Q_INVOKABLE void stopSystem();
 	float getEndSizeVar();
 	void setTangentialAccel(float t);
 	float getRadialAccel();
@@ -7505,7 +7273,6 @@ public:
 	Q_INVOKABLE bool initWithTotalParticles(unsigned int numberOfParticles);
 	void setTexture(cocos2d::CCTexture2D* var);
 	cocos2d::CCPoint getPosVar();
-	Q_INVOKABLE void updateWithNoTime();
 	bool isBlendAdditive();
 	float getAngleVar();
 	void setPositionType(int var);
@@ -7514,7 +7281,6 @@ public:
 	void setLifeVar(float var);
 	void setTotalParticles(unsigned int var);
 	void setEndColorVar(const cocos2d::_ccColor4F& var);
-	Q_INVOKABLE void updateQuadWithParticle(cocos2d::sCCParticle* particle, const cocos2d::CCPoint& newPosition);
 	unsigned int getAtlasIndex();
 	float getStartSize();
 	void setStartSpinVar(float var);
@@ -7528,7 +7294,7 @@ public:
 	void setSpeed(float speed);
 	float getStartSpin();
 	float getRotatePerSecond();
-	Q_INVOKABLE void initParticle(cocos2d::sCCParticle* particle);
+	Q_INVOKABLE void stopSystem();
 	void setEmitterMode(int var);
 	float getDuration();
 	void setSourcePosition(const cocos2d::CCPoint& var);
@@ -7552,7 +7318,6 @@ public:
 	void setSpeedVar(float speed);
 	void setAutoRemoveOnFinish(bool var);
 	void setGravity(const cocos2d::CCPoint& g);
-	Q_INVOKABLE void postStep();
 	void setEmissionRate(float var);
 	cocos2d::_ccColor4F getEndColorVar();
 	bool getRotationIsDir();
@@ -7618,8 +7383,6 @@ public:
 	Q_INVOKABLE void setDisplayFrame(cocos2d::CCSpriteFrame* spriteFrame);
 	Q_INVOKABLE void initTexCoordsWithRect(const cocos2d::CCRect& rect);
 	Q_INVOKABLE void setTextureWithRect(cocos2d::CCTexture2D* texture, const cocos2d::CCRect& rect);
-	Q_INVOKABLE void initIndices();
-	Q_INVOKABLE void listenBackToForeground(cocos2d::CCObject* obj);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithTotalParticles(QScriptContext *context, QScriptEngine* engine);
 };
@@ -7950,17 +7713,15 @@ public:
 	Q_PROPERTY(bool popupNotify READ isPopupNotify WRITE setPopupNotify)
 	bool isPopupNotify();
 	Q_INVOKABLE void removeSearchPath(const QByteArray& path);
-	Q_INVOKABLE QByteArray fullPathForFilename(const QByteArray& pszFileName);
+	Q_INVOKABLE void purgeCachedEntries();
 	Q_INVOKABLE QByteArray fullPathFromRelativeFile(const QByteArray& pszFilename, const QByteArray& pszRelativeFile);
-	Q_INVOKABLE QByteArray getFileData(const QByteArray& pszFileName, const QByteArray& pszMode, unsigned long* pSize);
 	void setSearchPaths(const std::vector<std::string>& searchPaths);
 	Q_INVOKABLE void setFilenameLookupDictionary(cocos2d::CCDictionary* pFilenameLookupDict);
 	Q_INVOKABLE void addSearchResolutionsOrder(const QByteArray& order);
-	Q_INVOKABLE QByteArray getFileDataFromZip(const QByteArray& pszZipFilePath, const QByteArray& pszFileName, unsigned long* pSize);
 	Q_INVOKABLE long getClassTypeInfo();
 	Q_INVOKABLE void removeAllPaths();
 	void setSearchResolutionsOrder(const std::vector<std::string>& searchResolutionsOrder);
-	Q_INVOKABLE void purgeCachedEntries();
+	Q_INVOKABLE QByteArray fullPathForFilename(const QByteArray& pszFileName);
 	Q_INVOKABLE bool isAbsolutePath(const QByteArray& strPath);
 	Q_INVOKABLE void addSearchPath(const QByteArray& path);
 	Q_INVOKABLE void loadFilenameLookupDictionaryFromFile(const QByteArray& filename);
@@ -8008,7 +7769,6 @@ public:
 	Q_INVOKABLE bool initWithImageFile(const QByteArray& strPath, int imageType);
 	Q_INVOKABLE unsigned short getWidth();
 	Q_INVOKABLE int getBitsPerComponent();
-	Q_INVOKABLE QByteArray getData();
 };
 
 } // end of cocos2d
@@ -8751,92 +8511,6 @@ Q_DECLARE_METATYPE(cocos2d::ccTouchHandlerHelperData *)
 Q_DECLARE_METATYPE(const cocos2d::ccTouchHandlerHelperData *)
 
 namespace cocos2d {
-class QtScriptCCTouchHandler : public QtScriptCCObject
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptCCTouchHandler(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptCCTouchHandler(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(int priority READ getPriority WRITE setPriority)
-	Q_PROPERTY(cocos2d::CCTouchDelegate* delegate READ getDelegate WRITE setDelegate)
-	cocos2d::CCTouchDelegate* getDelegate();
-	Q_INVOKABLE bool initWithDelegate(cocos2d::CCTouchDelegate* pDelegate, int nPriority);
-	int getPriority();
-	void setPriority(int nPriority);
-	Q_INVOKABLE int getEnabledSelectors();
-	void setDelegate(cocos2d::CCTouchDelegate* pDelegate);
-	Q_INVOKABLE void setEnalbedSelectors(int nValue);
-	static QScriptValue handlerWithDelegate(QScriptContext *context, QScriptEngine* engine);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::CCTouchHandler *)
-Q_DECLARE_METATYPE(const cocos2d::CCTouchHandler *)
-
-namespace cocos2d {
-class QtScriptCCStandardTouchHandler : public QtScriptCCTouchHandler
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptCCStandardTouchHandler(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptCCStandardTouchHandler(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	static QScriptValue handlerWithDelegate(QScriptContext *context, QScriptEngine* engine);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::CCStandardTouchHandler *)
-Q_DECLARE_METATYPE(const cocos2d::CCStandardTouchHandler *)
-
-namespace cocos2d {
-class QtScriptCCTargetedTouchHandler : public QtScriptCCTouchHandler
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptCCTargetedTouchHandler(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptCCTargetedTouchHandler(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(bool swallowsTouches READ isSwallowsTouches WRITE setSwallowsTouches)
-	bool isSwallowsTouches();
-	Q_INVOKABLE cocos2d::CCSet* getClaimedTouches();
-	void setSwallowsTouches(bool bSwallowsTouches);
-	Q_INVOKABLE bool initWithDelegate(cocos2d::CCTouchDelegate* pDelegate, int nPriority, bool bSwallow);
-	static QScriptValue handlerWithDelegate(QScriptContext *context, QScriptEngine* engine);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::CCTargetedTouchHandler *)
-Q_DECLARE_METATYPE(const cocos2d::CCTargetedTouchHandler *)
-
-namespace cocos2d {
 class QtScriptCCTimer : public QtScriptCCObject
 {
 	Q_OBJECT
@@ -8880,22 +8554,12 @@ public:
 	explicit QtScriptCCScheduler(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(float timeScale READ getTimeScale WRITE setTimeScale)
-	Q_INVOKABLE cocos2d::CCSet* pauseAllTargets();
-	void setTimeScale(float fTimeScale);
 	Q_INVOKABLE void unscheduleUpdateForTarget(const cocos2d::CCObject* pTarget);
 	Q_INVOKABLE void scheduleUpdateForTarget(cocos2d::CCObject* pTarget, int nPriority, bool bPaused);
 	Q_INVOKABLE unsigned schedule(const QScriptValue& arg0, float arg1, bool arg2);
-	Q_INVOKABLE void unscheduleAllWithMinPriority(int nMinPriority);
 	Q_INVOKABLE bool isTargetPaused(cocos2d::CCObject* pTarget);
-	Q_INVOKABLE void resumeTarget(cocos2d::CCObject* pTarget);
 	Q_INVOKABLE void unscheduleScriptEntry(unsigned int uScheduleScriptEntryID);
-	Q_INVOKABLE void unscheduleAll();
-	Q_INVOKABLE void resumeTargets(cocos2d::CCSet* targetsToResume);
-	Q_INVOKABLE void unscheduleAllForTarget(cocos2d::CCObject* pTarget);
-	Q_INVOKABLE void pauseTarget(cocos2d::CCObject* pTarget);
-	Q_INVOKABLE cocos2d::CCSet* pauseAllTargetsWithMinPriority(int nMinPriority);
-	float getTimeScale();
+	Q_INVOKABLE float getTimeScale();
 };
 
 } // end of cocos2d
@@ -8923,8 +8587,6 @@ public:
 	Q_PROPERTY(QByteArray name READ getName WRITE setName)
 	Q_PROPERTY(cocos2d::CCNode* owner READ getOwner WRITE setOwner)
 	void setEnabled(bool b);
-	Q_INVOKABLE void onEnter();
-	Q_INVOKABLE void onExit();
 	void setName(const QByteArray& pName);
 	bool isEnabled();
 	cocos2d::CCNode* getOwner();
