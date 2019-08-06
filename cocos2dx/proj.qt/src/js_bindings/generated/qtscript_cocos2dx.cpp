@@ -21331,22 +21331,53 @@ void QtScriptCCTextureAtlas::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-void QtScriptCCTextureAtlas::setTexture(cocos2d::CCTexture2D* var)
+void QtScriptCCTextureAtlas::removeAllQuads()
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
 	if (__o)
 	{
-		__o->setTexture(var);
+		__o->removeAllQuads();
 	}
 }
 
-void QtScriptCCTextureAtlas::updateQuad(cocos2d::_ccV3F_C4B_T2F_Quad* quad, unsigned int index)
+bool QtScriptCCTextureAtlas::isDirty()
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
 	if (__o)
 	{
-		__o->updateQuad(quad, index);
+		return __o->isDirty();
 	}
+	return false;
+}
+
+unsigned int QtScriptCCTextureAtlas::getTotalQuads()
+{
+	auto __o = this->thiz<CCTextureAtlas *>();
+	if (__o)
+	{
+		return __o->getTotalQuads();
+	}
+	return static_cast<unsigned int>(0);
+}
+
+bool QtScriptCCTextureAtlas::initWithFile(const QByteArray& file, unsigned int capacity)
+{
+	auto __o = this->thiz<CCTextureAtlas *>();
+	if (__o)
+	{
+		return __o->initWithFile(file.data(), capacity);
+	}
+	return false;
+}
+
+QByteArray QtScriptCCTextureAtlas::description()
+{
+	auto __o = this->thiz<CCTextureAtlas *>();
+	if (__o)
+	{
+		return QByteArray(__o->description());
+	}
+	return QByteArray();
 }
 
 cocos2d::CCTexture2D* QtScriptCCTextureAtlas::getTexture()
@@ -21359,13 +21390,14 @@ cocos2d::CCTexture2D* QtScriptCCTextureAtlas::getTexture()
 	return nullptr;
 }
 
-void QtScriptCCTextureAtlas::setQuads(cocos2d::_ccV3F_C4B_T2F_Quad* var)
+bool QtScriptCCTextureAtlas::resizeCapacity(unsigned int n)
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
 	if (__o)
 	{
-		__o->setQuads(var);
+		return __o->resizeCapacity(n);
 	}
+	return false;
 }
 
 void QtScriptCCTextureAtlas::moveQuadsFromIndex(unsigned int index, unsigned int newIndex)
@@ -21386,73 +21418,6 @@ void QtScriptCCTextureAtlas::moveQuadsFromIndex(unsigned int oldIndex, unsigned 
 	}
 }
 
-unsigned int QtScriptCCTextureAtlas::getTotalQuads()
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		return __o->getTotalQuads();
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScriptCCTextureAtlas::drawQuads()
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		__o->drawQuads();
-	}
-}
-
-void QtScriptCCTextureAtlas::fillWithEmptyQuadsFromIndex(unsigned int index, unsigned int amount)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		__o->fillWithEmptyQuadsFromIndex(index, amount);
-	}
-}
-
-unsigned int QtScriptCCTextureAtlas::getCapacity()
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		return __o->getCapacity();
-	}
-	return static_cast<unsigned int>(0);
-}
-
-void QtScriptCCTextureAtlas::listenBackToForeground(cocos2d::CCObject* obj)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		__o->listenBackToForeground(obj);
-	}
-}
-
-bool QtScriptCCTextureAtlas::initWithTexture(cocos2d::CCTexture2D* texture, unsigned int capacity)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		return __o->initWithTexture(texture, capacity);
-	}
-	return false;
-}
-
-QByteArray QtScriptCCTextureAtlas::description()
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		return QByteArray(__o->description());
-	}
-	return QByteArray();
-}
-
 void QtScriptCCTextureAtlas::removeQuadsAtIndex(unsigned int index, unsigned int amount)
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
@@ -21471,21 +21436,40 @@ void QtScriptCCTextureAtlas::insertQuad(cocos2d::_ccV3F_C4B_T2F_Quad* quad, unsi
 	}
 }
 
-void QtScriptCCTextureAtlas::drawNumberOfQuads(unsigned int n)
+void QtScriptCCTextureAtlas::fillWithEmptyQuadsFromIndex(unsigned int index, unsigned int amount)
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
 	if (__o)
 	{
-		__o->drawNumberOfQuads(n);
+		__o->fillWithEmptyQuadsFromIndex(index, amount);
 	}
 }
 
-void QtScriptCCTextureAtlas::drawNumberOfQuads(unsigned int n, unsigned int start)
+void QtScriptCCTextureAtlas::setTexture(cocos2d::CCTexture2D* var)
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
 	if (__o)
 	{
-		__o->drawNumberOfQuads(n, start);
+		__o->setTexture(var);
+	}
+}
+
+unsigned int QtScriptCCTextureAtlas::getCapacity()
+{
+	auto __o = this->thiz<CCTextureAtlas *>();
+	if (__o)
+	{
+		return __o->getCapacity();
+	}
+	return static_cast<unsigned int>(0);
+}
+
+void QtScriptCCTextureAtlas::insertQuadFromIndex(unsigned int fromIndex, unsigned int newIndex)
+{
+	auto __o = this->thiz<CCTextureAtlas *>();
+	if (__o)
+	{
+		__o->insertQuadFromIndex(fromIndex, newIndex);
 	}
 }
 
@@ -21498,79 +21482,22 @@ void QtScriptCCTextureAtlas::setDirty(bool bDirty)
 	}
 }
 
-bool QtScriptCCTextureAtlas::isDirty()
+bool QtScriptCCTextureAtlas::initWithTexture(cocos2d::CCTexture2D* texture, unsigned int capacity)
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
 	if (__o)
 	{
-		return __o->isDirty();
+		return __o->initWithTexture(texture, capacity);
 	}
 	return false;
 }
 
-void QtScriptCCTextureAtlas::removeAllQuads()
+void QtScriptCCTextureAtlas::updateQuad(cocos2d::_ccV3F_C4B_T2F_Quad* quad, unsigned int index)
 {
 	auto __o = this->thiz<CCTextureAtlas *>();
 	if (__o)
 	{
-		__o->removeAllQuads();
-	}
-}
-
-bool QtScriptCCTextureAtlas::initWithFile(const QByteArray& file, unsigned int capacity)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		return __o->initWithFile(file.data(), capacity);
-	}
-	return false;
-}
-
-cocos2d::_ccV3F_C4B_T2F_Quad* QtScriptCCTextureAtlas::getQuads()
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		return __o->getQuads();
-	}
-	return nullptr;
-}
-
-bool QtScriptCCTextureAtlas::resizeCapacity(unsigned int n)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		return __o->resizeCapacity(n);
-	}
-	return false;
-}
-
-void QtScriptCCTextureAtlas::increaseTotalQuadsWith(unsigned int amount)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		__o->increaseTotalQuadsWith(amount);
-	}
-}
-
-void QtScriptCCTextureAtlas::insertQuads(cocos2d::_ccV3F_C4B_T2F_Quad* quads, unsigned int index, unsigned int amount)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		__o->insertQuads(quads, index, amount);
-	}
-}
-
-void QtScriptCCTextureAtlas::insertQuadFromIndex(unsigned int fromIndex, unsigned int newIndex)
-{
-	auto __o = this->thiz<CCTextureAtlas *>();
-	if (__o)
-	{
-		__o->insertQuadFromIndex(fromIndex, newIndex);
+		__o->updateQuad(quad, index);
 	}
 }
 
@@ -21580,6 +21507,15 @@ void QtScriptCCTextureAtlas::removeQuadAtIndex(unsigned int index)
 	if (__o)
 	{
 		__o->removeQuadAtIndex(index);
+	}
+}
+
+void QtScriptCCTextureAtlas::increaseTotalQuadsWith(unsigned int amount)
+{
+	auto __o = this->thiz<CCTextureAtlas *>();
+	if (__o)
+	{
+		__o->increaseTotalQuadsWith(amount);
 	}
 }
 

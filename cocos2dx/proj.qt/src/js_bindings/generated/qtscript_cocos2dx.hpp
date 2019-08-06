@@ -5376,35 +5376,27 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_PROPERTY(cocos2d::CCTexture2D* texture READ getTexture WRITE setTexture)
-	Q_PROPERTY(cocos2d::_ccV3F_C4B_T2F_Quad* quads READ getQuads WRITE setQuads)
 	Q_PROPERTY(bool dirty READ isDirty WRITE setDirty)
-	void setTexture(cocos2d::CCTexture2D* var);
-	Q_INVOKABLE void updateQuad(cocos2d::_ccV3F_C4B_T2F_Quad* quad, unsigned int index);
+	Q_INVOKABLE void removeAllQuads();
+	bool isDirty();
+	Q_INVOKABLE unsigned int getTotalQuads();
+	Q_INVOKABLE bool initWithFile(const QByteArray& file, unsigned int capacity);
+	Q_INVOKABLE QByteArray description();
 	cocos2d::CCTexture2D* getTexture();
-	void setQuads(cocos2d::_ccV3F_C4B_T2F_Quad* var);
+	Q_INVOKABLE bool resizeCapacity(unsigned int n);
 	Q_INVOKABLE void moveQuadsFromIndex(unsigned int index, unsigned int newIndex);
 	Q_INVOKABLE void moveQuadsFromIndex(unsigned int oldIndex, unsigned int amount, unsigned int newIndex);
-	Q_INVOKABLE unsigned int getTotalQuads();
-	Q_INVOKABLE void drawQuads();
-	Q_INVOKABLE void fillWithEmptyQuadsFromIndex(unsigned int index, unsigned int amount);
-	Q_INVOKABLE unsigned int getCapacity();
-	Q_INVOKABLE void listenBackToForeground(cocos2d::CCObject* obj);
-	Q_INVOKABLE bool initWithTexture(cocos2d::CCTexture2D* texture, unsigned int capacity);
-	Q_INVOKABLE QByteArray description();
 	Q_INVOKABLE void removeQuadsAtIndex(unsigned int index, unsigned int amount);
 	Q_INVOKABLE void insertQuad(cocos2d::_ccV3F_C4B_T2F_Quad* quad, unsigned int index);
-	Q_INVOKABLE void drawNumberOfQuads(unsigned int n);
-	Q_INVOKABLE void drawNumberOfQuads(unsigned int n, unsigned int start);
-	void setDirty(bool bDirty);
-	bool isDirty();
-	Q_INVOKABLE void removeAllQuads();
-	Q_INVOKABLE bool initWithFile(const QByteArray& file, unsigned int capacity);
-	cocos2d::_ccV3F_C4B_T2F_Quad* getQuads();
-	Q_INVOKABLE bool resizeCapacity(unsigned int n);
-	Q_INVOKABLE void increaseTotalQuadsWith(unsigned int amount);
-	Q_INVOKABLE void insertQuads(cocos2d::_ccV3F_C4B_T2F_Quad* quads, unsigned int index, unsigned int amount);
+	Q_INVOKABLE void fillWithEmptyQuadsFromIndex(unsigned int index, unsigned int amount);
+	void setTexture(cocos2d::CCTexture2D* var);
+	Q_INVOKABLE unsigned int getCapacity();
 	Q_INVOKABLE void insertQuadFromIndex(unsigned int fromIndex, unsigned int newIndex);
+	void setDirty(bool bDirty);
+	Q_INVOKABLE bool initWithTexture(cocos2d::CCTexture2D* texture, unsigned int capacity);
+	Q_INVOKABLE void updateQuad(cocos2d::_ccV3F_C4B_T2F_Quad* quad, unsigned int index);
 	Q_INVOKABLE void removeQuadAtIndex(unsigned int index);
+	Q_INVOKABLE void increaseTotalQuadsWith(unsigned int amount);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithTexture(QScriptContext *context, QScriptEngine* engine);
 };
