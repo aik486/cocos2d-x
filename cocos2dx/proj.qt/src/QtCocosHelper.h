@@ -9,10 +9,15 @@
 #include <QPointF>
 #include <QSizeF>
 #include <QRectF>
+#include <QPolygonF>
 
 namespace cocos2d
 {
 class CCNode;
+using CCShape = QVector<CCPoint>;
+
+QPolygonF ccShapeToQPolygonF(const CCShape &shape);
+CCShape qPolygonFToCCShape(const QPolygonF &poly);
 
 QColor ccColor3BToQColor(const ccColor3B &color);
 QColor ccColor4BToQColor(const ccColor4B &color);

@@ -188,34 +188,32 @@ QSizeF ccSizeToQSizeF(const CCSize &size)
 
 CCPoint qPointToCCPoint(const QPoint &point)
 {
-	return CCPoint(float(point.x()), float(point.y()));
+	return CCPointMake(point.x(), point.y());
 }
 
 CCPoint qPointFToCCPoint(const QPointF &point)
 {
-	return CCPoint(float(point.x()), float(point.y()));
+	return CCPointMake(point.x(), point.y());
 }
 
 CCSize qSizeToCCSize(const QSize &size)
 {
-	return CCSize(float(size.width()), float(size.height()));
+	return CCSizeMake(size.width(), size.height());
 }
 
 CCSize qSizeFToCCSize(const QSizeF &size)
 {
-	return CCSize(float(size.width()), float(size.height()));
+	return CCSizeMake(size.width(), size.height());
 }
 
 CCRect qRectToCCRect(const QRect &rect)
 {
-	return CCRect(float(rect.x()), float(rect.y()), float(rect.width()),
-		float(rect.height()));
+	return CCRectMake(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 CCRect qRectFToCCRect(const QRectF &rect)
 {
-	return CCRect(float(rect.x()), float(rect.y()), float(rect.width()),
-		float(rect.height()));
+	return CCRectMake(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 QRect ccRectToQRect(const CCRect &rect)
@@ -228,5 +226,27 @@ QRectF ccRectToQRectF(const CCRect &rect)
 {
 	return QRectF(
 		rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
+QPolygonF ccShapeToQPolygonF(const CCShape &shape)
+{
+	int size = shape.size();
+	QPolygonF result(size);
+	for (int i = 0; i < size; i++)
+	{
+		result[i] = ccPointToQPointF(shape.at(i));
+	}
+	return result;
+}
+
+CCShape qPolygonFToCCShape(const QPolygonF &poly)
+{
+	int size = poly.size();
+	CCShape result(size);
+	for (int i = 0; i < size; i++)
+	{
+		result[i] = qPointFToCCPoint(poly.at(i));
+	}
+	return result;
 }
 }

@@ -9,11 +9,21 @@
 #include "textures/CCTextureAtlas.h"
 #include "cocos_warnings_pop.h"
 
+#include <QPolygonF>
+
 namespace cocos2d
 {
 enum
 {
 	RECT_VERTEX_COUNT = 4
+};
+
+struct ShapeProtocol
+{
+	virtual ~ShapeProtocol() = default;
+
+	virtual bool hasShape() const = 0;
+	virtual QPolygonF shape() const = 0;
 };
 
 struct CCAdditiveColorProtocol
