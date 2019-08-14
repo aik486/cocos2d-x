@@ -947,15 +947,15 @@ void CCDrawNodeRGBA::updateDisplayedOpacity(GLubyte parentOpacity)
 void CCDrawNodeRGBA::draw()
 {
 	auto savedBuffer = m_pBuffer;
-	auto savedCapacity = m_uBufferCapacity;
+	auto savedCapacity = m_nBufferCapacity;
 	if (mDisplayedColor.r != 255 || mDisplayedColor.g != 255 ||
 		mDisplayedColor.b != 255 || mDisplayedOpacity != 255)
 	{
 		if (m_bDirty)
 		{
 			CC_ASSERT(m_nBufferCount >= 0);
-			m_uBufferCapacity = unsigned(std::max(1, m_nBufferCount));
-			mDisplayedBuffer.reserve(m_uBufferCapacity);
+			m_nBufferCapacity = std::max(1, m_nBufferCount);
+			mDisplayedBuffer.reserve(m_nBufferCapacity);
 			mDisplayedBuffer.resize(m_nBufferCount);
 			memcpy(mDisplayedBuffer.data(), savedBuffer,
 				m_nBufferCount * sizeof(ccV2F_C4B_T2F));
@@ -978,6 +978,6 @@ void CCDrawNodeRGBA::draw()
 
 	CCDrawNode::draw();
 	m_pBuffer = savedBuffer;
-	m_uBufferCapacity = savedCapacity;
+	m_nBufferCapacity = savedCapacity;
 }
 }

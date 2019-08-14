@@ -4939,14 +4939,18 @@ public:
 
 	Q_PROPERTY(cocos2d::_ccBlendFunc blendFunc READ getBlendFunc WRITE setBlendFunc)
 	cocos2d::_ccBlendFunc getBlendFunc();
-	void setBlendFunc(const cocos2d::_ccBlendFunc& blendFunc);
+	Q_INVOKABLE void drawPolygon(const QScriptValue& arg0, const cocos2d::_ccColor4B& arg1, float arg2, const cocos2d::_ccColor4B& arg3);
+	Q_INVOKABLE void drawPolygon(const QScriptValue& arg0, float arg1, float arg2, const cocos2d::_ccColor4B& arg3, const cocos2d::_ccColor4B& arg4);
 	Q_INVOKABLE void clear();
-	Q_INVOKABLE void drawPolygon(const QScriptValue& arg0, const cocos2d::_ccColor4F& arg1, float arg2, const cocos2d::_ccColor4F& arg3);
-	Q_INVOKABLE void drawPolygon(const QScriptValue& arg0, float arg1, float arg2, const cocos2d::_ccColor4F& arg3, const cocos2d::_ccColor4F& arg4);
-	Q_INVOKABLE void drawDot(const cocos2d::CCPoint& pos, float radius, const cocos2d::_ccColor4F& color);
-	Q_INVOKABLE void drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float radius, const cocos2d::_ccColor4F& color);
-	Q_INVOKABLE void drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float width, float height, const cocos2d::_ccColor4F& color);
+	void setBlendFunc(const cocos2d::_ccBlendFunc& blendFunc);
+	Q_INVOKABLE int getCapacity();
+	Q_INVOKABLE bool isEmpty();
+	Q_INVOKABLE void drawDot(const cocos2d::CCPoint& pos, float radius, const cocos2d::_ccColor4B& color);
+	Q_INVOKABLE void drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float radius, const cocos2d::_ccColor4B& color);
+	Q_INVOKABLE void drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float width, float height, const cocos2d::_ccColor4B& color);
+	Q_INVOKABLE void shrink();
 	Q_INVOKABLE void listenBackToForeground(cocos2d::CCObject* obj);
+	Q_INVOKABLE void reserve(int count);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 

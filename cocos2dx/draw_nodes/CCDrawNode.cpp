@@ -102,7 +102,7 @@ static inline ccTex2F __t(const ccVertex2F &v)
 CCDrawNode::CCDrawNode()
 : m_uVao(0)
 , m_uVbo(0)
-, m_uBufferCapacity(0)
+, m_nBufferCapacity(0)
 , m_nBufferCount(0)
 , m_pBuffer(NULL)
 , m_bDirty(false)
@@ -147,11 +147,7 @@ CCDrawNode* CCDrawNode::create()
 
 void CCDrawNode::ensureCapacity(unsigned int count)
 {
-    if(m_nBufferCount + count > m_uBufferCapacity)
-    {
-        m_uBufferCapacity += MAX(m_uBufferCapacity, count);
-        m_pBuffer = (ccV2F_C4B_T2F*)realloc(m_pBuffer, m_uBufferCapacity*sizeof(ccV2F_C4B_T2F));
-    }
+    reserve(m_nBufferCount + count);
 }
 
 bool CCDrawNode::init()
@@ -161,7 +157,7 @@ bool CCDrawNode::init()
 
     setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionLengthTexureColor));
 
-    ensureCapacity(4);
+    reserve(4);
 
 #if CC_TEXTURE_ATLAS_USE_VAO
     glGenVertexArrays(1, &m_uVao);
@@ -170,7 +166,7 @@ bool CCDrawNode::init()
 
     glGenBuffers(1, &m_uVbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_uVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(ccV2F_C4B_T2F)* m_uBufferCapacity, m_pBuffer, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(ccV2F_C4B_T2F) * m_nBufferCapacity, m_pBuffer, GL_STREAM_DRAW);
 
     glEnableVertexAttribArray(kCCVertexAttrib_Position);
     glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, sizeof(ccV2F_C4B_T2F), (GLvoid *)offsetof(ccV2F_C4B_T2F, vertices));
@@ -207,9 +203,12 @@ void CCDrawNode::render()
     if (m_bDirty)
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_uVbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(ccV2F_C4B_T2F)*m_uBufferCapacity, m_pBuffer, GL_STREAM_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(ccV2F_C4B_T2F)*m_nBufferCount, m_pBuffer, GL_STREAM_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         m_bDirty = false;
     }
+    if (m_nBufferCount == 0)
+        return;
 #if CC_TEXTURE_ATLAS_USE_VAO
     ccGLBindVAO(m_uVao);
 #else
@@ -517,8 +516,20 @@ void CCDrawNode::drawPolygon(const CCPoint *vert, unsigned int count, float bord
 
 void CCDrawNode::clear()
 {
+    if (m_nBufferCount == 0)
+        return;
+    
     m_nBufferCount = 0;
     m_bDirty = true;
+}
+
+void CCDrawNode::shrink()
+{
+    if (m_nBufferCapacity == m_nBufferCount)
+        return;
+    
+    m_nBufferCapacity = 0;
+    reserve(m_nBufferCount);
 }
 
 ccBlendFunc CCDrawNode::getBlendFunc() const
@@ -536,6 +547,15 @@ void CCDrawNode::setBlendFunc(const ccBlendFunc &blendFunc)
 void CCDrawNode::listenBackToForeground(CCObject *)
 {
     init();
+}
+
+void CCDrawNode::reserve(int count)
+{
+    if (count > m_nBufferCapacity)
+    {
+        m_nBufferCapacity = count;
+        m_pBuffer = (ccV2F_C4B_T2F*)realloc(m_pBuffer, m_nBufferCapacity*sizeof(ccV2F_C4B_T2F));
+    }
 }
 
 NS_CC_END

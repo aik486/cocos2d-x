@@ -19124,12 +19124,21 @@ cocos2d::_ccBlendFunc QtScriptCCDrawNode::getBlendFunc()
 	return cocos2d::_ccBlendFunc();
 }
 
-void QtScriptCCDrawNode::setBlendFunc(const cocos2d::_ccBlendFunc& blendFunc)
+void QtScriptCCDrawNode::drawPolygon(const QScriptValue& arg0, const cocos2d::_ccColor4B& arg1, float arg2, const cocos2d::_ccColor4B& arg3)
 {
 	auto __o = this->thiz<CCDrawNode *>();
 	if (__o)
 	{
-		__o->setBlendFunc(blendFunc);
+		__o->drawPolygon(qscriptvalue_cast<CCPointArray*>(arg0)->getControlPoints()->data(), qscriptvalue_cast<CCPointArray*>(arg0)->count(), arg1, arg2, arg3);
+	}
+}
+
+void QtScriptCCDrawNode::drawPolygon(const QScriptValue& arg0, float arg1, float arg2, const cocos2d::_ccColor4B& arg3, const cocos2d::_ccColor4B& arg4)
+{
+	auto __o = this->thiz<CCDrawNode *>();
+	if (__o)
+	{
+		__o->drawPolygon(qscriptvalue_cast<CCPointArray*>(arg0)->getControlPoints()->data(), qscriptvalue_cast<CCPointArray*>(arg0)->count(), arg1, arg2, arg3, arg4);
 	}
 }
 
@@ -19142,25 +19151,36 @@ void QtScriptCCDrawNode::clear()
 	}
 }
 
-void QtScriptCCDrawNode::drawPolygon(const QScriptValue& arg0, const cocos2d::_ccColor4F& arg1, float arg2, const cocos2d::_ccColor4F& arg3)
+void QtScriptCCDrawNode::setBlendFunc(const cocos2d::_ccBlendFunc& blendFunc)
 {
 	auto __o = this->thiz<CCDrawNode *>();
 	if (__o)
 	{
-		__o->drawPolygon(qscriptvalue_cast<CCPointArray*>(arg0)->getControlPoints()->data(), qscriptvalue_cast<CCPointArray*>(arg0)->count(), arg1, arg2, arg3);
+		__o->setBlendFunc(blendFunc);
 	}
 }
 
-void QtScriptCCDrawNode::drawPolygon(const QScriptValue& arg0, float arg1, float arg2, const cocos2d::_ccColor4F& arg3, const cocos2d::_ccColor4F& arg4)
+int QtScriptCCDrawNode::getCapacity()
 {
 	auto __o = this->thiz<CCDrawNode *>();
 	if (__o)
 	{
-		__o->drawPolygon(qscriptvalue_cast<CCPointArray*>(arg0)->getControlPoints()->data(), qscriptvalue_cast<CCPointArray*>(arg0)->count(), arg1, arg2, arg3, arg4);
+		return __o->getCapacity();
 	}
+	return 0;
 }
 
-void QtScriptCCDrawNode::drawDot(const cocos2d::CCPoint& pos, float radius, const cocos2d::_ccColor4F& color)
+bool QtScriptCCDrawNode::isEmpty()
+{
+	auto __o = this->thiz<CCDrawNode *>();
+	if (__o)
+	{
+		return __o->isEmpty();
+	}
+	return false;
+}
+
+void QtScriptCCDrawNode::drawDot(const cocos2d::CCPoint& pos, float radius, const cocos2d::_ccColor4B& color)
 {
 	auto __o = this->thiz<CCDrawNode *>();
 	if (__o)
@@ -19169,7 +19189,7 @@ void QtScriptCCDrawNode::drawDot(const cocos2d::CCPoint& pos, float radius, cons
 	}
 }
 
-void QtScriptCCDrawNode::drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float radius, const cocos2d::_ccColor4F& color)
+void QtScriptCCDrawNode::drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float radius, const cocos2d::_ccColor4B& color)
 {
 	auto __o = this->thiz<CCDrawNode *>();
 	if (__o)
@@ -19178,12 +19198,21 @@ void QtScriptCCDrawNode::drawSegment(const cocos2d::CCPoint& from, const cocos2d
 	}
 }
 
-void QtScriptCCDrawNode::drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float width, float height, const cocos2d::_ccColor4F& color)
+void QtScriptCCDrawNode::drawSegment(const cocos2d::CCPoint& from, const cocos2d::CCPoint& to, float width, float height, const cocos2d::_ccColor4B& color)
 {
 	auto __o = this->thiz<CCDrawNode *>();
 	if (__o)
 	{
 		__o->drawSegment(from, to, width, height, color);
+	}
+}
+
+void QtScriptCCDrawNode::shrink()
+{
+	auto __o = this->thiz<CCDrawNode *>();
+	if (__o)
+	{
+		__o->shrink();
 	}
 }
 
@@ -19193,6 +19222,15 @@ void QtScriptCCDrawNode::listenBackToForeground(cocos2d::CCObject* obj)
 	if (__o)
 	{
 		__o->listenBackToForeground(obj);
+	}
+}
+
+void QtScriptCCDrawNode::reserve(int count)
+{
+	auto __o = this->thiz<CCDrawNode *>();
+	if (__o)
+	{
+		__o->reserve(count);
 	}
 }
 
