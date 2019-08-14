@@ -282,6 +282,30 @@ void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float width
 
 void CCDrawNode::drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4B &color)
 {
+	if (width != height)
+	{		
+		bool horizontal;
+		if (from.y == to.y)
+		{
+			horizontal = true;
+		} else
+		{
+			auto p3 = from - to;
+			int angle = int(kmRadiansToDegrees(p3.getAngle()));
+			if (angle < 0)
+				angle = 360 - (-angle % 360);
+			else if (angle > 360)
+				angle = angle % 360;
+		
+			horizontal = angle <= 45 || angle >= 360 - 45 ||
+				(angle >= 180 - 45 && angle <= 180 + 45);
+		}
+		if(!horizontal)
+		{
+			std::swap(width, height);
+		}
+	}
+    
     unsigned int vertex_count = 6*3;
     ensureCapacity(vertex_count);
 
@@ -490,23 +514,7 @@ void CCDrawNode::drawPolygon(const CCPoint *vert, unsigned int count, float bord
 			if (next == count)
 				next = 0;
 
-			auto &p1 = vert[i];
-			auto &p2 = vert[next];
-
-			auto p3 = p2 - p1;
-
-			int angle = int(kmRadiansToDegrees(p3.getAngle()));
-			if (angle < 0)
-				angle = 360 - (-angle % 360);
-			else if (angle > 360)
-				angle = angle % 360;
-
-			bool horizontal = angle <= 45 || angle >= 360 - 45 ||
-				(angle >= 180 - 45 && angle <= 180 + 45);
-
-			float w = horizontal ? borderWidth : borderHeight;
-			float h = horizontal ? borderHeight : borderWidth;
-			drawSegment(p1, p2, w, h, borderColor);
+			drawSegment(vert[i], vert[next], borderWidth, borderHeight, borderColor);
 		}
 	} else
 	{
