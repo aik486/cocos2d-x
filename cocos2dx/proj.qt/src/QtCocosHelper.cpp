@@ -1,9 +1,6 @@
 ﻿#include "QtCocosHelper.h"
 
-#include "cocos_warnings_off.h"
-#include "base_nodes/CCNode.h"
-#include "platform/platform.h"
-#include "cocos_warnings_pop.h"
+#include "QtCocosExtension.h"
 
 namespace cocos2d
 {
@@ -248,5 +245,37 @@ CCShape qPolygonFToCCShape(const QPolygonF &poly)
 		result[i] = qPointFToCCPoint(poly.at(i));
 	}
 	return result;
+}
+
+void transformShape(QPolygonF &poly, const CCAffineTransform &t)
+{
+	for (auto &p : poly)
+	{
+		p = QPointF(qreal(double(t.a * p.x()) + double(t.c * p.y()) + t.tx),
+			qreal(double(t.b * p.x()) + double(t.d * p.y()) + t.ty));
+	}
+}
+
+void transformShape(CCShape &shape, const CCAffineTransform &t)
+{
+	for (auto &p : shape)
+	{
+		p = CCPointApplyAffineTransform(p, t);
+	}
+}
+
+QPolygonF shapeFromNode(CCNode *node)
+{
+	if (!node)
+		return QPolygonF();
+
+	auto shapeNode = dynamic_cast<ShapeProtocol *>(node);
+	if (shapeNode)
+	{
+		return shapeNode->shape();
+	}
+
+	auto &size = node->getContentSize();
+	return QPolygonF(QRectF(0.0, 0.0, size.width, size.height));
 }
 }

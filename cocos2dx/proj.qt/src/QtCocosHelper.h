@@ -3,6 +3,7 @@
 #include "cocos_warnings_off.h"
 #include "include/ccTypes.h"
 #include "cocoa/CCGeometry.h"
+#include "cocoa/CCAffineTransform.h"
 #include "cocos_warnings_pop.h"
 
 #include <QColor>
@@ -16,8 +17,13 @@ namespace cocos2d
 class CCNode;
 using CCShape = QVector<CCPoint>;
 
+QPolygonF shapeFromNode(CCNode *node);
+
 QPolygonF ccShapeToQPolygonF(const CCShape &shape);
 CCShape qPolygonFToCCShape(const QPolygonF &poly);
+
+void transformShape(QPolygonF &poly, const CCAffineTransform &t);
+void transformShape(CCShape &shape, const CCAffineTransform &t);
 
 QColor ccColor3BToQColor(const ccColor3B &color);
 QColor ccColor4BToQColor(const ccColor4B &color);
