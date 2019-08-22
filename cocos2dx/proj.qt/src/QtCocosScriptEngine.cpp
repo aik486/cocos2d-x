@@ -15,25 +15,9 @@ using namespace cocos2d;
 static QtCocosScriptEngine *_instance = nullptr;
 
 const char *QtCocosScriptEngine::STRING_IDS[] = {
-	"cc", // CC
-	"Object", // OBJECT
-	"prototype", // PROTOTYPE
-	"backClicked", // BACK_CLICKED,
-	"menuClicked", // MENU_CLICKED,
-	"onTouchesBegan", // ON_TOUCHES_BEGIN,
-	"onTouchesEnded", // ON_TOUCHES_ENDED,
-	"onTouchesMoved", // ON_TOUCHES_MOVED,
-	"onTouchesCancelled", // ON_TOUCHES_CANCELLED,
-	"onTouchBegan", // ON_TOUCH_BEGIN,
-	"onTouchEnded", // ON_TOUCH_ENDED,
-	"onTouchMoved", // ON_TOUCH_MOVED,
-	"onTouchCancelled", // ON_TOUCH_CANCELLED,
-	"update", // UPDATE
-	"activate", // ACTIVATE
-	"onEnter", // ON_ENTER,
-	"onExit", // ON_EXIT,
-	"onEnterTransitionDidFinish", // ON_ENTER_TRANSITION_DID_FINISH,
-	"onExitTransitionDidStart", // ON_EXIT_TRANSITION_DID_START,
+	"cc",
+	"Object",
+	"prototype",
 };
 
 static QScriptValue stringVecToScriptValue(
@@ -258,7 +242,7 @@ QtCocosScriptEngine::~QtCocosScriptEngine()
 
 qint64 QtCocosScriptEngine::retainJSObject(const QScriptValue &v)
 {
-	if (!v.isObject())
+	if (!v.isObject() && !v.isFunction())
 		return 0;
 
 	auto result = v.objectId();
@@ -376,32 +360,24 @@ int QtCocosScriptEngine::executeGlobalFunction(const char *functionName)
 
 int QtCocosScriptEngine::executeNodeEvent(CCNode *pNode, int nAction)
 {
-	int funcId = getNodeEventFuncId(nAction);
-	if (funcId < 0)
+	auto func = getRegisteredJSObject(pNode->getScriptHandler());
+	if (!func.isFunction())
 		return 0;
 
-	auto object = getRegisteredJSObject(pNode->getScriptHandler());
-	if (!object.isObject())
-		return 0;
-
-	executeScriptFunction(funcId, object);
+	executeEventHandler(func, mEngine->toScriptValue(pNode),
+		QScriptValueList() << QScriptValue(mEngine, nAction));
 	return 1;
 }
 
 int QtCocosScriptEngine::executeMenuItemEvent(CCMenuItem *pMenuItem)
 {
-	auto object = getRegisteredJSObject(pMenuItem->getScriptTapHandler());
-	if (object.isFunction())
+	auto func = getRegisteredJSObject(pMenuItem->getScriptTapHandler());
+	if (func.isFunction())
 	{
-		checkResult(object.call());
+		executeEventHandler(func, mEngine->toScriptValue(pMenuItem));
 		return 1;
 	}
-
-	if (!object.isObject())
-		return 0;
-
-	executeScriptFunction(ACTIVATE, object);
-	return 1;
+	return 0;
 }
 
 int QtCocosScriptEngine::executeNotificationEvent(
@@ -414,9 +390,9 @@ int QtCocosScriptEngine::executeNotificationEvent(
 	if (!func.isFunction())
 		return 0;
 
-	checkResult(func.call(QScriptValue(),
+	executeEventHandler(func, QScriptValue(),
 		QScriptValueList() << QScriptValue(
-			mEngine, QString::fromUtf8(pszName))));
+			mEngine, QString::fromUtf8(pszName)));
 
 	return 1;
 }
@@ -431,32 +407,26 @@ int QtCocosScriptEngine::executeCallFuncActionEvent(
 	if (!func.isFunction())
 		return 0;
 
-	auto object = mEngine->toScriptValue(pTarget);
-	if (!object.isObject())
-		return 0;
+	auto node = dynamic_cast<CCNode *>(pTarget);
+	auto object =
+		node ? mEngine->toScriptValue(node) : mEngine->toScriptValue(pTarget);
 
-	checkResult(func.call(object));
+	executeEventHandler(func, object);
 	return 1;
 }
 
 int QtCocosScriptEngine::executeSchedule(
 	int64_t nHandler, float dt, CCNode *node)
 {
-	QScriptValue object;
-	object = getRegisteredJSObject(nHandler);
-	QScriptValueList args;
-	args << QScriptValue(mEngine, dt);
-	if (object.isFunction())
+	QScriptValue func = getRegisteredJSObject(nHandler);
+	if (func.isFunction())
 	{
-		checkResult(object.call(mEngine->toScriptValue(node), args));
+		QScriptValueList args;
+		args << QScriptValue(mEngine, dt);
+		executeEventHandler(func, mEngine->toScriptValue(node), args);
 		return 1;
 	}
-	if (!object.isObject())
-		return 0;
-
-	executeScriptFunction(
-		UPDATE, object, QScriptValueList() << QScriptValue(mEngine, dt));
-	return 1;
+	return 0;
 }
 
 int QtCocosScriptEngine::executeLayerTouchesEvent(
@@ -467,12 +437,12 @@ int QtCocosScriptEngine::executeLayerTouchesEvent(
 	if (!handler)
 		return 0;
 
-	QScriptValue object = getRegisteredJSObject(handler->getHandler());
-	if (!object.isObject())
+	QScriptValue func = getRegisteredJSObject(handler->getHandler());
+	if (!func.isFunction())
 		return 0;
 
-	int funcId = getTouchesFuncId(eventType);
 	QScriptValueList args;
+	args << QScriptValue(mEngine, eventType);
 	auto array = mEngine->newArray(pTouches->count());
 	quint32 i = 0;
 	for (auto it = pTouches->begin(); it != pTouches->end(); ++it, ++i)
@@ -481,8 +451,9 @@ int QtCocosScriptEngine::executeLayerTouchesEvent(
 			i, mEngine->toScriptValue(reinterpret_cast<CCTouch *>(*it)));
 	}
 	args << array;
-	executeScriptFunction(funcId, object, args);
-	return 1;
+	auto result =
+		executeEventHandler(func, mEngine->toScriptValue(pLayer), args);
+	return result.isError() ? 0 : result.toBool();
 }
 
 int QtCocosScriptEngine::executeLayerTouchEvent(
@@ -493,14 +464,15 @@ int QtCocosScriptEngine::executeLayerTouchEvent(
 	if (!handler)
 		return 0;
 
-	QScriptValue object = getRegisteredJSObject(handler->getHandler());
-	if (!object.isObject())
+	QScriptValue func = getRegisteredJSObject(handler->getHandler());
+	if (!func.isFunction())
 		return 0;
 
-	int funcId = getTouchFuncId(eventType);
 	QScriptValueList args;
+	args << QScriptValue(mEngine, eventType);
 	args << mEngine->toScriptValue(pTouch);
-	auto result = executeScriptFunction(funcId, object, args);
+	auto result =
+		executeEventHandler(func, mEngine->toScriptValue(pLayer), args);
 	return result.isError() ? 0 : result.toBool();
 }
 
@@ -511,21 +483,15 @@ int QtCocosScriptEngine::executeLayerKeypadEvent(CCLayer *pLayer, int eventType)
 	if (!handler)
 		return 0;
 
-	QScriptValue object = getRegisteredJSObject(handler->getHandler());
-	if (!object.isObject())
+	QScriptValue func = getRegisteredJSObject(handler->getHandler());
+	if (!func.isFunction())
 		return 0;
 
-	QScriptValue callback;
-	switch (ccKeypadMSGType(eventType))
-	{
-		case kTypeBackClicked:
-			executeScriptFunction(BACK_CLICKED, object);
-			break;
-		case kTypeMenuClicked:
-			executeScriptFunction(MENU_CLICKED, object);
-			break;
-	}
-	return 1;
+	QScriptValueList args;
+	args << QScriptValue(mEngine, eventType);
+	auto result =
+		executeEventHandler(func, mEngine->toScriptValue(pLayer), args);
+	return result.isError() ? 0 : result.toBool();
 }
 
 int QtCocosScriptEngine::executeAccelerometerEvent(CCLayer *, CCAcceleration *)
@@ -584,69 +550,9 @@ QScriptValue QtCocosScriptEngine::propertyById(
 	return object.property(jsString(id));
 }
 
-int QtCocosScriptEngine::getNodeEventFuncId(int nAction)
+QScriptValue QtCocosScriptEngine::executeEventHandler(
+	QScriptValue func, const QScriptValue &object, const QScriptValueList &args)
 {
-	switch (nAction)
-	{
-		case kCCNodeOnEnter:
-			return ON_ENTER;
-
-		case kCCNodeOnExit:
-			return ON_EXIT;
-
-		case kCCNodeOnEnterTransitionDidFinish:
-			return ON_ENTER_TRANSITION_DID_FINISH;
-
-		case kCCNodeOnExitTransitionDidStart:
-			return ON_EXIT_TRANSITION_DID_START;
-	}
-
-	return -1;
-}
-
-int QtCocosScriptEngine::getTouchesFuncId(int eventType)
-{
-	switch (eventType)
-	{
-		case CCTOUCHBEGAN:
-			return ON_TOUCHES_BEGIN;
-
-		case CCTOUCHENDED:
-			return ON_TOUCHES_ENDED;
-
-		case CCTOUCHMOVED:
-			return ON_TOUCHES_MOVED;
-
-		case CCTOUCHCANCELLED:
-			return ON_TOUCHES_CANCELLED;
-	}
-	return -1;
-}
-
-int QtCocosScriptEngine::getTouchFuncId(int eventType)
-{
-	switch (eventType)
-	{
-		case CCTOUCHBEGAN:
-			return ON_TOUCH_BEGIN;
-		case CCTOUCHENDED:
-			return ON_TOUCH_ENDED;
-		case CCTOUCHMOVED:
-			return ON_TOUCH_MOVED;
-		case CCTOUCHCANCELLED:
-			return ON_TOUCH_CANCELLED;
-	}
-
-	return -1;
-}
-
-QScriptValue QtCocosScriptEngine::executeScriptFunction(
-	int funcId, const QScriptValue &object, const QScriptValueList &args)
-{
-	Q_ASSERT(funcId >= 0);
-	Q_ASSERT(funcId < STRING_ID_COUNT);
-	Q_ASSERT(object.isObject());
-
-	auto func = object.property(mStringIds[funcId]);
+	Q_ASSERT(func.isFunction());
 	return checkResult(func.call(object, args));
 }

@@ -25,22 +25,6 @@ public:
 		CC,
 		OBJECT,
 		PROTOTYPE,
-		BACK_CLICKED,
-		MENU_CLICKED,
-		ON_TOUCHES_BEGIN,
-		ON_TOUCHES_ENDED,
-		ON_TOUCHES_MOVED,
-		ON_TOUCHES_CANCELLED,
-		ON_TOUCH_BEGIN,
-		ON_TOUCH_ENDED,
-		ON_TOUCH_MOVED,
-		ON_TOUCH_CANCELLED,
-		ON_ENTER,
-		ON_EXIT,
-		ON_ENTER_TRANSITION_DID_FINISH,
-		ON_EXIT_TRANSITION_DID_START,
-		UPDATE,
-		ACTIVATE,
 
 		STRING_ID_COUNT
 	};
@@ -102,10 +86,8 @@ signals:
 	void log(const QScriptValue &value);
 
 private:
-	static int getNodeEventFuncId(int eventType);
-	static int getTouchesFuncId(int eventType);
-	static int getTouchFuncId(int eventType);
-	QScriptValue executeScriptFunction(int funcId, const QScriptValue &object,
+	QScriptValue executeEventHandler(QScriptValue func,
+		const QScriptValue &object,
 		const QScriptValueList &args = QScriptValueList());
 	QScriptValue checkResult(QScriptValue value);
 
