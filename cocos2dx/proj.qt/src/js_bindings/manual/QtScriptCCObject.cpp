@@ -16,16 +16,21 @@ QtScriptCCObject::QtScriptCCObject(QScriptEngine *engine)
 
 void QtScriptCCObject::Register(const QScriptValue &targetNamespace)
 {
-	RegisterT<CCObject, QtScriptCCObject>(targetNamespace, QScriptValue());
+	auto ctor =
+		RegisterT<CCObject, QtScriptCCObject>(targetNamespace, QScriptValue());
+	Q_ASSERT(ctor.isFunction());
+	ctor.setProperty(QSTRKEY(cast),
+		ctor.engine()->newFunction(
+			static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+				&QtScriptCCObject::cast)),
+		QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 QScriptValue QtScriptCCObject::newInstance(CCObject *obj)
 {
 	Q_ASSERT(obj);
-	auto result = engine()->newObject();
-	result.setData(engine()->newVariant(QVariant::fromValue(obj)));
-	result.setScriptClass(this);
-	return result;
+	auto data = engine()->newVariant(QVariant::fromValue(obj));
+	return engine()->newObject(this, data);
 }
 
 CCObject *QtScriptCCObject::toCCObject(const QScriptValue &value)
@@ -92,6 +97,30 @@ bool QtScriptCCObject::isEqual(const CCObject *other) const
 		return ccObject->isEqual(other);
 
 	return false;
+}
+
+QScriptValue QtScriptCCObject::cast(
+	QScriptContext *context, QScriptEngine *engine)
+{
+	int argc = context->argumentCount();
+	CCObject *obj;
+	if (argc == 1)
+	{
+		obj = qscriptvalue_cast<cocos2d::CCObject *>(context->argument(0));
+	} else
+	{
+		obj = nullptr;
+	}
+	if (!obj)
+	{
+		return QtScriptUtils::badArgumentsException(
+			context, "cocos2d::CCObject::wrap");
+	}
+
+	auto cls =
+		qobject_cast<QtScriptCCObject *>(context->callee().data().toQObject());
+	Q_ASSERT(cls);
+	return cls->newInstance(obj);
 }
 
 int QtScriptCCObject::constructorArgumentCountMin() const

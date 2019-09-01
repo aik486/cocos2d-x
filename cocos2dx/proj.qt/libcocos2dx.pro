@@ -176,7 +176,8 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/CCScheduler.cpp \
     $$COCOS2DX_PATH/cocos2dx/cocos2d.cpp \
     src/js_bindings/generated/qtscript_cocos2dx.cpp \
-    src/js_bindings/manual/QtScriptCCObject.cpp
+    src/js_bindings/manual/QtScriptCCObject.cpp \
+    src/js_bindings/manual/QtScriptCCObjectHolder.cpp
 
 HEADERS += \
     src/QtCocosHelper.h \
@@ -344,7 +345,9 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos2dx/CCScheduler.h \
     $$COCOS2DX_PATH/cocos2dx/CCObjectHolder.h \
     src/js_bindings/generated/qtscript_cocos2dx.hpp \
-    src/js_bindings/manual/QtScriptCCObject.hpp
+    src/js_bindings/manual/QtScriptCCObject.hpp \
+    src/QtCocosEnums.h \
+    src/js_bindings/manual/QtScriptCCObjectHolder.h
 
 
 macx {

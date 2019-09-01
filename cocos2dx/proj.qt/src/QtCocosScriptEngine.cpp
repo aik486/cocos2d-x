@@ -5,8 +5,11 @@ Q_DECLARE_METATYPE(std::vector<std::string>)
 #include "cocos2dx_qt.h"
 #include "QtScriptInstall.h"
 #include "js_bindings/manual/QtScriptCCObject.hpp"
+#include "js_bindings/manual/QtScriptCCObjectHolder.h"
 #include "js_bindings/generated/qtscript_cocos2dx.hpp"
+
 #include "QtCocosHelper.h"
+#include "QtCocosEnums.h"
 
 #include <QScriptEngine>
 
@@ -47,6 +50,16 @@ static void stringVecFromScriptValue(
 		auto ba = qscriptvalue_cast<QByteArray>(item);
 		cont.push_back(std::string(ba.data(), size_t(ba.size())));
 	}
+}
+
+static QScriptValue qColorToScriptValue(QScriptEngine *eng, const QColor &color)
+{
+	return eng->toScriptValue(cocos2d::qColorToCcColor4B(color));
+}
+
+static void qColorFromScriptValue(const QScriptValue &value, QColor &color)
+{
+	color = ccColor4BToQColor(qscriptvalue_cast<cocos2d::_ccColor4B>(value));
 }
 
 static _ccColor4B ccColor3Bto4B(const _ccColor3B &from)
@@ -136,6 +149,9 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	}
 
 	mRootObject = engine->newObject();
+	mRootObject.setPrototype(
+		engine->newQMetaObject(&cocos2d::staticMetaObject));
+
 	engine->globalObject().setProperty(mStringIds[CC], mRootObject,
 		QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
@@ -144,7 +160,12 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 
 	QtScriptInstallQtCore(engine);
 	QtScriptCCObject::Register(mRootObject);
+	QtScriptCCObjectHolder::Register(mRootObject);
 	qtscript_register_all_cocos2dx(engine);
+
+	qScriptRegisterMetaType<QColor>(mEngine, qColorToScriptValue,
+		qColorFromScriptValue,
+		engine->defaultPrototype(qMetaTypeId<_ccColor4B>()));
 
 	static const bool cvtColor3Bto4B =
 		QMetaType::registerConverter<_ccColor3B, _ccColor4B>(ccColor3Bto4B);

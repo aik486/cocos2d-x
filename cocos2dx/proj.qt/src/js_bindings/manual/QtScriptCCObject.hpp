@@ -24,13 +24,14 @@ public:
 	using NativeObjectType = CCObject *;
 	using StorageType = CCObject *;
 
-public slots:
-	QString toString() const;
-	void update(float dt);
-	QScriptValue copy();
-	bool isEqual(const CCObject *other) const;
+	Q_INVOKABLE QString toString() const;
+	Q_INVOKABLE void update(float dt);
+	Q_INVOKABLE QScriptValue copy();
+	Q_INVOKABLE bool isEqual(const CCObject *other) const;
 
 protected:
+	static QScriptValue cast(QScriptContext *context, QScriptEngine *engine);
+
 	// QtScriptCCObject
 	virtual int constructorArgumentCountMin() const override;
 	virtual int constructorArgumentCountMax() const override;
@@ -56,11 +57,12 @@ protected:
 	}
 
 	template <typename TT, typename CLS_T>
-	static void registerPointerMetaType(QScriptEngine *engine)
+	static void registerPointerMetaType(
+		QScriptEngine *engine, const QScriptValue &proto)
 	{
 		qScriptRegisterMetaType<TT *>(engine,
 			QtScriptCCObject::toScriptValue<CLS_T, TT *>,
-			QtScriptCCObject::fromScriptValue<TT *>);
+			QtScriptCCObject::fromScriptValue<TT *>, proto);
 
 		typedef QScriptValue (*ToScriptValue)(QScriptEngine *, TT *const &);
 		typedef void (*FromScriptValue)(const QScriptValue &, TT *&);
@@ -73,7 +75,8 @@ protected:
 			reinterpret_cast<ConstToScriptValue>(static_cast<ToScriptValue>(
 				&QtScriptCCObject::toScriptValue<CLS_T, TT *>)),
 			reinterpret_cast<ConstFromScriptValue>(static_cast<FromScriptValue>(
-				&QtScriptCCObject::fromScriptValue<TT *>)));
+				&QtScriptCCObject::fromScriptValue<TT *>)),
+			proto);
 	}
 
 	template <typename CC_T, typename CLS_T>
@@ -94,15 +97,10 @@ protected:
 				QScriptEngine::ExcludeSlots);
 		obj->mProto = proto;
 
-		proto.setPrototype(inherit.isObject()
-				? inherit
-				: ccEngine->propertyById(QtCocosScriptEngine::PROTOTYPE,
-					  ccEngine->propertyById(QtCocosScriptEngine::OBJECT,
-						  engine->globalObject())));
+		if (inherit.isObject())
+			proto.setPrototype(inherit);
 
-		registerPointerMetaType<CC_T, CLS_T>(engine);
-
-		engine->setDefaultPrototype(qMetaTypeId<CC_T *>(), proto);
+		registerPointerMetaType<CC_T, CLS_T>(engine, proto);
 
 		QScriptValue ctor =
 			engine->newFunction(QtScriptCCObject::construct<CLS_T>, proto);

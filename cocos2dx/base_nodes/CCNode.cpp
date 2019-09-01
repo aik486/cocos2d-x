@@ -972,6 +972,9 @@ void CCNode::onExit()
 
 void CCNode::registerScriptHandler(int64_t nHandler)
 {
+    if (nHandler == m_nScriptHandler)
+        return;
+    
     unregisterScriptHandler();
     m_nScriptHandler = nHandler;
     LUALOG("[LUA] Add CCNode event handler: %d", m_nScriptHandler);

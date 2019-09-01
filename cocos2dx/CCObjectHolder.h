@@ -1,6 +1,7 @@
 #pragma once
 
 #include "platform/CCPlatformMacros.h"
+#include "cocoa/CCObject.h"
 
 namespace cocos2d
 {
@@ -76,4 +77,6 @@ public:
 		return *this;
 	}
 };
+
+using AnyObjectHolder = CCObjectHolder<CCObject*>;
 }
