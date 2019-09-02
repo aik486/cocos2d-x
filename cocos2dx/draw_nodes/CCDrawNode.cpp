@@ -383,108 +383,92 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
 
 void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4B &fillColor, float borderWidth, const ccColor4B &borderColor)
 {
-	struct ExtrudeVerts {ccVertex2F offset, n;};
-	struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts)*count);
-	memset(extrude, 0, sizeof(struct ExtrudeVerts)*count);
-
-    for(unsigned int i = 0; i < count; i++)
-    {
-        ccVertex2F v0 = __v2f(verts[(i-1+count)%count]);
-        ccVertex2F v1 = __v2f(verts[i]);
-        ccVertex2F v2 = __v2f(verts[(i+1)%count]);
-
-		ccVertex2F n1 = v2fnormalize(v2fperp(v2fsub(v1, v0)));
-		ccVertex2F n2 = v2fnormalize(v2fperp(v2fsub(v2, v1)));
-
-        ccVertex2F offset = v2fmult(v2fadd(n1, n2), 1.0f/(v2fdot(n1, n2) + 1.0f));
-        struct ExtrudeVerts tmp = {offset, n2};
-        extrude[i] = tmp;
-    }
-
-	bool outline = (borderColor.a > 0 && borderWidth > 0.f);
-
-	unsigned int triangle_count = 3*count - 2;
-	unsigned int vertex_count = 3*triangle_count;
+	if (count == 0)
+		return;
+	
+	if (count >= 2 && verts[count - 1].equals(verts[0]))
+		count--;
+	
+	bool outline = (borderColor.a > 0 && borderWidth > 0.0f);
+	
+	auto triangle_count = outline ? (3 * count - 1) : (count - 2);
+	auto vertex_count = 3 * triangle_count;
 	ensureCapacity(vertex_count);
-
+	
 	ccV2F_C4B_T2F_Triangle *triangles = (ccV2F_C4B_T2F_Triangle *)(m_pBuffer + m_nBufferCount);
 	ccV2F_C4B_T2F_Triangle *cursor = triangles;
-
-	float inset = (outline == 0.f ? 0.5f : 0.f);
-	for(unsigned int i = 0; i < count-2; i++)
+	
+	if (count > 2)
 	{
-		ccVertex2F v0 = v2fsub(__v2f(verts[0  ]), v2fmult(extrude[0  ].offset, inset));
-		ccVertex2F v1 = v2fsub(__v2f(verts[i+1]), v2fmult(extrude[i+1].offset, inset));
-		ccVertex2F v2 = v2fsub(__v2f(verts[i+2]), v2fmult(extrude[i+2].offset, inset));
-
-        ccV2F_C4B_T2F_Triangle tmp = {
-            {v0, fillColor, __t(v2fzero)},
-            {v1, fillColor, __t(v2fzero)},
-            {v2, fillColor, __t(v2fzero)},
-        };
-
-		*cursor++ = tmp;
+		for (unsigned i = 0; i < count - 2; i++)
+		{
+			auto v1 = __v2f(verts[0]);
+			auto v2 = __v2f(verts[i+1]);
+			auto v3 = __v2f(verts[i+2]);
+			
+			*cursor++ = {
+			   { v1, fillColor, __t(v2fzero) },
+			   { v2, fillColor, __t(v2fzero) },
+			   { v3, fillColor, __t(v2fzero) },
+			};
+		}
 	}
-
-    for(unsigned int i = 0; i < count; i++)
-    {
-        int j = (i+1)%count;
-        ccVertex2F v0 = __v2f(verts[i]);
-        ccVertex2F v1 = __v2f(verts[j]);
-
-		ccVertex2F n0 = extrude[i].n;
-
-		ccVertex2F offset0 = extrude[i].offset;
-		ccVertex2F offset1 = extrude[j].offset;
-
-        if(outline)
-        {
-            ccVertex2F inner0 = v2fsub(v0, v2fmult(offset0, borderWidth));
-            ccVertex2F inner1 = v2fsub(v1, v2fmult(offset1, borderWidth));
-            ccVertex2F outer0 = v2fadd(v0, v2fmult(offset0, borderWidth));
-            ccVertex2F outer1 = v2fadd(v1, v2fmult(offset1, borderWidth));
-
-            ccV2F_C4B_T2F_Triangle tmp1 = {
-                {inner0, borderColor, __t(v2fneg(n0))},
-                {inner1, borderColor, __t(v2fneg(n0))},
-                {outer1, borderColor, __t(n0)}
-            };
-            *cursor++ = tmp1;
-
-            ccV2F_C4B_T2F_Triangle tmp2 = {
-                {inner0, borderColor, __t(v2fneg(n0))},
-                {outer0, borderColor, __t(n0)},
-                {outer1, borderColor, __t(n0)}
-            };
-            *cursor++ = tmp2;
-        }
-        else {
-            ccVertex2F inner0 = v2fsub(v0, v2fmult(offset0, 0.5));
-            ccVertex2F inner1 = v2fsub(v1, v2fmult(offset1, 0.5));
-            ccVertex2F outer0 = v2fadd(v0, v2fmult(offset0, 0.5));
-            ccVertex2F outer1 = v2fadd(v1, v2fmult(offset1, 0.5));
-
-            ccV2F_C4B_T2F_Triangle tmp1 = {
-                {inner0, fillColor, __t(v2fzero)},
-                {inner1, fillColor, __t(v2fzero)},
-                {outer1, fillColor, __t(n0)}
-            };
-            *cursor++ = tmp1;
-
-            ccV2F_C4B_T2F_Triangle tmp2 = {
-                {inner0, fillColor, __t(v2fzero)},
-                {outer0, fillColor, __t(n0)},
-                {outer1, fillColor, __t(n0)}
-            };
-            *cursor++ = tmp2;
-        }
-    }
+	
+	if(outline)
+	{
+		struct ExtrudeVerts {ccVertex2F offset, n;};
+		struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts)*count);
+		memset(extrude, 0, sizeof(struct ExtrudeVerts)*count);
+		
+		for (unsigned i = 0; i < count; i++)
+		{
+			auto v0 = __v2f(verts[(i-1+count)%count]);
+			auto v1 = __v2f(verts[i]);
+			auto v2 = __v2f(verts[(i+1)%count]);
+			
+			auto n1 = v2fnormalize(v2fperp(v2fsub(v1, v0)));
+			auto n2 = v2fnormalize(v2fperp(v2fsub(v2, v1)));
+			
+			auto offset = v2fmult(v2fadd(n1, n2), 1.0f / (v2fdot(n1, n2) + 1.0f));
+			struct ExtrudeVerts tmp = {offset, n2};
+			extrude[i] = tmp;
+		}
+		
+		for(unsigned i = 0; i < count; i++)
+		{
+			int j = (i+1)%count;
+			auto v0 = __v2f(verts[i]);
+			auto v1 = __v2f(verts[j]);
+			
+			auto n0 = extrude[i].n;
+			
+			auto offset0 = extrude[i].offset;
+			auto offset1 = extrude[j].offset;
+			
+			auto inner0 = v2fsub(v0, v2fmult(offset0, borderWidth));
+			auto inner1 = v2fsub(v1, v2fmult(offset1, borderWidth));
+			auto outer0 = v2fadd(v0, v2fmult(offset0, borderWidth));
+			auto outer1 = v2fadd(v1, v2fmult(offset1, borderWidth));
+			
+			*cursor++ =  {
+				{inner0, borderColor, __t(v2fneg(n0))},
+				{inner1, borderColor, __t(v2fneg(n0))},
+				{outer1, borderColor, __t(n0)}
+			};
+			
+			*cursor++ = {
+				{inner0, borderColor, __t(v2fneg(n0))},
+				{outer0, borderColor, __t(n0)},
+				{outer1, borderColor, __t(n0)}
+			};
+		}
+		
+		free(extrude);
+	}
 
 	m_nBufferCount += vertex_count;
 
 	m_bDirty = true;
-
-	free(extrude);
 }
 
 void CCDrawNode::drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4F &borderColor, const ccColor4F &fillColor)
@@ -497,11 +481,8 @@ void CCDrawNode::drawPolygon(const CCPoint *vert, unsigned int count, float bord
 	if (count == 0)
 		return;
 
-	if (vert[count - 1].equals(vert[0]))
+	if (count >= 2 && vert[count - 1].equals(vert[0]))
 		count--;
-
-	if (count == 0)
-		return;
 
 	if (fabs(borderWidth - borderHeight) >= FLT_EPSILON)
 	{
