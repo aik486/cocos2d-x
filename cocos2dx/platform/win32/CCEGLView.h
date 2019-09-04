@@ -39,7 +39,6 @@ class CCEGL;
 class CC_DLL CCEGLView : public CCEGLViewProtocol
 {
 public:
-    CCEGLView();
     virtual ~CCEGLView();
 
     /* override functions */
@@ -54,6 +53,7 @@ public:
     void setWndProc(CUSTOM_WND_PROC proc);
 
 protected:
+    CCEGLView();
     virtual bool Create();
 	static bool glew_dynamic_binding();
 

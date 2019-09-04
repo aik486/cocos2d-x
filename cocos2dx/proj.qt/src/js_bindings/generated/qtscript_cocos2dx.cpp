@@ -23818,16 +23818,6 @@ void QtScriptCCLayerMultiplex::addLayer(cocos2d::CCLayer* layer)
 	}
 }
 
-bool QtScriptCCLayerMultiplex::initWithLayers(cocos2d::CCLayer* layer, QByteArray* params)
-{
-	auto __o = this->thiz<CCLayerMultiplex *>();
-	if (__o)
-	{
-		return __o->initWithLayers(layer, params->data());
-	}
-	return false;
-}
-
 void QtScriptCCLayerMultiplex::switchTo(unsigned int n)
 {
 	auto __o = this->thiz<CCLayerMultiplex *>();
@@ -33099,6 +33089,24 @@ void QtScriptCCEGLView::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
+int QtScriptCCEGLView::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptCCEGLView::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptCCEGLView::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	Q_UNUSED(out);
+	QtScriptUtils::noPublicConstructorException(context,
+		"cocos2d::CCEGLView");
+	return false;
+}
+
 void QtScriptCCEGLView::setIMEKeyboardState(bool bOpen)
 {
 	auto __o = this->thiz<CCEGLView *>();
@@ -33136,39 +33144,6 @@ QScriptValue QtScriptCCEGLView::sharedOpenGLView(QScriptContext *context, QScrip
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::CCEGLView::sharedOpenGLView");
 	return __e->uncaughtException();
-}
-
-int QtScriptCCEGLView::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptCCEGLView::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptCCEGLView::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			out = new CCEGLView();
-			ok = true;
-			break;
-		}
-	}
-	
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::CCEGLView constructor");
-	}
-	return ok;
 }
 
 } // end of cocos2d

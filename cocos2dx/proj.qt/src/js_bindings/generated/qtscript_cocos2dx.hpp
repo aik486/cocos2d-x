@@ -5771,7 +5771,6 @@ public:
 	Q_INVOKABLE bool initWithArray(cocos2d::CCArray* arrayOfLayers);
 	Q_INVOKABLE void switchToAndReleaseMe(unsigned int n);
 	Q_INVOKABLE void addLayer(cocos2d::CCLayer* layer);
-	Q_INVOKABLE bool initWithLayers(cocos2d::CCLayer* layer, QByteArray* params);
 	Q_INVOKABLE void switchTo(unsigned int n);
 	static QScriptValue createWithLayer(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
