@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cocos2dx_qt.h"
+#include <QObject>
 
 namespace cocos2d
 {

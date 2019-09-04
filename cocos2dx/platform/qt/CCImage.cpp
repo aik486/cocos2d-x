@@ -6,6 +6,7 @@
 #include <QFont>
 #include <QPainter>
 #include <QStaticText>
+#include <QtMath>
 
 namespace cocos2d
 {
