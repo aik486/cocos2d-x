@@ -154,6 +154,19 @@ void CCGrid3DAction::setVertex(const CCPoint& position, const ccVertex3F& vertex
     g->setVertex(position, vertex);
 }
 
+CCGrid3DAction *CCGrid3DAction::create(float duration, const CCSize &gridSize)
+{
+    auto result = new CCGrid3DAction;
+    if (result->initWithDuration(duration, gridSize))
+    {
+        result->autorelease();
+    } else 
+    {
+        CC_SAFE_DELETE(result);
+    }
+    return result;
+}
+
 // implementation of TiledGrid3DAction
 
 CCGridBase* CCTiledGrid3DAction::getGrid(void)

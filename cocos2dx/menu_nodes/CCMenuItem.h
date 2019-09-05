@@ -63,13 +63,7 @@ public:
     /**
      *  @js ctor
      */
-    CCMenuItem()
-    : m_bSelected(false)
-    , m_bEnabled(false)            
-    , m_pListener(NULL)            
-    , m_pfnSelector(NULL)
-    , m_nScriptTapHandler(0)
-    {}
+    CCMenuItem();
     /**
      * @js NA
      * @lua NA
@@ -97,9 +91,9 @@ public:
     virtual void unselected();
     
     /** Register menu handler script function */
-    virtual void registerScriptTapHandler(int nHandler);
+    virtual void registerScriptTapHandler(int64_t nHandler);
     virtual void unregisterScriptTapHandler(void);
-    int getScriptTapHandler() { return m_nScriptTapHandler; };
+    int64_t getScriptTapHandler() { return m_nScriptTapHandler; }
 
     virtual bool isEnabled();
     //@note: It's 'setIsEnable' in cocos2d-iphone. 
@@ -112,7 +106,7 @@ public:
 protected:
     CCObject*       m_pListener;
     SEL_MenuHandler    m_pfnSelector;
-    int             m_nScriptTapHandler;
+    int64_t             m_nScriptTapHandler;
 };
 
 /** @brief An abstract class for "label" CCMenuItemLabel items 

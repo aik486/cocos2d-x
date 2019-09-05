@@ -5,6 +5,8 @@
 #include <QImage>
 #include <QFont>
 #include <QPainter>
+#include <QStaticText>
+#include <QtMath>
 
 namespace cocos2d
 {
@@ -117,62 +119,76 @@ bool CCImage::initWithString(const char *pText, int nWidth, int nHeight,
 	{
 		m_pImage = new QImage;
 	}
-	*m_pImage = QImage(nWidth, nHeight, QImage::Format_RGBA8888);
-	m_pImage->fill(Qt::transparent);
 
 	{
-		QPainter painter(m_pImage);
-
-		QFont font(QString::fromUtf8(pFontName));
-		font.setPixelSize(nSize);
-
-		painter.setFont(font);
-		painter.setPen(Qt::transparent);
-		painter.setBrush(Qt::white);
-
 		auto text = QString::fromUtf8(pText);
 
-		int flags = Qt::TextWordWrap;
+		Qt::Alignment alignment;
 		switch (eAlignMask)
 		{
 			case kAlignCenter:
-				flags |= Qt::AlignCenter;
+				alignment |= Qt::AlignCenter;
 				break;
 
 			case kAlignTop:
-				flags |= Qt::AlignTop;
+				alignment |= Qt::AlignTop;
 				break;
 
 			case kAlignTopRight:
-				flags |= Qt::AlignTop | Qt::AlignRight;
+				alignment |= Qt::AlignTop | Qt::AlignRight;
 				break;
 
 			case kAlignRight:
-				flags |= Qt::AlignRight;
+				alignment |= Qt::AlignRight;
 				break;
 
 			case kAlignBottomRight:
-				flags |= Qt::AlignBottom | Qt::AlignRight;
+				alignment |= Qt::AlignBottom | Qt::AlignRight;
 				break;
 
 			case kAlignBottom:
-				flags |= Qt::AlignBottom;
+				alignment |= Qt::AlignBottom;
 				break;
 
 			case kAlignBottomLeft:
-				flags |= Qt::AlignBottom | Qt::AlignLeft;
+				alignment |= Qt::AlignBottom | Qt::AlignLeft;
 				break;
 
 			case kAlignLeft:
-				flags |= Qt::AlignLeft;
+				alignment |= Qt::AlignLeft;
 				break;
 
 			case kAlignTopLeft:
-				flags |= Qt::AlignTop | Qt::AlignLeft;
+				alignment |= Qt::AlignTop | Qt::AlignLeft;
 				break;
 		}
+		QStaticText staticText;
+		staticText.setTextFormat(Qt::PlainText);
+		QTextOption textOption;
+		textOption.setAlignment(alignment);
+		textOption.setWrapMode(nWidth <= 0
+				? QTextOption::NoWrap
+				: QTextOption::WrapAtWordBoundaryOrAnywhere);
+		staticText.setTextOption(textOption);
+		staticText.setTextWidth(nWidth <= 0 ? qreal(-1.0) : qreal(nWidth));
+		staticText.setText(text);
+		QFont font(QString::fromUtf8(pFontName));
+		font.setPixelSize(nSize);
+		staticText.prepare(QTransform(), font);
+		auto size = staticText.size();
+		nWidth = nWidth > 0 ? nWidth : qCeil(size.width());
+		nHeight = nHeight > 0 ? nHeight : qCeil(size.height());
 
-		painter.drawText(QRect(0, 0, nWidth, nHeight), flags, text);
+		*m_pImage = QImage(nWidth, nHeight, QImage::Format_RGBA8888);
+		m_pImage->fill(Qt::transparent);
+
+		QPainter painter(m_pImage);
+
+		painter.setFont(font);
+		painter.setPen(Qt::white);
+		painter.setBrush(Qt::transparent);
+
+		painter.drawStaticText(0, 0, staticText);
 	}
 
 	m_pData = m_pImage->bits();

@@ -73,6 +73,14 @@ bool CCMenuItem::initWithTarget(CCObject *rec, SEL_MenuHandler selector)
     return true;
 }
 
+CCMenuItem::CCMenuItem()
+    : m_bSelected(false)
+    , m_bEnabled(false)
+    , m_pListener(NULL)
+    , m_pfnSelector(NULL)
+    , m_nScriptTapHandler(0)
+{}
+
 CCMenuItem::~CCMenuItem()
 {
     unregisterScriptTapHandler();
@@ -88,7 +96,7 @@ void CCMenuItem::unselected()
     m_bSelected = false;
 }
 
-void CCMenuItem::registerScriptTapHandler(int nHandler)
+void CCMenuItem::registerScriptTapHandler(int64_t nHandler)
 {
     unregisterScriptTapHandler();
     m_nScriptTapHandler = nHandler;

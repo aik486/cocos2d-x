@@ -74,7 +74,7 @@ public:
      *  @note Only supports Lua Binding now.
      *  @param handler The lua handler.
      */
-    void registerScriptObserver(CCObject *target,int handler,const char* name);
+    void registerScriptObserver(CCObject *target,int64_t handler,const char* name);
 
     /** Unregisters script observer */
     void unregisterScriptObserver(CCObject *target,const char* name);
@@ -94,7 +94,7 @@ public:
      *  @note Only supports Lua Binding now.
      *  @return The script handle.
      */
-    inline int getScriptHandler() { return m_scriptHandler; };
+    inline int64_t getScriptHandler() const { return m_scriptHandler; }
     
     /** @brief Gets observer script handler.
      *  @param name The name of this notification.
@@ -110,7 +110,7 @@ private:
     // variables
     //
     CCArray *m_observers;
-    int     m_scriptHandler;
+    int64_t     m_scriptHandler;
 };
 
 /**
@@ -141,7 +141,7 @@ private:
     CC_PROPERTY_READONLY(SEL_CallFuncO, m_selector, Selector);
     CC_PROPERTY_READONLY(char *, m_name, Name);
     CC_PROPERTY_READONLY(CCObject *, m_object, Object);
-    CC_PROPERTY(int, m_nHandler,Handler);
+    CC_PROPERTY(int64_t, m_nHandler,Handler);
 };
 
 NS_CC_END

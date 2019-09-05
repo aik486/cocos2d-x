@@ -907,7 +907,7 @@ public:
      *
      * @param handler   A number that indicates a lua function. 
      */
-    virtual void registerScriptHandler(int handler);
+    virtual void registerScriptHandler(int64_t handler);
     /**
      * Unregisters a script function that will be called in onEnter() & onExit() series functions.
      *
@@ -921,13 +921,13 @@ public:
      *
      * @return A number that indicates a lua function.
      */
-    inline int getScriptHandler() { return m_nScriptHandler; };
+    inline int64_t getScriptHandler() const { return m_nScriptHandler; }
     
     /** 
      * Schedules for lua script. 
      * @js NA
      */
-    void scheduleUpdateWithPriorityLua(int nHandler, int priority);
+    void scheduleUpdateWithPriorityLua(int64_t nHandler, int priority);
     
     /// @}  end Script Bindings
 
@@ -1458,8 +1458,8 @@ protected:
     
     bool m_bReorderChildDirty;          ///< children order dirty flag
     
-    int m_nScriptHandler;               ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
-    int m_nUpdateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
+    int64_t m_nScriptHandler;               ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
+    int64_t m_nUpdateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
     ccScriptType m_eScriptType;         ///< type of script binding, lua or javascript
     
     CCComponentContainer *m_pComponentContainer;        ///< Dictionary of components

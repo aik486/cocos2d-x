@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include "cocoa/CCObject.h"
 #include "support/data_support/uthash.h"
+#include <cstdint>
 
 NS_CC_BEGIN
 
@@ -78,7 +79,7 @@ public:
     bool initWithTarget(CCObject *pTarget, SEL_SCHEDULE pfnSelector, float fSeconds, unsigned int nRepeat, float fDelay);
     
     /** Initializes a timer with a script callback function and an interval in seconds. */
-    bool initWithScriptHandler(int nHandler, float fSeconds);
+    bool initWithScriptHandler(int64_t nHandler, float fSeconds);
     
     /** triggers the timer */
     void update(float dt);
@@ -95,11 +96,11 @@ public:
     static CCTimer* timerWithTarget(CCObject *pTarget, SEL_SCHEDULE pfnSelector, float fSeconds);
     
     /** Allocates a timer with a script callback function and an interval in seconds. */
-    static CCTimer* timerWithScriptHandler(int nHandler, float fSeconds);
+    static CCTimer* timerWithScriptHandler(int64_t nHandler, float fSeconds);
     /**
      *  @lua NA
      */
-    inline int getScriptHandler() { return m_nScriptHandler; };
+    inline int64_t getScriptHandler() { return m_nScriptHandler; }
 
 protected:
     CCObject *m_pTarget;
@@ -112,7 +113,7 @@ protected:
     float m_fInterval;
     SEL_SCHEDULE m_pfnSelector;
     
-    int m_nScriptHandler;
+    int64_t m_nScriptHandler;
 };
 
 //
@@ -232,7 +233,7 @@ public:
      return schedule script entry ID, used for unscheduleScriptFunc().
      @js NA
      */
-    unsigned int scheduleScriptFunc(unsigned int nHandler, float fInterval, bool bPaused);
+    unsigned int scheduleScriptFunc(int64_t nHandler, float fInterval, bool bPaused);
     
     /** Unschedule a script entry. 
      *  @js NA

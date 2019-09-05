@@ -33,6 +33,7 @@
 #include <map>
 #include <string>
 #include <list>
+#include <cstdint>
 
 typedef struct lua_State lua_State;
 
@@ -57,28 +58,22 @@ enum ccScriptType {
 class CCScriptHandlerEntry : public CCObject
 {
 public:
-    static CCScriptHandlerEntry* create(int nHandler);
+    static CCScriptHandlerEntry* create(int64_t nHandler);
     ~CCScriptHandlerEntry(void);
     
-    int getHandler(void) {
+    inline int64_t getHandler(void) const{
         return m_nHandler;
     }
     
-    int getEntryId(void) {
+    inline unsigned getEntryId(void) {
         return m_nEntryId;
     }
     
 protected:
-    CCScriptHandlerEntry(int nHandler)
-    : m_nHandler(nHandler)
-    {
-        static int newEntryId = 0;
-        newEntryId++;
-        m_nEntryId = newEntryId;
-    }
+    CCScriptHandlerEntry(int64_t nHandler);
     
-    int m_nHandler;
-    int m_nEntryId;
+    int64_t m_nHandler;
+    unsigned m_nEntryId;
 };
 
 /**
@@ -92,33 +87,27 @@ class CCSchedulerScriptHandlerEntry : public CCScriptHandlerEntry
 {
 public:
     // nHandler return by tolua_ref_function(), called from LuaCocos2d.cpp
-    static CCSchedulerScriptHandlerEntry* create(int nHandler, float fInterval, bool bPaused);
+    static CCSchedulerScriptHandlerEntry* create(int64_t nHandler, float fInterval, bool bPaused);
     ~CCSchedulerScriptHandlerEntry(void);
     
-    cocos2d::CCTimer* getTimer(void) {
+    inline cocos2d::CCTimer* getTimer(void) const {
         return m_pTimer;
     }
     
-    bool isPaused(void) {
+    inline bool isPaused(void) const {
         return m_bPaused;
     }
     
-    void markedForDeletion(void) {
+    inline void markedForDeletion(void) {
         m_bMarkedForDeletion = true;
     }
     
-    bool isMarkedForDeletion(void) {
+    inline bool isMarkedForDeletion(void) const {
         return m_bMarkedForDeletion;
     }
     
 private:
-    CCSchedulerScriptHandlerEntry(int nHandler)
-    : CCScriptHandlerEntry(nHandler)
-    , m_pTimer(NULL)
-    , m_bPaused(false)
-    , m_bMarkedForDeletion(false)
-    {
-    }
+    CCSchedulerScriptHandlerEntry(int64_t nHandler);
     bool init(float fInterval, bool bPaused);
     
     cocos2d::CCTimer*   m_pTimer;
@@ -134,29 +123,23 @@ private:
 class CCTouchScriptHandlerEntry : public CCScriptHandlerEntry
 {
 public:
-    static CCTouchScriptHandlerEntry* create(int nHandler, bool bIsMultiTouches, int nPriority, bool bSwallowsTouches);
+    static CCTouchScriptHandlerEntry* create(int64_t nHandler, bool bIsMultiTouches, int nPriority, bool bSwallowsTouches);
     ~CCTouchScriptHandlerEntry(void);
     
-    bool isMultiTouches(void) {
+    inline bool isMultiTouches(void) const {
         return m_bIsMultiTouches;
     }
     
-    int getPriority(void) {
+    inline int getPriority(void) const {
         return m_nPriority;
     }
     
-    bool getSwallowsTouches(void) {
+    inline bool getSwallowsTouches(void) const {
         return m_bSwallowsTouches;
     }
     
 private:
-    CCTouchScriptHandlerEntry(int nHandler)
-    : CCScriptHandlerEntry(nHandler)
-    , m_bIsMultiTouches(false)
-    , m_nPriority(0)
-    , m_bSwallowsTouches(false)
-    {
-    }
+    CCTouchScriptHandlerEntry(int64_t nHandler);
     bool init(bool bIsMultiTouches, int nPriority, bool bSwallowsTouches);
     
     bool    m_bIsMultiTouches;
@@ -175,19 +158,19 @@ private:
 class CC_DLL CCScriptEngineProtocol
 {
 public:
-    virtual ~CCScriptEngineProtocol() {};
+    virtual ~CCScriptEngineProtocol();
     
     /** Get script type */
-    virtual ccScriptType getScriptType() { return kScriptTypeNone; };
+    virtual ccScriptType getScriptType();
 
     /** Remove script object. */
     virtual void removeScriptObjectByCCObject(CCObject* pObj) = 0;
     
     /** Remove script function handler, only CCLuaEngine class need to implement this function. */
-    virtual void removeScriptHandler(int nHandler) {};
+    virtual void removeScriptHandler(int64_t nHandler);
     
     /** Reallocate script function handler, only CCLuaEngine class need to implement this function. */
-    virtual int reallocateScriptHandler(int nHandler) { return -1;}
+    virtual int reallocateScriptHandler(int64_t nHandler);
     
     /**
      @brief Execute script code contained in the given string.
@@ -224,9 +207,9 @@ public:
     virtual int executeNotificationEvent(CCNotificationCenter* pNotificationCenter, const char* pszName) = 0;
     
     /** execute a callfun event */
-    virtual int executeCallFuncActionEvent(CCCallFunc* pAction, CCObject* pTarget = NULL) = 0;
+    virtual int executeCallFuncActionEvent(CCCallFunc* pAction, CCObject* pTarget = nullptr) = 0;
     /** execute a schedule function */
-    virtual int executeSchedule(int nHandler, float dt, CCNode* pNode = NULL) = 0;
+    virtual int executeSchedule(int64_t nHandler, float dt, CCNode* pNode = nullptr) = 0;
     
     /** functions for executing touch event */
     virtual int executeLayerTouchesEvent(CCLayer* pLayer, int eventType, CCSet *pTouches) = 0;
@@ -239,10 +222,10 @@ public:
     virtual int executeAccelerometerEvent(CCLayer* pLayer, CCAcceleration* pAccelerationValue) = 0;
 
     /** function for common event */
-    virtual int executeEvent(int nHandler, const char* pEventName, CCObject* pEventSource = NULL, const char* pEventSourceClassName = NULL) = 0;
+    virtual int executeEvent(int64_t nHandler, const char* pEventName, CCObject* pEventSource = nullptr, const char* pEventSourceClassName = nullptr) = 0;
     
     /** function for c++ call back lua funtion */
-    virtual int executeEventWithArgs(int nHandler, CCArray* pArgs) { return 0; }
+    virtual int executeEventWithArgs(int64_t nHandler, CCArray* pArgs);
 
     /** called by CCAssert to allow scripting engine to handle failed assertions
      * @return true if the assert was handled by the script engine, false otherwise.

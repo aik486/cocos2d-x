@@ -48,8 +48,8 @@ protected:
     GLuint      m_uVao;
     GLuint      m_uVbo;
     
-    unsigned int    m_uBufferCapacity;
-    GLsizei         m_nBufferCount;
+    int         m_nBufferCapacity;
+    int         m_nBufferCount;
     ccV2F_C4B_T2F   *m_pBuffer;
     
     ccBlendFunc     m_sBlendFunc;
@@ -67,18 +67,18 @@ public:
     virtual void draw();
     
     /** draw a dot at a position, with a given radius and color */
-    void drawDot(const CCPoint &pos, float radius, const ccColor4F &color);
-    /** draw a dot at a position, with a given radius and color */
     void drawDot(const CCPoint &pos, float radius, const ccColor4B &color);
+    /** draw a dot at a position, with a given radius and color */
+    void drawDot(const CCPoint &pos, float radius, const ccColor4F &color);
     
     /** draw a segment with a radius and color */
-    void drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4F &color);    
-    /** draw a segment with a radius and color */
     void drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4B &color);
+    /** draw a segment with a radius and color */
+    void drawSegment(const CCPoint &from, const CCPoint &to, float radius, const ccColor4F &color);    
+    /** draw a segment with a border width and height and color */
+	void drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4B &color);
     /** draw a segment with a border width and height and color */
     void drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4F &color);
-	/** draw a segment with a border width and height and color */
-	void drawSegment(const CCPoint &from, const CCPoint &to, float width, float height, const ccColor4B &color);
     
     /** draw a polygon with a fill color and line color 
      * @code
@@ -86,16 +86,20 @@ public:
      * js:var drawPolygon(var verts, var fillColor,var borderWidth,var borderColor)
      * @endcode
      */
-    void drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor);
-    /** draw a polygon with a fill color and line color */
     void drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4B &fillColor, float borderWidth, const ccColor4B &borderColor);
-    /** draw a polygon with a fill color and line color and border width and height */
-    void drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4F &borderColor, const ccColor4F &fillColor);
+    /** draw a polygon with a fill color and line color */
+    void drawPolygon(const CCPoint *verts, unsigned int count, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor);
     /** draw a polygon with a fill color and line color and border width and height */
     void drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4B &borderColor, const ccColor4B &fillColor);
+    /** draw a polygon with a fill color and line color and border width and height */
+    void drawPolygon(const CCPoint *vert, unsigned int count, float borderWidth, float borderHeight, const ccColor4F &borderColor, const ccColor4F &fillColor);
 
     /** Clear the geometry in the node's buffer. */
     void clear();
+    /** Capacity will equal to buffer size. */
+    void shrink();
+    /** Check if buffer is empty. **/
+    bool isEmpty() const;
     /**
      * @js NA
      */
@@ -114,10 +118,23 @@ public:
      * @js NA
      */
     void listenBackToForeground(CCObject *obj);
+    
+    int getCapacity() const;
+    void reserve(int count);
 private:
     void ensureCapacity(unsigned int count);
     void render();
 };
+
+inline bool CCDrawNode::isEmpty() const
+{
+    return m_nBufferCount == 0;
+}
+
+inline int CCDrawNode::getCapacity() const
+{
+    return m_nBufferCapacity;
+}
 
 NS_CC_END
 

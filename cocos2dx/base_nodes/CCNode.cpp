@@ -970,8 +970,11 @@ void CCNode::onExit()
     }
 }
 
-void CCNode::registerScriptHandler(int nHandler)
+void CCNode::registerScriptHandler(int64_t nHandler)
 {
+    if (nHandler == m_nScriptHandler)
+        return;
+    
     unregisterScriptHandler();
     m_nScriptHandler = nHandler;
     LUALOG("[LUA] Add CCNode event handler: %d", m_nScriptHandler);
@@ -1063,7 +1066,7 @@ void CCNode::scheduleUpdateWithPriority(int priority)
     m_pScheduler->scheduleUpdateForTarget(this, priority, !m_bRunning);
 }
 
-void CCNode::scheduleUpdateWithPriorityLua(int nHandler, int priority)
+void CCNode::scheduleUpdateWithPriorityLua(int64_t nHandler, int priority)
 {
     unscheduleUpdate();
     m_nUpdateScriptHandler = nHandler;

@@ -1,7 +1,7 @@
 /****************************************************************************
-Copyright (c) 2010гн2011 cocos2d-x.org
+Copyright (c) 2010я╝Н2011 cocos2d-x.org
 Copyright (c) 2009       On-Core
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -318,22 +318,22 @@ CCSize CCShuffleTiles::getDelta(const CCSize& pos)
     return CCSizeMake((int)(pos2.x - pos.width), (int)(pos2.y - pos.height));
 }
 
-void CCShuffleTiles::placeTile(const CCPoint& pos, Tile *t)
+void CCShuffleTiles::placeTile(const CCPoint& pos, const Tile &t)
 {
     ccQuad3 coords = originalTile(pos);
 
     CCPoint step = m_pTarget->getGrid()->getStep();
-    coords.bl.x += (int)(t->position.x * step.x);
-    coords.bl.y += (int)(t->position.y * step.y);
+    coords.bl.x += (int)(t.position.x * step.x);
+    coords.bl.y += (int)(t.position.y * step.y);
 
-    coords.br.x += (int)(t->position.x * step.x);
-    coords.br.y += (int)(t->position.y * step.y);
-
-    coords.tl.x += (int)(t->position.x * step.x);
-    coords.tl.y += (int)(t->position.y * step.y);
-
-    coords.tr.x += (int)(t->position.x * step.x);
-    coords.tr.y += (int)(t->position.y * step.y);
+    coords.br.x += (int)(t.position.x * step.x);
+    coords.br.y += (int)(t.position.y * step.y);
+                          
+    coords.tl.x += (int)(t.position.x * step.x);
+    coords.tl.y += (int)(t.position.y * step.y);
+                          
+    coords.tr.x += (int)(t.position.x * step.x);
+    coords.tr.y += (int)(t.position.y * step.y);
 
     setTile(pos, coords);
 }
@@ -389,7 +389,7 @@ void CCShuffleTiles::update(float time)
         for (j = 0; j < m_sGridSize.height; ++j)
         {
             tileArray->position = ccpMult(ccp((float)tileArray->delta.width, (float)tileArray->delta.height), time);
-            placeTile(ccp(i, j), tileArray);
+            placeTile(ccp(i, j), *tileArray);
             ++tileArray;
         }
     }
