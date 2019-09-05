@@ -42,7 +42,7 @@ NS_CC_BEGIN
 // #pragma mark CCScriptHandlerEntry
 #endif
 
-CCScriptHandlerEntry* CCScriptHandlerEntry::create(int nHandler)
+CCScriptHandlerEntry* CCScriptHandlerEntry::create(int64_t nHandler)
 {
     CCScriptHandlerEntry* entry = new CCScriptHandlerEntry(nHandler);
     entry->autorelease();
@@ -58,12 +58,20 @@ CCScriptHandlerEntry::~CCScriptHandlerEntry(void)
     }
 }
 
+CCScriptHandlerEntry::CCScriptHandlerEntry(int64_t nHandler)
+    : m_nHandler(nHandler)
+{
+    static unsigned newEntryId = 0;
+    newEntryId++;
+    m_nEntryId = newEntryId;
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 // #pragma mark -
 // #pragma mark CCSchedulerScriptHandlerEntry
 #endif
 
-CCSchedulerScriptHandlerEntry* CCSchedulerScriptHandlerEntry::create(int nHandler, float fInterval, bool bPaused)
+CCSchedulerScriptHandlerEntry* CCSchedulerScriptHandlerEntry::create(int64_t nHandler, float fInterval, bool bPaused)
 {
     CCSchedulerScriptHandlerEntry* pEntry = new CCSchedulerScriptHandlerEntry(nHandler);
     pEntry->init(fInterval, bPaused);
@@ -88,12 +96,20 @@ CCSchedulerScriptHandlerEntry::~CCSchedulerScriptHandlerEntry(void)
     LUALOG("[LUA] DEL script schedule %d, entryID: %d", m_nHandler, m_nEntryId);
 }
 
+CCSchedulerScriptHandlerEntry::CCSchedulerScriptHandlerEntry(int64_t nHandler)
+    : CCScriptHandlerEntry(nHandler)
+    , m_pTimer(nullptr)
+    , m_bPaused(false)
+    , m_bMarkedForDeletion(false)
+{
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 // #pragma mark -
 // #pragma mark CCTouchScriptHandlerEntry
 #endif
 
-CCTouchScriptHandlerEntry* CCTouchScriptHandlerEntry::create(int nHandler,
+CCTouchScriptHandlerEntry* CCTouchScriptHandlerEntry::create(int64_t nHandler,
                                                              bool bIsMultiTouches,
                                                              int nPriority,
                                                              bool bSwallowsTouches)
@@ -112,6 +128,14 @@ CCTouchScriptHandlerEntry::~CCTouchScriptHandlerEntry(void)
         LUALOG("[LUA] Remove touch event handler: %d", m_nHandler);
         m_nHandler = 0;
     }
+}
+
+CCTouchScriptHandlerEntry::CCTouchScriptHandlerEntry(int64_t nHandler)
+    : CCScriptHandlerEntry(nHandler)
+    , m_bIsMultiTouches(false)
+    , m_nPriority(0)
+    , m_bSwallowsTouches(false)
+{
 }
 
 bool CCTouchScriptHandlerEntry::init(bool bIsMultiTouches, int nPriority, bool bSwallowsTouches)
@@ -168,5 +192,15 @@ void CCScriptEngineManager::purgeSharedManager(void)
         s_pSharedScriptEngineManager = NULL;
     }
 }
+
+CCScriptEngineProtocol::~CCScriptEngineProtocol() {}
+
+ccScriptType CCScriptEngineProtocol::getScriptType() { return kScriptTypeNone; }
+
+void CCScriptEngineProtocol::removeScriptHandler(int64_t) {}
+
+int CCScriptEngineProtocol::reallocateScriptHandler(int64_t) { return -1;}
+
+int CCScriptEngineProtocol::executeEventWithArgs(int64_t, CCArray *) { return 0; }
 
 NS_CC_END

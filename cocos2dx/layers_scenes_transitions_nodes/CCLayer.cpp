@@ -126,7 +126,7 @@ void CCLayer::registerWithTouchDispatcher()
     }
 }
 
-void CCLayer::registerScriptTouchHandler(int nHandler, bool bIsMultiTouches, int nPriority, bool bSwallowsTouches)
+void CCLayer::registerScriptTouchHandler(int64_t nHandler, bool bIsMultiTouches, int nPriority, bool bSwallowsTouches)
 {
     unregisterScriptTouchHandler();
     m_pScriptTouchHandlerEntry = CCTouchScriptHandlerEntry::create(nHandler, bIsMultiTouches, nPriority, bSwallowsTouches);
@@ -261,7 +261,7 @@ void CCLayer::didAccelerate(CCAcceleration* pAccelerationValue)
    }
 }
 
-void CCLayer::registerScriptAccelerateHandler(int nHandler)
+void CCLayer::registerScriptAccelerateHandler(int64_t nHandler)
 {
     unregisterScriptAccelerateHandler();
     m_pScriptAccelerateHandlerEntry = CCScriptHandlerEntry::create(nHandler);
@@ -300,7 +300,7 @@ void CCLayer::setKeypadEnabled(bool enabled)
     }
 }
 
-void CCLayer::registerScriptKeypadHandler(int nHandler)
+void CCLayer::registerScriptKeypadHandler(int64_t nHandler)
 {
     unregisterScriptKeypadHandler();
     m_pScriptKeypadHandlerEntry = CCScriptHandlerEntry::create(nHandler);

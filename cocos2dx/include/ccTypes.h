@@ -353,12 +353,12 @@ typedef struct _ccT2F_Quad
 } ccT2F_Quad;
 
 // struct that holds the size in pixels, texture coordinates and delays for animated CCParticleSystemQuad
-typedef struct
+struct ccAnimationFrameData
 {
     ccT2F_Quad texCoords;
     float delay;
     CCSize size;
-} ccAnimationFrameData;
+};
 
 
 

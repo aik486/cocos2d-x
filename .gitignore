@@ -127,3 +127,4 @@ tags
 /external/version.json
 .gradle
 .settings
+cocos2dx/proj.qt/bin*/

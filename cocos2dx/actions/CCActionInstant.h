@@ -293,12 +293,7 @@ public:
     /**
      *  @js ctor
      */
-    CCCallFunc()
-        : m_pSelectorTarget(NULL)
-		, m_nScriptHandler(0)
-        , m_pCallFunc(NULL)
-    {
-    }
+    CCCallFunc();
     /**
      * @js NA
      * @lua NA
@@ -315,7 +310,7 @@ public:
 	/** creates the action with the handler script function 
      * @js NA
      */
-	static CCCallFunc * create(int nHandler);
+    static CCCallFunc * create(int64_t nHandler);
 
 	/** initializes the action with the callback 
     
@@ -358,12 +353,13 @@ public:
     /**
      * @lua NA
      */
-    inline int getScriptHandler() { return m_nScriptHandler; };
+    inline int64_t getScriptHandler() const { return m_nScriptHandler; }
+    inline void setScriptHandler(int64_t nHandler);
 protected:
     /** Target that will be called */
     CCObject*   m_pSelectorTarget;
 
-	int m_nScriptHandler;
+    int64_t m_nScriptHandler;
 
     union
     {
@@ -373,6 +369,11 @@ protected:
         SEL_CallFuncO   m_pCallFuncO;
     };
 };
+
+void CCCallFunc::setScriptHandler(int64_t nHandler)
+{
+    m_nScriptHandler = nHandler;
+}
 
 /** 
 @brief Calls a 'callback' with the node as the first argument
@@ -408,7 +409,7 @@ public:
     static CCCallFuncN * create(CCObject* pSelectorTarget, SEL_CallFuncN selector);
 
 	/** creates the action with the handler script function*/
-	static CCCallFuncN * create(int nHandler);
+	static CCCallFuncN * create(int64_t nHandler);
 
     /** initializes the action with the callback 
 

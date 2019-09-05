@@ -1,6 +1,6 @@
 [submodule "tools/bindings-generator"]
         path = tools/bindings-generator
-        url = https://github.com/cocos2d/bindings-generator.git
+        url = https://github.com/kusharami/bindings-generator.git
 [submodule "scripting/javascript/bindings/generated"]
         path = scripting/javascript/bindings/generated
         url = git://github.com/folecr/cocos2dx-autogen-bindings.git
@@ -16,3 +16,9 @@
 [submodule "samples/Cpp/TestCpp/Resources/ccs-res"]
 	path = samples/Cpp/TestCpp/Resources/ccs-res
 	url = https://github.com/dumganhar/ccs-res
+[submodule "external/pthreads4w"]
+	path = external/pthreads4w
+	url = https://git.code.sf.net/p/pthreads4w/code
+[submodule "scripting/javascript/qtscript_bindings"]
+	path = scripting/javascript/qtscript_bindings
+	url = https://github.com/kusharami/qtscript_bindings.git

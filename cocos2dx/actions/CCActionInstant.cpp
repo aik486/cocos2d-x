@@ -390,7 +390,7 @@ CCCallFunc * CCCallFunc::create(CCObject* pSelectorTarget, SEL_CallFunc selector
     return NULL;
 }
 
-CCCallFunc * CCCallFunc::create(int nHandler)
+CCCallFunc * CCCallFunc::create(int64_t nHandler)
 {
 	CCCallFunc *pRet = new CCCallFunc();
 
@@ -417,6 +417,13 @@ bool CCCallFunc::initWithTarget(CCObject* pSelectorTarget) {
 
     m_pSelectorTarget = pSelectorTarget;
     return true;
+}
+
+CCCallFunc::CCCallFunc()
+	: m_pSelectorTarget(NULL)
+	, m_nScriptHandler(0)
+	, m_pCallFunc(NULL)
+{
 }
 
 CCCallFunc::~CCCallFunc(void)
@@ -490,7 +497,7 @@ CCCallFuncN * CCCallFuncN::create(CCObject* pSelectorTarget, SEL_CallFuncN selec
     return NULL;
 }
 
-CCCallFuncN * CCCallFuncN::create(int nHandler)
+CCCallFuncN * CCCallFuncN::create(int64_t nHandler)
 {
 	CCCallFuncN *pRet = new CCCallFuncN();
 

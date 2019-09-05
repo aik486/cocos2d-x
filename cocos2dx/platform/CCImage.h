@@ -55,7 +55,7 @@ public:
      */
     ~CCImage();
 
-    typedef enum
+    enum EImageFormat
     {
         kFmtJpg = 0,
         kFmtPng,
@@ -63,9 +63,9 @@ public:
         kFmtWebp,
         kFmtRawData,
         kFmtUnKnown
-    }EImageFormat;
+    };
 
-    typedef enum
+    enum ETextAlign
     {
         kAlignCenter        = 0x33, ///< Horizontal center and vertical center.
         kAlignTop           = 0x13, ///< Horizontal center and vertical top.
@@ -76,7 +76,7 @@ public:
         kAlignBottomLeft    = 0x21, ///< Horizontal left and vertical bottom.
         kAlignLeft          = 0x31, ///< Horizontal left and vertical center.
         kAlignTopLeft       = 0x11, ///< Horizontal left and vertical top.
-    }ETextAlign;
+    };
     
     /**
     @brief  Load the image from the specified path. 

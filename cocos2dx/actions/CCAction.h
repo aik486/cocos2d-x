@@ -240,7 +240,7 @@ public:
 
     inline bool isBoundarySet(void) { return m_bBoundarySet; }
     /** alter behavior - turn on/off boundary */
-    inline void setBoudarySet(bool bValue) { m_bBoundarySet = bValue; }
+    inline void setBoundarySet(bool bValue) { m_bBoundarySet = bValue; }
 
     /** initializes the action with a set boundary */
     bool initWithTarget(CCNode *pFollowedNode, const CCRect& rect = CCRectZero);

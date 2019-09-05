@@ -108,7 +108,7 @@ public:
      * @lua NA
      */
     virtual void didAccelerate(CCAcceleration* pAccelerationValue);
-    void registerScriptAccelerateHandler(int nHandler);
+    void registerScriptAccelerateHandler(int64_t nHandler);
     void unregisterScriptAccelerateHandler(void);
 
     /** If isTouchEnabled, this method is called onEnter. Override it to change the
@@ -124,7 +124,7 @@ public:
     virtual void registerWithTouchDispatcher(void);
     
     /** Register script touch events handler */
-    virtual void registerScriptTouchHandler(int nHandler, bool bIsMultiTouches = false, int nPriority = INT_MIN, bool bSwallowsTouches = false);
+    virtual void registerScriptTouchHandler(int64_t nHandler, bool bIsMultiTouches = false, int nPriority = INT_MIN, bool bSwallowsTouches = false);
     /** Unregister script touch events handler */
     virtual void unregisterScriptTouchHandler(void);
 
@@ -159,16 +159,16 @@ public:
     virtual void setKeypadEnabled(bool value);
 
     /** Register keypad events handler */
-    void registerScriptKeypadHandler(int nHandler);
+    void registerScriptKeypadHandler(int64_t nHandler);
     /** Unregister keypad events handler */
     void unregisterScriptKeypadHandler(void);
 
     virtual void keyBackClicked(void);
     virtual void keyMenuClicked(void);
     
-    inline CCTouchScriptHandlerEntry* getScriptTouchHandlerEntry() { return m_pScriptTouchHandlerEntry; };
-    inline CCScriptHandlerEntry* getScriptKeypadHandlerEntry() { return m_pScriptKeypadHandlerEntry; };
-    inline CCScriptHandlerEntry* getScriptAccelerateHandlerEntry() { return m_pScriptAccelerateHandlerEntry; };
+    inline CCTouchScriptHandlerEntry* getScriptTouchHandlerEntry() { return m_pScriptTouchHandlerEntry; }
+    inline CCScriptHandlerEntry* getScriptKeypadHandlerEntry() { return m_pScriptKeypadHandlerEntry; }
+    inline CCScriptHandlerEntry* getScriptAccelerateHandlerEntry() { return m_pScriptAccelerateHandlerEntry; }
 protected:   
     bool m_bTouchEnabled;
     bool m_bAccelerometerEnabled;

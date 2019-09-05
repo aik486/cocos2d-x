@@ -96,7 +96,7 @@ public:
     virtual bool initWithDuration(float duration, const CCSize& gridSize, unsigned int seed);
     void shuffle(unsigned int *pArray, unsigned int nLen);
     CCSize getDelta(const CCSize& pos);
-    void placeTile(const CCPoint& pos, Tile *t);
+    void placeTile(const CCPoint& pos, const Tile &t);
 
     virtual void startWithTarget(CCNode *pTarget);
     virtual void update(float time);

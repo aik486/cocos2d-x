@@ -73,16 +73,16 @@ public:
     CCPointArray();
     
     /** initializes a Catmull Rom config with a capacity hint */
-    bool initWithCapacity(unsigned int capacity);
+    bool initWithCapacity(unsigned int cap);
     
     /** appends a control point */
-    void addControlPoint(CCPoint controlPoint);
+    void addControlPoint(const CCPoint &controlPoint);
     
     /** inserts a controlPoint at index */
-    void insertControlPoint(CCPoint &controlPoint, unsigned int index);
+    void insertControlPoint(const CCPoint &controlPoint, unsigned int index);
     
     /** replaces an existing controlPoint at index */
-    void replaceControlPoint(CCPoint &controlPoint, unsigned int index);
+    void replaceControlPoint(const CCPoint &controlPoint, unsigned int index);
     
     /** get the value of a controlPoint at a given index */
     CCPoint getControlPointAtIndex(unsigned int index);
@@ -104,12 +104,12 @@ public:
      */
     virtual CCObject* copyWithZone(CCZone *zone);
     
-    const std::vector<CCPoint*>* getControlPoints();
+    const std::vector<CCPoint>* getControlPoints();
 
-    void setControlPoints(std::vector<CCPoint*> *controlPoints);
+    void setControlPoints(std::vector<CCPoint> *controlPoints);
 private:
     /** Array that contains the control points */
-    std::vector<CCPoint*> *m_pControlPoints;
+    std::vector<CCPoint> *m_pControlPoints;
 };
 
 /** Cardinal Spline path.
