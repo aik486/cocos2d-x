@@ -1,5 +1,4 @@
 include(liboutdir.pri)
-include($$QTSCRIPT_BINDINGS_PATH/qtscript_bindings_depend.pri)
 
 DEFINES += QT_COCOS
 

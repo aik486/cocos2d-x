@@ -1,6 +1,6 @@
 include(libcocos2dx.pri)
 
-QT += core gui widgets opengl script
+QT += core gui widgets opengl
 
 CONFIG += c++11 warn_off
 DESTDIR = $$COCOS2DX_LIB
@@ -9,7 +9,6 @@ TEMPLATE = lib
 CONFIG += staticlib
 
 CONFIG(debug, debug|release) {
-    DEFINES += COCOS2D_DEBUG=1
     DEFINES += DEBUG
 } else {
     DEFINES += NDEBUG
@@ -55,7 +54,6 @@ SOURCES +=\
     src/QtCocosHelper.cpp \
     src/QtCocosExtension.cpp \
     src/QtCocosEGLView.cpp \
-    src/QtCocosScriptEngine.cpp \
     src/QtCocosWindow.cpp \
     $$COCOS2DX_PATH/extensions/GUI/CCControlExtension/CCScale9Sprite.cpp \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCAtlasNode.cpp \
@@ -174,15 +172,11 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/CCConfiguration.cpp \
     $$COCOS2DX_PATH/cocos2dx/CCDirector.cpp \
     $$COCOS2DX_PATH/cocos2dx/CCScheduler.cpp \
-    $$COCOS2DX_PATH/cocos2dx/cocos2d.cpp \
-    src/js_bindings/generated/qtscript_cocos2dx.cpp \
-    src/js_bindings/manual/QtScriptCCObject.cpp \
-    src/js_bindings/manual/QtScriptCCObjectHolder.cpp
+    $$COCOS2DX_PATH/cocos2dx/cocos2d.cpp
 
 HEADERS += \
     src/QtCocosHelper.h \
     src/QtCocosExtension.h \
-    src/QtCocosScriptEngine.h \
     src/cocos2dx_qt.h \
     src/cocos_warnings_off.h \
     src/cocos_warnings_pop.h \
@@ -343,11 +337,7 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos2dx/CCConfiguration.h \
     $$COCOS2DX_PATH/cocos2dx/CCDirector.h \
     $$COCOS2DX_PATH/cocos2dx/CCScheduler.h \
-    $$COCOS2DX_PATH/cocos2dx/CCObjectHolder.h \
-    src/js_bindings/generated/qtscript_cocos2dx.hpp \
-    src/js_bindings/manual/QtScriptCCObject.hpp \
-    src/QtCocosEnums.h \
-    src/js_bindings/manual/QtScriptCCObjectHolder.h
+    $$COCOS2DX_PATH/cocos2dx/CCObjectHolder.h
 
 
 macx {
@@ -397,8 +387,3 @@ HEADERS +=\
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCPlatformDefine.h \
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCStdC.h
 }
-
-OTHER_FILES += \
-    src/js_bindings/generated/mac/userconf.ini \
-    src/js_bindings/generated/win32/userconf.ini \
-    src/js_bindings/generated/js_bindings.ini
