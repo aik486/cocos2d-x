@@ -391,7 +391,7 @@ void CCDrawNode::drawPolygon(const CCPoint *verts, unsigned int count, const ccC
 	
 	bool outline = (borderColor.a > 0 && borderWidth > 0.0f);
 	
-	auto triangle_count = outline ? (3 * count - 1) : (count - 2);
+	auto triangle_count = outline ? (3 * count - 2) : (count - 2);
 	auto vertex_count = 3 * triangle_count;
 	ensureCapacity(vertex_count);
 	
