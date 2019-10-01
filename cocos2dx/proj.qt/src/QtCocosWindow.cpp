@@ -54,6 +54,7 @@ QtCocosWindow::QtCocosWindow()
 	, mMasterWidget(nullptr)
 	, mHasFocus(false)
 	, mEnabled(true)
+	, mRunning(false)
 {
 	mBgColor = { 0.f, 0.f, 0.f, 0.f };
 
@@ -160,6 +161,11 @@ bool QtCocosWindow::applicationDidFinishLaunching()
 
 void QtCocosWindow::applicationDidEnterBackground()
 {
+	if (!mRunning)
+		return;
+
+	mRunning = false;
+
 	QObject::disconnect(this, &QOpenGLWindow::frameSwapped, this,
 		static_cast<void (QPaintDeviceWindow::*)()>(
 			&QPaintDeviceWindow::update));
@@ -167,6 +173,11 @@ void QtCocosWindow::applicationDidEnterBackground()
 
 void QtCocosWindow::applicationWillEnterForeground()
 {
+	if (mRunning)
+		return;
+
+	mRunning = true;
+
 	QObject::connect(this, &QOpenGLWindow::frameSwapped, this,
 		static_cast<void (QPaintDeviceWindow::*)()>(
 			&QPaintDeviceWindow::update));
@@ -477,10 +488,22 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 	}
 }
 
-void QtCocosWindow::exposeEvent(QExposeEvent *event)
+void QtCocosWindow::showEvent(QShowEvent *)
 {
-	Q_UNUSED(event);
+#ifdef Q_OS_MAC
+	// Dirty hack for a MacOS bug when exposeEvent is not executed
+	// while showing window after hide
+	if (mMasterWidget)
+	{
+		auto oldSize = size();
+		resize(1, 1);
+		mMasterWidget->resize(oldSize.width() + 1, oldSize.height() + 1);
+	}
+#endif
+}
 
+void QtCocosWindow::exposeEvent(QExposeEvent *)
+{
 	makeCurrent();
 
 	updateAnimationState(false);
