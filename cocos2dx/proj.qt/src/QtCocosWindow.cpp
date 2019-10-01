@@ -477,10 +477,22 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 	}
 }
 
-void QtCocosWindow::exposeEvent(QExposeEvent *event)
+void QtCocosWindow::showEvent(QShowEvent *)
 {
-	Q_UNUSED(event);
+#ifdef Q_OS_MAC
+	// Dirty hack for a MacOS bug when exposeEvent is not executed
+	// while showing window after hide
+	if (mMasterWidget)
+	{
+		auto oldSize = size();
+		resize(1, 1);
+		mMasterWidget->resize(oldSize.width() + 1, oldSize.height() + 1);
+	}
+#endif
+}
 
+void QtCocosWindow::exposeEvent(QExposeEvent *)
+{
 	makeCurrent();
 
 	updateAnimationState(false);
