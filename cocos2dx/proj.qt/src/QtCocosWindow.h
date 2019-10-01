@@ -117,6 +117,7 @@ private:
 	QWidget *mMasterWidget;
 	bool mHasFocus;
 	bool mEnabled;
+	bool mRunning;
 };
 
 QWidget *QtCocosWindow::masterWidget() const

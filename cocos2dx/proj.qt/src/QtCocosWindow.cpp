@@ -54,6 +54,7 @@ QtCocosWindow::QtCocosWindow()
 	, mMasterWidget(nullptr)
 	, mHasFocus(false)
 	, mEnabled(true)
+	, mRunning(false)
 {
 	mBgColor = { 0.f, 0.f, 0.f, 0.f };
 
@@ -160,6 +161,11 @@ bool QtCocosWindow::applicationDidFinishLaunching()
 
 void QtCocosWindow::applicationDidEnterBackground()
 {
+	if (!mRunning)
+		return;
+
+	mRunning = false;
+
 	QObject::disconnect(this, &QOpenGLWindow::frameSwapped, this,
 		static_cast<void (QPaintDeviceWindow::*)()>(
 			&QPaintDeviceWindow::update));
@@ -167,6 +173,11 @@ void QtCocosWindow::applicationDidEnterBackground()
 
 void QtCocosWindow::applicationWillEnterForeground()
 {
+	if (mRunning)
+		return;
+
+	mRunning = true;
+
 	QObject::connect(this, &QOpenGLWindow::frameSwapped, this,
 		static_cast<void (QPaintDeviceWindow::*)()>(
 			&QPaintDeviceWindow::update));
