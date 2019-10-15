@@ -110,7 +110,9 @@ CCNode::~CCNode(void)
     unregisterScriptHandler();
     if (m_nUpdateScriptHandler)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nUpdateScriptHandler);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->removeScriptHandler(m_nUpdateScriptHandler);
     }
 
     CC_SAFE_RELEASE(m_pActionManager);
@@ -551,7 +553,9 @@ void CCNode::cleanup()
     
     if ( m_eScriptType != kScriptTypeNone)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->executeNodeEvent(this, kCCNodeOnCleanup);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->executeNodeEvent(this, kCCNodeOnCleanup);
     }
     
     // timers
@@ -915,7 +919,9 @@ void CCNode::onEnter()
 
     if (m_eScriptType != kScriptTypeNone)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->executeNodeEvent(this, kCCNodeOnEnter);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->executeNodeEvent(this, kCCNodeOnEnter);
     }
 
     //Judge the running state for prevent called onEnter method more than once,it's possible that this function called by addChild  
@@ -940,7 +946,9 @@ void CCNode::onEnterTransitionDidFinish()
 {
     if (m_eScriptType != kScriptTypeNone)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->executeNodeEvent(this, kCCNodeOnEnterTransitionDidFinish);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->executeNodeEvent(this, kCCNodeOnEnterTransitionDidFinish);
     }
     
     arrayMakeObjectsPerformSelector(m_pChildren, onEnterTransitionDidFinish, CCNode*);
@@ -952,7 +960,9 @@ void CCNode::onExitTransitionDidStart()
 
     if (m_eScriptType != kScriptTypeNone)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->executeNodeEvent(this, kCCNodeOnExitTransitionDidStart);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->executeNodeEvent(this, kCCNodeOnExitTransitionDidStart);
     }
 }
 
@@ -966,7 +976,9 @@ void CCNode::onExit()
     
     if ( m_eScriptType != kScriptTypeNone)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->executeNodeEvent(this, kCCNodeOnExit);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->executeNodeEvent(this, kCCNodeOnExit);
     }
 }
 
@@ -984,7 +996,9 @@ void CCNode::unregisterScriptHandler(void)
 {
     if (m_nScriptHandler)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nScriptHandler);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->removeScriptHandler(m_nScriptHandler);
         LUALOG("[LUA] Remove CCNode event handler: %d", m_nScriptHandler);
         m_nScriptHandler = 0;
     }
@@ -1078,7 +1092,9 @@ void CCNode::unscheduleUpdate()
     m_pScheduler->unscheduleUpdateForTarget(this);
     if (m_nUpdateScriptHandler)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->removeScriptHandler(m_nUpdateScriptHandler);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->removeScriptHandler(m_nUpdateScriptHandler);
         m_nUpdateScriptHandler = 0;
     }
 }
@@ -1137,7 +1153,9 @@ void CCNode::update(float fDelta)
 {
     if (m_nUpdateScriptHandler)
     {
-        CCScriptEngineManager::sharedManager()->getScriptEngine()->executeSchedule(m_nUpdateScriptHandler, fDelta, this);
+        auto engine = CCScriptEngineManager::sharedManager()->getScriptEngine();
+        if (engine)
+            engine->executeSchedule(m_nUpdateScriptHandler, fDelta, this);
     }
     
     if (m_pComponentContainer && !m_pComponentContainer->isEmpty())
