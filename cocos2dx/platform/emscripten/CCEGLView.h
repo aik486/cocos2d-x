@@ -58,6 +58,9 @@ public:
 
     bool    handleEvents();
 
+protected:
+    static CCEGLView* s_pInstance;
+    
 private:
     void        release();
 

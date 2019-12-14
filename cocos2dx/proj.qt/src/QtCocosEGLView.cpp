@@ -191,6 +191,8 @@ QtCocosEGLView::QtCocosEGLView()
 	view_ptr = &s_sharedView;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 	view_ptr = &s_pEglView;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_EMSCRIPTEN
+	view_ptr = &s_pInstance;
 #endif
 
 	CC_ASSERT(nullptr == *view_ptr);

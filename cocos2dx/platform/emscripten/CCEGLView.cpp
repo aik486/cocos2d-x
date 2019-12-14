@@ -71,7 +71,7 @@ enum Orientation
 static Orientation orientation = LANDSCAPE;
 
 #define MAX_TOUCHES         4
-static CCEGLView* s_pInstance = NULL;
+CCEGLView* CCEGLView::s_pInstance = NULL;
 
 static bool buttonDepressed = false;
 extern "C" void mouseCB(int button, int state, int x, int y)
@@ -110,6 +110,7 @@ extern "C" void motionCB(int x, int y)
 
 CCEGLView::CCEGLView()
 {
+#ifndef QT_COCOS
 	m_eglDisplay = EGL_NO_DISPLAY;
 	m_eglContext = EGL_NO_CONTEXT;
 	m_eglSurface = EGL_NO_SURFACE;
@@ -122,7 +123,6 @@ CCEGLView::CCEGLView()
     if (m_isGLInitialized)
     	initEGLFunctions();
 
-#ifndef QT_COCOS
     // Initialize SDL: used for font rendering, sprite loading and audio
     // playing.
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -130,7 +130,6 @@ CCEGLView::CCEGLView()
     // Emscripten ignores all these values.
     Mix_OpenAudio(0, 0, 0, 0);
     TTF_Init();
-#endif
 
     char *arg1 = (char*)malloc(1);
     char **dummyArgv = (char**)malloc(sizeof(char*));
@@ -142,6 +141,7 @@ CCEGLView::CCEGLView()
     glutMouseFunc(&mouseCB);
     glutMotionFunc(&motionCB);
     glutPassiveMotionFunc(&motionCB);
+#endif
 }
 
 CCEGLView::~CCEGLView()
@@ -155,6 +155,7 @@ const char* CCEGLView::getWindowGroupId() const
 
 void CCEGLView::release()
 {
+#ifndef QT_COCOS
     if (m_eglDisplay != EGL_NO_DISPLAY)
     {
         eglMakeCurrent(m_eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -181,6 +182,7 @@ void CCEGLView::release()
 	m_isGLInitialized = false;
 
 	exit(0);
+#endif	
 }
 
 void CCEGLView::initEGLFunctions()
@@ -282,6 +284,7 @@ static EGLenum checkErrorEGL(const char* msg)
 
 bool CCEGLView::initGL()
 {
+#ifndef QT_COCOS    
     EGLint eglConfigCount;
     EGLConfig config;
 
@@ -370,7 +373,7 @@ bool CCEGLView::initGL()
     // setting the size of the viewport by adjusting the canvas size (so
     // there's no weird letterboxing).
     setFrameSize(width, height);
-
+#endif
     return true;
 }
 

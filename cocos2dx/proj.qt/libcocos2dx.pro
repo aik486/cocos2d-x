@@ -56,6 +56,7 @@ SOURCES +=\
     src/QtCocosEGLView.cpp \
     src/QtCocosWindow.cpp \
     $$COCOS2DX_PATH/extensions/GUI/CCControlExtension/CCScale9Sprite.cpp \
+    $$COCOS2DX_PATH/cocos2dx/base_nodes/CCGLBufferedNode.cpp \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCAtlasNode.cpp \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCNode.cpp \
     $$COCOS2DX_PATH/cocos2dx/ccFPSImages.c \
@@ -183,6 +184,7 @@ HEADERS += \
     src/QtCocosEGLView.h \
     src/QtCocosWindow.h \
     $$COCOS2DX_PATH/extensions/GUI/CCControlExtension/CCScale9Sprite.h \
+    $$COCOS2DX_PATH/cocos2dx/base_nodes/CCGLBufferedNode.h \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCAtlasNode.h \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCNode.h \
     $$COCOS2DX_PATH/cocos2dx/ccFPSImages.h \
@@ -395,6 +397,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCDevice.cpp \
     $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCEGLView.cpp \
     $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCFileUtilsEmscripten.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/CCThread.cpp
 
 HEADERS +=\
     $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCAccelerometer.h \
