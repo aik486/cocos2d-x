@@ -34,9 +34,11 @@ THE SOFTWARE.
 #include "CCAccelerometer.h"
 #include "CCApplication.h"
 
+#ifndef QT_COCOS
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_mixer.h>
+#endif
 
 #include <ctype.h>
 
@@ -120,6 +122,7 @@ CCEGLView::CCEGLView()
     if (m_isGLInitialized)
     	initEGLFunctions();
 
+#ifndef QT_COCOS
     // Initialize SDL: used for font rendering, sprite loading and audio
     // playing.
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -127,6 +130,7 @@ CCEGLView::CCEGLView()
     // Emscripten ignores all these values.
     Mix_OpenAudio(0, 0, 0, 0);
     TTF_Init();
+#endif
 
     char *arg1 = (char*)malloc(1);
     char **dummyArgv = (char**)malloc(sizeof(char*));
@@ -368,11 +372,6 @@ bool CCEGLView::initGL()
     setFrameSize(width, height);
 
     return true;
-}
-
-static long time2millis(struct timespec *times)
-{
-    return times->tv_sec*1000 + times->tv_nsec/1000000;
 }
 
 bool CCEGLView::handleEvents()
