@@ -1,6 +1,6 @@
 include(libcocos2dx.pri)
 
-QT += core gui widgets opengl
+QT += core gui widgets
 
 CONFIG += c++11 warn_off
 DESTDIR = $$COCOS2DX_LIB
