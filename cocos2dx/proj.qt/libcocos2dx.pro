@@ -387,3 +387,21 @@ HEADERS +=\
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCPlatformDefine.h \
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCStdC.h
 }
+
+emscripten {
+SOURCES +=\
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCApplication.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCCommon.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCDevice.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCEGLView.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCFileUtilsEmscripten.cpp \
+
+HEADERS +=\
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCAccelerometer.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCApplication.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCEGLView.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCFileUtilsEmscripten.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCGL.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCPlatformDefine.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCStdC.h
+}

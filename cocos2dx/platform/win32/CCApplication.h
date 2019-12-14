@@ -48,19 +48,11 @@ public:
      */
     CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath(void);
 
-    void setStartupScriptFilename(const std::string& startupScriptFile);
-
-    const std::string& getStartupScriptFilename(void)
-    {
-        return m_startupScriptFilename;
-    }
-
 protected:
     HINSTANCE           m_hInstance;
     HACCEL              m_hAccelTable;
     LARGE_INTEGER       m_nAnimationInterval;
     std::string         m_resourceRootPath;
-    std::string         m_startupScriptFilename;
 
     static CCApplication * sm_pSharedApplication;
 };

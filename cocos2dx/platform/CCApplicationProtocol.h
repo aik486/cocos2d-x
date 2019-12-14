@@ -25,6 +25,9 @@ THE SOFTWARE.
 #ifndef __CC_APPLICATION_PROTOCOL_H__
 #define __CC_APPLICATION_PROTOCOL_H__
 
+#include "CCCommon.h"
+#include <string>
+
 NS_CC_BEGIN
 
 enum TargetPlatform
@@ -91,6 +94,20 @@ public:
      @brief Get target platform
      */
     virtual TargetPlatform getTargetPlatform() = 0;
+    
+    void setStartupScriptFilename(const std::string& startupScriptFile)
+    {
+        m_startupScriptFilename = startupScriptFile;
+        std::replace(m_startupScriptFilename.begin(), m_startupScriptFilename.end(), '\\', '/');
+    }
+
+    inline const std::string& getStartupScriptFilename(void)
+    {
+        return m_startupScriptFilename;
+    }
+    
+private:
+    std::string         m_startupScriptFilename;
 };
 
 // end of platform group

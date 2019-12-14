@@ -43,6 +43,15 @@ THE SOFTWARE.
 #include <queue>
 #include <list>
 
+#ifndef CC_USE_THREADS
+#if !defined(EMSCRIPTEN) || (defined(USE_PTHREADS) && USE_PTHREADS)
+#define CC_USE_THREADS 1
+#else
+#define CC_USE_THREADS 0
+#endif
+#endif
+
+#if CC_USE_THREADS
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT) && (CC_TARGET_PLATFORM != CC_PLATFORM_WP8)
 #include <pthread.h>
 #else
@@ -51,11 +60,13 @@ THE SOFTWARE.
 #include <ppltasks.h>
 using namespace concurrency;
 #endif
+#endif
 
 using namespace std;
 
 NS_CC_BEGIN
 
+#if CC_USE_THREADS
 typedef struct _AsyncStruct
 {
     std::string            filename;
@@ -78,11 +89,6 @@ static pthread_cond_t		s_SleepCondition;
 static pthread_mutex_t      s_asyncStructQueueMutex;
 static pthread_mutex_t      s_ImageInfoMutex;
 
-#ifdef EMSCRIPTEN
-// Hack to get ASM.JS validation (no undefined symbols allowed).
-#define pthread_cond_signal(_)
-#endif // EMSCRIPTEN
-
 static unsigned long s_nAsyncRefCount = 0;
 
 static bool need_quit = false;
@@ -90,33 +96,6 @@ static bool need_quit = false;
 static std::queue<AsyncStruct*>* s_pAsyncStructQueue = NULL;
 
 static std::queue<ImageInfo*>*   s_pImageQueue = NULL;
-
-
-static CCImage::EImageFormat computeImageFormatType(string& filename)
-{
-    CCImage::EImageFormat ret = CCImage::kFmtUnKnown;
-
-    if ((std::string::npos != filename.find(".jpg")) || (std::string::npos != filename.find(".jpeg")))
-    {
-        ret = CCImage::kFmtJpg;
-    }
-    else if ((std::string::npos != filename.find(".png")) || (std::string::npos != filename.find(".PNG")))
-    {
-        ret = CCImage::kFmtPng;
-    }
-    else if ((std::string::npos != filename.find(".tiff")) || (std::string::npos != filename.find(".TIFF")))
-    {
-        ret = CCImage::kFmtTiff;
-    }
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT) && (CC_TARGET_PLATFORM != CC_PLATFORM_WP8)
-    else if ((std::string::npos != filename.find(".webp")) || (std::string::npos != filename.find(".WEBP")))
-    {
-        ret = CCImage::kFmtWebp;
-    }
-#endif
-
-    return ret;
-}
 
 static void loadImageData(AsyncStruct *pAsyncStruct)
 {
@@ -198,7 +177,33 @@ static void* loadImage(void*)
 
     return 0;
 }
+#endif
 
+static CCImage::EImageFormat computeImageFormatType(string& filename)
+{
+    CCImage::EImageFormat ret = CCImage::kFmtUnKnown;
+
+    if ((std::string::npos != filename.find(".jpg")) || (std::string::npos != filename.find(".jpeg")))
+    {
+        ret = CCImage::kFmtJpg;
+    }
+    else if ((std::string::npos != filename.find(".png")) || (std::string::npos != filename.find(".PNG")))
+    {
+        ret = CCImage::kFmtPng;
+    }
+    else if ((std::string::npos != filename.find(".tiff")) || (std::string::npos != filename.find(".TIFF")))
+    {
+        ret = CCImage::kFmtTiff;
+    }
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT) && (CC_TARGET_PLATFORM != CC_PLATFORM_WP8)
+    else if ((std::string::npos != filename.find(".webp")) || (std::string::npos != filename.find(".WEBP")))
+    {
+        ret = CCImage::kFmtWebp;
+    }
+#endif
+
+    return ret;
+}
 
 // implementation CCTextureCache
 
@@ -224,8 +229,10 @@ CCTextureCache::CCTextureCache()
 CCTextureCache::~CCTextureCache()
 {
     CCLOGINFO("cocos2d: deallocing CCTextureCache.");
+#if CC_USE_THREADS
     need_quit = true;
     pthread_cond_signal(&s_SleepCondition);
+#endif
     CC_SAFE_RELEASE(m_pTextures);
 }
 
@@ -253,10 +260,9 @@ CCDictionary* CCTextureCache::snapshotTextures()
 
 void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector)
 {
-#ifdef EMSCRIPTEN
-    CCLOGWARN("Cannot load image %s asynchronously in Emscripten builds.", path);
-    return;
-#endif // EMSCRIPTEN
+#if !CC_USE_THREADS
+    CCLOGWARN("Cannot load image %s asynchronously.", path);
+#else
 
     CCAssert(path != NULL, "TextureCache: fileimage MUST not be NULL");
 
@@ -331,10 +337,12 @@ void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallF
         loadImageData(data);
     });
 #endif
+#endif
 }
 
 void CCTextureCache::addImageAsyncCallBack(float)
 {
+#if CC_USE_THREADS
     // the image is generated in loading thread
     std::queue<ImageInfo*> *imagesQueue = s_pImageQueue;
 
@@ -389,6 +397,7 @@ void CCTextureCache::addImageAsyncCallBack(float)
             CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(schedule_selector(CCTextureCache::addImageAsyncCallBack), this);
         }
     }
+#endif
 }
 
 CCTexture2D * CCTextureCache::addImage(const char * path)
@@ -632,20 +641,6 @@ void CCTextureCache::removeAllTextures()
 
 void CCTextureCache::removeUnusedTextures()
 {
-    /*
-    CCDictElement* pElement = NULL;
-    CCDICT_FOREACH(m_pTextures, pElement)
-    {
-        CCLOG("cocos2d: CCTextureCache: texture: %s", pElement->getStrKey());
-        CCTexture2D *value = (CCTexture2D*)pElement->getObject();
-        if (value->retainCount() == 1)
-        {
-            CCLOG("cocos2d: CCTextureCache: removing unused texture: %s", pElement->getStrKey());
-            m_pTextures->removeObjectForElememt(pElement);
-        }
-    }
-     */
-
     /** Inter engineer zhuoshi sun finds that this way will get better performance
      */
     if (m_pTextures->count())

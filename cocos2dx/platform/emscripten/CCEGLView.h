@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 //#include <bps/event.h>
 
+#include "CCGL.h"
+
 NS_CC_BEGIN
 
 class CC_DLL CCEGLView : public CCEGLViewProtocol

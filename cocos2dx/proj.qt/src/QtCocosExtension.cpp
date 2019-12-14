@@ -271,8 +271,12 @@ void CCSpriteEx::draw()
 	glEnableVertexAttribArray(kCCVertexAttrib_MAX);
 
 #define kQuadSize sizeof(m_sQuad.bl)
-
+#ifdef EMSCRIPTEN
+	long offset = 0;
+	setGLBufferData(&m_sQuad, 4 * kQuadSize, 0);
+#else
 	uintptr_t offset = (uintptr_t) &m_sQuad;
+#endif // EMSCRIPTEN
 
 	int diff = offsetof(ccV3F_C4B_T2F, vertices);
 	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE,
