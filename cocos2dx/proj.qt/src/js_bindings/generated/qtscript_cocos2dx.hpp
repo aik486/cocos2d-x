@@ -7901,10 +7901,7 @@ public:
 	explicit QtScriptCCApplication(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(QByteArray startupScriptFilename READ getStartupScriptFilename WRITE setStartupScriptFilename)
-	void setStartupScriptFilename(const QByteArray& startupScriptFile);
 	Q_INVOKABLE int getTargetPlatform();
-	QByteArray getStartupScriptFilename();
 	Q_INVOKABLE void setAnimationInterval(double interval);
 	Q_INVOKABLE int getCurrentLanguage();
 	static QScriptValue sharedApplication(QScriptContext *context, QScriptEngine* engine);
