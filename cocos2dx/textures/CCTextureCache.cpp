@@ -97,6 +97,7 @@ static std::queue<AsyncStruct*>* s_pAsyncStructQueue = NULL;
 
 static std::queue<ImageInfo*>*   s_pImageQueue = NULL;
 
+static CCImage::EImageFormat computeImageFormatType(string& filename);
 static void loadImageData(AsyncStruct *pAsyncStruct)
 {
     const char *filename = pAsyncStruct->filename.c_str();
