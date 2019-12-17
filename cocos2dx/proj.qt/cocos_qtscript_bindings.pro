@@ -1,6 +1,6 @@
 include(cocos_qtscript_bindings.pri)
 
-QT += opengl script
+QT += script
 
 CONFIG += c++11 warn_off
 DESTDIR = $$COCOS2DX_LIB
