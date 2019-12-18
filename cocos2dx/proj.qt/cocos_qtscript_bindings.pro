@@ -8,6 +8,10 @@ TARGET = cocos_qtscript_bindings
 TEMPLATE = lib
 CONFIG += staticlib
 
+emscripten {
+    DEFINES += QT_FORCE_ASSERTS
+}
+
 CONFIG(debug, debug|release) {
     DEFINES += DEBUG
 } else {
