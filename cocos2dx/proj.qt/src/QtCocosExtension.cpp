@@ -268,13 +268,12 @@ void CCSpriteEx::draw()
 	ccGLBindTexture2D(m_pobTexture->getName());
 	ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
 
-	//glEnableVertexAttribArray(kCCVertexAttrib_MAX);
-
 #define kQuadSize sizeof(m_sQuad.bl)
 #ifdef EMSCRIPTEN
 	long offset = 0;
 	setGLBufferData(&m_sQuad, 4 * kQuadSize, 0);
 #else
+	glEnableVertexAttribArray(kCCVertexAttrib_MAX);
 	uintptr_t offset = (uintptr_t) &m_sQuad;
 #endif // EMSCRIPTEN
 
@@ -292,15 +291,19 @@ void CCSpriteEx::draw()
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE,
 		kQuadSize, (void *) (offset + diff));
 
-	//	// additive_color
-	//	glVertexAttribPointer(kCCVertexAttrib_MAX, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0,
-	//		(void *) &mDisplayedAdditiveColor);
+#ifndef EMSCRIPTEN
+	// additive_color
+	glVertexAttribPointer(kCCVertexAttrib_MAX, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0,
+		(void *) &mDisplayedAdditiveColor);
+#endif
 
 #undef kQuadSize
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-	//glDisableVertexAttribArray(kCCVertexAttrib_MAX);
+#ifndef EMSCRIPTEN
+	glDisableVertexAttribArray(kCCVertexAttrib_MAX);
+#endif
 
 	CHECK_GL_ERROR_DEBUG();
 

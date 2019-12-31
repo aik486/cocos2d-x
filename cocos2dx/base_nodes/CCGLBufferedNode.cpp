@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 #include "CCGLBufferedNode.h"
 
+namespace cocos2d {
+
 CCGLBufferedNode::CCGLBufferedNode(void)
 {
     for(int i = 0; i < BUFFER_SLOTS; i++)
@@ -94,4 +96,4 @@ void CCGLBufferedNode::setGLIndexData(void *buf, GLuint bufSize, int slot)
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, bufSize, buf);
     }
 }
-
+}
