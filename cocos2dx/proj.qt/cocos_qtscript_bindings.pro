@@ -1,12 +1,16 @@
 include(cocos_qtscript_bindings.pri)
 
-QT += opengl script
+QT += script
 
 CONFIG += c++11 warn_off
 DESTDIR = $$COCOS2DX_LIB
 TARGET = cocos_qtscript_bindings
 TEMPLATE = lib
 CONFIG += staticlib
+
+emscripten {
+    DEFINES += QT_FORCE_ASSERTS
+}
 
 CONFIG(debug, debug|release) {
     DEFINES += DEBUG

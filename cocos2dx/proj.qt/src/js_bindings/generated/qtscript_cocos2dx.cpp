@@ -32848,15 +32848,6 @@ bool QtScriptCCApplication::constructObject(QScriptContext *context, NativeObjec
 	return false;
 }
 
-void QtScriptCCApplication::setStartupScriptFilename(const QByteArray& startupScriptFile)
-{
-	auto __o = this->thiz<CCApplication *>();
-	if (__o)
-	{
-		__o->setStartupScriptFilename(std::string(startupScriptFile.data(), size_t(startupScriptFile.size())));
-	}
-}
-
 int QtScriptCCApplication::getTargetPlatform()
 {
 	auto __o = this->thiz<CCApplication *>();
@@ -32865,16 +32856,6 @@ int QtScriptCCApplication::getTargetPlatform()
 		return int(__o->getTargetPlatform());
 	}
 	return 0;
-}
-
-QByteArray QtScriptCCApplication::getStartupScriptFilename()
-{
-	auto __o = this->thiz<CCApplication *>();
-	if (__o)
-	{
-		return QByteArray(__o->getStartupScriptFilename().c_str(), int(__o->getStartupScriptFilename().size()));
-	}
-	return QByteArray();
 }
 
 void QtScriptCCApplication::setAnimationInterval(double interval)

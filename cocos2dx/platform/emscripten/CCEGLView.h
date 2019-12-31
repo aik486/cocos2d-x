@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 //#include <bps/event.h>
 
+#include "CCGL.h"
+
 NS_CC_BEGIN
 
 class CC_DLL CCEGLView : public CCEGLViewProtocol
@@ -56,6 +58,9 @@ public:
 
     bool    handleEvents();
 
+protected:
+    static CCEGLView* s_pInstance;
+    
 private:
     void        release();
 

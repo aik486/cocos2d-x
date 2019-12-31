@@ -379,11 +379,13 @@ void QtCocosWindow::mouseDoubleClickEvent(QMouseEvent *event)
 	if (!mEnabled)
 		return;
 
+#ifndef Q_OS_WASM
 	if (!mHasFocus)
 	{
 		event->ignore();
 		return;
 	}
+#endif
 
 	auto pos = event->localPos();
 
@@ -406,11 +408,13 @@ void QtCocosWindow::mouseMoveEvent(QMouseEvent *event)
 
 	auto buttons = event->buttons();
 
+#ifndef Q_OS_WASM
 	if (!mHasFocus && buttons != Qt::NoButton)
 	{
 		event->ignore();
 		return;
 	}
+#endif
 
 	auto pos = event->localPos();
 	auto pos_x = float(pos.x());
@@ -534,6 +538,7 @@ void QtCocosWindow::keyReleaseEvent(QKeyEvent *event)
 
 bool QtCocosWindow::ignoredMouseEvent(QMouseEvent *event)
 {
+#ifndef Q_OS_WASM
 	if (!mHasFocus)
 	{
 		if (mMasterWidget)
@@ -547,6 +552,7 @@ bool QtCocosWindow::ignoredMouseEvent(QMouseEvent *event)
 
 		return true;
 	}
+#endif
 	return false;
 }
 

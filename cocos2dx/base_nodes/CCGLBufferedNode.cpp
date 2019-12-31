@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 #include "CCGLBufferedNode.h"
 
+namespace cocos2d {
+
 CCGLBufferedNode::CCGLBufferedNode(void)
 {
     for(int i = 0; i < BUFFER_SLOTS; i++)
@@ -32,6 +34,22 @@ CCGLBufferedNode::CCGLBufferedNode(void)
         m_bufferSize[i] = 0;
         m_indexBufferObject[i] = 0;
         m_indexBufferSize[i] = 0;
+    }
+}
+
+CCGLBufferedNode::~CCGLBufferedNode()
+{
+    for(int i = 0; i < BUFFER_SLOTS; i++)
+    {
+        if (m_bufferObject[i])
+        {
+            glDeleteBuffers(1, &(m_bufferObject[i]));
+        }
+        
+        if(m_indexBufferObject[i])
+        {
+            glDeleteBuffers(1, &(m_indexBufferObject[i]));
+        }
     }
 }
 
@@ -78,4 +96,4 @@ void CCGLBufferedNode::setGLIndexData(void *buf, GLuint bufSize, int slot)
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, bufSize, buf);
     }
 }
-
+}

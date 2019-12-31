@@ -6,6 +6,8 @@ CONFIG(debug, debug|release) {
     DEFINES += COCOS2D_DEBUG=1
 }
 
+DEFINES += CC_ENABLE_CACHE_TEXTURE_DATA=0
+
 macx {
     LIBS += \
         -framework Foundation \
@@ -20,12 +22,15 @@ win32-msvc* {
     INCLUDEPATH += $$PTHREADS_PATH
 }
 
+win32|emscripten {
+    INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtZlib
+}
+
 win32 {
     DEFINES += _WINDOWS
     DEFINES += CC_TEXTURE_ATLAS_USE_VAO=0
     DEFINES += CC_USE_QT_OPENGL
     INCLUDEPATH += \
-        $$[QT_INSTALL_HEADERS]/QtZlib \
         $$COCOS2DX_PATH/cocos2dx/platform/win32
 }
 
@@ -33,6 +38,10 @@ macx {
     LIBS += -lz
     DEFINES += CC_TARGET_OS_MAC
     INCLUDEPATH += $$COCOS2DX_PATH/cocos2dx/platform/mac
+}
+
+emscripten {
+    INCLUDEPATH += $$COCOS2DX_PATH/cocos2dx/platform/emscripten
 }
 
 DEFINES += CC_STATIC_LIB

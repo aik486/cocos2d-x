@@ -26,7 +26,6 @@ THE SOFTWARE.
 #define __CCGL_H__
 
 #ifdef CC_USE_QT_OPENGL
-#include <QtOpenGL>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
