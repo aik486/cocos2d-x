@@ -249,6 +249,7 @@ void QtCocosWindow::resizeGL(int w, int h)
 	mEGLView->setFrameSize(w, h);
 	mEGLView->setDesignResolutionSize(w, h, kResolutionNoBorder);
 
+	mScene->setContentSize(CCSizeMake(w, h));
 	mMainNode->setPosition(CCPoint(w * 0.5f, h * 0.5f));
 
 	emit VisibleFrameAdjusted();
