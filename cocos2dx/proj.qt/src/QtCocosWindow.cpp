@@ -1,6 +1,7 @@
 #include "QtCocosWindow.h"
 
 #include "QtCocosHelper.h"
+#include "QtCocosContext.h"
 
 #include "cocos_warnings_off.h"
 #include "base_nodes/CCNode.h"
@@ -61,6 +62,9 @@ QtCocosWindow::QtCocosWindow()
 	auto surfaceFormat = format();
 	surfaceFormat.setStencilBufferSize(8);
 	setFormat(surfaceFormat);
+
+	QtCocosContext::setBackgroundColorSetter(
+		[this](const QColor &color) { setBackgroundColor(color); });
 }
 
 QtCocosWindow::~QtCocosWindow()
@@ -76,6 +80,8 @@ QtCocosWindow::~QtCocosWindow()
 		director->mainLoop();
 	}
 
+	QtCocosContext::setContextSetter(nullptr);
+	QtCocosContext::setBackgroundColorSetter(nullptr);
 	delete mEGLView;
 }
 
@@ -218,6 +224,8 @@ void QtCocosWindow::initializeGL()
 {
 	QOpenGLWindow::initializeGL();
 
+	QtCocosContext::setContextSetter([this]() { makeCurrent(); });
+
 	auto director = CCDirector::sharedDirector();
 
 	if (!mEGLView->InitGL())
@@ -249,6 +257,7 @@ void QtCocosWindow::resizeGL(int w, int h)
 	mEGLView->setFrameSize(w, h);
 	mEGLView->setDesignResolutionSize(w, h, kResolutionNoBorder);
 
+	mScene->setContentSize(CCSizeMake(w, h));
 	mMainNode->setPosition(CCPoint(w * 0.5f, h * 0.5f));
 
 	emit VisibleFrameAdjusted();
