@@ -51,6 +51,7 @@ msvc {
 }
 
 SOURCES +=\
+    src/QtCocosContext.cpp \
     src/QtCocosHelper.cpp \
     src/QtCocosExtension.cpp \
     src/QtCocosEGLView.cpp \
@@ -176,6 +177,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/cocos2d.cpp
 
 HEADERS += \
+    src/QtCocosContext.h \
     src/QtCocosHelper.h \
     src/QtCocosExtension.h \
     src/cocos2dx_qt.h \
