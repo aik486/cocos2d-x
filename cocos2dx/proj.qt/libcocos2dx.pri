@@ -18,7 +18,7 @@ macx {
 }
 
 win32-msvc* {
-    LIBS += -lgdi32 -lopengl32 -luser32 -ladvapi32 -lpthreads4w
+    LIBS += -lgdi32 -lopengl32 -luser32 -ladvapi32 -lpthreads4w -lshell32
     INCLUDEPATH += $$PTHREADS_PATH
 }
 
