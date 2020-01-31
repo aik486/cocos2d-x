@@ -257,8 +257,6 @@ void CCDirector::drawScene(void)
         m_pScheduler->update(m_fDeltaTime);
     }
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     /* to avoid flickr, nextScene MUST be here: after tick and before draw.
      XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
     if (m_pNextScene)
@@ -271,6 +269,7 @@ void CCDirector::drawScene(void)
     // draw the scene
     if (m_pRunningScene)
     {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         m_pRunningScene->visit();
     }
 
