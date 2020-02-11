@@ -28,7 +28,7 @@ msvc {
             -Wno-overloaded-virtual \
             -Wno-unused-function \
             -Wno-deprecated-declarations
-    
+
         clang:QMAKE_CXXFLAGS += \
             -Wno-unused-private-field \
             -Wno-unneeded-internal-declaration \
@@ -40,7 +40,7 @@ msvc {
             -Wno-sequence-point \
             -Wno-sign-compare \
             -Wno-misleading-indentation
-    
+
         INCLUDEPATH += \
             $$COCOS2DX_PATH/cocos2dx/platform \
             $$COCOS2DX_PATH/cocos2dx/cocoa \
@@ -131,7 +131,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/support/CCVertex.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/component/CCComponent.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/component/CCComponentContainer.cpp \
-    $$COCOS2DX_PATH/cocos2dx/support/tinyxml2\tinyxml2.cpp \
+    $$COCOS2DX_PATH/cocos2dx/support/tinyxml2/tinyxml2.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/TransformUtils.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/data_support/ccCArray.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/image_support/TGAlib.cpp \
