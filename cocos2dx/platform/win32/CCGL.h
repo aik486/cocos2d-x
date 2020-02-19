@@ -34,229 +34,14 @@ THE SOFTWARE.
 namespace cocos2d
 {
 
-inline void glBindTexture(GLenum target, GLuint texture)
-{
-	CC_QT_OPENGL_FUNCTIONS->glBindTexture(target, texture);
-}
-
-inline void glBlendFunc(GLenum sfactor, GLenum dfactor)
-{
-	CC_QT_OPENGL_FUNCTIONS->glBlendFunc(sfactor, dfactor);
-}
-
-inline void glClear(GLbitfield mask)
-{
-	CC_QT_OPENGL_FUNCTIONS->glClear(mask);
-}
-
-inline void glClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
-{
-	CC_QT_OPENGL_FUNCTIONS->glClearColor(red, green, blue, alpha);
-}
-
-inline void glClearStencil(GLint s)
-{
-	CC_QT_OPENGL_FUNCTIONS->glClearStencil(s);
-}
-
-inline void glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
-{
-	CC_QT_OPENGL_FUNCTIONS->glColorMask(red, green, blue, alpha);
-}
-
-inline void glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
-{
-	CC_QT_OPENGL_FUNCTIONS->glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
-}
-
-inline void glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	CC_QT_OPENGL_FUNCTIONS->glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
-}
-
-inline void glCullFace(GLenum mode)
-{
-	CC_QT_OPENGL_FUNCTIONS->glCullFace(mode);
-}
-
-inline void glDeleteTextures(GLsizei n, const GLuint *textures)
-{
-	CC_QT_OPENGL_FUNCTIONS->glDeleteTextures(n, textures);
-}
-
-inline void glDepthFunc(GLenum func)
-{
-	CC_QT_OPENGL_FUNCTIONS->glDepthFunc(func);
-}
-
-inline void glDepthMask(GLboolean flag)
-{
-	CC_QT_OPENGL_FUNCTIONS->glDepthMask(flag);
-}
-
-inline void glDisable(GLenum cap)
-{
-	CC_QT_OPENGL_FUNCTIONS->glDisable(cap);
-}
-
-inline void glDrawArrays(GLenum mode, GLint first, GLsizei count)
-{
-	CC_QT_OPENGL_FUNCTIONS->glDrawArrays(mode, first, count);
-}
-
-inline void glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
-{
-	CC_QT_OPENGL_FUNCTIONS->glDrawElements(mode, count, type, indices);
-}
-
 inline void glEnable(GLenum cap)
 {
 	CC_QT_OPENGL_FUNCTIONS->glEnable(cap);
 }
 
-inline void glFinish()
-{
-	CC_QT_OPENGL_FUNCTIONS->glFinish();
-}
-
-inline void glFlush()
-{
-	CC_QT_OPENGL_FUNCTIONS->glFlush();
-}
-
-inline void glFrontFace(GLenum mode)
-{
-	CC_QT_OPENGL_FUNCTIONS->glFrontFace(mode);
-}
-
-inline void glGenTextures(GLsizei n, GLuint *textures)
-{
-	CC_QT_OPENGL_FUNCTIONS->glGenTextures(n, textures);
-}
-
-inline void glGetBooleanv(GLenum pname, GLboolean *params)
-{
-	CC_QT_OPENGL_FUNCTIONS->glGetBooleanv(pname, params);
-}
-
-inline GLenum glGetError()
-{
-	return CC_QT_OPENGL_FUNCTIONS->glGetError();
-}
-
-inline void glGetFloatv(GLenum pname, GLfloat *params)
-{
-	CC_QT_OPENGL_FUNCTIONS->glGetFloatv(pname, params);
-}
-
-inline void glGetIntegerv(GLenum pname, GLint *params)
-{
-	CC_QT_OPENGL_FUNCTIONS->glGetIntegerv(pname, params);
-}
-
 inline const GLubyte *glGetString(GLenum name)
 {
  return CC_QT_OPENGL_FUNCTIONS->glGetString(name);
-}
-
-inline void glGetTexParameterfv(GLenum target, GLenum pname, GLfloat *params)
-{
-	CC_QT_OPENGL_FUNCTIONS->glGetTexParameterfv(target, pname, params);
-}
-
-inline void glGetTexParameteriv(GLenum target, GLenum pname, GLint *params)
-{
-	CC_QT_OPENGL_FUNCTIONS->glGetTexParameteriv(target, pname, params);
-}
-
-inline void glHint(GLenum target, GLenum mode)
-{
-	CC_QT_OPENGL_FUNCTIONS->glHint(target, mode);
-}
-
-inline GLboolean glIsEnabled(GLenum cap)
-{
-	return CC_QT_OPENGL_FUNCTIONS->glIsEnabled(cap);
-}
-
-inline GLboolean glIsTexture(GLuint texture)
-{
-	return CC_QT_OPENGL_FUNCTIONS->glIsTexture(texture);
-}
-
-inline void glLineWidth(GLfloat width)
-{
-	CC_QT_OPENGL_FUNCTIONS->glLineWidth(width);
-}
-
-inline void glPixelStorei(GLenum pname, GLint param)
-{
-	CC_QT_OPENGL_FUNCTIONS->glPixelStorei(pname, param);
-}
-
-inline void glPolygonOffset(GLfloat factor, GLfloat units)
-{
-	CC_QT_OPENGL_FUNCTIONS->glPolygonOffset(factor, units);
-}
-
-inline void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels)
-{
-	CC_QT_OPENGL_FUNCTIONS->glReadPixels(x, y, width, height, format, type, pixels);
-}
-
-inline void glScissor(GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	CC_QT_OPENGL_FUNCTIONS->glScissor(x, y, width, height);
-}
-
-inline void glStencilFunc(GLenum func, GLint ref, GLuint mask)
-{
-	CC_QT_OPENGL_FUNCTIONS->glStencilFunc(func, ref, mask);
-}
-
-inline void glStencilMask(GLuint mask)
-{
-	CC_QT_OPENGL_FUNCTIONS->glStencilMask(mask);
-}
-
-inline void glStencilOp(GLenum fail, GLenum zfail, GLenum zpass)
-{
-	CC_QT_OPENGL_FUNCTIONS->glStencilOp(fail, zfail, zpass);
-}
-
-inline void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels)
-{
-	CC_QT_OPENGL_FUNCTIONS->glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
-}
-
-inline void glTexParameterf(GLenum target, GLenum pname, GLfloat param)
-{
-	CC_QT_OPENGL_FUNCTIONS->glTexParameterf(target, pname, param);
-}
-
-inline void glTexParameterfv(GLenum target, GLenum pname, const GLfloat *params)
-{
-	CC_QT_OPENGL_FUNCTIONS->glTexParameterfv(target, pname, params);
-}
-
-inline void glTexParameteri(GLenum target, GLenum pname, GLint param)
-{
-	CC_QT_OPENGL_FUNCTIONS->glTexParameteri(target, pname, param);
-}
-
-inline void glTexParameteriv(GLenum target, GLenum pname, const GLint *params)
-{
-	CC_QT_OPENGL_FUNCTIONS->glTexParameteriv(target, pname, params);
-}
-
-inline void glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels)
-{
-	CC_QT_OPENGL_FUNCTIONS->glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
-}
-
-inline void glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	CC_QT_OPENGL_FUNCTIONS->glViewport(x, y, width, height);
 }
 
 inline void glActiveTexture(GLenum texture)
@@ -322,11 +107,6 @@ inline void glBufferSubData(GLenum target, qopengl_GLintptr offset, qopengl_GLsi
 inline GLenum glCheckFramebufferStatus(GLenum target)
 {
 	return CC_QT_OPENGL_FUNCTIONS->glCheckFramebufferStatus(target);
-}
-
-inline void glClearDepth(GLclampd depth)
-{
-	CC_QT_OPENGL_FUNCTIONS->glClearDepthf(GLclampf(depth));
 }
 
 inline void glClearDepthf(GLclampf depth)
@@ -529,7 +309,7 @@ inline void glGetVertexAttribPointerv(GLuint index, GLenum pname, void **pointer
 	CC_QT_OPENGL_FUNCTIONS->glGetVertexAttribPointerv(index, pname, pointer);
 }
 
-inline GLboolean	glIsBuffer(GLuint buffer)
+inline GLboolean glIsBuffer(GLuint buffer)
 {
 	return CC_QT_OPENGL_FUNCTIONS->glIsBuffer(buffer);
 }
@@ -544,7 +324,7 @@ inline GLboolean glIsProgram(GLuint program)
 	return CC_QT_OPENGL_FUNCTIONS->glIsProgram(program);
 }
 
-inline GLboolean	glIsRenderbuffer(GLuint renderbuffer)
+inline GLboolean glIsRenderbuffer(GLuint renderbuffer)
 {
 	return CC_QT_OPENGL_FUNCTIONS->glIsRenderbuffer(renderbuffer);
 }
