@@ -38,7 +38,6 @@ win32 {
     DEFINES += CC_TEXTURE_ATLAS_USE_VAO=0
     DEFINES += CC_USE_QT_OPENGL
     INCLUDEPATH += \
-        $$[QT_INSTALL_HEADERS]/QtZlib \
         $$COCOS2DX_PATH/cocos2dx/platform/win32
 }
 
