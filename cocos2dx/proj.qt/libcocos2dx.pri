@@ -8,6 +8,13 @@ CONFIG(debug, debug|release) {
 
 DEFINES += CC_ENABLE_CACHE_TEXTURE_DATA=0
 
+linux {
+ LIBS += -Wl,-Bstatic -lz -Wl,-Bdynamic
+ DEFINES += LINUX
+ INCLUDEPATH += $$COCOS2DX_PATH/cocos2dx/platform/linux
+ DEFINES += CC_USE_QT_OPENGL
+}
+
 macx {
     LIBS += \
         -framework Foundation \
@@ -31,6 +38,7 @@ win32 {
     DEFINES += CC_TEXTURE_ATLAS_USE_VAO=0
     DEFINES += CC_USE_QT_OPENGL
     INCLUDEPATH += \
+        $$[QT_INSTALL_HEADERS]/QtZlib \
         $$COCOS2DX_PATH/cocos2dx/platform/win32
 }
 
