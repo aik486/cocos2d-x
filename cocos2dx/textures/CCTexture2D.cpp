@@ -139,7 +139,7 @@ bool CCTexture2D::hasPremultipliedAlpha() { return m_bHasPremultipliedAlpha; }
 bool CCTexture2D::initWithData(const void* data,
     CCTexture2DPixelFormat pixelFormat,
     unsigned int pixelsWide, unsigned int pixelsHigh,
-    const CCSize& contentSize)
+    const CCSize& contentSize, bool premultipliedAlpha)
 {
     unsigned int bitsPerPixel;
     // Hack: bitsPerPixelForFormat returns wrong number for RGB_888 textures. See
@@ -219,7 +219,7 @@ bool CCTexture2D::initWithData(const void* data,
     m_fMaxS = contentSize.width / (float)(pixelsWide);
     m_fMaxT = contentSize.height / (float)(pixelsHigh);
 
-    m_bHasPremultipliedAlpha = false;
+    m_bHasPremultipliedAlpha = premultipliedAlpha;
     m_bHasMipmaps = false;
 
     setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(

@@ -285,7 +285,7 @@ bool CCRenderTexture::initWithWidthAndHeight(int w, int h, CCTexture2DPixelForma
         m_pTexture = new CCTexture2D();
         if (m_pTexture)
         {
-            m_pTexture->initWithData(data, (CCTexture2DPixelFormat)m_ePixelFormat, powW, powH, CCSizeMake((float)w, (float)h));
+            m_pTexture->initWithData(data, (CCTexture2DPixelFormat)m_ePixelFormat, powW, powH, CCSizeMake((float)w, (float)h), true);
         }
         else
         {
@@ -299,7 +299,7 @@ bool CCRenderTexture::initWithWidthAndHeight(int w, int h, CCTexture2DPixelForma
             m_pTextureCopy = new CCTexture2D();
             if (m_pTextureCopy)
             {
-                m_pTextureCopy->initWithData(data, (CCTexture2DPixelFormat)m_ePixelFormat, powW, powH, CCSizeMake((float)w, (float)h));
+                m_pTextureCopy->initWithData(data, (CCTexture2DPixelFormat)m_ePixelFormat, powW, powH, CCSizeMake((float)w, (float)h), true);
             }
             else
             {
@@ -340,23 +340,20 @@ bool CCRenderTexture::initWithWidthAndHeight(int w, int h, CCTexture2DPixelForma
         m_pTexture->release();
         m_pSprite->setScaleY(-1);
 
-        ccBlendFunc tBlendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA };
-        m_pSprite->setBlendFunc(tBlendFunc);
-
         glBindRenderbuffer(GL_RENDERBUFFER, oldRBO);
         glBindFramebuffer(GL_FRAMEBUFFER, m_nOldFBO);
-        
+
         // Diabled by default.
         m_bAutoDraw = false;
-        
+
         // add sprite for backward compatibility
         addChild(m_pSprite);
-        
+
         bRet = true;
     } while (0);
-    
+
     CC_SAFE_FREE(data);
-    
+
     return bRet;
 }
 

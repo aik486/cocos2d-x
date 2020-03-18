@@ -152,7 +152,7 @@ public:
    */
     bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat,
         unsigned int pixelsWide, unsigned int pixelsHigh,
-        const CCSize& contentSize);
+        const CCSize& contentSize, bool premultipliedAlpha = false);
 
     /**
   Drawing extensions to make it easy to draw basic quads using a CCTexture2D
