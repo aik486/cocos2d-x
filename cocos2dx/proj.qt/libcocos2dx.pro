@@ -142,12 +142,12 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureCache.cpp \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureETC.cpp \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTexturePVR.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCParallaxNode.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTileMapAtlas.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXLayer.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXObjectGroup.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXTiledMap.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXXMLParser.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCParallaxNode.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXLayer.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.cpp \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouch.cpp \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchDispatcher.cpp \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchHandler.cpp \
@@ -304,12 +304,12 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureCache.h \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureETC.h \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTexturePVR.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCParallaxNode.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTileMapAtlas.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXLayer.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXObjectGroup.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXTiledMap.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXXMLParser.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCParallaxNode.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXLayer.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouch.h \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchDispatcher.h \
@@ -386,4 +386,24 @@ HEADERS +=\
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCGL.h \
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCPlatformDefine.h \
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCStdC.h
+}
+
+linux {
+SOURCES +=\
+    src/CCEGLViewLinux.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCApplication.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCCommon.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCDevice.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCFileUtilsLinux.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCStdC.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/CCThread.cpp
+
+HEADERS +=\
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCAccelerometer.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCApplication.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCEGLView.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCFileUtilsLinux.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCGL.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCPlatformDefine.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCStdC.h
 }

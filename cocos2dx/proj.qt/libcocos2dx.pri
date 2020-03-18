@@ -6,6 +6,14 @@ CONFIG(debug, debug|release) {
     DEFINES += COCOS2D_DEBUG=1
 }
 
+
+linux {
+ LIBS += -Wl,-Bstatic -lz -Wl,-Bdynamic
+ DEFINES += LINUX
+ INCLUDEPATH += $$COCOS2DX_PATH/cocos2dx/platform/linux
+ DEFINES += CC_USE_QT_OPENGL
+}
+
 macx {
     LIBS += \
         -framework Foundation \

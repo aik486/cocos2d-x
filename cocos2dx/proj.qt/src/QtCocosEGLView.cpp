@@ -139,8 +139,10 @@ bool QtCocosEGLView::InitGL()
 		return false;
 	}
 
-	// Enable point size by default on windows.
-	cocos2d::glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    // Enable point size by default on windows
+#endif
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+    cocos2d::glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 #endif
 	openglReady = true;
 	return true;
@@ -191,6 +193,8 @@ QtCocosEGLView::QtCocosEGLView()
 	view_ptr = &s_sharedView;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 	view_ptr = &s_pEglView;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+    view_ptr = &s_pEglView;
 #endif
 
 	CC_ASSERT(nullptr == *view_ptr);
