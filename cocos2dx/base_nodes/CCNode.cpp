@@ -1247,6 +1247,11 @@ void CCNode::setAdditionalTransform(const CCAffineTransform& additionalTransform
     m_bAdditionalTransformDirty = true;
 }
 
+const CCAffineTransform &CCNode::getAdditionalTransform() const
+{
+    return m_sAdditionalTransform;
+}
+
 const CCAffineTransform& CCNode::parentToNodeTransform(void)
 {
     if ( m_bInverseDirty ) {

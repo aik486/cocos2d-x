@@ -1352,6 +1352,8 @@ public:
      */
     void setAdditionalTransform(const CCAffineTransform& additionalTransform);
     
+    const CCAffineTransform& getAdditionalTransform() const;
+
     /// @} end of Coordinate Converters
 
       /// @{
