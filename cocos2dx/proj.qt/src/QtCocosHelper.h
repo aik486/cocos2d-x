@@ -15,6 +15,7 @@
 namespace cocos2d
 {
 class CCNode;
+class CCNodeRGBA;
 using CCShape = QVector<CCPoint>;
 
 QPolygonF shapeFromNode(CCNode *node);
@@ -56,4 +57,6 @@ qreal getGlobalNodeRotation(CCNode *node);
 
 CCRect getWorldRectForNode(
 	CCNode *node, bool *xReversePtr = nullptr, bool *yReversePtr = nullptr);
+
+void copyNodeProperties(CCNodeRGBA*from,CCNodeRGBA*to);
 }
