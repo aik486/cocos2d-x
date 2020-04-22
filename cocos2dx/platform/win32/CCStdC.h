@@ -79,13 +79,18 @@ THE SOFTWARE.
 #define _WINSOCK2API_
 #endif
 // Structure timeval has define in winsock.h, include windows.h for it.
+#ifndef __MINGW32__
+#ifndef _WINSOCK2API_
+#include <WinSock2.h>
+#endif
+#endif
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
 #include <Windows.h>
 
 #ifndef __MINGW32__
 
-#ifndef _WINSOCK2API_
-#include <WinSock2.h>
-#endif
 
 NS_CC_BEGIN
 
