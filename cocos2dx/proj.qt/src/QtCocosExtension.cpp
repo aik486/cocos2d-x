@@ -903,7 +903,7 @@ void CCDrawNodeRGBA::updateDisplayedColor(const ccColor3B &parentColor)
 	mDisplayedColor.r = GLubyte((mRealColor.r * parentColor.r) / 255);
 	mDisplayedColor.g = GLubyte((mRealColor.g * parentColor.g) / 255);
 	mDisplayedColor.b = GLubyte((mRealColor.b * parentColor.b) / 255);
-	m_bDirty = oldColor.r != mDisplayedColor.r ||
+	m_bDirty = m_bDirty || oldColor.r != mDisplayedColor.r ||
 		oldColor.g != mDisplayedColor.g || oldColor.b != mDisplayedColor.b;
 
 	if (mCascadeColorEnabled)
@@ -934,7 +934,7 @@ void CCDrawNodeRGBA::updateDisplayedOpacity(GLubyte parentOpacity)
 {
 	auto oldOpacity = mDisplayedOpacity;
 	mDisplayedOpacity = GLubyte((mRealOpacity * parentOpacity) / 255);
-	m_bDirty = mDisplayedOpacity != oldOpacity;
+	m_bDirty = m_bDirty || mDisplayedOpacity != oldOpacity;
 
 	if (mCascadeOpacityEnabled)
 	{
