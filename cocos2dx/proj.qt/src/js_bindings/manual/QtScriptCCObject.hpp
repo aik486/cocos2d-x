@@ -43,6 +43,9 @@ protected:
 	static QScriptValue toScriptValue(QScriptEngine *engine, CC_T const &object)
 	{
 		CCObject *obj = object;
+		if (!obj)
+			return engine->nullValue();
+
 		QScriptValue proto = engine->defaultPrototype(qMetaTypeId<CC_T>());
 		QtScriptCCObject *cls = qobject_cast<CLS_T *>(proto.toQObject());
 		Q_ASSERT(nullptr != cls);
