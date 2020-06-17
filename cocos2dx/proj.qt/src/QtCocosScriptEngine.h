@@ -91,6 +91,15 @@ private:
 		const QScriptValueList &args = QScriptValueList());
 	QScriptValue checkResult(QScriptValue value);
 
+	static QScriptValue spriteFrameByName(
+		QScriptContext *context, QScriptEngine *engine);
+	static QScriptValue addImageSpriteFrame(
+		QScriptContext *context, QScriptEngine *engine);
+	static QScriptValue shaderProgramByName(
+		QScriptContext *context, QScriptEngine *engine);
+	static QScriptValue addShaderProgram(
+		QScriptContext *context, QScriptEngine *engine);
+
 private:
 	QScriptEngine *mEngine;
 	QScriptString mStringIds[STRING_ID_COUNT];

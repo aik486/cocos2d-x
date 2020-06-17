@@ -52,12 +52,14 @@ msvc {
 SOURCES +=\
     src/QtCocosScriptEngine.cpp \
     src/js_bindings/generated/qtscript_cocos2dx.cpp \
+    src/js_bindings/manual/QtScriptCCCustomEffect.cpp \
     src/js_bindings/manual/QtScriptCCObject.cpp \
     src/js_bindings/manual/QtScriptCCObjectHolder.cpp
 
 HEADERS += \
     src/QtCocosScriptEngine.h \
     src/js_bindings/generated/qtscript_cocos2dx.hpp \
+    src/js_bindings/manual/QtScriptCCCustomEffect.h \
     src/js_bindings/manual/QtScriptCCObject.hpp \
     src/QtCocosEnums.h \
     src/js_bindings/manual/QtScriptCCObjectHolder.h

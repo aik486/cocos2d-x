@@ -9,7 +9,12 @@
 #include "textures/CCTextureAtlas.h"
 #include "cocos_warnings_pop.h"
 
+#include "CCObjectHolder.h"
+
 #include <QPolygonF>
+
+#include <deque>
+#include <functional>
 
 namespace cocos2d
 {
@@ -85,6 +90,32 @@ public:
 	static CCNodeEx *create();
 
 	virtual void updateAdditiveColor() override;
+};
+
+class CCCustomEffect : public CCSprite
+{
+public:
+	static CCCustomEffect *create();
+
+	void addTextureForShader(
+		CCTexture2D *texture, const QByteArray &uniformName);
+
+	using PreDrawCalllback = std::function<void()>;
+
+	void setPreDrawCallback(const PreDrawCalllback &callback);
+
+	virtual void draw() override;
+
+private:
+	struct TextureEntry
+	{
+		CCObjectHolder<CCTexture2D *> texture;
+		QByteArray uniformName;
+		int uniformLocation = -1;
+	};
+
+	std::deque<TextureEntry> mShaderTextures;
+	PreDrawCalllback mPreDrawCallback;
 };
 
 class CCSpriteEx

@@ -987,4 +987,59 @@ void CCDrawNodeRGBA::draw()
 	m_pBuffer = savedBuffer;
 	m_nBufferCapacity = savedCapacity;
 }
+
+CCCustomEffect *CCCustomEffect::create()
+{
+	auto result = new CCCustomEffect;
+	if (result && result->init())
+	{
+		result->autorelease();
+	} else
+	{
+		CC_SAFE_DELETE(result);
+	}
+
+	return result;
+}
+
+void CCCustomEffect::addTextureForShader(
+	CCTexture2D *texture, const QByteArray &uniformName)
+{
+	mShaderTextures.emplace_back();
+	auto &entry = mShaderTextures.back();
+	entry.texture.setObject(texture);
+	entry.uniformName = uniformName;
+}
+
+void CCCustomEffect::setPreDrawCallback(const PreDrawCalllback &callback)
+{
+	mPreDrawCallback = callback;
+}
+
+void CCCustomEffect::draw()
+{
+	auto program = m_pShaderProgram;
+	if (program)
+	{
+		program->use();
+		int i = 0;
+		for (auto &entry : mShaderTextures)
+		{
+			if (entry.uniformLocation < 0)
+			{
+				entry.uniformLocation = program->getUniformLocationForName(
+					entry.uniformName.data());
+			}
+			program->setUniformLocationWith1i(entry.uniformLocation, i);
+			ccGLBindTexture2DN(i, entry.texture.object()->getName());
+		}
+	}
+
+	if (mPreDrawCallback)
+	{
+		mPreDrawCallback();
+	}
+
+	CCSprite::draw();
+}
 }

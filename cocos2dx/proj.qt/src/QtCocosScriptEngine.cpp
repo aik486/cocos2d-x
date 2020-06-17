@@ -6,12 +6,17 @@ Q_DECLARE_METATYPE(std::vector<std::string>)
 #include "QtScriptInstall.h"
 #include "js_bindings/manual/QtScriptCCObject.hpp"
 #include "js_bindings/manual/QtScriptCCObjectHolder.h"
+#include "js_bindings/manual/QtScriptCCCustomEffect.h"
 #include "js_bindings/generated/qtscript_cocos2dx.hpp"
 
 #include "QtCocosHelper.h"
 #include "QtCocosEnums.h"
+#include "QtCocosContext.h"
 
 #include <QScriptEngine>
+#include <QScriptValueIterator>
+#include <QIODevice>
+#include <QImage>
 
 using namespace cocos2d;
 
@@ -148,11 +153,18 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 		mStringIds[i] = engine->toStringHandle(STRING_IDS[i]);
 	}
 
+	auto glObject = engine->newObject();
+	glObject.setPrototype(engine->newQMetaObject(&gl_enum::staticMetaObject));
+
+	auto global = engine->globalObject();
+	global.setProperty(
+		"gl", glObject, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 	mRootObject = engine->newObject();
 	mRootObject.setPrototype(
 		engine->newQMetaObject(&cocos2d::staticMetaObject));
 
-	engine->globalObject().setProperty(mStringIds[CC], mRootObject,
+	global.setProperty(mStringIds[CC], mRootObject,
 		QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	qScriptRegisterMetaType<std::vector<std::string>>(
@@ -162,6 +174,7 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	QtScriptCCObject::Register(mRootObject);
 	QtScriptCCObjectHolder::Register(mRootObject);
 	qtscript_register_all_cocos2dx(engine);
+	QtScriptCCCustomEffect::Register(mRootObject);
 
 	qScriptRegisterMetaType<QColor>(mEngine, qColorToScriptValue,
 		qColorFromScriptValue,
@@ -555,6 +568,168 @@ QScriptValue QtCocosScriptEngine::checkResult(QScriptValue value)
 		mEngine->clearExceptions();
 	}
 	return value;
+}
+
+QScriptValue QtCocosScriptEngine::spriteFrameByName(
+	QScriptContext *context, QScriptEngine *engine)
+{
+	if (context->argumentCount() != 1)
+	{
+		badArgumentsException(context, "cc.spriteFrameByName");
+		return engine->uncaughtException();
+	}
+
+	return engine->toScriptValue(
+		CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(
+			qscriptvalue_cast<QByteArray>(context->argument(0)).constData()));
+}
+
+QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
+	QScriptContext *context, QScriptEngine *engine)
+{
+	int argc = context->argumentCount();
+	switch (argc)
+	{
+		case 2:
+		case 3:
+			break;
+
+		default:
+			badArgumentsException(context, "cc.addImageSpriteFrame");
+			return engine->uncaughtException();
+	}
+
+	auto key = qscriptvalue_cast<QByteArray>(context->argument(0));
+	auto arg1 = context->argument(1);
+	auto device = qscriptvalue_cast<QIODevice *>(arg1);
+
+	QImage image;
+
+	if (device)
+	{
+		image.load(device, nullptr);
+	} else
+	{
+		image.loadFromData(qscriptvalue_cast<QByteArray>(arg1));
+	}
+
+	CCTexture2DPixelFormat textureFormat;
+	if (image.hasAlphaChannel())
+	{
+		if (image.format() != QImage::Format_RGBA8888_Premultiplied)
+		{
+			image =
+				image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
+		}
+
+		textureFormat = kCCTexture2DPixelFormat_RGBA8888;
+	} else
+	{
+		if (image.format() != QImage::Format_RGB888)
+			image = image.convertToFormat(QImage::Format_RGB888);
+		textureFormat = kCCTexture2DPixelFormat_RGB888;
+	}
+
+	if (image.isNull())
+	{
+		image = QImage(1, 1, QImage::Format_RGB888);
+		image.fill(Qt::transparent);
+	}
+
+	QtCocosContext::makeCurrent();
+
+	CCRect rect(0, 0, float(image.width()), float(image.height()));
+	auto texture = new CCTexture2D;
+	bool textureOk = texture->initWithData(image.constBits(), textureFormat,
+		image.width(), image.height(), rect.size, true);
+
+	Q_ASSERT(textureOk);
+	Q_UNUSED(textureOk);
+
+	if (argc == 3)
+	{
+		auto params = qscriptvalue_cast<ccTexParams>(context->argument(2));
+		texture->setTexParameters(&params);
+	}
+
+	auto spriteFrame = CCSpriteFrame::createWithTexture(texture, rect);
+	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFrame(
+		spriteFrame, key.data());
+
+	texture->release();
+	return engine->toScriptValue(spriteFrame);
+}
+
+QScriptValue QtCocosScriptEngine::shaderProgramByName(
+	QScriptContext *context, QScriptEngine *engine)
+{
+	if (context->argumentCount() != 1)
+	{
+		badArgumentsException(context, "cc.shaderProgramByName");
+		return engine->uncaughtException();
+	}
+
+	return engine->toScriptValue(
+		CCShaderCache::sharedShaderCache()->programForKey(
+			qscriptvalue_cast<QByteArray>(context->argument(0)).constData()));
+}
+
+QScriptValue QtCocosScriptEngine::addShaderProgram(
+	QScriptContext *context, QScriptEngine *engine)
+{
+	int argc = context->argumentCount();
+	switch (argc)
+	{
+		case 3:
+		case 4:
+			break;
+
+		default:
+			badArgumentsException(context, "cc.addShaderProgram");
+			return engine->uncaughtException();
+	}
+
+	QtCocosContext::makeCurrent();
+
+	auto program = new CCGLProgram;
+
+	auto key = qscriptvalue_cast<QByteArray>(context->argument(0));
+
+	auto arg1 = context->argument(1);
+	auto arg2 = context->argument(2);
+
+	auto vDevice = qscriptvalue_cast<QIODevice *>(arg1);
+	auto fDevice = qscriptvalue_cast<QIODevice *>(arg2);
+
+	auto vert =
+		vDevice ? vDevice->readAll() : qscriptvalue_cast<QByteArray>(arg1);
+	auto frag =
+		fDevice ? fDevice->readAll() : qscriptvalue_cast<QByteArray>(arg2);
+
+	program->initWithVertexShaderByteArray(vert, frag);
+
+	if (argc == 4)
+	{
+		QScriptValueIterator it(context->argument(3));
+		while (it.hasNext())
+		{
+			it.next();
+			if (it.flags() & QScriptValue::SkipInEnumeration)
+				continue;
+
+			program->addAttribute(
+				it.name().toUtf8().constData(), it.value().toUInt32());
+		}
+	}
+
+	program->link();
+	program->updateUniforms();
+
+	CCShaderCache::sharedShaderCache()->addProgram(program, key);
+
+	program->release();
+
+	return engine->toScriptValue(program);
 }
 
 const QScriptString &QtCocosScriptEngine::jsString(int id) const

@@ -294,9 +294,9 @@ void copyNodeProperties(CCNodeRGBA *from, CCNodeRGBA *to)
 	to->setAdditionalTransform(from->getAdditionalTransform());
 	to->setPosition(from->getPosition());
 	to->setAnchorPoint(from->getAnchorPoint());
-	to->setContentSize(from->getContentSize());
 	to->setZOrder(from->getZOrder());
 	to->ignoreAnchorPointForPosition(from->isIgnoreAnchorPointForPosition());
 	to->setVisible(from->isVisible());
+	to->setContentSize(from->getContentSize());
 }
 }
