@@ -28,6 +28,8 @@ const char *QtCocosScriptEngine::STRING_IDS[] = {
 	"prototype",
 };
 
+#define STATIC_PROPERTY (QScriptValue::ReadOnly | QScriptValue::Undeletable)
+
 static QScriptValue stringVecToScriptValue(
 	QScriptEngine *eng, const std::vector<std::string> &cont)
 {
@@ -157,15 +159,13 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	glObject.setPrototype(engine->newQMetaObject(&gl_enum::staticMetaObject));
 
 	auto global = engine->globalObject();
-	global.setProperty(
-		"gl", glObject, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	global.setProperty("gl", glObject, STATIC_PROPERTY);
 
 	mRootObject = engine->newObject();
 	mRootObject.setPrototype(
 		engine->newQMetaObject(&cocos2d::staticMetaObject));
 
-	global.setProperty(mStringIds[CC], mRootObject,
-		QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	global.setProperty(mStringIds[CC], mRootObject, STATIC_PROPERTY);
 
 	qScriptRegisterMetaType<std::vector<std::string>>(
 		engine, stringVecToScriptValue, stringVecFromScriptValue);
@@ -179,6 +179,15 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	qScriptRegisterMetaType<QColor>(mEngine, qColorToScriptValue,
 		qColorFromScriptValue,
 		engine->defaultPrototype(qMetaTypeId<_ccColor4B>()));
+
+	mRootObject.setProperty(QSTRKEY(spriteFrameByName),
+		mEngine->newFunction(spriteFrameByName), STATIC_PROPERTY);
+	mRootObject.setProperty(QSTRKEY(addImageSpriteFrame),
+		mEngine->newFunction(addImageSpriteFrame), STATIC_PROPERTY);
+	mRootObject.setProperty(QSTRKEY(shaderProgramByName),
+		mEngine->newFunction(shaderProgramByName), STATIC_PROPERTY);
+	mRootObject.setProperty(QSTRKEY(addShaderProgram),
+		mEngine->newFunction(addShaderProgram), STATIC_PROPERTY);
 
 	static const bool cvtColor3Bto4B =
 		QMetaType::registerConverter<_ccColor3B, _ccColor4B>(ccColor3Bto4B);
