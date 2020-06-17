@@ -56,6 +56,7 @@ QtCocosWindow::QtCocosWindow()
 	, mHasFocus(false)
 	, mEnabled(true)
 	, mRunning(false)
+	, mInitialized(false)
 {
 	mBgColor = { 0.f, 0.f, 0.f, 0.f };
 
@@ -91,9 +92,14 @@ QWidget *QtCocosWindow::createWidget(QWidget *parent)
 
 	auto window = new QtCocosWindow;
 
-	auto result = QWidget::createWindowContainer(window, parent);
+	return window->makeContainerWidget(parent);
+}
 
-	window->mMasterWidget = result;
+QWidget *QtCocosWindow::makeContainerWidget(QWidget *parent)
+{
+	auto result = QWidget::createWindowContainer(this, parent);
+
+	mMasterWidget = result;
 
 	return result;
 }
@@ -246,6 +252,7 @@ void QtCocosWindow::initializeGL()
 
 	director->runWithScene(mScene);
 
+	mInitialized = true;
 	emit Initialized();
 }
 
