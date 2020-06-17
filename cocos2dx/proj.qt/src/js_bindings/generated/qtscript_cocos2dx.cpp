@@ -32450,6 +32450,17 @@ bool QtScriptCCImage::initWithImageFile(const QByteArray& strPath, int imageType
 	return false;
 }
 
+bool QtScriptCCImage::initWithImageData(const QByteArray &data)
+{
+	auto __o = this->thiz<CCImage *>();
+	if (__o)
+	{
+		return __o->initWithImageData(
+					const_cast<char*>(data.data()), data.size());
+	}
+	return false;
+}
+
 unsigned short QtScriptCCImage::getWidth()
 {
 	auto __o = this->thiz<CCImage *>();
