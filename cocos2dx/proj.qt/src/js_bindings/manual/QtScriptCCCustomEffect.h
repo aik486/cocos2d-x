@@ -23,9 +23,10 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE void addTextureForShader(
-		CCTexture2D *texture, const QByteArray &uniformName);
+		cocos2d::CCTexture2D *texture, const QByteArray &uniformName);
 
-	Q_INVOKABLE void setPreDrawCallback(QScriptValue value);
+	Q_INVOKABLE void setPreDrawCallback(QScriptValue callback);
+	Q_INVOKABLE void setCopyCallback(QScriptValue callback);
 
 	static QScriptValue create(QScriptContext *context, QScriptEngine *engine);
 };

@@ -70,25 +70,47 @@ void QtScriptCCCustomEffect::addTextureForShader(
 	}
 }
 
-void QtScriptCCCustomEffect::setPreDrawCallback(QScriptValue value)
+void QtScriptCCCustomEffect::setPreDrawCallback(QScriptValue callback)
 {
-	if (!value.isFunction())
+	if (!callback.isFunction())
 	{
 		QtScriptUtils::badArgumentsException(
-			context(), "cocos2d::CCCustomEffect::create");
+			context(), "cocos2d::CCCustomEffect::setPreDrawCallback");
 	}
 	auto o = this->thiz<CCCustomEffect *>();
 	if (o)
 	{
 		auto thiz = thisObject();
-		o->setPreDrawCallback([value, thiz]() mutable { value.call(thiz); });
+		o->setPreDrawCallback([callback, thiz](CCCustomEffect *) mutable {
+			callback.call(thiz);
+		});
+	}
+}
+
+void QtScriptCCCustomEffect::setCopyCallback(QScriptValue callback)
+{
+	if (!callback.isFunction())
+	{
+		QtScriptUtils::badArgumentsException(
+			context(), "cocos2d::CCCustomEffect::setCopyCallback");
+	}
+	auto o = this->thiz<CCCustomEffect *>();
+	if (o)
+	{
+		auto thiz = thisObject();
+		o->setCopyCallback(
+			[callback, thiz](CCCustomEffect *, CCCustomEffect *dst) mutable {
+				auto engine = callback.engine();
+				callback.call(
+					thiz, QScriptValueList() << engine->toScriptValue(dst));
+			});
 	}
 }
 
 QScriptValue QtScriptCCCustomEffect::create(
 	QScriptContext *context, QScriptEngine *engine)
 {
-	if (!QtScriptUtils::checkArgumentCount(context, 2, 0))
+	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
 	{
 		return engine->uncaughtException();
 	}

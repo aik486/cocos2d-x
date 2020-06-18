@@ -12,8 +12,8 @@
 #include "CCObjectHolder.h"
 
 #include <QPolygonF>
+#include <QList>
 
-#include <deque>
 #include <functional>
 
 namespace cocos2d
@@ -95,14 +95,19 @@ public:
 class CCCustomEffect : public CCSprite
 {
 public:
+	using PreDrawCallback = std::function<void(CCCustomEffect *)>;
+	using CopyCallback =
+		std::function<void(CCCustomEffect *, CCCustomEffect *)>;
+
 	static CCCustomEffect *create();
+
+	virtual CCObject *copyWithZone(CCZone *) override;
 
 	void addTextureForShader(
 		CCTexture2D *texture, const QByteArray &uniformName);
 
-	using PreDrawCalllback = std::function<void()>;
-
-	void setPreDrawCallback(const PreDrawCalllback &callback);
+	void setPreDrawCallback(const PreDrawCallback &callback);
+	void setCopyCallback(const CopyCallback &callback);
 
 	virtual void draw() override;
 
@@ -114,8 +119,9 @@ private:
 		int uniformLocation = -1;
 	};
 
-	std::deque<TextureEntry> mShaderTextures;
-	PreDrawCalllback mPreDrawCallback;
+	QList<TextureEntry> mShaderTextures;
+	PreDrawCallback mPreDrawCallback;
+	CopyCallback mCopyCallback;
 };
 
 class CCSpriteEx

@@ -285,6 +285,12 @@ void copyNodeProperties(CCNodeRGBA *from, CCNodeRGBA *to)
 	to->setCascadeOpacityEnabled(from->isCascadeOpacityEnabled());
 	to->setOpacity(from->getOpacity());
 	to->setColor(from->getColor());
+	copyNodeProperties(
+		reinterpret_cast<CCNode *>(from), reinterpret_cast<CCNode *>(to));
+}
+
+void copyNodeProperties(CCNode *from, CCNode *to)
+{
 	to->setRotationX(from->getRotationX());
 	to->setRotationY(from->getRotationY());
 	to->setSkewX(from->getSkewX());
