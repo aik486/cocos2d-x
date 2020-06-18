@@ -30,7 +30,7 @@ public:
 	Q_INVOKABLE bool isEqual(const CCObject *other) const;
 
 protected:
-	static QScriptValue cast(QScriptContext *context, QScriptEngine *engine);
+	static QScriptValue cast(QScriptContext *context, QScriptEngine *);
 
 	// QtScriptCCObject
 	virtual int constructorArgumentCountMin() const override;
