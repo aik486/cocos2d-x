@@ -715,7 +715,7 @@ QScriptValue QtCocosScriptEngine::addShaderProgram(
 	auto frag =
 		fDevice ? fDevice->readAll() : qscriptvalue_cast<QByteArray>(arg2);
 
-	program->initWithVertexShaderByteArray(vert, frag);
+	program->initWithVertexShaderByteArray(vert.constData(), frag.constData());
 
 	if (argc == 4)
 	{
@@ -734,7 +734,7 @@ QScriptValue QtCocosScriptEngine::addShaderProgram(
 	program->link();
 	program->updateUniforms();
 
-	CCShaderCache::sharedShaderCache()->addProgram(program, key);
+	CCShaderCache::sharedShaderCache()->addProgram(program, key.constData());
 
 	program->release();
 
