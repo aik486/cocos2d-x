@@ -239,6 +239,20 @@ void CCDrawNode::draw()
     render();
 }
 
+CCObject *CCDrawNode::copyWithZone(CCZone *)
+{
+    auto drawNode = new CCDrawNode;
+    drawNode->init();
+    drawNode->copyPropertiesFrom(this);
+    drawNode->setBlendFunc(m_sBlendFunc);
+    drawNode->reserve(m_nBufferCount);
+    drawNode->m_nBufferCount = m_nBufferCount;
+    memcpy(drawNode->m_pBuffer, 
+           m_pBuffer, m_nBufferCount * sizeof(ccV2F_C4B_T2F));
+    
+    return drawNode;
+}
+
 void CCDrawNode::drawDot(const CCPoint &pos, float radius, const ccColor4F &color)
 {
     drawDot(pos, radius, ccc4BFromccc4F(color));    

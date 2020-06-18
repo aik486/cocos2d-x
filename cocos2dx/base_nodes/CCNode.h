@@ -144,6 +144,11 @@ public:
      */
     virtual ~CCNode(void);
     
+    virtual CCObject *copyWithZone(CCZone *) override;
+    
+    void copyPropertiesFrom(CCNode *from);
+    void copyNodeChildrenFrom(CCNode* from, bool skipHidden = true);
+    
     /**
      *  Initializes the instance of CCNode
      *  @return Whether the initialization was successful.
@@ -1216,7 +1221,7 @@ public:
     /* 
      * Update method will be called automatically every frame if "scheduleUpdate" is called, and the node is "live"
      */
-    virtual void update(float delta);
+    virtual void update(float delta) override;
 
     /// @} end of Scheduler and Timer
 
@@ -1494,7 +1499,7 @@ public:
      */
     virtual ~CCNodeRGBA();
     
-    virtual bool init();
+    virtual bool init() override;
     
     /**
      * Allocates and initializes a nodergba.
@@ -1502,22 +1507,26 @@ public:
      */
     static CCNodeRGBA * create(void);
     
-    virtual GLubyte getOpacity();
-    virtual GLubyte getDisplayedOpacity();
-    virtual void setOpacity(GLubyte opacity);
-    virtual void updateDisplayedOpacity(GLubyte parentOpacity);
-    virtual bool isCascadeOpacityEnabled();
-    virtual void setCascadeOpacityEnabled(bool cascadeOpacityEnabled);
+    virtual CCObject *copyWithZone(CCZone *) override;
     
-    virtual const ccColor3B& getColor(void);
-    virtual const ccColor3B& getDisplayedColor();
-    virtual void setColor(const ccColor3B& color);
-    virtual void updateDisplayedColor(const ccColor3B& parentColor);
-    virtual bool isCascadeColorEnabled();
-    virtual void setCascadeColorEnabled(bool cascadeColorEnabled);
+    void copyPropertiesFrom(CCNodeRGBA *from);
     
-    virtual void setOpacityModifyRGB(bool bValue) {CC_UNUSED_PARAM(bValue);};
-    virtual bool isOpacityModifyRGB() { return false; };
+    virtual GLubyte getOpacity() override;
+    virtual GLubyte getDisplayedOpacity() override;
+    virtual void setOpacity(GLubyte opacity) override;
+    virtual void updateDisplayedOpacity(GLubyte parentOpacity) override;
+    virtual bool isCascadeOpacityEnabled() override;
+    virtual void setCascadeOpacityEnabled(bool cascadeOpacityEnabled) override;
+    
+    virtual const ccColor3B& getColor(void) override;
+    virtual const ccColor3B& getDisplayedColor() override;
+    virtual void setColor(const ccColor3B& color) override;
+    virtual void updateDisplayedColor(const ccColor3B& parentColor) override;
+    virtual bool isCascadeColorEnabled() override;
+    virtual void setCascadeColorEnabled(bool cascadeColorEnabled) override;
+    
+    virtual void setOpacityModifyRGB(bool bValue) override;
+    virtual bool isOpacityModifyRGB() override;
 
 protected:
 	GLubyte		_displayedOpacity;

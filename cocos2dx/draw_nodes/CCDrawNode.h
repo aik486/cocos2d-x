@@ -63,8 +63,10 @@ public:
     static CCDrawNode* create();
     virtual ~CCDrawNode();
     
-    virtual bool init();
-    virtual void draw();
+    virtual bool init() override;
+    virtual void draw() override;
+    
+    virtual CCObject *copyWithZone(CCZone *) override;
     
     /** draw a dot at a position, with a given radius and color */
     void drawDot(const CCPoint &pos, float radius, const ccColor4B &color);

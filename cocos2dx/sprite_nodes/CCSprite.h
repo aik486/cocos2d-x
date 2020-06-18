@@ -168,6 +168,8 @@ public:
      */
     CCSprite(void);
     
+    virtual CCObject *copyWithZone(CCZone *) override;
+    
     /**
      * Default destructor
      * @js NA
@@ -178,7 +180,7 @@ public:
     /**
      * Initializes an empty sprite with nothing init.
      */
-    virtual bool init(void);
+    virtual bool init(void) override;
     
     /**
      * Initializes a sprite with a texture.
@@ -266,51 +268,51 @@ public:
     
     /// @{
     /// @name Functions inherited from CCTextureProtocol
-    virtual void setTexture(CCTexture2D *texture);
-    virtual CCTexture2D* getTexture(void);
-    inline void setBlendFunc(ccBlendFunc blendFunc) { m_sBlendFunc = blendFunc; }
+    virtual void setTexture(CCTexture2D *texture) override;
+    virtual CCTexture2D* getTexture(void) override;
+    void setBlendFunc(ccBlendFunc blendFunc) override;
     /**
      * @js NA
      */
-    inline ccBlendFunc getBlendFunc(void) { return m_sBlendFunc; }
+    ccBlendFunc getBlendFunc(void) override;
     /// @}
 
     /// @{
     /// @name Functions inherited from CCNode
-    virtual void setScaleX(float fScaleX);
-    virtual void setScaleY(float fScaleY);
+    virtual void setScaleX(float fScaleX) override;
+    virtual void setScaleY(float fScaleY) override;
     /**
      * @lua NA
      */
-    virtual void setPosition(const CCPoint& pos);
-    virtual void setRotation(float fRotation);
-    virtual void setRotationX(float fRotationX);
-    virtual void setRotationY(float fRotationY);
-    virtual void setSkewX(float sx);
-    virtual void setSkewY(float sy);
-    virtual void removeChild(CCNode* pChild, bool bCleanup);
-    virtual void removeAllChildrenWithCleanup(bool bCleanup);
-    virtual void reorderChild(CCNode *pChild, int zOrder);
-    virtual void addChild(CCNode *pChild);
-    virtual void addChild(CCNode *pChild, int zOrder);
-    virtual void addChild(CCNode *pChild, int zOrder, int tag);
-    virtual void sortAllChildren();
-    virtual void setScale(float fScale);
-    virtual void setVertexZ(float fVertexZ);
-    virtual void setAnchorPoint(const CCPoint& anchor);
-    virtual void ignoreAnchorPointForPosition(bool value);
-    virtual void setVisible(bool bVisible);
-    virtual void draw(void);
+    virtual void setPosition(const CCPoint& pos) override;
+    virtual void setRotation(float fRotation) override;
+    virtual void setRotationX(float fRotationX) override;
+    virtual void setRotationY(float fRotationY) override;
+    virtual void setSkewX(float sx) override;
+    virtual void setSkewY(float sy) override;
+    virtual void removeChild(CCNode* pChild, bool bCleanup) override;
+    virtual void removeAllChildrenWithCleanup(bool bCleanup) override;
+    virtual void reorderChild(CCNode *pChild, int zOrder) override;
+    virtual void addChild(CCNode *pChild) override;
+    virtual void addChild(CCNode *pChild, int zOrder) override;
+    virtual void addChild(CCNode *pChild, int zOrder, int tag) override;
+    virtual void sortAllChildren() override;
+    virtual void setScale(float fScale) override;
+    virtual void setVertexZ(float fVertexZ) override;
+    virtual void setAnchorPoint(const CCPoint& anchor) override;
+    virtual void ignoreAnchorPointForPosition(bool value) override;
+    virtual void setVisible(bool bVisible) override;
+    virtual void draw(void) override;
     /// @}
     
     /// @{
     /// @name Functions inherited from CCNodeRGBA
-    virtual void setColor(const ccColor3B& color3);
-    virtual void updateDisplayedColor(const ccColor3B& parentColor);
-    virtual void setOpacity(GLubyte opacity);
-    virtual void setOpacityModifyRGB(bool modify);
-    virtual bool isOpacityModifyRGB(void);
-    virtual void updateDisplayedOpacity(GLubyte parentOpacity);
+    virtual void setColor(const ccColor3B& color3) override;
+    virtual void updateDisplayedColor(const ccColor3B& parentColor) override;
+    virtual void setOpacity(GLubyte opacity) override;
+    virtual void setOpacityModifyRGB(bool modify) override;
+    virtual bool isOpacityModifyRGB(void) override;
+    virtual void updateDisplayedOpacity(GLubyte parentOpacity) override;
     /// @}
 
     
@@ -320,7 +322,7 @@ public:
     /**
      * Updates the quad according the rotation, position, scale values. 
      */
-    virtual void updateTransform(void);
+    virtual void updateTransform(void) override;
     
     /**
      * Returns the batch node object if this sprite is rendered by CCSpriteBatchNode

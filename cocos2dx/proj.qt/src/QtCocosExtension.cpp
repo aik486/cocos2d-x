@@ -1011,14 +1011,13 @@ CCObject *CCCustomEffect::copyWithZone(CCZone *)
 	result->m_bFlipY = m_bFlipY;
 	result->m_obUnflippedOffsetPositionFromCenter =
 		m_obUnflippedOffsetPositionFromCenter;
-	result->initWithTexture(this->m_pobTexture, m_obRect, m_bRectRotated);
+	result->initWithTexture(m_pobTexture, m_obRect, m_bRectRotated);
 
-	result->setShaderProgram(m_pShaderProgram);
 	result->mShaderTextures = mShaderTextures;
 	result->mCopyCallback = mCopyCallback;
 	result->mPreDrawCallback = mPreDrawCallback;
 
-	copyNodeProperties(this, result);
+	result->copyPropertiesFrom(this);
 
 	if (mCopyCallback)
 	{
