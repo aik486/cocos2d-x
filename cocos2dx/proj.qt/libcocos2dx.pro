@@ -14,6 +14,10 @@ CONFIG(debug, debug|release) {
     DEFINES += NDEBUG
 }
 
+!isEmpty(DEBUG_COCOS) {
+    emscripten:DEFINES += QT_FORCE_ASSERTS
+}
+
 msvc {
     QMAKE_CXXFLAGS_WARN_OFF -= -W0
     QMAKE_CXXFLAGS += -W3 /wd4251 /wd4573
