@@ -10,3 +10,6 @@
 [submodule "external"]
 	path = external
 	url = https://github.com/kusharami/cocos2d-x-3rd-party-libs-bin.git
+[submodule "scripting/javascript/qtscript_bindings"]
+	path = scripting/javascript/qtscript_bindings
+	url = https://github.com/kusharami/qtscript_bindings.git
