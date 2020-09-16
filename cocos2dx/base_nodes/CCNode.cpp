@@ -1385,7 +1385,26 @@ CCNodeRGBA * CCNodeRGBA::create(void)
     {
         CC_SAFE_DELETE(pRet);
     }
-	return pRet;
+    return pRet;
+}
+
+CCObject *CCNodeRGBA::copyWithZone(CCZone *)
+{
+    auto result = new CCNodeRGBA;
+    
+    result->copyPropertiesFrom(this);
+    result->copyNodeChildrenFrom(this);
+    
+    return result;
+}
+
+void CCNodeRGBA::copyPropertiesFrom(CCNodeRGBA *from)
+{
+	setCascadeColorEnabled(from->isCascadeColorEnabled());
+	setCascadeOpacityEnabled(from->isCascadeOpacityEnabled());
+	setOpacity(from->getOpacity());
+	setColor(from->getColor());
+	CCNode::copyPropertiesFrom(from);
 }
 
 GLubyte CCNodeRGBA::getOpacity(void)
@@ -1497,6 +1516,70 @@ bool CCNodeRGBA::isCascadeColorEnabled(void)
 void CCNodeRGBA::setCascadeColorEnabled(bool cascadeColorEnabled)
 {
     _cascadeColorEnabled = cascadeColorEnabled;
+}
+
+void CCNodeRGBA::setOpacityModifyRGB(bool bValue) 
+{
+    CC_UNUSED_PARAM(bValue);
+}
+
+bool CCNodeRGBA::isOpacityModifyRGB() 
+{ 
+    return false; 
+}
+
+cocos2d::CCObject *cocos2d::CCNode::copyWithZone(cocos2d::CCZone *)
+{
+    auto result = new CCNode;
+    result->copyPropertiesFrom(this);
+    result->copyNodeChildrenFrom(this);
+    return result;
+}
+
+void CCNode::copyPropertiesFrom(CCNode *from)
+{
+    setRotationX(from->getRotationX());
+	setRotationY(from->getRotationY());
+	setSkewX(from->getSkewX());
+	setSkewY(from->getSkewY());
+	setScaleX(from->getScaleX());
+	setScaleY(from->getScaleY());
+	setAdditionalTransform(from->getAdditionalTransform());
+	setPosition(from->getPosition());
+	setAnchorPoint(from->getAnchorPoint());
+	setZOrder(from->getZOrder());
+	ignoreAnchorPointForPosition(from->isIgnoreAnchorPointForPosition());
+	setVisible(from->isVisible());
+	setShaderProgram(from->getShaderProgram());
+	setContentSize(from->getContentSize());
+}
+
+void CCNode::copyNodeChildrenFrom(CCNode *from, bool skipHidden)
+{
+    if (!from)
+        return;
+    from->sortAllChildren();
+    
+    int order = 0;
+    CCObject *child;
+    auto children = from->getChildren();
+    CCARRAY_FOREACH(children, child)
+    {
+        auto childNode = static_cast<CCNode *>(child);
+        
+        if (skipHidden && !childNode->isVisible()) {
+            continue;
+        }
+        
+        auto node = static_cast<CCNode *>(child->copy());
+        
+        if (node)
+        {
+            node->setZOrder(order++);
+            addChild(node);
+            node->release();
+        }
+    }
 }
 
 NS_CC_END

@@ -301,6 +301,21 @@ m_pobTexture(NULL)
 {
 }
 
+CCObject *CCSprite::copyWithZone(CCZone *)
+{
+    auto sprite = new CCSprite;
+    
+    sprite->m_bFlipX = m_bFlipX;
+	sprite->m_bFlipY = m_bFlipY;
+	sprite->m_obUnflippedOffsetPositionFromCenter =
+		m_obUnflippedOffsetPositionFromCenter;
+	sprite->initWithTexture(m_pobTexture, m_obRect, m_bRectRotated);
+    
+    sprite->copyPropertiesFrom(this);
+   
+    return sprite;
+}
+
 CCSprite::~CCSprite(void)
 {
     CC_SAFE_RELEASE(m_pobTexture);
@@ -1125,5 +1140,9 @@ CCTexture2D* CCSprite::getTexture(void)
 {
     return m_pobTexture;
 }
+
+void CCSprite::setBlendFunc(ccBlendFunc blendFunc) { m_sBlendFunc = blendFunc; }
+
+ccBlendFunc CCSprite::getBlendFunc() { return m_sBlendFunc; }
 
 NS_CC_END

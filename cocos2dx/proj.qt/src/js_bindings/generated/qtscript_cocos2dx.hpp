@@ -7770,6 +7770,7 @@ public:
 	Q_INVOKABLE bool hasAlpha();
 	Q_INVOKABLE bool initWithImageFile(const QByteArray& strPath);
 	Q_INVOKABLE bool initWithImageFile(const QByteArray& strPath, int imageType);
+	Q_INVOKABLE bool initWithImageData(const QByteArray& data);
 	Q_INVOKABLE unsigned short getWidth();
 	Q_INVOKABLE int getBitsPerComponent();
 };

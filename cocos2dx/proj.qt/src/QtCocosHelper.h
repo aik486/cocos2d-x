@@ -57,6 +57,4 @@ qreal getGlobalNodeRotation(CCNode *node);
 
 CCRect getWorldRectForNode(
 	CCNode *node, bool *xReversePtr = nullptr, bool *yReversePtr = nullptr);
-
-void copyNodeProperties(CCNodeRGBA*from,CCNodeRGBA*to);
 }

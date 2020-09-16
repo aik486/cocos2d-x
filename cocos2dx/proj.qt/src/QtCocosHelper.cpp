@@ -279,24 +279,4 @@ QPolygonF shapeFromNode(CCNode *node)
 	return QPolygonF(QRectF(0.0, 0.0, size.width, size.height));
 }
 
-void copyNodeProperties(CCNodeRGBA *from, CCNodeRGBA *to)
-{
-	to->setCascadeColorEnabled(from->isCascadeColorEnabled());
-	to->setCascadeOpacityEnabled(from->isCascadeOpacityEnabled());
-	to->setOpacity(from->getOpacity());
-	to->setColor(from->getColor());
-	to->setRotationX(from->getRotationX());
-	to->setRotationY(from->getRotationY());
-	to->setSkewX(from->getSkewX());
-	to->setSkewY(from->getSkewY());
-	to->setScaleX(from->getScaleX());
-	to->setScaleY(from->getScaleY());
-	to->setAdditionalTransform(from->getAdditionalTransform());
-	to->setPosition(from->getPosition());
-	to->setAnchorPoint(from->getAnchorPoint());
-	to->setContentSize(from->getContentSize());
-	to->setZOrder(from->getZOrder());
-	to->ignoreAnchorPointForPosition(from->isIgnoreAnchorPointForPosition());
-	to->setVisible(from->isVisible());
-}
 }

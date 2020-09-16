@@ -2,6 +2,8 @@
 
 #include "cocos2dx_qt.h"
 
+#include "QtCocosHelper.h"
+
 static const GLchar ccPositionTextureColor_frag[] = "\
 #ifdef GL_ES																\n\
 precision lowp float;														\n\
@@ -986,5 +988,88 @@ void CCDrawNodeRGBA::draw()
 	CCDrawNode::draw();
 	m_pBuffer = savedBuffer;
 	m_nBufferCapacity = savedCapacity;
+}
+
+CCCustomEffect *CCCustomEffect::create()
+{
+	auto result = new CCCustomEffect;
+	if (result && result->init())
+	{
+		result->autorelease();
+	} else
+	{
+		CC_SAFE_DELETE(result);
+	}
+
+	return result;
+}
+
+CCObject *CCCustomEffect::copyWithZone(CCZone *)
+{
+	auto result = new CCCustomEffect;
+	result->m_bFlipX = m_bFlipX;
+	result->m_bFlipY = m_bFlipY;
+	result->m_obUnflippedOffsetPositionFromCenter =
+		m_obUnflippedOffsetPositionFromCenter;
+	result->initWithTexture(m_pobTexture, m_obRect, m_bRectRotated);
+
+	result->mShaderTextures = mShaderTextures;
+	result->mCopyCallback = mCopyCallback;
+	result->mPreDrawCallback = mPreDrawCallback;
+
+	result->copyPropertiesFrom(this);
+
+	if (mCopyCallback)
+	{
+		mCopyCallback(this, result);
+	}
+
+	return result;
+}
+
+void CCCustomEffect::addTextureForShader(
+	CCTexture2D *texture, const QByteArray &uniformName)
+{
+	TextureEntry entry;
+	entry.texture.setObject(texture);
+	entry.uniformName = uniformName;
+	mShaderTextures.append(entry);
+}
+
+void CCCustomEffect::setPreDrawCallback(const PreDrawCallback &callback)
+{
+	mPreDrawCallback = callback;
+}
+
+void CCCustomEffect::setCopyCallback(const CopyCallback &callback)
+{
+	mCopyCallback = callback;
+}
+
+void CCCustomEffect::draw()
+{
+	auto program = m_pShaderProgram;
+	if (program)
+	{
+		program->use();
+		for (int i = 0, count = mShaderTextures.count(); i < count; i++)
+		{
+			auto &entry = mShaderTextures[i];
+			if (entry.uniformLocation < 0)
+			{
+				entry.uniformLocation = program->getUniformLocationForName(
+					entry.uniformName.constData());
+			}
+			program->setUniformLocationWith1i(entry.uniformLocation, i);
+			ccGLBindTexture2DN(i, entry.texture.object()->getName());
+		}
+	}
+
+	if (mPreDrawCallback)
+	{
+		mPreDrawCallback(this);
+	}
+
+	CCSprite::draw();
 }
 }

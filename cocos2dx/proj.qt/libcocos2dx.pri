@@ -2,8 +2,9 @@ include(liboutdir.pri)
 
 DEFINES += QT_COCOS
 
-CONFIG(debug, debug|release) {
+CONFIG(debug, debug|release)|!isEmpty(DEBUG_COCOS) {
     DEFINES += COCOS2D_DEBUG=1
+    DEBUG_COCOS = 1
 }
 
 DEFINES += CC_ENABLE_CACHE_TEXTURE_DATA=0
