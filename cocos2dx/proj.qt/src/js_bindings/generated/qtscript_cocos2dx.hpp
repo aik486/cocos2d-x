@@ -7770,6 +7770,7 @@ public:
 	Q_INVOKABLE bool hasAlpha();
 	Q_INVOKABLE bool initWithImageFile(const QByteArray& strPath);
 	Q_INVOKABLE bool initWithImageFile(const QByteArray& strPath, int imageType);
+	Q_INVOKABLE bool initWithImageData(const QByteArray& data);
 	Q_INVOKABLE unsigned short getWidth();
 	Q_INVOKABLE int getBitsPerComponent();
 };
@@ -7901,10 +7902,7 @@ public:
 	explicit QtScriptCCApplication(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(QByteArray startupScriptFilename READ getStartupScriptFilename WRITE setStartupScriptFilename)
-	void setStartupScriptFilename(const QByteArray& startupScriptFile);
 	Q_INVOKABLE int getTargetPlatform();
-	QByteArray getStartupScriptFilename();
 	Q_INVOKABLE void setAnimationInterval(double interval);
 	Q_INVOKABLE int getCurrentLanguage();
 	static QScriptValue sharedApplication(QScriptContext *context, QScriptEngine* engine);

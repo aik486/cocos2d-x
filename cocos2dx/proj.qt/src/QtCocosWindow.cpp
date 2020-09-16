@@ -1,6 +1,7 @@
 #include "QtCocosWindow.h"
 
 #include "QtCocosHelper.h"
+#include "QtCocosContext.h"
 
 #include "cocos_warnings_off.h"
 #include "base_nodes/CCNode.h"
@@ -55,12 +56,16 @@ QtCocosWindow::QtCocosWindow()
 	, mHasFocus(false)
 	, mEnabled(true)
 	, mRunning(false)
+	, mInitialized(false)
 {
 	mBgColor = { 0.f, 0.f, 0.f, 0.f };
 
 	auto surfaceFormat = format();
 	surfaceFormat.setStencilBufferSize(8);
 	setFormat(surfaceFormat);
+
+	QtCocosContext::setBackgroundColorSetter(
+		[this](const QColor &color) { setBackgroundColor(color); });
 }
 
 QtCocosWindow::~QtCocosWindow()
@@ -76,6 +81,8 @@ QtCocosWindow::~QtCocosWindow()
 		director->mainLoop();
 	}
 
+	QtCocosContext::setContextSetter(nullptr);
+	QtCocosContext::setBackgroundColorSetter(nullptr);
 	delete mEGLView;
 }
 
@@ -85,9 +92,14 @@ QWidget *QtCocosWindow::createWidget(QWidget *parent)
 
 	auto window = new QtCocosWindow;
 
-	auto result = QWidget::createWindowContainer(window, parent);
+	return window->makeContainerWidget(parent);
+}
 
-	window->mMasterWidget = result;
+QWidget *QtCocosWindow::makeContainerWidget(QWidget *parent)
+{
+	auto result = QWidget::createWindowContainer(this, parent);
+
+	mMasterWidget = result;
 
 	return result;
 }
@@ -218,6 +230,8 @@ void QtCocosWindow::initializeGL()
 {
 	QOpenGLWindow::initializeGL();
 
+	QtCocosContext::setContextSetter([this]() { makeCurrent(); });
+
 	auto director = CCDirector::sharedDirector();
 
 	if (!mEGLView->InitGL())
@@ -238,6 +252,7 @@ void QtCocosWindow::initializeGL()
 
 	director->runWithScene(mScene);
 
+	mInitialized = true;
 	emit Initialized();
 }
 
@@ -249,6 +264,7 @@ void QtCocosWindow::resizeGL(int w, int h)
 	mEGLView->setFrameSize(w, h);
 	mEGLView->setDesignResolutionSize(w, h, kResolutionNoBorder);
 
+	mScene->setContentSize(CCSizeMake(w, h));
 	mMainNode->setPosition(CCPoint(w * 0.5f, h * 0.5f));
 
 	emit VisibleFrameAdjusted();
@@ -379,11 +395,13 @@ void QtCocosWindow::mouseDoubleClickEvent(QMouseEvent *event)
 	if (!mEnabled)
 		return;
 
+#ifndef Q_OS_WASM
 	if (!mHasFocus)
 	{
 		event->ignore();
 		return;
 	}
+#endif
 
 	auto pos = event->localPos();
 
@@ -406,11 +424,13 @@ void QtCocosWindow::mouseMoveEvent(QMouseEvent *event)
 
 	auto buttons = event->buttons();
 
+#ifndef Q_OS_WASM
 	if (!mHasFocus && buttons != Qt::NoButton)
 	{
 		event->ignore();
 		return;
 	}
+#endif
 
 	auto pos = event->localPos();
 	auto pos_x = float(pos.x());
@@ -534,6 +554,7 @@ void QtCocosWindow::keyReleaseEvent(QKeyEvent *event)
 
 bool QtCocosWindow::ignoredMouseEvent(QMouseEvent *event)
 {
+#ifndef Q_OS_WASM
 	if (!mHasFocus)
 	{
 		if (mMasterWidget)
@@ -547,6 +568,7 @@ bool QtCocosWindow::ignoredMouseEvent(QMouseEvent *event)
 
 		return true;
 	}
+#endif
 	return false;
 }
 

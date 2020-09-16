@@ -13,6 +13,7 @@ win32 {
     COCOS2DX_LIB = $$COCOS2DX_LIB-win32
     msvc:COCOS2DX_LIB = $$COCOS2DX_LIB-msvc
 }
+emscripten:COCOS2DX_LIB = $$COCOS2DX_LIB-emscripten
 clang:COCOS2DX_LIB = $$COCOS2DX_LIB-clang
 else::gcc:COCOS2DX_LIB = $$COCOS2DX_LIB-gcc
 

@@ -2,6 +2,8 @@
 
 #include "cocos2dx_qt.h"
 
+#include "QtCocosHelper.h"
+
 static const GLchar ccPositionTextureColor_frag[] = "\
 #ifdef GL_ES																\n\
 precision lowp float;														\n\
@@ -268,11 +270,14 @@ void CCSpriteEx::draw()
 	ccGLBindTexture2D(m_pobTexture->getName());
 	ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
 
-	glEnableVertexAttribArray(kCCVertexAttrib_MAX);
-
 #define kQuadSize sizeof(m_sQuad.bl)
-
+#ifdef EMSCRIPTEN
+	long offset = 0;
+	setGLBufferData(&m_sQuad, 4 * kQuadSize, 0);
+#else
+	glEnableVertexAttribArray(kCCVertexAttrib_MAX);
 	uintptr_t offset = (uintptr_t) &m_sQuad;
+#endif // EMSCRIPTEN
 
 	int diff = offsetof(ccV3F_C4B_T2F, vertices);
 	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE,
@@ -288,15 +293,19 @@ void CCSpriteEx::draw()
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE,
 		kQuadSize, (void *) (offset + diff));
 
+#ifndef EMSCRIPTEN
 	// additive_color
 	glVertexAttribPointer(kCCVertexAttrib_MAX, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0,
 		(void *) &mDisplayedAdditiveColor);
+#endif
 
 #undef kQuadSize
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+#ifndef EMSCRIPTEN
 	glDisableVertexAttribArray(kCCVertexAttrib_MAX);
+#endif
 
 	CHECK_GL_ERROR_DEBUG();
 
@@ -896,7 +905,7 @@ void CCDrawNodeRGBA::updateDisplayedColor(const ccColor3B &parentColor)
 	mDisplayedColor.r = GLubyte((mRealColor.r * parentColor.r) / 255);
 	mDisplayedColor.g = GLubyte((mRealColor.g * parentColor.g) / 255);
 	mDisplayedColor.b = GLubyte((mRealColor.b * parentColor.b) / 255);
-	m_bDirty = oldColor.r != mDisplayedColor.r ||
+	m_bDirty = m_bDirty || oldColor.r != mDisplayedColor.r ||
 		oldColor.g != mDisplayedColor.g || oldColor.b != mDisplayedColor.b;
 
 	if (mCascadeColorEnabled)
@@ -927,7 +936,7 @@ void CCDrawNodeRGBA::updateDisplayedOpacity(GLubyte parentOpacity)
 {
 	auto oldOpacity = mDisplayedOpacity;
 	mDisplayedOpacity = GLubyte((mRealOpacity * parentOpacity) / 255);
-	m_bDirty = mDisplayedOpacity != oldOpacity;
+	m_bDirty = m_bDirty || mDisplayedOpacity != oldOpacity;
 
 	if (mCascadeOpacityEnabled)
 	{
@@ -979,5 +988,88 @@ void CCDrawNodeRGBA::draw()
 	CCDrawNode::draw();
 	m_pBuffer = savedBuffer;
 	m_nBufferCapacity = savedCapacity;
+}
+
+CCCustomEffect *CCCustomEffect::create()
+{
+	auto result = new CCCustomEffect;
+	if (result && result->init())
+	{
+		result->autorelease();
+	} else
+	{
+		CC_SAFE_DELETE(result);
+	}
+
+	return result;
+}
+
+CCObject *CCCustomEffect::copyWithZone(CCZone *)
+{
+	auto result = new CCCustomEffect;
+	result->m_bFlipX = m_bFlipX;
+	result->m_bFlipY = m_bFlipY;
+	result->m_obUnflippedOffsetPositionFromCenter =
+		m_obUnflippedOffsetPositionFromCenter;
+	result->initWithTexture(m_pobTexture, m_obRect, m_bRectRotated);
+
+	result->mShaderTextures = mShaderTextures;
+	result->mCopyCallback = mCopyCallback;
+	result->mPreDrawCallback = mPreDrawCallback;
+
+	result->copyPropertiesFrom(this);
+
+	if (mCopyCallback)
+	{
+		mCopyCallback(this, result);
+	}
+
+	return result;
+}
+
+void CCCustomEffect::addTextureForShader(
+	CCTexture2D *texture, const QByteArray &uniformName)
+{
+	TextureEntry entry;
+	entry.texture.setObject(texture);
+	entry.uniformName = uniformName;
+	mShaderTextures.append(entry);
+}
+
+void CCCustomEffect::setPreDrawCallback(const PreDrawCallback &callback)
+{
+	mPreDrawCallback = callback;
+}
+
+void CCCustomEffect::setCopyCallback(const CopyCallback &callback)
+{
+	mCopyCallback = callback;
+}
+
+void CCCustomEffect::draw()
+{
+	auto program = m_pShaderProgram;
+	if (program)
+	{
+		program->use();
+		for (int i = 0, count = mShaderTextures.count(); i < count; i++)
+		{
+			auto &entry = mShaderTextures[i];
+			if (entry.uniformLocation < 0)
+			{
+				entry.uniformLocation = program->getUniformLocationForName(
+					entry.uniformName.constData());
+			}
+			program->setUniformLocationWith1i(entry.uniformLocation, i);
+			ccGLBindTexture2DN(i, entry.texture.object()->getName());
+		}
+	}
+
+	if (mPreDrawCallback)
+	{
+		mPreDrawCallback(this);
+	}
+
+	CCSprite::draw();
 }
 }

@@ -35,6 +35,8 @@ public:
 	static QWidget *createWidget(QWidget *parent);
 	inline QWidget *masterWidget() const;
 
+	QWidget *makeContainerWidget(QWidget *parent);
+
 	bool isAnimating() const;
 	void animate(bool yes);
 
@@ -46,6 +48,8 @@ public:
 	inline bool hasFocus() const;
 
 	static QtCocosWindow *instance();
+
+	inline bool isInitialized() const;
 
 	QColor backgroundColor() const;
 	void setBackgroundColor(const QColor &color);
@@ -118,6 +122,7 @@ private:
 	bool mHasFocus;
 	bool mEnabled;
 	bool mRunning;
+	bool mInitialized;
 };
 
 QWidget *QtCocosWindow::masterWidget() const
@@ -138,6 +143,11 @@ cocos2d::CCNode *QtCocosWindow::mainNode() const
 bool QtCocosWindow::hasFocus() const
 {
 	return mHasFocus;
+}
+
+bool QtCocosWindow::isInitialized() const
+{
+	return mInitialized;
 }
 
 bool QtCocosWindow::isEnabled() const

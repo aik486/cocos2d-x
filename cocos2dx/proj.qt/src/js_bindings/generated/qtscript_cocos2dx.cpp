@@ -32450,6 +32450,17 @@ bool QtScriptCCImage::initWithImageFile(const QByteArray& strPath, int imageType
 	return false;
 }
 
+bool QtScriptCCImage::initWithImageData(const QByteArray &data)
+{
+	auto __o = this->thiz<CCImage *>();
+	if (__o)
+	{
+		return __o->initWithImageData(
+					const_cast<char*>(data.data()), data.size());
+	}
+	return false;
+}
+
 unsigned short QtScriptCCImage::getWidth()
 {
 	auto __o = this->thiz<CCImage *>();
@@ -32848,15 +32859,6 @@ bool QtScriptCCApplication::constructObject(QScriptContext *context, NativeObjec
 	return false;
 }
 
-void QtScriptCCApplication::setStartupScriptFilename(const QByteArray& startupScriptFile)
-{
-	auto __o = this->thiz<CCApplication *>();
-	if (__o)
-	{
-		__o->setStartupScriptFilename(std::string(startupScriptFile.data(), size_t(startupScriptFile.size())));
-	}
-}
-
 int QtScriptCCApplication::getTargetPlatform()
 {
 	auto __o = this->thiz<CCApplication *>();
@@ -32865,16 +32867,6 @@ int QtScriptCCApplication::getTargetPlatform()
 		return int(__o->getTargetPlatform());
 	}
 	return 0;
-}
-
-QByteArray QtScriptCCApplication::getStartupScriptFilename()
-{
-	auto __o = this->thiz<CCApplication *>();
-	if (__o)
-	{
-		return QByteArray(__o->getStartupScriptFilename().c_str(), int(__o->getStartupScriptFilename().size()));
-	}
-	return QByteArray();
 }
 
 void QtScriptCCApplication::setAnimationInterval(double interval)

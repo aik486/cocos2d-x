@@ -34,9 +34,11 @@ THE SOFTWARE.
 #include "CCAccelerometer.h"
 #include "CCApplication.h"
 
+#ifndef QT_COCOS
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_mixer.h>
+#endif
 
 #include <ctype.h>
 
@@ -69,7 +71,7 @@ enum Orientation
 static Orientation orientation = LANDSCAPE;
 
 #define MAX_TOUCHES         4
-static CCEGLView* s_pInstance = NULL;
+CCEGLView* CCEGLView::s_pInstance = NULL;
 
 static bool buttonDepressed = false;
 extern "C" void mouseCB(int button, int state, int x, int y)
@@ -108,6 +110,7 @@ extern "C" void motionCB(int x, int y)
 
 CCEGLView::CCEGLView()
 {
+#ifndef QT_COCOS
 	m_eglDisplay = EGL_NO_DISPLAY;
 	m_eglContext = EGL_NO_CONTEXT;
 	m_eglSurface = EGL_NO_SURFACE;
@@ -138,6 +141,7 @@ CCEGLView::CCEGLView()
     glutMouseFunc(&mouseCB);
     glutMotionFunc(&motionCB);
     glutPassiveMotionFunc(&motionCB);
+#endif
 }
 
 CCEGLView::~CCEGLView()
@@ -151,6 +155,7 @@ const char* CCEGLView::getWindowGroupId() const
 
 void CCEGLView::release()
 {
+#ifndef QT_COCOS
     if (m_eglDisplay != EGL_NO_DISPLAY)
     {
         eglMakeCurrent(m_eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -177,6 +182,7 @@ void CCEGLView::release()
 	m_isGLInitialized = false;
 
 	exit(0);
+#endif	
 }
 
 void CCEGLView::initEGLFunctions()
@@ -278,6 +284,7 @@ static EGLenum checkErrorEGL(const char* msg)
 
 bool CCEGLView::initGL()
 {
+#ifndef QT_COCOS    
     EGLint eglConfigCount;
     EGLConfig config;
 
@@ -366,13 +373,8 @@ bool CCEGLView::initGL()
     // setting the size of the viewport by adjusting the canvas size (so
     // there's no weird letterboxing).
     setFrameSize(width, height);
-
+#endif
     return true;
-}
-
-static long time2millis(struct timespec *times)
-{
-    return times->tv_sec*1000 + times->tv_nsec/1000000;
 }
 
 bool CCEGLView::handleEvents()

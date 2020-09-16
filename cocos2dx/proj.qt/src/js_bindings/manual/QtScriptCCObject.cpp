@@ -99,8 +99,7 @@ bool QtScriptCCObject::isEqual(const CCObject *other) const
 	return false;
 }
 
-QScriptValue QtScriptCCObject::cast(
-	QScriptContext *context, QScriptEngine *engine)
+QScriptValue QtScriptCCObject::cast(QScriptContext *context, QScriptEngine *)
 {
 	int argc = context->argumentCount();
 	CCObject *obj;
@@ -113,8 +112,7 @@ QScriptValue QtScriptCCObject::cast(
 	}
 	if (!obj)
 	{
-		return QtScriptUtils::badArgumentsException(
-			context, "cocos2d::CCObject::wrap");
+		return QtScriptUtils::badArgumentsException(context, "cc.Object.cast");
 	}
 
 	auto cls =

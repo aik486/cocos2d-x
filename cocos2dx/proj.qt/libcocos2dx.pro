@@ -1,6 +1,6 @@
 include(libcocos2dx.pri)
 
-QT += core gui widgets opengl
+QT += core gui widgets
 
 CONFIG += c++11 warn_off
 DESTDIR = $$COCOS2DX_LIB
@@ -12,6 +12,10 @@ CONFIG(debug, debug|release) {
     DEFINES += DEBUG
 } else {
     DEFINES += NDEBUG
+}
+
+!isEmpty(DEBUG_COCOS) {
+    emscripten:DEFINES += QT_FORCE_ASSERTS
 }
 
 msvc {
@@ -28,7 +32,7 @@ msvc {
             -Wno-overloaded-virtual \
             -Wno-unused-function \
             -Wno-deprecated-declarations
-    
+
         clang:QMAKE_CXXFLAGS += \
             -Wno-unused-private-field \
             -Wno-unneeded-internal-declaration \
@@ -40,7 +44,7 @@ msvc {
             -Wno-sequence-point \
             -Wno-sign-compare \
             -Wno-misleading-indentation
-    
+
         INCLUDEPATH += \
             $$COCOS2DX_PATH/cocos2dx/platform \
             $$COCOS2DX_PATH/cocos2dx/cocoa \
@@ -51,11 +55,13 @@ msvc {
 }
 
 SOURCES +=\
+    src/QtCocosContext.cpp \
     src/QtCocosHelper.cpp \
     src/QtCocosExtension.cpp \
     src/QtCocosEGLView.cpp \
     src/QtCocosWindow.cpp \
     $$COCOS2DX_PATH/extensions/GUI/CCControlExtension/CCScale9Sprite.cpp \
+    $$COCOS2DX_PATH/cocos2dx/base_nodes/CCGLBufferedNode.cpp \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCAtlasNode.cpp \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCNode.cpp \
     $$COCOS2DX_PATH/cocos2dx/ccFPSImages.c \
@@ -129,7 +135,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/support/CCVertex.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/component/CCComponent.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/component/CCComponentContainer.cpp \
-    $$COCOS2DX_PATH/cocos2dx/support/tinyxml2\tinyxml2.cpp \
+    $$COCOS2DX_PATH/cocos2dx/support/tinyxml2/tinyxml2.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/TransformUtils.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/data_support/ccCArray.cpp \
     $$COCOS2DX_PATH/cocos2dx/support/image_support/TGAlib.cpp \
@@ -142,12 +148,12 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureCache.cpp \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureETC.cpp \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTexturePVR.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCParallaxNode.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTileMapAtlas.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXLayer.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXObjectGroup.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXTiledMap.cpp \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXXMLParser.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCParallaxNode.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXLayer.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.cpp \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.cpp \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouch.cpp \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchDispatcher.cpp \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchHandler.cpp \
@@ -175,6 +181,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos2dx/cocos2d.cpp
 
 HEADERS += \
+    src/QtCocosContext.h \
     src/QtCocosHelper.h \
     src/QtCocosExtension.h \
     src/cocos2dx_qt.h \
@@ -183,6 +190,7 @@ HEADERS += \
     src/QtCocosEGLView.h \
     src/QtCocosWindow.h \
     $$COCOS2DX_PATH/extensions/GUI/CCControlExtension/CCScale9Sprite.h \
+    $$COCOS2DX_PATH/cocos2dx/base_nodes/CCGLBufferedNode.h \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCAtlasNode.h \
     $$COCOS2DX_PATH/cocos2dx/base_nodes/CCNode.h \
     $$COCOS2DX_PATH/cocos2dx/ccFPSImages.h \
@@ -304,12 +312,12 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureCache.h \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTextureETC.h \
     $$COCOS2DX_PATH/cocos2dx/textures/CCTexturePVR.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCParallaxNode.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTileMapAtlas.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXLayer.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXObjectGroup.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXTiledMap.h \
-    $$COCOS2DX_PATH/cocos2dx/tileMap_parallax_nodes/CCTMXXMLParser.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCParallaxNode.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXLayer.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.h \
+    $$COCOS2DX_PATH/cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouch.h \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h \
     $$COCOS2DX_PATH/cocos2dx/touch_dispatcher/CCTouchDispatcher.h \
@@ -386,4 +394,45 @@ HEADERS +=\
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCGL.h \
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCPlatformDefine.h \
     $$COCOS2DX_PATH/cocos2dx/platform/win32/CCStdC.h
+}
+
+
+emscripten {
+SOURCES +=\
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCApplication.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCCommon.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCDevice.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCEGLView.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCFileUtilsEmscripten.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/CCThread.cpp
+
+HEADERS +=\
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCAccelerometer.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCApplication.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCEGLView.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCFileUtilsEmscripten.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCGL.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCPlatformDefine.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/emscripten/CCStdC.h
+}
+
+
+linux {
+SOURCES +=\
+    src/CCEGLViewLinux.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCApplication.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCCommon.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCDevice.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCFileUtilsLinux.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCStdC.cpp \
+    $$COCOS2DX_PATH/cocos2dx/platform/CCThread.cpp
+
+HEADERS +=\
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCAccelerometer.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCApplication.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCEGLView.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCFileUtilsLinux.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCGL.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCPlatformDefine.h \
+    $$COCOS2DX_PATH/cocos2dx/platform/linux/CCStdC.h
 }

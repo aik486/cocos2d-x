@@ -84,22 +84,22 @@ Q_ENUM_NS(AlignmentFlag)
 
 enum VertexAttrib
 {
-	VertexAttribPosition,
-	VertexAttribColor,
-	VertexAttribTexCoords,
+	VertexAttribPosition = kCCVertexAttrib_Position,
+	VertexAttribColor = kCCVertexAttrib_Color,
+	VertexAttribTexCoords = kCCVertexAttrib_TexCoords,
 };
 Q_ENUM_NS(VertexAttrib)
 
 enum UniformType
 {
-	UniformPMatrix,
-	UniformMVMatrix,
-	UniformMVPMatrix,
-	UniformTime,
-	UniformSinTime,
-	UniformCosTime,
-	UniformRandom01,
-	UniformSampler,
+	UniformPMatrix = kCCUniformPMatrix,
+	UniformMVMatrix = kCCUniformMVMatrix,
+	UniformMVPMatrix = kCCUniformMVPMatrix,
+	UniformTime = kCCUniformTime,
+	UniformSinTime = kCCUniformSinTime,
+	UniformCosTime = kCCUniformCosTime,
+	UniformRandom01 = kCCUniformRandom01,
+	UniformSampler = kCCUniformSampler,
 };
 Q_ENUM_NS(UniformType)
 
@@ -118,4 +118,18 @@ enum TextureFormat
 	TextureFormat_Default = kCCTexture2DPixelFormat_Default
 };
 Q_ENUM_NS(TextureFormat)
+
+namespace gl_enum
+{
+Q_NAMESPACE
+
+enum Enum
+{
+	LINEAR = GL_LINEAR,
+	NEAREST = GL_NEAREST,
+	REPEAT = GL_REPEAT,
+	CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+};
+Q_ENUM_NS(Enum);
+}
 }

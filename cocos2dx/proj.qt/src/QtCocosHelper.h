@@ -15,6 +15,7 @@
 namespace cocos2d
 {
 class CCNode;
+class CCNodeRGBA;
 using CCShape = QVector<CCPoint>;
 
 QPolygonF shapeFromNode(CCNode *node);

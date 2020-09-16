@@ -26,10 +26,12 @@ THE SOFTWARE.
 
 #include <CCGL.h>
 
+namespace cocos2d {
 class CCGLBufferedNode
 {
 public:
     CCGLBufferedNode(void);
+    virtual ~CCGLBufferedNode();
 
     /**
      * Load the given data into this CCNode's GL Buffer. Needed for WebGL, as it does not support client-side arrays.
@@ -45,4 +47,5 @@ public:
     GLuint m_indexBufferObject[BUFFER_SLOTS];
     GLuint m_indexBufferSize[BUFFER_SLOTS];
 };
+}
 #endif // __CC_GL_BUFFERED_NODE__

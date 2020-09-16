@@ -278,4 +278,5 @@ QPolygonF shapeFromNode(CCNode *node)
 	auto &size = node->getContentSize();
 	return QPolygonF(QRectF(0.0, 0.0, size.width, size.height));
 }
+
 }
