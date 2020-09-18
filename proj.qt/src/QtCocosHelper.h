@@ -17,11 +17,11 @@ using CCShape = QVector<Point>;
 
 QPolygonF shapeFromNode(Node *node);
 
-QPolygonF ccShapeToQPolygonF(const Shape &shape);
-Shape qPolygonFToShape(const QPolygonF &poly);
+QPolygonF ccShapeToQPolygonF(const CCShape &shape);
+CCShape qPolygonFToShape(const QPolygonF &poly);
 
 void transformShape(QPolygonF &poly, const AffineTransform &t);
-void transformShape(Shape &shape, const AffineTransform &t);
+void transformShape(CCShape &shape, const AffineTransform &t);
 
 QColor ccColor3BToQColor(const Color3B &color);
 QColor ccColor4BToQColor(const Color4B &color);
