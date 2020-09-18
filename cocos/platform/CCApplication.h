@@ -30,6 +30,12 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformConfig.h"
 
+#ifdef QT_COCOS
+
+#include "platform/qt/CCApplication-qt.h"
+
+#else
+
 #if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 #include "platform/mac/CCApplication-mac.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -40,6 +46,8 @@ THE SOFTWARE.
 #include "platform/win32/CCApplication-win32.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 #include "platform/linux/CCApplication-linux.h"
+#endif
+
 #endif
 
 /// @endcond

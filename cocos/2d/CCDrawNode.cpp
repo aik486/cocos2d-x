@@ -138,9 +138,9 @@ bool DrawNode::init()
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     updateShader();
-    ensureCapacity(512);
-    ensureCapacityGLPoint(64);
-    ensureCapacityGLLine(256);
+    ensureCapacity(8);
+    ensureCapacityGLPoint(8);
+    ensureCapacityGLLine(8);
     
     _dirty = true;
     _dirtyGLLine = true;

@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 Alexandra Cherdantseva
 
 http://www.cocos2d-x.org
 
@@ -30,12 +31,20 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformConfig.h"
 
+#ifdef QT_COCOS
+
+#include "platform/qt/CCGL-qt.h"
+
+#else
+
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "platform/android/CCGL-android.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 #include "platform/win32/CCGL-win32.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 #include "platform/linux/CCGL-linux.h"
+#endif
+
 #endif
 
 /// @endcond

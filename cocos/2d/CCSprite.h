@@ -198,6 +198,9 @@ public:
      * Updates the quad according the rotation, position, scale values.
      */
     virtual void updateTransform() override;
+    
+    virtual Sprite* clone() const override;
+    void copyPropertiesFrom(const Sprite* from);
 
     /**
      * Returns the batch node object if this sprite is rendered by SpriteBatchNode.
@@ -641,7 +644,7 @@ protected:
     void updateStretchFactor();
     void populateTriangle(int quadIndex, const V3F_C4B_T2F_Quad& quad);
     void setMVPMatrixUniform();
-    void setProgramState(backend::ProgramType type);
+    virtual void setProgramState(backend::ProgramType type);
     //
     // Data used when the sprite is rendered using a SpriteSheet
     //

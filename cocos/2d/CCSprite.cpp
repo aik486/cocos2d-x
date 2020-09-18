@@ -1094,6 +1094,25 @@ void Sprite::updateTransform()
     Node::updateTransform();
 }
 
+Sprite *Sprite::clone() const
+{
+    auto sprite = new Sprite;
+    sprite->copyPropertiesFrom(this);
+    
+    return sprite;
+}
+
+void Sprite::copyPropertiesFrom(const Sprite *from)
+{
+	_flippedX = from->_flippedX;
+	_flippedY = from->_flippedY;
+	_unflippedOffsetPositionFromCenter =
+		from->_unflippedOffsetPositionFromCenter;
+	initWithTexture(from->_texture, from->_rect, from->_rectRotated);
+	
+    Node::copyPropertiesFrom(from);
+}
+
 // draw
 void Sprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {

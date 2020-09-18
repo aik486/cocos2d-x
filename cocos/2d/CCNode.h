@@ -108,7 +108,7 @@ class EventListener;
 
  */
 
-class CC_DLL Node : public Ref
+class CC_DLL Node : public Ref, public Clonable
 {
 public:
     /** Default tag used for all the nodes */
@@ -143,6 +143,10 @@ public:
      * @lua NA
      */
     virtual std::string getDescription() const;
+    
+    virtual Node* clone() const override;
+    
+    void copyPropertiesFrom(const Node *from);
 
     /// @} end of initializers
 
@@ -1769,6 +1773,9 @@ public:
     
     virtual void setProgramState(backend::ProgramState* programState);
     virtual backend::ProgramState* getProgramState() const;
+    
+    bool isInvertedAditionalTransformOrder() const;
+    void setUseInvertedAdditionalTransformOrder(bool value);
 
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
@@ -1918,6 +1925,7 @@ protected:
     Color3B     _realColor;
     bool        _cascadeColorEnabled;
     bool        _cascadeOpacityEnabled;
+    bool _useInvertedAdditionalTransformOrder = false;
 
     // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
     unsigned short _cameraMask;
@@ -1952,6 +1960,11 @@ public:
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Node);
 };
+
+inline bool Node::isInvertedAditionalTransformOrder() const
+{
+    return _useInvertedAdditionalTransformOrder;
+}
 
 /**
  * This is a helper function, checks a GL screen point is in content rectangle space.

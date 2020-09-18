@@ -86,7 +86,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = checkForGLExtension("GL_OES_packed_depth_stencil");
         break;
     case FeatureType::VAO:
-#ifdef CC_PLATFORM_PC
+#ifdef CC_USE_GL
         featureSupported = checkForGLExtension("vertex_array_object");
 #else
         featureSupported = checkForGLExtension("GL_OES_vertex_array_object");

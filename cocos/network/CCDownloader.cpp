@@ -25,6 +25,14 @@
 
 #include "network/CCDownloader.h"
 
+#ifdef QT_COCOS
+
+#include "network/CCDownloader-qt.h"
+
+#define DownloaderImpl  DownloaderQt
+
+#else
+
 // include platform specific implement class
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
@@ -40,6 +48,8 @@
 
 #include "network/CCDownloader-curl.h"
 #define DownloaderImpl  DownloaderCURL
+
+#endif
 
 #endif
 

@@ -49,10 +49,11 @@ THE SOFTWARE.
 // #define CC_PLATFORM_BLACKBERRY         7
 #define CC_PLATFORM_MAC                8
 // #define CC_PLATFORM_NACL               9
-// #define CC_PLATFORM_EMSCRIPTEN        10
+#define CC_PLATFORM_EMSCRIPTEN        10
 // #define CC_PLATFORM_TIZEN             11
 // #define CC_PLATFORM_QT5               12
 // #define CC_PLATFORM_WINRT             13
+
 
 // Determine target platform by compile environment macro.
 #define CC_TARGET_PLATFORM             CC_PLATFORM_UNKNOWN
@@ -87,6 +88,11 @@ THE SOFTWARE.
     #define CC_TARGET_PLATFORM         CC_PLATFORM_LINUX
 #endif
 
+#if defined(__EMSCRIPTEN__) || defined(EMSCRIPTEN)
+    #undef  CC_TARGET_PLATFORM
+    #define CC_TARGET_PLATFORM         CC_PLATFORM_EMSCRIPTEN
+#endif
+
 
 //////////////////////////////////////////////////////////////////////////
 // post configure
@@ -105,9 +111,21 @@ THE SOFTWARE.
 
 #if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
     #define CC_PLATFORM_MOBILE
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_EMSCRIPTEN)
+    #define CC_PLATFORM_BROWSER
 #else
-    #define CC_PLATFORM_PC
+    #define CC_PLATFORM_DESKTOP
 #endif
+
+#if QT_COCOS
+
+#if defined(CC_PLATFORM_DESKTOP)
+#define CC_USE_GL
+#else
+#define CC_USE_GLES
+#endif
+
+#else
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     #define CC_USE_METAL
@@ -115,6 +133,8 @@ THE SOFTWARE.
     #define CC_USE_GLES
 #else
     #define CC_USE_GL
+#endif
+
 #endif
 
 /// @endcond

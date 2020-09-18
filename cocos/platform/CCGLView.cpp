@@ -466,6 +466,21 @@ void GLView::handleTouchesCancel(int num, intptr_t ids[], float xs[], float ys[]
     handleTouchesOfEndOrCancel(EventTouch::EventCode::CANCELLED, num, ids, xs, ys);
 }
 
+void GLView::setIcon(const std::string &) const 
+{
+    
+}
+
+void GLView::setIcon(const std::vector<std::string> &) const 
+{
+    
+}
+
+void GLView::setDefaultIcon() const 
+{
+    
+}
+
 const Rect& GLView::getViewPortRect() const
 {
     return _viewPortRect;

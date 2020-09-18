@@ -232,6 +232,42 @@ std::string Node::getDescription() const
     return StringUtils::format("<Node | Tag = %d", _tag);
 }
 
+Node *Node::clone() const
+{
+    auto result = new Node;
+    
+    result->copyPropertiesFrom(this);
+    
+    return result;
+}
+
+void Node::copyPropertiesFrom(const Node *from)
+{
+    setRotation3D(from->getRotation3D());
+    setSkewX(from->getSkewX());
+    setSkewY(from->getSkewY());
+    setScaleX(from->getScaleX());
+    setScaleY(from->getScaleY());
+    setScaleZ(from->getScaleY());
+    setAdditionalTransform(
+        from->_additionalTransform ? &from->_additionalTransform[0] : nullptr);
+    setUseInvertedAdditionalTransformOrder(
+        from->_useInvertedAdditionalTransformOrder);
+    setPosition3D(from->getPosition3D());
+    setAnchorPoint(from->getAnchorPoint());
+    setLocalZOrder(from->getLocalZOrder());
+    setGlobalZOrder(from->getGlobalZOrder());
+    setIgnoreAnchorPointForPosition(from->isIgnoreAnchorPointForPosition());
+    
+    setCascadeColorEnabled(from->isCascadeColorEnabled());
+    setCascadeOpacityEnabled(from->isCascadeOpacityEnabled());
+    setOpacity(from->getOpacity());
+    setColor(from->getColor());
+    setVisible(from->isVisible());
+    setProgramState(from->getProgramState()->clone());
+    setContentSize(from->getContentSize());
+}
+
 // MARK: getters / setters
 
 float Node::getSkewX() const
@@ -272,7 +308,7 @@ void Node::setLocalZOrder(std::int32_t z)
     {
         _parent->reorderChild(this, z);
     }
-
+    
     _eventDispatcher->setDirtyForNode(this);
 }
 
@@ -1759,7 +1795,11 @@ const Mat4& Node::getNodeToParentTransform() const
             _additionalTransform[1] = _transform;
 
         if (_transformUpdated)
-            _transform = _additionalTransform[1] * _additionalTransform[0];
+        {
+            _transform = _useInvertedAdditionalTransformOrder //
+                    ? _additionalTransform[0] * _additionalTransform[1] // cocos2-style order
+                    : _additionalTransform[1] * _additionalTransform[0];// cocos3-style order
+        }
     }
 
     _transformDirty = _additionalTransformDirty = false;
@@ -1780,6 +1820,7 @@ void Node::setNodeToParentTransform(const Mat4& transform)
 
 void Node::setAdditionalTransform(const AffineTransform& additionalTransform)
 {
+    setUseInvertedAdditionalTransformOrder(true);
     Mat4 tmp;
     CGAffineToGL(additionalTransform, tmp.m);
     setAdditionalTransform(&tmp);
@@ -2194,6 +2235,14 @@ void Node::setProgramState(backend::ProgramState* programState)
 backend::ProgramState* Node::getProgramState() const
 {
     return _programState;
+}
+
+void Node::setUseInvertedAdditionalTransformOrder(bool value) {
+    if (_useInvertedAdditionalTransformOrder == value) {
+        return;
+    }
+    _useInvertedAdditionalTransformOrder = value;
+    _transformUpdated = _additionalTransformDirty = _inverseDirty = true;
 }
 
 NS_CC_END

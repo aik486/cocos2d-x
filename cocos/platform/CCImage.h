@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "base/CCRef.h"
 #include "renderer/CCTexture2D.h"
+#include <memory>
 
 // premultiply alpha, or the effect will be wrong when using other pixel formats in Texture2D,
 // such as RGB888, RGB5A1
@@ -38,6 +39,11 @@ THE SOFTWARE.
     ((unsigned)((unsigned char)(vg) * ((unsigned char)(va) + 1) >> 8) << 8) | \
     ((unsigned)((unsigned char)(vb) * ((unsigned char)(va) + 1) >> 8) << 16) | \
     ((unsigned)(unsigned char)(va) << 24))
+
+#ifdef QT_COCOS
+class QImage;
+class QIODevice;
+#endif
 
 NS_CC_BEGIN
 
@@ -157,6 +163,9 @@ public:
     void reversePremultipliedAlpha();   
 
 protected:
+#ifdef QT_COCOS
+    bool initWithDevice(QIODevice *device);
+#else
     bool initWithJpgData(const unsigned char *  data, ssize_t dataLen);
     bool initWithPngData(const unsigned char * data, ssize_t dataLen);
     bool initWithWebpData(const unsigned char * data, ssize_t dataLen);
@@ -171,7 +180,7 @@ protected:
 
     bool saveImageToPNG(const std::string& filePath, bool isToRGB = true);
     bool saveImageToJPG(const std::string& filePath);
-    
+#endif
 
     
 protected:
@@ -212,6 +221,9 @@ protected:
      */
     bool initWithImageFileThreadSafe(const std::string& fullpath);
     
+#ifdef QT_COCOS
+    std::unique_ptr<QImage> _image;
+#else
     Format detectFormat(const unsigned char * data, ssize_t dataLen);
     bool isPng(const unsigned char * data, ssize_t dataLen);
     bool isJpg(const unsigned char * data, ssize_t dataLen);
@@ -220,6 +232,7 @@ protected:
     bool isEtc(const unsigned char * data, ssize_t dataLen);
     bool isS3TC(const unsigned char * data,ssize_t dataLen);
     bool isATITC(const unsigned char *data, ssize_t dataLen);
+#endif
 };
 
 // end of platform group

@@ -28,6 +28,7 @@ THE SOFTWARE.
 #define __CC_APPLICATION_PROTOCOL_H__
 
 #include "platform/CCPlatformMacros.h"
+#include "platform/CCCommon.h"
 #include "base/CCAutoreleasePool.h"
 #include "base/ccTypes.h"
 
