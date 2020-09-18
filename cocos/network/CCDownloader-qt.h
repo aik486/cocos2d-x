@@ -36,7 +36,7 @@ namespace cocos2d { namespace network
     {
     public:
         DownloaderQt(const DownloaderHints& hints);
-        virtual ~DownloaderQt();
+        virtual ~DownloaderQt() override;
 
         virtual IDownloadTask *createCoTask(std::shared_ptr<const DownloadTask>& task) override;
 

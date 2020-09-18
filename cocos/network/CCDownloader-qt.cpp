@@ -60,7 +60,7 @@ class DownloadTaskQt : public IDownloadTask
 public:
     DownloadTaskQt(
         DownloaderQt* owner, const std::shared_ptr<const DownloadTask>& task);
-    virtual ~DownloadTaskQt();
+    virtual ~DownloadTaskQt() override;
     
 protected:
     void taskFinished(QNetworkReply::NetworkError status);
@@ -74,7 +74,7 @@ private:
 };
 
 
-DownloaderQt::DownloaderQt(const DownloaderHints&)
+DownloaderQt::DownloaderQt(const DownloaderHints &)
     : _manager(new QNetworkAccessManager)
 {
 }
