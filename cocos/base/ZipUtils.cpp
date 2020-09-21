@@ -29,9 +29,9 @@
 #ifdef MINIZIP_FROM_SYSTEM
 #include <minizip/unzip.h>
 #else // from our embedded sources
-#include "unzip.h"
+#include "unzip/unzip.h"
 #endif
-#include "ioapi_mem.h"
+#include "unzip/ioapi_mem.h"
 #include <memory>
 
 #include <zlib.h>

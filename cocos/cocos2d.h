@@ -181,23 +181,23 @@ THE SOFTWARE.
 #include "platform/CCSAXParser.h"
 
 #include "platform/CCApplication.h"
+#include "platform/CCStdC.h"
 
 #ifdef QT_COCOS
 
 #include "platform/qt/CCFileUtils-qt.h"
 #include "platform/qt/CCGLViewImpl-qt.h"
+#include "platform/qt/CCGL-qt.h"
 
 #else
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     #include "platform/ios/CCGLViewImpl-ios.h"
-    #include "platform/ios/CCStdC-ios.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     #include "platform/android/CCGLViewImpl-android.h"
     #include "platform/android/CCGL-android.h"
-    #include "platform/android/CCStdC-android.h"
 //Enhance modification begin
     #include "platform/android/CCEnhanceAPI-android.h"
 //Enhance modification end
@@ -206,18 +206,15 @@ THE SOFTWARE.
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     #include "platform/desktop/CCGLViewImpl-desktop.h"
     #include "platform/win32/CCGL-win32.h"
-    #include "platform/win32/CCStdC-win32.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     #include "platform/desktop/CCGLViewImpl-desktop.h"
-    #include "platform/mac/CCStdC-mac.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     #include "platform/desktop/CCGLViewImpl-desktop.h"
     #include "platform/linux/CCGL-linux.h"
-    #include "platform/linux/CCStdC-linux.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 #endif
 

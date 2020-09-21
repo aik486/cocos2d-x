@@ -27,24 +27,6 @@ msvc {
     QMAKE_CXXFLAGS += /wd4005 /wd4244 /bigobj
 } else {
     clang|gcc {
-        QMAKE_CXXFLAGS += \
-            -Wno-unknown-pragmas \
-            -Wno-overloaded-virtual \
-            -Wno-unused-function \
-            -Wno-deprecated-declarations
-
-        clang:QMAKE_CXXFLAGS += \
-            -Wno-unused-private-field \
-            -Wno-unneeded-internal-declaration \
-            -Wno-null-conversion \
-            -Wno-unsequenced \
-            -Wno-nonnull
-        else:gcc:QMAKE_CXXFLAGS += \
-            -Wno-nonnull-compare \
-            -Wno-sequence-point \
-            -Wno-sign-compare \
-            -Wno-misleading-indentation
-
         DEFINES += USE_FILE32API
     }
 }
@@ -81,7 +63,6 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/2d/CCDrawNode.cpp \
     $$COCOS2DX_PATH/cocos/2d/CCFastTMXLayer.cpp \
     $$COCOS2DX_PATH/cocos/2d/CCFastTMXTiledMap.cpp \
-    $$COCOS2DX_PATH/cocos/2d/CCFont.cpp \
     $$COCOS2DX_PATH/cocos/2d/CCFontAtlas.cpp \
     $$COCOS2DX_PATH/cocos/2d/CCFontAtlasCache.cpp \
     $$COCOS2DX_PATH/cocos/2d/CCFontCharMap.cpp \
@@ -184,7 +165,6 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/base/CCStencilStateManager.cpp \
     $$COCOS2DX_PATH/cocos/base/CCTouch.cpp \
     $$COCOS2DX_PATH/cocos/base/ccTypes.cpp \
-    $$COCOS2DX_PATH/cocos/base/CCUserDefault.cpp \
     $$COCOS2DX_PATH/cocos/base/ccUTF8.cpp \
     $$COCOS2DX_PATH/cocos/base/ccUtils.cpp \
     $$COCOS2DX_PATH/cocos/base/CCValue.cpp \
@@ -195,7 +175,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/base/TGAlib.cpp \
     $$COCOS2DX_PATH/cocos/base/ZipUtils.cpp \
     $$COCOS2DX_PATH/cocos/cocos2d.cpp \
-    $$COCOS2DX_PATH/editor-support/cocostudio/CocosStudioExtension.cpp \
+    $$COCOS2DX_PATH/cocos/editor-support/cocostudio/CocosStudioExtension.cpp \
     $$COCOS2DX_PATH/cocos/math/CCAffineTransform.cpp \
     $$COCOS2DX_PATH/cocos/math/CCGeometry.cpp \
     $$COCOS2DX_PATH/cocos/math/CCVertex.cpp \
@@ -213,19 +193,6 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/navmesh/CCNavMeshUtils.cpp \
     $$COCOS2DX_PATH/cocos/network/CCDownloader.cpp \
     $$COCOS2DX_PATH/cocos/network/CCDownloader-qt.cpp \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsBody.cpp \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsContact.cpp \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsJoint.cpp \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsShape.cpp \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsWorld.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3D.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DComponent.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DConstraint.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DDebugDrawer.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DObject.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DShape.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DWorld.cpp \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysicsSprite3D.cpp \
     $$COCOS2DX_PATH/cocos/platform/CCFileUtils.cpp \
     $$COCOS2DX_PATH/cocos/platform/CCGLView.cpp \
     $$COCOS2DX_PATH/cocos/platform/CCSAXParser.cpp \
@@ -490,21 +457,6 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/network/CCDownloader.h \
     $$COCOS2DX_PATH/cocos/network/CCDownloader-qt.h \
     $$COCOS2DX_PATH/cocos/network/CCIDownloaderImpl.h \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsBody.h \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsContact.h \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsHelper.h \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsJoint.h \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsShape.h \
-    $$COCOS2DX_PATH/cocos/physics/CCPhysicsWorld.h \
-    $$COCOS2DX_PATH/cocos/physics/cpCompat62.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3D.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DComponent.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DConstraint.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DDebugDrawer.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DObject.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DShape.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysics3DWorld.h \
-    $$COCOS2DX_PATH/cocos/physics3d/CCPhysicsSprite3D.h \
     $$COCOS2DX_PATH/cocos/platform/CCApplication.h \
     $$COCOS2DX_PATH/cocos/platform/CCApplicationProtocol.h \
     $$COCOS2DX_PATH/cocos/platform/CCCommon.h \
@@ -518,7 +470,6 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/platform/CCPlatformMacros.h \
     $$COCOS2DX_PATH/cocos/platform/CCSAXParser.h \
     $$COCOS2DX_PATH/cocos/platform/CCStdC.h \
-    $$COCOS2DX_PATH/cocos/platform/qt/CCImage-qt.h \
     $$COCOS2DX_PATH/cocos/platform/qt/CCGL-qt.h \
     $$COCOS2DX_PATH/cocos/platform/qt/CCGLViewImpl-qt.h \
     $$COCOS2DX_PATH/cocos/platform/qt/CCApplication-qt.h \
@@ -684,3 +635,5 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/platform/linux/CCStdC-linux.h
 
 }
+
+include($$COCOS2DX_PATH/external/freetype2/qt/freetype_build.pri)

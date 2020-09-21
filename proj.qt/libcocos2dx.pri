@@ -1,11 +1,15 @@
 include(liboutdir.pri)
 
+include($$COCOS2DX_PATH/external/freetype2/qt/freetype_depend.pri)
+
 DEFINES += \
     QT_COCOS \
     CC_STATIC_LIB \
     CC_ENABLE_CACHE_TEXTURE_DATA=0 \
     CC_USE_CULLING=0 \
-    CC_ENABLE_CHIPMUNK_INTEGRATION=0
+    CC_ENABLE_CHIPMUNK_INTEGRATION=0 \
+    CC_USE_PHYSICS=0 \
+    CC_ENABLE_BULLET_INTEGRATION=0
 
 CONFIG(debug, debug|release)|!isEmpty(DEBUG_COCOS) {
     DEFINES += COCOS2D_DEBUG=1
@@ -17,6 +21,7 @@ linux {
     LIBS += -Wl,-Bstatic -lz -Wl,-Bdynamic
     DEFINES += LINUX
     DEFINES += CC_USE_QT_OPENGL
+    
 }
 
 macx {

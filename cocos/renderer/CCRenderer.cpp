@@ -43,7 +43,7 @@
 #include "base/CCEventType.h"
 #include "2d/CCCamera.h"
 #include "2d/CCScene.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 #include "renderer/backend/Backend.h"
 

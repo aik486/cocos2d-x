@@ -31,7 +31,7 @@
 #include "Macros.h"
 #include "Types.h"
 #include "RenderPassDescriptor.h"
-#include "CCStdC.h"
+#include "platform/CCStdC.h"
 #include "ProgramState.h"
 #include "VertexLayout.h"
 
