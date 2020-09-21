@@ -328,12 +328,30 @@ public:
 
     bool isIsolated() const { return _isolated; }
 
+    enum BufferType {
+        TRIANGLES,
+        POINTS,
+        LINES
+    };
+    
+    bool isEmpty(BufferType bufferType) const;
+    int getCapacity(BufferType bufferType) const;
+    int getSize(BufferType bufferType) const;
+        
+    void reserve(int capacity, BufferType bufferType);
+    void shrink(BufferType bufferType);
+    
 CC_CONSTRUCTOR_ACCESS:
     DrawNode(float lineWidth = DEFAULT_LINE_WIDTH);
     virtual ~DrawNode();
-    virtual bool init() override;
+    virtual bool init() override;    
 
 protected:
+    int *getCapacityPtr(BufferType bufferType);
+    V2F_C4B_T2F **getBufferPtr(BufferType bufferType);
+    CustomCommand *getCommandPtr(BufferType bufferType);
+    int *getSizePtr(BufferType bufferType);
+    
     void ensureCapacity(int count);
     void ensureCapacityGLPoint(int count);
     void ensureCapacityGLLine(int count);
@@ -350,8 +368,6 @@ protected:
     int         _bufferCapacityGLPoint = 0;
     int         _bufferCountGLPoint = 0;
     V2F_C4B_T2F *_bufferGLPoint = nullptr;
-    Color4F     _pointColor;
-    int         _pointSize = 0;
     
     int         _bufferCapacityGLLine = 0;
     int         _bufferCountGLLine = 0;
@@ -376,6 +392,12 @@ protected:
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(DrawNode);
 };
+
+inline bool DrawNode::isEmpty(BufferType bufferType) const
+{
+    return getCapacity(bufferType) == 0;
+}
+
 /** @} */
 NS_CC_END
 

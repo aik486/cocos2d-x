@@ -94,53 +94,26 @@ DrawNode* DrawNode::create(float defaultLineWidth)
 
 void DrawNode::ensureCapacity(int count)
 {
-    CCASSERT(count>=0, "capacity must be >= 0");
-    
-    if(_bufferCount + count > _bufferCapacity)
-    {
-        _bufferCapacity += MAX(_bufferCapacity, count);
-        _buffer = (V2F_C4B_T2F*)realloc(_buffer, _bufferCapacity*sizeof(V2F_C4B_T2F));
-        
-        _customCommand.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacity, CustomCommand::BufferUsage::STATIC);
-        _customCommand.updateVertexBuffer(_buffer, _bufferCapacity*sizeof(V2F_C4B_T2F));
-    }
+    reserve(_bufferCount + count, TRIANGLES);
 }
 
 void DrawNode::ensureCapacityGLPoint(int count)
 {
-    CCASSERT(count>=0, "capacity must be >= 0");
-    
-    if(_bufferCountGLPoint + count > _bufferCapacityGLPoint)
-    {
-        _bufferCapacityGLPoint += MAX(_bufferCapacityGLPoint, count);
-        _bufferGLPoint = (V2F_C4B_T2F*)realloc(_bufferGLPoint, _bufferCapacityGLPoint*sizeof(V2F_C4B_T2F));
-        
-        _customCommandGLPoint.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacityGLPoint, CustomCommand::BufferUsage::STATIC);
-        _customCommandGLPoint.updateVertexBuffer(_bufferGLPoint, _bufferCapacityGLPoint*sizeof(V2F_C4B_T2F));
-    }
+    reserve(_bufferCountGLPoint + count, POINTS);
 }
 
 void DrawNode::ensureCapacityGLLine(int count)
 {
-    CCASSERT(count>=0, "capacity must be >= 0");
-    
-    if(_bufferCountGLLine + count > _bufferCapacityGLLine)
-    {
-        _bufferCapacityGLLine += MAX(_bufferCapacityGLLine, count);
-        _bufferGLLine = (V2F_C4B_T2F*)realloc(_bufferGLLine, _bufferCapacityGLLine*sizeof(V2F_C4B_T2F));
-        
-        _customCommandGLLine.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacityGLLine, CustomCommand::BufferUsage::STATIC);
-        _customCommandGLLine.updateVertexBuffer(_bufferGLLine, _bufferCapacityGLLine*sizeof(V2F_C4B_T2F));
-    }
+    reserve(_bufferCountGLLine + count, LINES);
 }
 
 bool DrawNode::init()
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     updateShader();
-    ensureCapacity(8);
-    ensureCapacityGLPoint(8);
-    ensureCapacityGLLine(8);
+    reserve(18, TRIANGLES);
+    reserve(4, POINTS);
+    reserve(8, LINES);
     
     _dirty = true;
     _dirtyGLLine = true;
@@ -235,7 +208,7 @@ void DrawNode::updateUniforms(const Mat4 &transform, CustomCommand& cmd)
     pipelineDescriptor.programState->setUniform(alphaUniformLocation, &alpha, sizeof(alpha));
 }
 
-void DrawNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void DrawNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t)
 {
     if(_bufferCount)
     {
@@ -915,6 +888,145 @@ void DrawNode::setLineWidth(float lineWidth)
 float DrawNode::getLineWidth()
 {
     return this->_lineWidth;
+}
+
+int DrawNode::getCapacity(BufferType bufferType) const
+{
+    switch (bufferType) {
+        case TRIANGLES:
+            return _bufferCapacity;
+            
+        case POINTS:
+            return _bufferCapacityGLPoint;
+            
+        case LINES:
+            return _bufferCapacityGLLine;
+    }
+    
+    return 0;
+}
+
+
+int *DrawNode::getCapacityPtr(BufferType bufferType)
+{
+    switch (bufferType) {
+        case TRIANGLES:
+            return &_bufferCapacity;
+            
+        case POINTS:
+            return &_bufferCapacityGLPoint;
+            
+        case LINES:
+            return &_bufferCapacityGLLine;
+    }
+    
+    return nullptr;
+}
+
+V2F_C4B_T2F **DrawNode::getBufferPtr(DrawNode::BufferType bufferType)
+{
+    switch (bufferType) {
+        case TRIANGLES:
+            return &_buffer;
+            
+        case POINTS:
+            return &_bufferGLPoint;
+            
+        case LINES:
+            return &_bufferGLLine;
+    }
+    
+    return nullptr;
+}
+
+CustomCommand *DrawNode::getCommandPtr(DrawNode::BufferType bufferType)
+{
+    switch (bufferType) {
+        case TRIANGLES:
+            return &_customCommand;
+            
+        case POINTS:
+            return &_customCommandGLPoint;
+            
+        case LINES:
+            return &_customCommandGLLine;
+    }
+    
+    return nullptr;
+}
+
+int DrawNode::getSize(BufferType bufferType) const
+{
+    switch (bufferType) {
+        case TRIANGLES:
+            return _bufferCount;
+            
+        case POINTS:
+            return _bufferCountGLPoint;
+            
+        case LINES:
+            return _bufferCountGLLine;
+    }
+    
+    return 0;
+}
+
+int *DrawNode::getSizePtr(DrawNode::BufferType bufferType)
+{
+    switch (bufferType) {
+        case TRIANGLES:
+            return &_bufferCount;
+            
+        case POINTS:
+            return &_bufferCountGLPoint;
+            
+        case LINES:
+            return &_bufferCountGLLine;
+    }
+    
+    return nullptr;
+}
+
+void DrawNode::reserve(int capacity, BufferType bufferType)
+{
+    if (capacity < 0) {
+        return;
+    }
+    auto ptr = getCapacityPtr(bufferType);
+    if (!ptr) {
+        return;
+    }
+    if (capacity <= *ptr) {
+        return;
+    }
+   
+    *ptr = capacity;
+    auto &buffer = *getBufferPtr(bufferType);
+    auto &command = *getCommandPtr(bufferType);
+    size_t newSize = size_t(capacity) * sizeof(V2F_C4B_T2F);
+    buffer = (V2F_C4B_T2F*)realloc(buffer, newSize);
+    if (capacity > 0) {
+        command.createVertexBuffer(sizeof(V2F_C4B_T2F), capacity, CustomCommand::BufferUsage::STATIC);
+        command.updateVertexBuffer(buffer, newSize);
+    } else {
+        command.setVertexBuffer(nullptr);
+    }
+}
+
+void DrawNode::shrink(BufferType bufferType)
+{
+    int size = getSize(bufferType);
+    if (getCapacity(bufferType) == size)
+        return;
+    
+    *getCapacityPtr(bufferType) = 0;
+    reserve(size, bufferType);
+    
+    if (size > 0) {
+        auto &command = *getCommandPtr(bufferType);
+        auto &buffer = *getBufferPtr(bufferType);
+        command.updateVertexBuffer(buffer, size, size_t(size) * sizeof(V2F_C4B_T2F));
+    }
 }
 
 void DrawNode::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
