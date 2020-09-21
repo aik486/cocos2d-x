@@ -263,17 +263,28 @@ void DrawNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     }
 }
 
-void DrawNode::drawPoint(const Vec2& position, const float pointSize, const Color4F &color)
+
+void DrawNode::drawPoint(const Vec2 &position, const float pointSize, const Color4B &color)
 {
     ensureCapacityGLPoint(1);
     
     V2F_C4B_T2F *point = _bufferGLPoint + _bufferCountGLPoint;
-    *point = {position, Color4B(color), Tex2F(pointSize,0)};
+    *point = {position, color, Tex2F(pointSize,0)};
     
     _customCommandGLPoint.updateVertexBuffer(point, _bufferCountGLPoint*sizeof(V2F_C4B_T2F), sizeof(V2F_C4B_T2F));
     _bufferCountGLPoint += 1;
     _dirtyGLPoint = true;
-    _customCommandGLPoint.setVertexDrawInfo(0, _bufferCountGLPoint);
+    _customCommandGLPoint.setVertexDrawInfo(0, _bufferCountGLPoint);   
+}
+
+void DrawNode::drawPoint(const Vec2& position, const float pointSize, const Color4F &color)
+{
+    drawPoint(position, pointSize, Color4B(color));
+}
+
+void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, const Color4B &color)
+{
+    drawPoints(position, numberOfPoints, 1.0, color);
 }
 
 void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, const Color4F &color)
@@ -281,14 +292,14 @@ void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, con
     drawPoints(position, numberOfPoints, 1.0, color);
 }
 
-void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, const float pointSize, const Color4F &color)
+void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, const float pointSize, const Color4B &color)
 {
     ensureCapacityGLPoint(numberOfPoints);
     
     V2F_C4B_T2F *point = _bufferGLPoint + _bufferCountGLPoint;
     for(unsigned int i=0; i < numberOfPoints; i++)
     {
-        *(point + i) = {position[i], Color4B(color), Tex2F(pointSize,0)};
+        *(point + i) = {position[i], color, Tex2F(pointSize,0)};
     }
     
     _customCommandGLPoint.updateVertexBuffer(point, _bufferCountGLPoint*sizeof(V2F_C4B_T2F), numberOfPoints*sizeof(V2F_C4B_T2F));
@@ -297,14 +308,19 @@ void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, con
     _customCommandGLPoint.setVertexDrawInfo(0, _bufferCountGLPoint);
 }
 
-void DrawNode::drawLine(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
+void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, const float pointSize, const Color4F &color)
+{
+    drawPoints(position, numberOfPoints, pointSize, Color4B(color));
+}
+
+void DrawNode::drawLine(const Vec2 &origin, const Vec2 &destination, const Color4B &color)
 {
     ensureCapacityGLLine(2);
     
     V2F_C4B_T2F *point = _bufferGLLine + _bufferCountGLLine;
     
-    *point = {origin, Color4B(color), Tex2F(0.0, 0.0)};
-    *(point+1) = {destination, Color4B(color), Tex2F(0.0, 0.0)};
+    *point = {origin, color, Tex2F(0.0, 0.0)};
+    *(point+1) = {destination, color, Tex2F(0.0, 0.0)};
     
     _customCommandGLLine.updateVertexBuffer(point, _bufferCountGLLine*sizeof(V2F_C4B_T2F), 2*sizeof(V2F_C4B_T2F));
     _bufferCountGLLine += 2;
@@ -312,7 +328,12 @@ void DrawNode::drawLine(const Vec2 &origin, const Vec2 &destination, const Color
     _customCommandGLLine.setVertexDrawInfo(0, _bufferCountGLLine);
 }
 
-void DrawNode::drawRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
+void DrawNode::drawLine(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
+{
+    drawLine(origin, destination, Color4B(color));
+}
+
+void DrawNode::drawRect(const Vec2 &origin, const Vec2 &destination, const Color4B &color)
 {
     drawLine(origin, Vec2(destination.x, origin.y), color);
     drawLine(Vec2(destination.x, origin.y), destination, color);
@@ -320,7 +341,12 @@ void DrawNode::drawRect(const Vec2 &origin, const Vec2 &destination, const Color
     drawLine(Vec2(origin.x, destination.y), origin, color);
 }
 
-void DrawNode::drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool closePolygon, const Color4F &color)
+void DrawNode::drawRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
+{
+    drawRect(origin, destination, Color4B(color));
+}
+
+void DrawNode::drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool closePolygon, const Color4B &color)
 {
     unsigned int vertex_count;
     if(closePolygon)
@@ -340,14 +366,14 @@ void DrawNode::drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool clos
     unsigned int i = 0;
     for(; i < numberOfPoints - 1; i++)
     {
-        *point = {poli[i], Color4B(color), Tex2F(0.0, 0.0)};
-        *(point + 1) = {poli[i+1], Color4B(color), Tex2F(0.0, 0.0)};
+        *point = {poli[i], color, Tex2F(0.0, 0.0)};
+        *(point + 1) = {poli[i+1], color, Tex2F(0.0, 0.0)};
         point += 2;
     }
     if(closePolygon)
     {
-        *point = {poli[i], Color4B(color), Tex2F(0.0, 0.0)};
-        *(point + 1) = {poli[0], Color4B(color), Tex2F(0.0, 0.0)};
+        *point = {poli[i], color, Tex2F(0.0, 0.0)};
+        *(point + 1) = {poli[0], color, Tex2F(0.0, 0.0)};
     }
     
     _customCommandGLLine.updateVertexBuffer(cursor, _bufferCountGLLine*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
@@ -355,7 +381,12 @@ void DrawNode::drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool clos
     _customCommandGLLine.setVertexDrawInfo(0, _bufferCountGLLine);
 }
 
-void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const Color4F &color)
+void DrawNode::drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool closePolygon, const Color4F &color)
+{
+    drawPoly(poli, numberOfPoints, closePolygon, Color4B(color));
+}
+
+void DrawNode::drawCircle(const Vec2 &center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const Color4B &color)
 {
     const float coef = 2.0f * (float)M_PI/segments;
     
@@ -383,12 +414,22 @@ void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigne
     CC_SAFE_DELETE_ARRAY(vertices);
 }
 
+void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const Color4F &color)
+{
+    drawCircle(center, radius, angle, segments, drawLineToCenter, scaleX, scaleY, Color4B(color));
+}
+
+void DrawNode::drawCircle(const Vec2 &center, float radius, float angle, unsigned int segments, bool drawLineToCenter, const Color4B &color)
+{
+    drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color);
+}
+
 void DrawNode::drawCircle(const Vec2 &center, float radius, float angle, unsigned int segments, bool drawLineToCenter, const Color4F &color)
 {
     drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color);
 }
 
-void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec2 &destination, unsigned int segments, const Color4F &color)
+void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec2 &destination, unsigned int segments, const Color4B &color)
 {
     Vec2* vertices = new (std::nothrow) Vec2[segments + 1];
     if( ! vertices )
@@ -409,7 +450,12 @@ void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec
     CC_SAFE_DELETE_ARRAY(vertices);
 }
 
-void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const Vec2 &control2, const Vec2 &destination, unsigned int segments, const Color4F &color)
+void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec2 &destination, unsigned int segments, const Color4F &color)
+{
+    drawQuadBezier(origin, control, destination, segments, Color4B(color));
+}
+
+void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const Vec2 &control2, const Vec2 &destination, unsigned int segments, const Color4B &color)
 {
     Vec2* vertices = new (std::nothrow) Vec2[segments + 1];
     if( ! vertices )
@@ -430,7 +476,12 @@ void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const V
     CC_SAFE_DELETE_ARRAY(vertices);
 }
 
-void DrawNode::drawCardinalSpline(PointArray *config, float tension,  unsigned int segments, const Color4F &color)
+void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const Vec2 &control2, const Vec2 &destination, unsigned int segments, const Color4F &color)
+{
+    drawCubicBezier(origin, control1, control2, destination, segments, Color4B(color));
+}
+
+void DrawNode::drawCardinalSpline(PointArray *config, float tension, unsigned int segments, const Color4B &color)
 {
     Vec2* vertices = new (std::nothrow) Vec2[segments + 1];
     if( ! vertices )
@@ -469,20 +520,30 @@ void DrawNode::drawCardinalSpline(PointArray *config, float tension,  unsigned i
     CC_SAFE_DELETE_ARRAY(vertices);
 }
 
+void DrawNode::drawCardinalSpline(PointArray *config, float tension,  unsigned int segments, const Color4F &color)
+{
+    drawCardinalSpline(config, tension, segments, Color4B(color));
+}
+
+void DrawNode::drawCatmullRom(PointArray *points, unsigned int segments, const Color4B &color)
+{
+    drawCardinalSpline( points, 0.5f, segments, color);
+}
+
 void DrawNode::drawCatmullRom(PointArray *points, unsigned int segments, const Color4F &color)
 {
     drawCardinalSpline( points, 0.5f, segments, color);
 }
 
-void DrawNode::drawDot(const Vec2 &pos, float radius, const Color4F &color)
+void DrawNode::drawDot(const Vec2 &pos, float radius, const Color4B &color)
 {
     unsigned int vertex_count = 2*3;
     ensureCapacity(vertex_count);
     
-    V2F_C4B_T2F a = {Vec2(pos.x - radius, pos.y - radius), Color4B(color), Tex2F(-1.0, -1.0) };
-    V2F_C4B_T2F b = {Vec2(pos.x - radius, pos.y + radius), Color4B(color), Tex2F(-1.0,  1.0) };
-    V2F_C4B_T2F c = {Vec2(pos.x + radius, pos.y + radius), Color4B(color), Tex2F( 1.0,  1.0) };
-    V2F_C4B_T2F d = {Vec2(pos.x + radius, pos.y - radius), Color4B(color), Tex2F( 1.0, -1.0) };
+    V2F_C4B_T2F a = {Vec2(pos.x - radius, pos.y - radius), color, Tex2F(-1.0, -1.0) };
+    V2F_C4B_T2F b = {Vec2(pos.x - radius, pos.y + radius), color, Tex2F(-1.0,  1.0) };
+    V2F_C4B_T2F c = {Vec2(pos.x + radius, pos.y + radius), color, Tex2F( 1.0,  1.0) };
+    V2F_C4B_T2F d = {Vec2(pos.x + radius, pos.y - radius), color, Tex2F( 1.0, -1.0) };
     
     V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_buffer + _bufferCount);
     V2F_C4B_T2F_Triangle triangle0 = {a, b, c};
@@ -496,7 +557,12 @@ void DrawNode::drawDot(const Vec2 &pos, float radius, const Color4F &color)
     _customCommand.setVertexDrawInfo(0, _bufferCount);
 }
 
-void DrawNode::drawRect(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Vec2& p4, const Color4F &color)
+void DrawNode::drawDot(const Vec2 &pos, float radius, const Color4F &color)
+{
+    drawDot(pos, radius, Color4B(color));
+}
+
+void DrawNode::drawRect(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Vec2 &p4, const Color4B &color)
 {
     drawLine(p1, p2, color);
     drawLine(p2, p3, color);
@@ -504,8 +570,37 @@ void DrawNode::drawRect(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Ve
     drawLine(p4, p1, color);
 }
 
-void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const Color4F &color)
+void DrawNode::drawRect(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Vec2& p4, const Color4F &color)
 {
+    drawRect(p1, p2, p3, p4, Color4B(color));
+}
+
+void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float width, float height, const Color4B &color)
+{
+	if (width != height)
+	{		
+		bool horizontal;
+		if (from.y == to.y)
+		{
+			horizontal = true;
+		} else
+		{
+			auto p3 = from - to;
+			int angle = int(MATH_RAD_TO_DEG(p3.getAngle()));
+			if (angle < 0)
+				angle = 360 - (-angle % 360);
+			else if (angle > 360)
+				angle = angle % 360;
+		
+			horizontal = angle <= 45 || angle >= 360 - 45 ||
+				(angle >= 180 - 45 && angle <= 180 + 45);
+		}
+		if(!horizontal)
+		{
+			std::swap(width, height);
+		}
+	}
+	
     unsigned int vertex_count = 6*3;
     ensureCapacity(vertex_count);
     
@@ -516,8 +611,8 @@ void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const
     Vec2 n = ((b - a).getPerp()).getNormalized();
     Vec2 t = n.getPerp();
 
-    Vec2 nw = n * radius;
-    Vec2 tw = t * radius;
+    Vec2 nw = n * height;
+    Vec2 tw = t * width;
     Vec2 v0 = b - (nw + tw);
     Vec2 v1 = b + (nw - tw);
     Vec2 v2 = b - nw;
@@ -531,44 +626,44 @@ void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const
     V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_buffer + _bufferCount);
     
     V2F_C4B_T2F_Triangle triangles0 = {
-        {v0, Color4B(color), v2ToTex2F(-(n + t))},
-        {v1, Color4B(color), v2ToTex2F(n - t)},
-        {v2, Color4B(color), v2ToTex2F(-n)},
+        {v0, color, v2ToTex2F(-(n + t))},
+        {v1, color, v2ToTex2F(n - t)},
+        {v2, color, v2ToTex2F(-n)},
     };
     triangles[0] = triangles0;
 
     V2F_C4B_T2F_Triangle triangles1 = {
-        {v3, Color4B(color), v2ToTex2F(n)},
-        {v1, Color4B(color), v2ToTex2F(n - t)},
-        {v2, Color4B(color), v2ToTex2F(-n)},
+        {v3, color, v2ToTex2F(n)},
+        {v1, color, v2ToTex2F(n - t)},
+        {v2, color, v2ToTex2F(-n)},
     };
     triangles[1] = triangles1;
 
     V2F_C4B_T2F_Triangle triangles2 = {
-        {v3, Color4B(color), v2ToTex2F(n)},
-        {v4, Color4B(color), v2ToTex2F(-n)},
-        {v2, Color4B(color), v2ToTex2F(-n)},
+        {v3, color, v2ToTex2F(n)},
+        {v4, color, v2ToTex2F(-n)},
+        {v2, color, v2ToTex2F(-n)},
     };
     triangles[2] = triangles2;
 
     V2F_C4B_T2F_Triangle triangles3 = {
-        {v3, Color4B(color), v2ToTex2F(n)},
-        {v4, Color4B(color), v2ToTex2F(-n)},
-        {v5, Color4B(color), v2ToTex2F(n) },
+        {v3, color, v2ToTex2F(n)},
+        {v4, color, v2ToTex2F(-n)},
+        {v5, color, v2ToTex2F(n) },
     };
     triangles[3] = triangles3;
 
     V2F_C4B_T2F_Triangle triangles4 = {
-        {v6, Color4B(color), v2ToTex2F(t - n)},
-        {v4, Color4B(color), v2ToTex2F(-n) },
-        {v5, Color4B(color), v2ToTex2F(n)},
+        {v6, color, v2ToTex2F(t - n)},
+        {v4, color, v2ToTex2F(-n) },
+        {v5, color, v2ToTex2F(n)},
     };
     triangles[4] = triangles4;
 
     V2F_C4B_T2F_Triangle triangles5 = {
-        {v6, Color4B(color), v2ToTex2F(t - n)},
-        {v7, Color4B(color), v2ToTex2F(t + n)},
-        {v5, Color4B(color), v2ToTex2F(n)},
+        {v6, color, v2ToTex2F(t - n)},
+        {v7, color, v2ToTex2F(t + n)},
+        {v5, color, v2ToTex2F(n)},
     };
     triangles[5] = triangles5;
     
@@ -578,11 +673,21 @@ void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const
     _customCommand.setVertexDrawInfo(0, _bufferCount);
 }
 
-void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColor, float borderWidth, const Color4F &borderColor)
+void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const Color4B &color)
+{
+    drawSegment(from, to, radius, radius, color);    
+}
+
+void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const Color4F &color)
+{
+    drawSegment(from, to, radius, Color4B(color));
+}
+
+void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4B &fillColor, float borderWidth, const Color4B &borderColor)
 {
     CCASSERT(count >= 0, "invalid count value");
     
-    bool outline = (borderColor.a > 0.0f && borderWidth > 0.0f);
+    bool outline = (borderColor.a > 0 && borderWidth > 0.0f);
     
     auto  triangle_count = outline ? (3*count - 2) : (count - 2);
     auto vertex_count = 3*triangle_count;
@@ -594,9 +699,9 @@ void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColo
     for (int i = 0; i < count-2; i++)
     {
         V2F_C4B_T2F_Triangle tmp = {
-            {verts[0], Color4B(fillColor), v2ToTex2F(Vec2::ZERO)},
-            {verts[i+1], Color4B(fillColor), v2ToTex2F(Vec2::ZERO)},
-            {verts[i+2], Color4B(fillColor), v2ToTex2F(Vec2::ZERO)},
+            {verts[0],   fillColor, v2ToTex2F(Vec2::ZERO)},
+            {verts[i+1], fillColor, v2ToTex2F(Vec2::ZERO)},
+            {verts[i+2], fillColor, v2ToTex2F(Vec2::ZERO)},
         };
         
         *cursor++ = tmp;
@@ -637,16 +742,16 @@ void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColo
             Vec2 outer1 = v1 + offset1 * borderWidth;
             
             V2F_C4B_T2F_Triangle tmp1 = {
-                {inner0, Color4B(borderColor), v2ToTex2F(-n0)},
-                {inner1, Color4B(borderColor), v2ToTex2F(-n0)},
-                {outer1, Color4B(borderColor), v2ToTex2F(n0)}
+                {inner0, borderColor, v2ToTex2F(-n0)},
+                {inner1, borderColor, v2ToTex2F(-n0)},
+                {outer1, borderColor, v2ToTex2F(n0)}
             };
             *cursor++ = tmp1;
             
             V2F_C4B_T2F_Triangle tmp2 = {
-                {inner0, Color4B(borderColor), v2ToTex2F(-n0)},
-                {outer0, Color4B(borderColor), v2ToTex2F(n0)},
-                {outer1, Color4B(borderColor), v2ToTex2F(n0)}
+                {inner0, borderColor, v2ToTex2F(-n0)},
+                {outer0, borderColor, v2ToTex2F(n0)},
+                {outer1, borderColor, v2ToTex2F(n0)}
             };
             *cursor++ = tmp2;
         }
@@ -660,7 +765,39 @@ void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColo
     _dirty = true;
 }
 
-void DrawNode::drawSolidRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
+void DrawNode::drawPolygon(const Vec2 *vert, int count, float borderWidth, float borderHeight, const Color4B &borderColor, const Color4B &fillColor)
+{
+	if (count <= 0)
+		return;
+
+	if (count >= 2 && vert[count - 1].equals(vert[0]))
+		count--;
+
+	if (fabs(borderWidth - borderHeight) >= FLT_EPSILON)
+	{
+		if (fillColor.a > 0)
+			drawPolygon(vert, count, fillColor, 0.f, borderColor);
+
+		for (int i = 0; i < count; i++)
+		{
+			int next = i + 1;
+			if (next == count)
+				next = 0;
+
+			drawSegment(vert[i], vert[next], borderWidth, borderHeight, borderColor);
+		}
+	} else
+	{
+		drawPolygon(vert, count, fillColor, borderWidth, borderColor);
+	}
+}
+
+void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColor, float borderWidth, const Color4F &borderColor)
+{
+	drawPolygon(verts, count, Color4B(fillColor), borderWidth, Color4B(borderColor));
+}
+
+void DrawNode::drawSolidRect(const Vec2 &origin, const Vec2 &destination, const Color4B &color)
 {
     Vec2 vertices[] = {
         origin,
@@ -672,12 +809,22 @@ void DrawNode::drawSolidRect(const Vec2 &origin, const Vec2 &destination, const 
     drawSolidPoly(vertices, 4, color);
 }
 
-void DrawNode::drawSolidPoly(const Vec2 *poli, unsigned int numberOfPoints, const Color4F &color)
+void DrawNode::drawSolidRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
 {
-    drawPolygon(poli, numberOfPoints, color, 0.0, Color4F());
+    drawSolidRect(origin, destination, Color4B(color));
 }
 
-void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F &color)
+void DrawNode::drawSolidPoly(const Vec2 *poli, unsigned int numberOfPoints, const Color4B &color)
+{
+    drawPolygon(poli, numberOfPoints, color, 0.0, Color4B());
+}
+
+void DrawNode::drawSolidPoly(const Vec2 *poli, unsigned int numberOfPoints, const Color4F &color)
+{
+    drawSolidPoly(poli, numberOfPoints, Color4B(color));
+}
+
+void DrawNode::drawSolidCircle(const Vec2 &center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4B &color)
 {
     const float coef = 2.0f * (float)M_PI/segments;
     
@@ -700,20 +847,29 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
     CC_SAFE_DELETE_ARRAY(vertices);
 }
 
-void DrawNode::drawSolidCircle( const Vec2& center, float radius, float angle, unsigned int segments, const Color4F& color)
+void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F &color)
+{
+    drawSolidCircle(center, radius, angle, segments, scaleX, scaleY, Color4B(color));
+}
+
+void DrawNode::drawSolidCircle(const Vec2 &center, float radius, float angle, unsigned int segments, const Color4B &color)
 {
     drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, color);
 }
 
-void DrawNode::drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Color4F &color)
+void DrawNode::drawSolidCircle( const Vec2& center, float radius, float angle, unsigned int segments, const Color4F& color)
+{
+    drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, Color4B(color));
+}
+
+void DrawNode::drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Color4B &color)
 {
     unsigned int vertex_count = 3;
     ensureCapacity(vertex_count);
 
-    Color4B col = Color4B(color);
-    V2F_C4B_T2F a = {p1, col, Tex2F(0.0, 0.0) };
-    V2F_C4B_T2F b = {p2, col, Tex2F(0.0,  0.0) };
-    V2F_C4B_T2F c = {p3, col, Tex2F(0.0,  0.0) };
+    V2F_C4B_T2F a = {p1, color, Tex2F(0.0, 0.0) };
+    V2F_C4B_T2F b = {p2, color, Tex2F(0.0,  0.0) };
+    V2F_C4B_T2F c = {p3, color, Tex2F(0.0,  0.0) };
 
     V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_buffer + _bufferCount);
     V2F_C4B_T2F_Triangle triangle = {a, b, c};
@@ -723,6 +879,11 @@ void DrawNode::drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, cons
     _bufferCount += vertex_count;
     _dirty = true;
     _customCommand.setVertexDrawInfo(0, _bufferCount);
+}
+
+void DrawNode::drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Color4F &color)
+{
+   drawTriangle(p1, p2, p3, Color4B(color));
 }
 
 void DrawNode::clear()

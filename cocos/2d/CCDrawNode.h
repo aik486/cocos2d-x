@@ -63,12 +63,13 @@ public:
     
     /** Draw a point.
      *
-     * @param point A Vec2 used to point.
+     * @param position A Vec2 used to point.
      * @param pointSize The point size.
      * @param color The point color.
      * @js NA
      */
-    void drawPoint(const Vec2& point, const float pointSize, const Color4F &color);
+    void drawPoint(const Vec2& position, const float pointSize, const Color4B &color);
+    void drawPoint(const Vec2& position, const float pointSize, const Color4F &color);
     
     /** Draw a group point.
      *
@@ -77,6 +78,7 @@ public:
      * @param color The point color.
      * @js NA
      */
+    void drawPoints(const Vec2 *position, unsigned int numberOfPoints, const Color4B &color);
     void drawPoints(const Vec2 *position, unsigned int numberOfPoints, const Color4F &color);
     
     /** Draw a group point.
@@ -87,6 +89,7 @@ public:
      * @param color The point color.
      * @js NA
      */
+    void drawPoints(const Vec2 *position, unsigned int numberOfPoints, const float pointSize, const Color4B &color);
     void drawPoints(const Vec2 *position, unsigned int numberOfPoints, const float pointSize, const Color4F &color);
     
     /** Draw an line from origin to destination with color. 
@@ -96,6 +99,7 @@ public:
      * @param color The line color.
      * @js NA
      */
+    void drawLine(const Vec2 &origin, const Vec2 &destination, const Color4B &color);
     void drawLine(const Vec2 &origin, const Vec2 &destination, const Color4F &color);
     
     /** Draws a rectangle given the origin and destination point measured in points.
@@ -105,6 +109,7 @@ public:
      * @param destination The rectangle destination.
      * @param color The rectangle color.
      */
+    void drawRect(const Vec2 &origin, const Vec2 &destination, const Color4B &color);
     void drawRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color);
     
     /** Draws a polygon given a pointer to point coordinates and the number of vertices measured in points.
@@ -115,6 +120,7 @@ public:
      * @param closePolygon The polygon can be closed or open.
      * @param color The polygon color.
      */
+    void drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool closePolygon, const Color4B &color);
     void drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool closePolygon, const Color4F &color);
     
     /** Draws a circle given the center, radius and number of segments.
@@ -128,6 +134,7 @@ public:
      * @param scaleY The scale value in y.
      * @param color Set the circle color.
      */
+    void drawCircle( const Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const Color4B &color);
     void drawCircle( const Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const Color4F &color);
     
     /** Draws a circle given the center, radius and number of segments.
@@ -139,6 +146,7 @@ public:
      * @param drawLineToCenter Whether or not draw the line from the origin to center.
      * @param color Set the circle color.
      */
+    void drawCircle(const Vec2 &center, float radius, float angle, unsigned int segments, bool drawLineToCenter, const Color4B &color);
     void drawCircle(const Vec2 &center, float radius, float angle, unsigned int segments, bool drawLineToCenter, const Color4F &color);
     
     /** Draws a quad bezier path.
@@ -149,6 +157,7 @@ public:
      * @param segments The number of segments.
      * @param color Set the quad bezier color.
      */
+    void drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec2 &destination, unsigned int segments, const Color4B &color);
     void drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec2 &destination, unsigned int segments, const Color4F &color);
 
     /** Draw a cubic bezier curve with color and number of segments
@@ -160,6 +169,7 @@ public:
      * @param segments The number of segments.
      * @param color Set the cubic bezier color.
      */
+    void drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const Vec2 &control2, const Vec2 &destination, unsigned int segments, const Color4B &color);
     void drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const Vec2 &control2, const Vec2 &destination, unsigned int segments, const Color4F &color);
     
     /** Draws a Cardinal Spline path.
@@ -169,6 +179,7 @@ public:
      * @param segments The number of segments.
      * @param color Set the Spline color.
      */
+    void drawCardinalSpline(PointArray *config, float tension,  unsigned int segments, const Color4B &color);
     void drawCardinalSpline(PointArray *config, float tension,  unsigned int segments, const Color4F &color);
     
     /** Draws a Catmull Rom path.
@@ -177,6 +188,7 @@ public:
      * @param segments The number of segments.
      * @param color The Catmull Rom color.
      */
+    void drawCatmullRom(PointArray *points, unsigned int segments, const Color4B &color);
     void drawCatmullRom(PointArray *points, unsigned int segments, const Color4F &color);
     
     /** draw a dot at a position, with a given radius and color. 
@@ -185,6 +197,7 @@ public:
      * @param radius The dot radius.
      * @param color The dot color.
      */
+    void drawDot(const Vec2 &pos, float radius, const Color4B &color);
     void drawDot(const Vec2 &pos, float radius, const Color4F &color);
     
     /** Draws a rectangle with 4 points.
@@ -195,6 +208,7 @@ public:
      * @param p4 The rectangle vertex point.
      * @param color The rectangle color.
      */
+    void drawRect(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Vec2& p4, const Color4B &color);
     void drawRect(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Vec2& p4, const Color4F &color);
     
     /** Draws a solid rectangle given the origin and destination point measured in points.
@@ -205,6 +219,7 @@ public:
      * @param color The rectangle color.
      * @js NA
      */
+    void drawSolidRect(const Vec2 &origin, const Vec2 &destination, const Color4B &color);
     void drawSolidRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color);
     
     /** Draws a solid polygon given a pointer to CGPoint coordinates, the number of vertices measured in points, and a color.
@@ -214,6 +229,7 @@ public:
      * @param color The solid polygon color.
      * @js NA
      */
+    void drawSolidPoly(const Vec2 *poli, unsigned int numberOfPoints, const Color4B &color);
     void drawSolidPoly(const Vec2 *poli, unsigned int numberOfPoints, const Color4F &color);
     
     /** Draws a solid circle given the center, radius and number of segments.
@@ -226,6 +242,7 @@ public:
      * @param color The solid circle color.
      * @js NA
      */
+    void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4B &color);
     void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F &color);
     
     /** Draws a solid circle given the center, radius and number of segments.
@@ -236,6 +253,7 @@ public:
      * @param color The solid circle color.
      * @js NA
      */
+    void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color4B& color);
     void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color4F& color);
     
     /** draw a segment with a radius and color. 
@@ -245,6 +263,8 @@ public:
      * @param radius The segment radius.
      * @param color The segment color.
      */
+    void drawSegment(const Vec2 &from, const Vec2 &to, float width, float height, const Color4B &color);
+    void drawSegment(const Vec2 &from, const Vec2 &to, float radius, const Color4B &color);
     void drawSegment(const Vec2 &from, const Vec2 &to, float radius, const Color4F &color);
     
     /** draw a polygon with a fill color and line color
@@ -260,7 +280,9 @@ public:
     * @param borderColor The border of line color.
     * @js NA
     */
+    void drawPolygon(const Vec2 *verts, int count, const Color4B &fillColor, float borderWidth, const Color4B &borderColor);
     void drawPolygon(const Vec2 *verts, int count, const Color4F &fillColor, float borderWidth, const Color4F &borderColor);
+    void drawPolygon(const Vec2 *verts, int count, float borderWidth, float borderHeight, const Color4B &borderColor, const Color4B &fillColor);
 	
     /** draw a triangle with color. 
      *
@@ -270,6 +292,7 @@ public:
      * @param color The triangle color.
      * @js NA
      */
+    void drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Color4B &color);
     void drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Color4F &color);
 
     /** Clear the geometry in the node's buffer. */
