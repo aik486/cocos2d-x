@@ -133,7 +133,6 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/base/ccCArray.cpp \
     $$COCOS2DX_PATH/cocos/base/CCConfiguration.cpp \
     $$COCOS2DX_PATH/cocos/base/CCConsole.cpp \
-    $$COCOS2DX_PATH/cocos/base/CCController.cpp \
     $$COCOS2DX_PATH/cocos/base/CCData.cpp \
     $$COCOS2DX_PATH/cocos/base/CCDirector.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEvent.cpp \
@@ -145,7 +144,6 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/base/CCEventKeyboard.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEventListener.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEventListenerAcceleration.cpp \
-    $$COCOS2DX_PATH/cocos/base/CCEventListenerController.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEventListenerCustom.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEventListenerFocus.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEventListenerKeyboard.cpp \
@@ -380,7 +378,6 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/base/CCConfiguration.h \
     $$COCOS2DX_PATH/cocos/base/CCConsole.h \
     $$COCOS2DX_PATH/cocos/base/ccConstants.h \
-    $$COCOS2DX_PATH/cocos/base/CCController.h \
     $$COCOS2DX_PATH/cocos/base/CCData.h \
     $$COCOS2DX_PATH/cocos/base/CCDirector.h \
     $$COCOS2DX_PATH/cocos/base/CCEnumClass.h \
@@ -403,7 +400,6 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/base/CCEventTouch.h \
     $$COCOS2DX_PATH/cocos/base/CCEventType.h \
     $$COCOS2DX_PATH/cocos/base/ccFPSImages.h \
-    $$COCOS2DX_PATH/cocos/base/CCGameController.h \
     $$COCOS2DX_PATH/cocos/base/CCIMEDelegate.h \
     $$COCOS2DX_PATH/cocos/base/CCIMEDispatcher.h \
     $$COCOS2DX_PATH/cocos/base/ccMacros.h \
