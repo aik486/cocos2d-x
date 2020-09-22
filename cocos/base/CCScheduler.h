@@ -119,14 +119,14 @@ protected:
 class CC_DLL TimerScriptHandler : public Timer
 {
 public:
-    bool initWithScriptHandler(int handler, float seconds);
-    int getScriptHandler() const { return _scriptHandler; }
+    bool initWithScriptHandler(int64_t handler, float seconds);
+    int64_t getScriptHandler() const { return _scriptHandler; }
     
     virtual void trigger(float dt) override;
     virtual void cancel() override;
     
 private:
-    int _scriptHandler;
+    int64_t _scriptHandler;
 };
 
 #endif
@@ -295,7 +295,7 @@ public:
      @js NA
      @lua NA
      */
-    unsigned int scheduleScriptFunc(unsigned int handler, float interval, bool paused);
+    int scheduleScriptFunc(int64_t handler, float interval, bool paused);
 #endif
     /////////////////////////////////////
     

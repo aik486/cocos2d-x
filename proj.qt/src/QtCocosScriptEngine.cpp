@@ -2,7 +2,7 @@
 
 Q_DECLARE_METATYPE(std::vector<std::string>)
 
-#include "cocos2dx_qt.h"
+#include "cocos2dx.h"
 #include "QtScriptInstall.h"
 #include "js_bindings/manual/QtScriptCCObject.hpp"
 #include "js_bindings/manual/QtScriptCCObjectHolder.h"
@@ -458,8 +458,7 @@ int QtCocosScriptEngine::executeCallFuncActionEvent(
 	return 1;
 }
 
-int QtCocosScriptEngine::executeSchedule(
-	int64_t nHandler, float dt, CCNode *node)
+int QtCocosScriptEngine::executeSchedule(int64_t nHandler, float dt, Node *node)
 {
 	QScriptValue func = getRegisteredJSObject(nHandler);
 	if (func.isFunction())
@@ -473,7 +472,7 @@ int QtCocosScriptEngine::executeSchedule(
 }
 
 int QtCocosScriptEngine::executeLayerTouchesEvent(
-	CCLayer *pLayer, int eventType, CCSet *pTouches)
+	Layer *pLayer, int eventType, std::vector<Touch *> *pTouches)
 {
 	Q_ASSERT(pLayer);
 	auto handler = pLayer->getScriptTouchHandlerEntry();
@@ -500,7 +499,7 @@ int QtCocosScriptEngine::executeLayerTouchesEvent(
 }
 
 int QtCocosScriptEngine::executeLayerTouchEvent(
-	CCLayer *pLayer, int eventType, CCTouch *pTouch)
+	Layer *pLayer, int eventType, Touch *pTouch)
 {
 	Q_ASSERT(pLayer);
 	auto handler = pLayer->getScriptTouchHandlerEntry();
@@ -519,7 +518,7 @@ int QtCocosScriptEngine::executeLayerTouchEvent(
 	return result.isError() ? 0 : result.toBool();
 }
 
-int QtCocosScriptEngine::executeLayerKeypadEvent(CCLayer *pLayer, int eventType)
+int QtCocosScriptEngine::executeLayerKeypadEvent(Layer *pLayer, int eventType)
 {
 	Q_ASSERT(pLayer);
 	auto handler = pLayer->getScriptKeypadHandlerEntry();

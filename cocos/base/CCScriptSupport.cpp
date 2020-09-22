@@ -46,7 +46,7 @@ NS_CC_BEGIN
 // 
 // // ScriptHandlerEntry
 
-ScriptHandlerEntry* ScriptHandlerEntry::create(int handler)
+ScriptHandlerEntry* ScriptHandlerEntry::create(int64_t handler)
 {
     ScriptHandlerEntry* entry = new (std::nothrow) ScriptHandlerEntry(handler);
     entry->autorelease();
@@ -66,7 +66,7 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
 // 
 // // SchedulerScriptHandlerEntry
 
-SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int handler, float interval, bool paused)
+SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int64_t handler, float interval, bool paused)
 {
     SchedulerScriptHandlerEntry* entry = new (std::nothrow) SchedulerScriptHandlerEntry(handler);
     entry->init(interval, paused);
@@ -93,7 +93,7 @@ SchedulerScriptHandlerEntry::~SchedulerScriptHandlerEntry()
 // 
 // // TouchScriptHandlerEntry
 
-TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int handler,
+TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int64_t handler,
                                                              bool isMultiTouches,
                                                              int priority,
                                                              bool swallowsTouches)

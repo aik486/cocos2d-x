@@ -706,7 +706,7 @@ namespace ui {
 
         float _adjustHeight = 0.f;
 #if CC_ENABLE_SCRIPT_BINDING
-        int   _scriptEditBoxHandler = 0;
+        int64_t   _scriptEditBoxHandler = 0;
 #endif
     };
 }

@@ -1,8 +1,6 @@
 #pragma once
 
-#include "cocos_warnings_off.h"
-#include "script_support/CCScriptSupport.h"
-#include "cocos_warnings_pop.h"
+#include "base/CCScriptSupport.h"
 
 #include <QObject>
 #include <QScriptValue>
@@ -15,7 +13,7 @@ class QScriptContext;
 
 class QtCocosScriptEngine
 	: public QObject
-	, public cocos2d::CCScriptEngineProtocol
+	, public cocos2d::ScriptEngineProtocol
 {
 	Q_OBJECT
 
@@ -51,31 +49,21 @@ public:
 	static QtCocosScriptEngine *instance();
 
 	virtual cocos2d::ccScriptType getScriptType() override;
-	virtual void removeScriptObjectByCCObject(cocos2d::CCObject *pObj) override;
+	virtual void removeScriptObjectByObject(cocos2d::Ref *pObj) override;
 	virtual void removeScriptHandler(int64_t nHandler) override;
 	virtual int executeString(const char *codes) override;
 	virtual int executeScriptFile(const char *filename) override;
 	virtual int executeGlobalFunction(const char *functionName) override;
-	virtual int executeNodeEvent(cocos2d::CCNode *pNode, int nAction) override;
-	virtual int executeMenuItemEvent(cocos2d::CCMenuItem *pMenuItem) override;
-	virtual int executeNotificationEvent(
-		cocos2d::CCNotificationCenter *pCenter, const char *pszName) override;
-	virtual int executeCallFuncActionEvent(
-		cocos2d::CCCallFunc *pAction, cocos2d::CCObject *pTarget) override;
-	virtual int executeSchedule(
-		int64_t nHandler, float dt, cocos2d::CCNode *) override;
-	virtual int executeLayerTouchesEvent(cocos2d::CCLayer *pLayer,
-		int eventType, cocos2d::CCSet *pTouches) override;
-	virtual int executeLayerTouchEvent(cocos2d::CCLayer *pLayer, int eventType,
-		cocos2d::CCTouch *pTouch) override;
-	virtual int executeLayerKeypadEvent(
-		cocos2d::CCLayer *pLayer, int eventType) override;
-	virtual int executeAccelerometerEvent(
-		cocos2d::CCLayer *, cocos2d::CCAcceleration *) override;
-	virtual int executeEvent(int64_t nHandler, const char *,
-		cocos2d::CCObject *, const char *) override;
+	virtual int sendEvent(cocos2d::ScriptEvent *evt) override;
 	virtual bool handleAssert(const char *msg) override;
 	virtual bool parseConfig(ConfigType type, const std::string &str) override;
+
+	virtual void setCalledFromScript(bool callFromScript) override;
+	virtual bool isCalledFromScript() override;
+
+	virtual void garbageCollect() override;
+
+	virtual void removeObjectProxy(cocos2d::Ref *obj) override;
 
 	QScriptValue getRegisteredJSObject(qint64 id) const;
 
@@ -86,6 +74,19 @@ signals:
 	void log(const QScriptValue &value);
 
 private:
+	int executeNodeEvent(cocos2d::Node *pNode, int nAction);
+	int executeMenuItemEvent(cocos2d::MenuItem *pMenuItem);
+	int executeCallFuncActionEvent(
+		cocos2d::CallFunc *pAction, cocos2d::Ref *pTarget);
+	int executeSchedule(int64_t nHandler, float dt, cocos2d::Node *);
+	int executeLayerTouchesEvent(cocos2d::Layer *pLayer, int eventType,
+		std::vector<cocos2d::Touch *> *pTouches);
+	int executeLayerTouchEvent(
+		cocos2d::Layer *pLayer, int eventType, cocos2d::Touch *pTouch);
+	int executeLayerKeypadEvent(cocos2d::Layer *pLayer, int eventType);
+	int executeEvent(
+		int64_t nHandler, const char *, cocos2d::Ref *, const char *);
+
 	QScriptValue executeEventHandler(QScriptValue func,
 		const QScriptValue &object,
 		const QScriptValueList &args = QScriptValueList());

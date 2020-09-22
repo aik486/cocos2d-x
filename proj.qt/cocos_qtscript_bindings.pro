@@ -8,14 +8,14 @@ TARGET = cocos_qtscript_bindings
 TEMPLATE = lib
 CONFIG += staticlib
 
-emscripten {
-    DEFINES += QT_FORCE_ASSERTS
-}
-
 CONFIG(debug, debug|release) {
     DEFINES += DEBUG
 } else {
     DEFINES += NDEBUG
+}
+
+!isEmpty(DEBUG_COCOS) {
+    emscripten:DEFINES += QT_FORCE_ASSERTS
 }
 
 msvc {
@@ -26,27 +26,7 @@ msvc {
     CONFIG += no_batch
     QMAKE_CXXFLAGS += /wd4005 /wd4244 /bigobj
 } else {
-    clang|gcc {
-        QMAKE_CXXFLAGS += \
-            -Wno-unknown-pragmas \
-            -Wno-overloaded-virtual \
-            -Wno-unused-function \
-            -Wno-deprecated-declarations
-    
-        clang:QMAKE_CXXFLAGS += \
-            -Wno-unused-private-field \
-            -Wno-unneeded-internal-declaration \
-            -Wno-null-conversion \
-            -Wno-unsequenced \
-            -Wno-nonnull
-        else:gcc:QMAKE_CXXFLAGS += \
-            -Wno-nonnull-compare \
-            -Wno-sequence-point \
-            -Wno-sign-compare \
-            -Wno-misleading-indentation
-
-        DEFINES += USE_FILE32API
-    }
+    DEFINES += USE_FILE32API
 }
 
 SOURCES +=\

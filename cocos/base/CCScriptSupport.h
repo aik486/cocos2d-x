@@ -76,7 +76,7 @@ public:
      * @lua NA
      * @js NA
      */
-    static ScriptHandlerEntry* create(int handler);
+    static ScriptHandlerEntry* create(int64_t handler);
     
     /**
      * Destructor of ScriptHandlerEntry.
@@ -92,7 +92,7 @@ public:
      * @lua NA
      * @js NA
      */
-    int getHandler() {
+    int64_t getHandler() {
         return _handler;
     }
     
@@ -108,7 +108,7 @@ public:
     }
     
 protected:
-    ScriptHandlerEntry(int handler)
+    ScriptHandlerEntry(int64_t handler)
     : _handler(handler)
     {
         static int newEntryId = 0;
@@ -116,7 +116,7 @@ protected:
         _entryId = newEntryId;
     }
     
-    int _handler;
+    int64_t _handler;
     int _entryId;
 };
 
@@ -138,7 +138,7 @@ public:
      * @js NA
      * @lua NA
      */
-    static SchedulerScriptHandlerEntry* create(int handler, float interval, bool paused);
+    static SchedulerScriptHandlerEntry* create(int64_t handler, float interval, bool paused);
     
     /**
      * Destructor of SchedulerScriptHandlerEntry.
@@ -188,7 +188,7 @@ public:
     }
     
 private:
-    SchedulerScriptHandlerEntry(int handler)
+    SchedulerScriptHandlerEntry(int64_t handler)
     : ScriptHandlerEntry(handler)
     , _timer(nullptr)
     , _paused(false)
@@ -211,7 +211,7 @@ class TouchScriptHandlerEntry : public ScriptHandlerEntry
 {
 public:
 
-    static TouchScriptHandlerEntry* create(int handler, bool isMultiTouches, int priority, bool swallowsTouches);
+    static TouchScriptHandlerEntry* create(int64_t handler, bool isMultiTouches, int priority, bool swallowsTouches);
 
     virtual ~TouchScriptHandlerEntry();
 
@@ -228,7 +228,7 @@ public:
     }
     
 private:
-    TouchScriptHandlerEntry(int handler)
+    TouchScriptHandlerEntry(int64_t handler)
     : ScriptHandlerEntry(handler)
     , _isMultiTouches(false)
     , _priority(0)
@@ -353,7 +353,7 @@ struct SchedulerScriptData
      * @js NA
      * @lua NA
      */
-    int handler;
+    int64_t handler;
     /** 
      * the parameter would be passed in to the Lua function, only use in the Lua.
      *
@@ -695,7 +695,7 @@ public:
      * @lua NA
      * @js NA
      */
-    virtual void removeScriptHandler(int /*handler*/) {}
+    virtual void removeScriptHandler(int64_t /*handler*/) {}
     
     /** 
      * Reallocate script function handler, only LuaEngine class need to implement this function.
@@ -703,7 +703,7 @@ public:
      * @lua NA
      * @js NA
      */
-    virtual int reallocateScriptHandler(int /*handler*/) { return 0; }
+    virtual int reallocateScriptHandler(int64_t /*handler*/) { return 0; }
     
     /**
      * Execute script code contained in the given string.

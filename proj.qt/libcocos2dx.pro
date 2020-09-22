@@ -26,9 +26,7 @@ msvc {
     CONFIG += no_batch
     QMAKE_CXXFLAGS += /wd4005 /wd4244 /bigobj
 } else {
-    clang|gcc {
-        DEFINES += USE_FILE32API
-    }
+    DEFINES += USE_FILE32API
 }
 
 
