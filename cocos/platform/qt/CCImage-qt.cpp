@@ -195,9 +195,7 @@ bool Image::initWithRawData(
 			return false;
 	}
 
-	_image.reset(new QImage);
-
-	*_image = QImage(width, height, sourceImageFormat);
+	_image.reset(new QImage(width, height, sourceImageFormat));
 
 	int bytesPerLine = width * (_image->depth() / 8);
 
