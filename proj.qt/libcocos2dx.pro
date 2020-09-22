@@ -151,6 +151,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/base/CCEventListenerTouch.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEventMouse.cpp \
     $$COCOS2DX_PATH/cocos/base/CCEventTouch.cpp \
+    $$COCOS2DX_PATH/cocos/base/ccFPSImages.c \
     $$COCOS2DX_PATH/cocos/base/CCIMEDispatcher.cpp \
     $$COCOS2DX_PATH/cocos/base/CCNinePatchImageParser.cpp \
     $$COCOS2DX_PATH/cocos/base/CCNS.cpp \
@@ -269,7 +270,39 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/ui/UITextBMFont.cpp \
     $$COCOS2DX_PATH/cocos/ui/UITextField.cpp \
     $$COCOS2DX_PATH/cocos/ui/UIVBox.cpp \
-    $$COCOS2DX_PATH/cocos/ui/UIWidget.cpp
+    $$COCOS2DX_PATH/cocos/ui/UIWidget.cpp \
+    $$COCOS2DX_PATH/external/ConvertUTF/ConvertUTF.c \
+    $$COCOS2DX_PATH/external/ConvertUTF/ConvertUTFWrapper.cpp \
+    $$COCOS2DX_PATH/external/edtaa3func/edtaa3func.cpp \
+    $$COCOS2DX_PATH/external/xxhash/xxhash.c \
+    $$COCOS2DX_PATH/external/recast/fastlz/fastlz.c \
+    $$COCOS2DX_PATH/external/recast/DebugUtils/DebugDraw.cpp \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourAlloc.cpp \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourCommon.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourCrowd.cpp \
+    $$COCOS2DX_PATH/external/recast/DebugUtils/DetourDebugDraw.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourLocalBoundary.cpp \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNavMesh.cpp \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNavMeshBuilder.cpp \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNavMeshQuery.cpp \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNode.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourObstacleAvoidance.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourPathCorridor.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourPathQueue.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourProximityGrid.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourTileCache/DetourTileCache.cpp \
+    $$COCOS2DX_PATH/external/recast/DetourTileCache/DetourTileCacheBuilder.cpp \
+    $$COCOS2DX_PATH/external/clipper/clipper.cpp \
+    $$COCOS2DX_PATH/external/poly2tri/common/shapes.cc \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/cdt.cc \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/sweep.cc \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/sweep_context.cc \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/advancing_front.cc \
+    $$COCOS2DX_PATH/external/unzip/ioapi.cpp \
+    $$COCOS2DX_PATH/external/unzip/ioapi_mem.cpp \
+    $$COCOS2DX_PATH/external/unzip/unzip.cpp \
+    $$COCOS2DX_PATH/external/md5/md5.c \
+    $$COCOS2DX_PATH/external/tinyxml2/tinyxml2.cpp
     
 HEADERS += \
     src/QtCocosContext.h \
@@ -551,7 +584,44 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/ui/UITextField.h \
     $$COCOS2DX_PATH/cocos/ui/UIVBox.h \
     $$COCOS2DX_PATH/cocos/ui/UIVideoPlayer.h \
-    $$COCOS2DX_PATH/cocos/ui/UIWidget.h \    
+    $$COCOS2DX_PATH/cocos/ui/UIWidget.h \
+    $$COCOS2DX_PATH/external/ConvertUTF/ConvertUTF.h \
+    $$COCOS2DX_PATH/external/edtaa3func/edtaa3func.h \
+    $$COCOS2DX_PATH/external/xxhash/xxhash.h \
+    $$COCOS2DX_PATH/external/recast/DebugUtils/DebugDraw.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourAlloc.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourAssert.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourCommon.h \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourCrowd.h \
+    $$COCOS2DX_PATH/external/recast/DebugUtils/DetourDebugDraw.h \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourLocalBoundary.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourMath.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNavMesh.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNavMeshBuilder.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNavMeshQuery.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourNode.h \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourObstacleAvoidance.h \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourPathCorridor.h \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourPathQueue.h \
+    $$COCOS2DX_PATH/external/recast/DetourCrowd/DetourProximityGrid.h \
+    $$COCOS2DX_PATH/external/recast/Detour/DetourStatus.h \
+    $$COCOS2DX_PATH/external/recast/DetourTileCache/DetourTileCache.h \
+    $$COCOS2DX_PATH/external/recast/DetourTileCache/DetourTileCacheBuilder.h \
+    $$COCOS2DX_PATH/external/recast/fastlz/fastlz.h \
+    $$COCOS2DX_PATH/external/clipper/clipper.hpp \
+    $$COCOS2DX_PATH/external/poly2tri/poly2tri.h \
+    $$COCOS2DX_PATH/external/poly2tri/common/shapes.h \
+    $$COCOS2DX_PATH/external/poly2tri/common/utils.h \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/cdt.h \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/sweep.h \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/sweep_context.h \
+    $$COCOS2DX_PATH/external/poly2tri/sweep/advancing_front.h \
+    $$COCOS2DX_PATH/external/unzip/crypt.h \
+    $$COCOS2DX_PATH/external/unzip/ioapi.h \
+    $$COCOS2DX_PATH/external/unzip/ioapi_mem.h \
+    $$COCOS2DX_PATH/external/unzip/unzip.h \
+    $$COCOS2DX_PATH/external/md5/md5.h \
+    $$COCOS2DX_PATH/external/tinyxml2/tinyxml2.h \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_color.frag \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_colorNormal.frag \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_colorNormalTexture.frag \

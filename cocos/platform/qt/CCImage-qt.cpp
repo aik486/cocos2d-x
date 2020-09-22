@@ -118,6 +118,34 @@ bool Image::saveToFile(const std::string &filename, bool isToRGB)
 	return image.save(QString::fromStdString(filename));
 }
 
+void Image::premultiplyAlpha()
+{
+	if (!_image) {
+		return;
+	}
+	
+	if (_image->format() == QImage::Format_RGBA8888)
+	{
+		return;
+	}
+	
+	*_image = _image->convertToFormat(QImage::Format_RGBA8888_Premultiplied);
+	_hasPremultipliedAlpha = true;
+	_data = _image->bits();
+}
+
+void Image::reversePremultipliedAlpha()
+{
+	if (_image->format() == QImage::Format_RGBA8888_Premultiplied)
+	{
+		return;
+	}
+	
+	*_image = _image->convertToFormat(QImage::Format_RGBA8888);
+	_hasPremultipliedAlpha = false;
+	_data = _image->bits();
+}
+
 bool Image::initWithRawData(
 		const unsigned char *data, ssize_t dataLen, 
 		int width, int height, int bitsPerComponent, bool preMulti)
@@ -196,6 +224,21 @@ bool Image::initWithRawData(
 	_numberOfMipmaps = 0;
 
 	return true;
+}
+
+int Image::getBitPerPixel()
+{
+	return _image ? (_image->bytesPerLine() / _image->width()) * 8 : 0;
+}
+
+bool Image::hasAlpha()
+{
+	return _image ? _image->hasAlphaChannel() : false;
+}
+
+bool Image::isCompressed()
+{
+	return false;
 }
 
 void Image::setPVRImagesHavePremultipliedAlpha(bool)

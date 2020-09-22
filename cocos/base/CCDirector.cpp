@@ -1024,7 +1024,9 @@ void Director::reset()
     
     
     // cocos2d-x specific data structures
+#ifndef QT_COCOS
     UserDefault::destroyInstance();
+#endif
     resetMatrixStack();
 
     destroyTextureCache();
