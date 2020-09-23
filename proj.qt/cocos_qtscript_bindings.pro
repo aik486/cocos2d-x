@@ -33,16 +33,16 @@ SOURCES +=\
     src/QtCocosScriptEngine.cpp \
     src/js_bindings/generated/qtscript_cocos2dx.cpp \
     src/js_bindings/manual/QtScriptCCCustomEffect.cpp \
-    src/js_bindings/manual/QtScriptCCObject.cpp \
-    src/js_bindings/manual/QtScriptCCObjectHolder.cpp
+    src/js_bindings/manual/QtScriptRef.cpp \
+    src/js_bindings/manual/QtScriptRefHolder.cpp
 
 HEADERS += \
     src/QtCocosScriptEngine.h \
     src/js_bindings/generated/qtscript_cocos2dx.hpp \
     src/js_bindings/manual/QtScriptCCCustomEffect.h \
-    src/js_bindings/manual/QtScriptCCObject.hpp \
     src/QtCocosEnums.h \
-    src/js_bindings/manual/QtScriptCCObjectHolder.h
+    src/js_bindings/manual/QtScriptRef.hpp \
+    src/js_bindings/manual/QtScriptRefHolder.h
 
 OTHER_FILES += \
     src/js_bindings/generated/mac/userconf.ini \

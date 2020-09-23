@@ -7,7 +7,7 @@
 #include "ui/UIScale9Sprite.h"
 #include "renderer/CCTextureAtlas.h"
 
-#include "CCObjectHolder.h"
+#include "CCRefHolder.h"
 
 #include <QPolygonF>
 #include <QList>
@@ -113,7 +113,7 @@ protected:
 private:
 	struct TextureEntry
 	{
-		CCObjectHolder<Texture2D *> texture;
+		RefHolder<Texture2D *> texture;
 		std::string uniformName;
 	};
 

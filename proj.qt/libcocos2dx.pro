@@ -303,11 +303,11 @@ SOURCES +=\
     $$COCOS2DX_PATH/external/tinyxml2/tinyxml2.cpp
     
 HEADERS += \
+    src/CCRefHolder.h \
     src/QtCocosContext.h \
     src/QtCocosHelper.h \
     src/QtCocosExtension.h \
     src/QtCocosWindow.h \
-    src/CCObjectHolder.h \
     $$COCOS2DX_PATH/cocos/2d/CCAction.h \
     $$COCOS2DX_PATH/cocos/2d/CCActionCamera.h \
     $$COCOS2DX_PATH/cocos/2d/CCActionCatmullRom.h \

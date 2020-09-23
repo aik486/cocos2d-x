@@ -4,8 +4,8 @@ Q_DECLARE_METATYPE(std::vector<std::string>)
 
 #include "cocos2dx.h"
 #include "QtScriptInstall.h"
-#include "js_bindings/manual/QtScriptCCObject.hpp"
-#include "js_bindings/manual/QtScriptCCObjectHolder.h"
+#include "js_bindings/manual/QtScriptRef.hpp"
+#include "js_bindings/manual/QtScriptRefHolder.h"
 #include "js_bindings/manual/QtScriptCCCustomEffect.h"
 #include "js_bindings/generated/qtscript_cocos2dx.hpp"
 
@@ -172,7 +172,7 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 
 	QtScriptInstallQtCore(engine);
 	QtScriptCCObject::Register(mRootObject);
-	QtScriptCCObjectHolder::Register(mRootObject);
+	QtScriptRefHolder::Register(mRootObject);
 	qtscript_register_all_cocos2dx(engine);
 	QtScriptCCCustomEffect::Register(mRootObject);
 

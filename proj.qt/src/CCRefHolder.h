@@ -6,7 +6,7 @@
 namespace cocos2d
 {
 template <typename T>
-class CCObjectHolder
+class RefHolder
 {
 	T mObject;
 
@@ -26,45 +26,45 @@ public:
 		CC_SAFE_RETAIN(mObject);
 	}
 
-	CCObjectHolder(T object)
+	RefHolder(T object)
 		: mObject(nullptr)
 	{
 		setObject(object);
 	}
-	CCObjectHolder()
+	RefHolder()
 		: mObject(nullptr)
 	{
 	}
-	CCObjectHolder(const CCObjectHolder &other)
-		: CCObjectHolder(other.mObject)
+	RefHolder(const RefHolder &other)
+		: RefHolder(other.mObject)
 	{
 	}
-	CCObjectHolder(CCObjectHolder &&other)
+	RefHolder(RefHolder &&other)
 		: mObject(other.mObject)
 	{
 		other.mObject = nullptr;
 	}
-	~CCObjectHolder()
+	~RefHolder()
 	{
 		CC_SAFE_RELEASE(mObject);
 	}
 
-	inline bool operator==(const CCObjectHolder &other)
+	inline bool operator==(const RefHolder &other)
 	{
 		return other.mObject == mObject;
 	}
-	inline bool operator!=(const CCObjectHolder &other)
+	inline bool operator!=(const RefHolder &other)
 	{
 		return !operator==(other);
 	}
 
-	CCObjectHolder &operator=(const CCObjectHolder &other)
+	RefHolder &operator=(const RefHolder &other)
 	{
 		setObject(other.mObject);
 		return *this;
 	}
 
-	CCObjectHolder &operator=(CCObjectHolder &&other)
+	RefHolder &operator=(RefHolder &&other)
 	{
 		if (other.mObject == mObject)
 		{
@@ -78,5 +78,5 @@ public:
 	}
 };
 
-using AnyObjectHolder = CCObjectHolder<Ref *>;
+using AnyObjectHolder = RefHolder<Ref *>;
 }

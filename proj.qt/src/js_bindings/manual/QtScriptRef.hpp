@@ -8,46 +8,42 @@
 
 namespace cocos2d
 {
-class QtScriptCCObject : public QtScriptAbstractClass
+class QtScriptRef : public QtScriptAbstractClass
 {
 	Q_OBJECT
 
-	explicit QtScriptCCObject(QScriptEngine *engine);
+	explicit QtScriptRef(QScriptEngine *engine);
 
 protected:
-	explicit QtScriptCCObject(
-		QScriptEngine *engine, const QByteArray &className);
+	explicit QtScriptRef(QScriptEngine *engine, const QByteArray &className);
 
 public:
 	static void Register(const QScriptValue &targetNamespace);
 
-	using NativeObjectType = CCObject *;
-	using StorageType = CCObject *;
+	using NativeObjectType = Ref *;
+	using StorageType = Ref *;
 
 	Q_INVOKABLE QString toString() const;
-	Q_INVOKABLE void update(float dt);
-	Q_INVOKABLE QScriptValue copy();
-	Q_INVOKABLE bool isEqual(const CCObject *other) const;
 
 protected:
 	static QScriptValue cast(QScriptContext *context, QScriptEngine *);
 
-	// QtScriptCCObject
+	// QtScriptRef
 	virtual int constructorArgumentCountMin() const override;
 	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, CCObject *&out);
-	QScriptValue newInstance(CCObject *obj);
-	static CCObject *toCCObject(const QScriptValue &value);
+	virtual bool constructObject(QScriptContext *context, Ref *&);
+	QScriptValue newInstance(Ref *obj);
+	static Ref *toRef(const QScriptValue &value);
 
 	template <typename CLS_T, typename CC_T>
 	static QScriptValue toScriptValue(QScriptEngine *engine, CC_T const &object)
 	{
-		CCObject *obj = object;
+		Ref *obj = object;
 		if (!obj)
 			return engine->nullValue();
 
 		QScriptValue proto = engine->defaultPrototype(qMetaTypeId<CC_T>());
-		QtScriptCCObject *cls = qobject_cast<CLS_T *>(proto.toQObject());
+		QtScriptRef *cls = qobject_cast<CLS_T *>(proto.toQObject());
 		Q_ASSERT(nullptr != cls);
 
 		return cls->newInstance(obj);
@@ -55,7 +51,7 @@ protected:
 	template <typename CC_T>
 	static void fromScriptValue(const QScriptValue &value, CC_T &out)
 	{
-		auto obj = toCCObject(value);
+		auto obj = toRef(value);
 		out = dynamic_cast<CC_T>(obj);
 	}
 
@@ -64,8 +60,8 @@ protected:
 		QScriptEngine *engine, const QScriptValue &proto)
 	{
 		qScriptRegisterMetaType<TT *>(engine,
-			QtScriptCCObject::toScriptValue<CLS_T, TT *>,
-			QtScriptCCObject::fromScriptValue<TT *>, proto);
+			QtScriptRef::toScriptValue<CLS_T, TT *>,
+			QtScriptRef::fromScriptValue<TT *>, proto);
 
 		typedef QScriptValue (*ToScriptValue)(QScriptEngine *, TT *const &);
 		typedef void (*FromScriptValue)(const QScriptValue &, TT *&);
@@ -76,9 +72,9 @@ protected:
 
 		qScriptRegisterMetaType<const TT *>(engine,
 			reinterpret_cast<ConstToScriptValue>(static_cast<ToScriptValue>(
-				&QtScriptCCObject::toScriptValue<CLS_T, TT *>)),
+				&QtScriptRef::toScriptValue<CLS_T, TT *>)),
 			reinterpret_cast<ConstFromScriptValue>(static_cast<FromScriptValue>(
-				&QtScriptCCObject::fromScriptValue<TT *>)),
+				&QtScriptRef::fromScriptValue<TT *>)),
 			proto);
 	}
 
@@ -91,7 +87,7 @@ protected:
 		Q_ASSERT(targetNamespace.isObject());
 		Q_ASSERT(engine == targetNamespace.engine());
 
-		QtScriptCCObject *obj = new CLS_T(engine);
+		QtScriptRef *obj = new CLS_T(engine);
 		auto proto = engine->newQObject(obj, QScriptEngine::QtOwnership,
 			QScriptEngine::ExcludeChildObjects |
 				QScriptEngine::ExcludeDeleteLater |
@@ -106,7 +102,7 @@ protected:
 		registerPointerMetaType<CC_T, CLS_T>(engine, proto);
 
 		QScriptValue ctor =
-			engine->newFunction(QtScriptCCObject::construct<CLS_T>, proto);
+			engine->newFunction(QtScriptRef::construct<CLS_T>, proto);
 		ctor.setData(proto);
 		targetNamespace.setProperty(obj->mClassName, ctor,
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -126,5 +122,5 @@ protected:
 };
 } // namespace cocos2d
 
-Q_DECLARE_METATYPE(cocos2d::CCObject *)
-Q_DECLARE_METATYPE(const cocos2d::CCObject *)
+Q_DECLARE_METATYPE(cocos2d::Ref *)
+Q_DECLARE_METATYPE(const cocos2d::Ref *)

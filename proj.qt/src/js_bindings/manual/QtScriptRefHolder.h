@@ -1,19 +1,19 @@
 #pragma once
 
 #include "QtScriptBaseClassPrototype.h"
-#include "CCObjectHolder.h"
+#include "CCRefHolder.h"
 
 namespace cocos2d
 {
-class QtScriptCCObjectHolder final
+class QtScriptRefHolder final
 	: public QtScriptBaseClassPrototype<AnyObjectHolder, false>
 {
 	Q_OBJECT
 
-	Q_PROPERTY(cocos2d::CCObject *object READ object WRITE setObject)
+	Q_PROPERTY(cocos2d::Ref *object READ object WRITE setObject)
 
 protected:
-	explicit QtScriptCCObjectHolder(
+	explicit QtScriptRefHolder(
 		QScriptEngine *engine, const QByteArray &className);
 
 	virtual int constructorArgumentCountMin() const override;
@@ -22,11 +22,11 @@ protected:
 		QScriptContext *, NativeObjectType &out) override;
 
 public:
-	explicit QtScriptCCObjectHolder(QScriptEngine *engine);
+	explicit QtScriptRefHolder(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	CCObject *object() const;
-	void setObject(CCObject *object);
+	Ref *object() const;
+	void setObject(Ref *object);
 };
 }
 

@@ -1,25 +1,25 @@
-#include "QtScriptCCObjectHolder.h"
-#include "QtScriptCCObject.hpp"
+#include "QtScriptRefHolder.h"
+#include "QtScriptRef.hpp"
 
 namespace cocos2d
 {
-QtScriptCCObjectHolder::QtScriptCCObjectHolder(
+QtScriptRefHolder::QtScriptRefHolder(
 	QScriptEngine *engine, const QByteArray &className)
 	: QtScriptBaseClassPrototype<AnyObjectHolder, false>(engine, className)
 {
 }
 
-int QtScriptCCObjectHolder::constructorArgumentCountMin() const
+int QtScriptRefHolder::constructorArgumentCountMin() const
 {
 	return 0;
 }
 
-int QtScriptCCObjectHolder::constructorArgumentCountMax() const
+int QtScriptRefHolder::constructorArgumentCountMax() const
 {
 	return 1;
 }
 
-bool QtScriptCCObjectHolder::constructObject(
+bool QtScriptRefHolder::constructObject(
 	QScriptContext *context, NativeObjectType &out)
 {
 	bool ok = false;
@@ -34,7 +34,7 @@ bool QtScriptCCObjectHolder::constructObject(
 		case 1:
 		{
 			out.setObject(
-				qscriptvalue_cast<cocos2d::CCObject *>(context->argument(0)));
+				qscriptvalue_cast<cocos2d::Ref *>(context->argument(0)));
 			ok = true;
 			break;
 		}
@@ -48,21 +48,21 @@ bool QtScriptCCObjectHolder::constructObject(
 	return ok;
 }
 
-QtScriptCCObjectHolder::QtScriptCCObjectHolder(QScriptEngine *engine)
-	: QtScriptCCObjectHolder(engine, "ObjectHolder")
+QtScriptRefHolder::QtScriptRefHolder(QScriptEngine *engine)
+	: QtScriptRefHolder(engine, "RefHolder")
 {
 }
 
-void QtScriptCCObjectHolder::Register(const QScriptValue &targetNamespace)
+void QtScriptRefHolder::Register(const QScriptValue &targetNamespace)
 {
 	auto engine = targetNamespace.engine();
 	Q_ASSERT(engine);
-	auto ctor = RegisterT<AnyObjectHolder, QtScriptCCObjectHolder>(
+	auto ctor = RegisterT<AnyObjectHolder, QtScriptRefHolder>(
 		targetNamespace, QScriptValue());
 	Q_ASSERT(ctor.isFunction());
 }
 
-CCObject *QtScriptCCObjectHolder::object() const
+Ref *QtScriptRefHolder::object() const
 {
 	auto o = thiz<AnyObjectHolder *>();
 	if (o)
@@ -71,7 +71,7 @@ CCObject *QtScriptCCObjectHolder::object() const
 	return nullptr;
 }
 
-void QtScriptCCObjectHolder::setObject(CCObject *object)
+void QtScriptRefHolder::setObject(Ref *object)
 {
 	auto o = thiz<AnyObjectHolder *>();
 	if (o)
