@@ -192,10 +192,6 @@ public:
 
     inline IndexFormat getIndexFormat() const { return _indexFormat; }
 
-    /**Callback function.*/
-    //TODO:minggo: should remove it.
-    std::function<void()> func;
-
     /**
     * set a callback which will be invoke before rendering
     */

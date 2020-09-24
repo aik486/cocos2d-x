@@ -101,17 +101,71 @@ enum TextureFormat
 };
 Q_ENUM_NS(TextureFormat)
 
-namespace gl_enum
+enum SamplerFilter
 {
-Q_NAMESPACE
+	SamplerFilter_NEAREST = int(backend::SamplerFilter::NEAREST),
 
-enum Enum
-{
-	LINEAR = GL_LINEAR,
-	NEAREST = GL_NEAREST,
-	REPEAT = GL_REPEAT,
-	CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+	SamplerFilter_NEAREST_MIPMAP_NEAREST =
+		int(backend::SamplerFilter::NEAREST_MIPMAP_NEAREST),
+
+	SamplerFilter_NEAREST_MIPMAP_LINEAR =
+		int(backend::SamplerFilter::NEAREST_MIPMAP_LINEAR),
+
+	SamplerFilter_LINEAR = int(backend::SamplerFilter::LINEAR),
+
+	SamplerFilter_LINEAR_MIPMAP_LINEAR =
+		int(backend::SamplerFilter::LINEAR_MIPMAP_LINEAR),
+
+	SamplerFilter_LINEAR_MIPMAP_NEAREST =
+		int(backend::SamplerFilter::LINEAR_MIPMAP_NEAREST),
+
+	SamplerFilter_DONT_CARE = int(backend::SamplerFilter::DONT_CARE),
 };
-Q_ENUM_NS(Enum);
-}
+Q_ENUM_NS(SamplerFilter);
+
+enum SamplerAddressMode
+{
+	SamplerAddressMode_REPEAT = int(backend::SamplerAddressMode::REPEAT),
+
+	SamplerAddressMode_MIRROR_REPEAT =
+		int(backend::SamplerAddressMode::MIRROR_REPEAT),
+
+	SamplerAddressMode_CLAMP_TO_EDGE =
+		int(backend::SamplerAddressMode::CLAMP_TO_EDGE),
+
+	SamplerAddressMode_DONT_CARE = int(backend::SamplerAddressMode::DONT_CARE),
+};
+Q_ENUM_NS(SamplerAddressMode);
+
+enum BlendFactor
+{
+	ZERO = int(backend::BlendFactor::ZERO),
+
+	ONE = int(backend::BlendFactor::ONE),
+
+	SRC_COLOR = int(backend::BlendFactor::SRC_COLOR),
+
+	ONE_MINUS_SRC_COLOR = int(backend::BlendFactor::ONE_MINUS_SRC_COLOR),
+
+	SRC_ALPHA = int(backend::BlendFactor::SRC_ALPHA),
+
+	ONE_MINUS_SRC_ALPHA = int(backend::BlendFactor::ONE_MINUS_SRC_ALPHA),
+
+	DST_COLOR = int(backend::BlendFactor::DST_COLOR),
+
+	ONE_MINUS_DST_COLOR = int(backend::BlendFactor::ONE_MINUS_DST_COLOR),
+
+	DST_ALPHA = int(backend::BlendFactor::DST_ALPHA),
+
+	ONE_MINUS_DST_ALPHA = int(backend::BlendFactor::ONE_MINUS_DST_ALPHA),
+
+	CONSTANT_ALPHA = int(backend::BlendFactor::CONSTANT_ALPHA),
+
+	SRC_ALPHA_SATURATE = int(backend::BlendFactor::SRC_ALPHA_SATURATE),
+
+	ONE_MINUS_CONSTANT_ALPHA =
+		int(backend::BlendFactor::ONE_MINUS_CONSTANT_ALPHA),
+	BLEND_CLOLOR = int(backend::BlendFactor::BLEND_CLOLOR),
+};
+Q_ENUM_NS(BlendFactor);
 }

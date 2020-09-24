@@ -72,8 +72,7 @@ typedef struct _BMFontPadding {
 */
 class CC_DLL BMFontConfiguration : public Ref
 {
-    // FIXME: Creating a public interface so that the bitmapFontArray[] is accessible
-public://@public
+private:
     // BMFont definitions
     std::unordered_map<int /* key */, BMFontDef /* fontDef */> _fontDefDictionary;
 

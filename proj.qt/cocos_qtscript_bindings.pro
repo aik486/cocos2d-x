@@ -31,6 +31,7 @@ msvc {
 
 SOURCES +=\
     src/QtCocosScriptEngine.cpp \
+    src/js_bindings/QtCocosScriptUtils.cpp \
     src/js_bindings/generated/qtscript_cocos2dx.cpp \
     src/js_bindings/manual/QtScriptCCCustomEffect.cpp \
     src/js_bindings/manual/QtScriptRef.cpp \
@@ -38,6 +39,7 @@ SOURCES +=\
 
 HEADERS += \
     src/QtCocosScriptEngine.h \
+    src/js_bindings/QtCocosScriptUtils.hpp \
     src/js_bindings/generated/qtscript_cocos2dx.hpp \
     src/js_bindings/manual/QtScriptCCCustomEffect.h \
     src/QtCocosEnums.h \
