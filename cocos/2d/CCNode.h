@@ -1051,7 +1051,7 @@ public:
      * @param handler The key to search lua function.
      * @param priority A given priority value.
      */
-    void scheduleUpdateWithPriorityLua(int handler, int priority);
+    void scheduleUpdateWithPriorityLua(int64_t handler, int priority);
 
     /// @}  end Script Bindings
 
@@ -1774,7 +1774,7 @@ public:
     virtual void setProgramState(backend::ProgramState* programState);
     virtual backend::ProgramState* getProgramState() const;
     
-    bool isInvertedAditionalTransformOrder() const;
+    bool isUseInvertedAditionalTransformOrder() const;
     void setUseInvertedAdditionalTransformOrder(bool value);
 
 CC_CONSTRUCTOR_ACCESS:
@@ -1961,7 +1961,7 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(Node);
 };
 
-inline bool Node::isInvertedAditionalTransformOrder() const
+inline bool Node::isUseInvertedAditionalTransformOrder() const
 {
     return _useInvertedAdditionalTransformOrder;
 }

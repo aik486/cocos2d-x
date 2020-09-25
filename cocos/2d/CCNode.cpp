@@ -1540,7 +1540,7 @@ void Node::scheduleUpdateWithPriority(int priority)
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
 
-void Node::scheduleUpdateWithPriorityLua(int nHandler, int priority)
+void Node::scheduleUpdateWithPriorityLua(int64_t nHandler, int priority)
 {
     unscheduleUpdate();
     
