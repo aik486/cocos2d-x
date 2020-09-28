@@ -68,7 +68,7 @@ public:
     /**
      * @js ctor
      */
-    FontAtlas(Font &theFont);
+    FontAtlas(Font *theFont);
     /**
      * @js NA
      * @lua NA

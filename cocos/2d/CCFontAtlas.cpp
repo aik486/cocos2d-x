@@ -46,8 +46,8 @@ const int FontAtlas::CacheTextureHeight = 512;
 const char* FontAtlas::CMD_PURGE_FONTATLAS = "__cc_PURGE_FONTATLAS";
 const char* FontAtlas::CMD_RESET_FONTATLAS = "__cc_RESET_FONTATLAS";
 
-FontAtlas::FontAtlas(Font &theFont) 
-: _font(&theFont)
+FontAtlas::FontAtlas(Font *theFont) 
+: _font(theFont)
 {
     _font->retain();
 

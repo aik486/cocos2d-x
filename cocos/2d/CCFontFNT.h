@@ -35,6 +35,8 @@
 
 NS_CC_BEGIN
 
+class FontFNT;
+
 /**
 @struct BMFontDef
 BMFont definition
@@ -93,6 +95,8 @@ private:
 
     //! Font Size
     int _fontSize;
+    
+    friend class FontFNT;
 public:
     /**
      * @js ctor
@@ -143,7 +147,7 @@ public:
     static FontFNT* create(const std::string& fntFilePath, const std::string& subTextureKey);
     static FontFNT* create(const std::string& fntFilePath);
 
-    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(const std::string& fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
+    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(const std::string& fntFilePath, const Vec2& imageOffset);
 
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.

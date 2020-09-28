@@ -666,7 +666,7 @@ FontAtlas * FontFNT::createFontAtlas()
     if (_configuration->_commonHeight == 0)
         return nullptr;
     
-    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(*this);
+    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(this);
     if (tempAtlas == nullptr)
         return nullptr;
     

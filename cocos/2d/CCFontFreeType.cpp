@@ -212,7 +212,7 @@ FontAtlas * FontFreeType::createFontAtlas()
 {
     if (_fontAtlas == nullptr)
     {
-        _fontAtlas = new (std::nothrow) FontAtlas(*this);
+        _fontAtlas = new (std::nothrow) FontAtlas(this);
         if (_fontAtlas && _usedGlyphs != GlyphCollection::DYNAMIC)
         {
             std::u32string utf32;
