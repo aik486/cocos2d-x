@@ -136,6 +136,10 @@ void Image::premultiplyAlpha()
 
 void Image::reversePremultipliedAlpha()
 {
+	if (!_image) {
+		return;
+	}
+	
 	if (_image->format() != QImage::Format_RGBA8888_Premultiplied)
 	{
 		return;
