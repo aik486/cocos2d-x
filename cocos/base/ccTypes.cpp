@@ -47,6 +47,12 @@ Color3B::Color3B(uint8_t _r, uint8_t _g, uint8_t _b)
 , b(_b)
 {}
 
+Color3B::Color3B(const Color3B &color)
+    : Color3B(color.r, color.g, color.b)
+{
+    
+}
+
 Color3B::Color3B(const Color4B& color)
 : r(color.r)
 , g(color.g)
@@ -102,6 +108,12 @@ Color4B::Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
 , b(_b)
 , a(_a)
 {}
+
+Color4B::Color4B(const Color4B &color)
+    : Color4B(color.r, color.g, color.b, color.a)
+{
+    
+}
 
 Color4B::Color4B(const Color3B& color, uint8_t _a)
 : r(color.r)
@@ -160,6 +172,12 @@ Color4F::Color4F(float _r, float _g, float _b, float _a)
 , b(_b)
 , a(_a)
 {}
+
+Color4F::Color4F(const Color4F &color)
+    : Color4F(color.r, color.g, color.b, color.a)
+{
+    
+}
 
 Color4F::Color4F(const Color3B& color, float _a)
 : r(color.r / 255.0f)
