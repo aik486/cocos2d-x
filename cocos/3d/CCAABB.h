@@ -48,6 +48,7 @@ public:
      * @lua new
      */
     AABB();
+    AABB(const AABB& other);
     
     /**
      * Constructor.

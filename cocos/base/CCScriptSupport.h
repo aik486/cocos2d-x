@@ -51,7 +51,6 @@ class TimerScriptHandler;
 class Layer;
 class MenuItem;
 class CallFunc;
-class Acceleration;
 class Action;
 
 enum ccScriptType {

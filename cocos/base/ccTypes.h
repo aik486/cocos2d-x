@@ -225,6 +225,8 @@ struct CC_DLL Tex2F {
     Tex2F(float _u, float _v): u(_u), v(_v) {}
 
     Tex2F() {}
+    
+    Tex2F(const Tex2F&o) : u(o.u), v(o.v) {}
 
     float u = 0.f;
     float v = 0.f;

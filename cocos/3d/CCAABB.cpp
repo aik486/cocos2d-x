@@ -32,6 +32,12 @@ AABB::AABB()
     reset();
 }
 
+AABB::AABB(const AABB &other)
+    : _min(other._min)
+    , _max(other._max)
+{
+}
+
 AABB::AABB(const Vec3& min, const Vec3& max)
 {
     set(min, max);

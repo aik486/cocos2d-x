@@ -17,6 +17,7 @@ Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::SpriteFrame *>)
 Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::FiniteTimeAction *>)
 Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::MenuItem *>)
 Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Pass *>)
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::ParticleSystem *>)
 
 #include "js_bindings/QtCocosScriptUtils.hpp"
 
@@ -188,6 +189,7 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	QtCocosScriptUtils::registerVector<FiniteTimeAction *>(engine);
 	QtCocosScriptUtils::registerVector<MenuItem *>(engine);
 	QtCocosScriptUtils::registerVector<Pass *>(engine);
+	QtCocosScriptUtils::registerVector<ParticleSystem *>(engine);
 
 	QtScriptInstallQtCore(engine);
 	QtScriptCCObject::Register(mRootObject);

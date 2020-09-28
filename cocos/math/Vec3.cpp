@@ -30,6 +30,12 @@ Vec3::Vec3()
 {
 }
 
+Vec3::Vec3(const Vec3 &vec)
+    : x(vec.x), y(vec.y), z(vec.z)
+{
+    
+}
+
 Vec3::Vec3(float xx, float yy, float zz)
     : x(xx), y(yy), z(zz)
 {

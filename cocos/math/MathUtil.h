@@ -77,6 +77,9 @@ public:
      */
     static void smooth(float* x, float target, float elapsedTime, float riseTime, float fallTime);
     
+    static float smoothed(float x, float target, float elapsedTime, float responseTime);
+    static float smoothed(float x, float target, float elapsedTime, float riseTime, float fallTime);
+    
     /**
      * Linearly interpolates between from value to to value by alpha which is in
      * the range [0,1]

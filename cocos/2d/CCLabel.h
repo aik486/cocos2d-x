@@ -52,7 +52,7 @@ typedef struct _ttfConfig
     float fontSize;
 
     GlyphCollection glyphs;
-    const char *customGlyphs;
+    std::string customGlyphs;
 
     bool distanceFieldEnabled;
     int outlineSize;
@@ -63,7 +63,7 @@ typedef struct _ttfConfig
     bool strikethrough;
 
     _ttfConfig(const std::string& filePath = "",float size = CC_DEFAULT_FONT_LABEL_SIZE, const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
-        const char *customGlyphCollection = nullptr, bool useDistanceField = false, int outline = 0,
+        const std::string &customGlyphCollection = std::string(), bool useDistanceField = false, int outline = 0,
                bool useItalics = false, bool useBold = false, bool useUnderline = false, bool useStrikethrough = false)
         : fontFilePath(filePath)
         , fontSize(size)

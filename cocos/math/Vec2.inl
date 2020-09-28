@@ -27,6 +27,13 @@ inline Vec2::Vec2()
 {
 }
 
+inline Vec2::Vec2(const Vec2& vec) 
+    : x(vec.x)
+    , y(vec.y)
+{
+    
+}
+
 inline Vec2::Vec2(float xx, float yy)
 : x(xx), y(yy)
 {

@@ -412,7 +412,8 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName, Image::Forma
 
     _saveFileCallback = callback;
 
-    std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
+    auto fileUtils = FileUtils::getInstance();
+    std::string fullpath = fileUtils->isAbsolutePath(fileName) ? fileName : fileUtils->getWritablePath() + fileName;
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
 
@@ -429,7 +430,8 @@ bool RenderTexture::saveToFile(const std::string& fileName, Image::Format format
     
     _saveFileCallback = callback;
     
-    std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
+    auto fileUtils = FileUtils::getInstance();
+    std::string fullpath = fileUtils->isAbsolutePath(fileName) ? fileName : fileUtils->getWritablePath() + fileName;
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
     
