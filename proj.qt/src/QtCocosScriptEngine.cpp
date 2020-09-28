@@ -2,12 +2,23 @@
 
 Q_DECLARE_METATYPE(std::vector<std::string>)
 
-#include "cocos2dx.h"
+#include "cocos2d.h"
+
 #include "QtScriptInstall.h"
 #include "js_bindings/manual/QtScriptRef.hpp"
 #include "js_bindings/manual/QtScriptRefHolder.h"
 #include "js_bindings/manual/QtScriptCCCustomEffect.h"
 #include "js_bindings/generated/qtscript_cocos2dx.hpp"
+
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Node *>)
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Layer *>)
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::AnimationFrame *>)
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::SpriteFrame *>)
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::FiniteTimeAction *>)
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::MenuItem *>)
+Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Pass *>)
+
+#include "js_bindings/QtCocosScriptUtils.hpp"
 
 #include "QtCocosHelper.h"
 #include "QtCocosEnums.h"
@@ -169,6 +180,14 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 
 	qScriptRegisterMetaType<std::vector<std::string>>(
 		engine, stringVecToScriptValue, stringVecFromScriptValue);
+
+	QtCocosScriptUtils::registerVector<Node *>(engine);
+	QtCocosScriptUtils::registerVector<Layer *>(engine);
+	QtCocosScriptUtils::registerVector<AnimationFrame *>(engine);
+	QtCocosScriptUtils::registerVector<SpriteFrame *>(engine);
+	QtCocosScriptUtils::registerVector<FiniteTimeAction *>(engine);
+	QtCocosScriptUtils::registerVector<MenuItem *>(engine);
+	QtCocosScriptUtils::registerVector<Pass *>(engine);
 
 	QtScriptInstallQtCore(engine);
 	QtScriptCCObject::Register(mRootObject);

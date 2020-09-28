@@ -1,13 +1,15 @@
 #include "QtCocosScriptUtils.hpp"
 
-#include <QScriptValue>
-#include <QScriptEngine>
-
 namespace cocos2d
 {
-QtCocosScriptUtils::TextureBackendGetBytesCallback
-QtCocosScriptUtils::getTextureBackendGetBytesCallback(QScriptValue callback)
+QtCocosScriptUtils::PixelsCallback QtCocosScriptUtils::getPixelsCallback(
+	QScriptValue callback)
 {
+	if (!callback.isFunction())
+	{
+		return nullptr;
+	}
+
 	return [=](const unsigned char *data, size_t width, size_t height) mutable {
 		QScriptValueList arguments;
 		auto engine = callback.engine();
@@ -22,6 +24,11 @@ QtCocosScriptUtils::getTextureBackendGetBytesCallback(QScriptValue callback)
 QtCocosScriptUtils::Sprite3DCallback QtCocosScriptUtils::getSprite3DCallback(
 	QScriptValue callback)
 {
+	if (!callback.isFunction())
+	{
+		return nullptr;
+	}
+
 	return [=](Sprite3D *sprite, void *) mutable {
 		QScriptValueList arguments;
 		auto engine = callback.engine();
