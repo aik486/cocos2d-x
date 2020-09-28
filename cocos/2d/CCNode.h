@@ -1759,6 +1759,13 @@ public:
      */
     const std::function<void()>& getOnExitTransitionDidStartCallback() const { return _onExitTransitionDidStartCallback; }
     
+    const std::function<void(float)>& getOnUpdateCallback() const {
+        return _onUpdateCallback;
+    }
+    void setOnUpdateCallback(const std::function<void(float)>&callback) {
+        _onUpdateCallback = callback;
+    }
+    
     /**
      * get & set camera mask, the node is visible by the camera whose camera flag & node's camera mask is true
      */
@@ -1911,7 +1918,6 @@ protected:
     bool _isTransitionFinished;       ///< flag to indicate whether the transition was finished
 
 #if CC_ENABLE_SCRIPT_BINDING
-    int64_t _scriptHandler;               ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
     int64_t _updateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
     ccScriptType _scriptType;         ///< type of script binding, lua or javascript
 #endif
@@ -1934,6 +1940,7 @@ protected:
     std::function<void()> _onExitCallback;
     std::function<void()> _onEnterTransitionDidFinishCallback;
     std::function<void()> _onExitTransitionDidStartCallback;
+    std::function<void(float)> _onUpdateCallback;
     
     backend::ProgramState* _programState = nullptr;
 

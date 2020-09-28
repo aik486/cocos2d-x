@@ -1653,6 +1653,10 @@ void Node::update(float fDelta)
     }
 #endif
     
+    if (_onUpdateCallback) {
+        _onUpdateCallback(fDelta);
+    }
+    
     if (_componentContainer && !_componentContainer->isEmpty())
     {
         _componentContainer->visit(fDelta);
