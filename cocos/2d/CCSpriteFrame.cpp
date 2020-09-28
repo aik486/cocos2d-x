@@ -96,12 +96,7 @@ bool SpriteFrame::initWithTextureFilename(const std::string& filename, const Rec
 
 bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize)
 {
-    _texture = texture;
-
-    if (texture)
-    {
-        texture->retain();
-    }
+    setTexture(texture);
 
     _rectInPixels = rect;
     _rect = CC_RECT_PIXELS_TO_POINTS(rect);
@@ -119,7 +114,7 @@ bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect, bool rot
 bool SpriteFrame::initWithTextureFilename(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize)
 {
     if (FileUtils::getInstance()->isFileExist(filename)) {
-        _texture = nullptr;
+        CC_SAFE_RELEASE_NULL(_texture);
         _textureFilename = filename;
         _rectInPixels = rect;
         _rect = CC_RECT_PIXELS_TO_POINTS( rect );
