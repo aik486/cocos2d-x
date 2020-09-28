@@ -1774,7 +1774,7 @@ public:
     virtual void setProgramState(backend::ProgramState* programState);
     virtual backend::ProgramState* getProgramState() const;
     
-    bool isUseInvertedAditionalTransformOrder() const;
+    bool isUseInvertedAdditionalTransformOrder() const;
     void setUseInvertedAdditionalTransformOrder(bool value);
 
 CC_CONSTRUCTOR_ACCESS:
@@ -1961,7 +1961,7 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(Node);
 };
 
-inline bool Node::isUseInvertedAditionalTransformOrder() const
+inline bool Node::isUseInvertedAdditionalTransformOrder() const
 {
     return _useInvertedAdditionalTransformOrder;
 }
