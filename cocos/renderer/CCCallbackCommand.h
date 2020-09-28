@@ -67,7 +67,13 @@ public:
     /**
      * A callback function to do with the image after capture from the color buffer.
      */
-    std::function<void(const unsigned char*, int, int)> func;
+    using Callback = std::function<void(const unsigned char*, size_t, size_t)>;
+    
+    inline void setCallback(const Callback& callback) {
+        func = callback;
+    }
+    
+    Callback func;
 };
 
 NS_CC_END
