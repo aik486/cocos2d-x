@@ -114,10 +114,6 @@ bool DrawNode::init()
     reserve(18, TRIANGLES);
     reserve(4, POINTS);
     reserve(8, LINES);
-    
-    _dirty = true;
-    _dirtyGLLine = true;
-    _dirtyGLPoint = true;
     return true;
 }
 
@@ -246,7 +242,6 @@ void DrawNode::drawPoint(const Vec2 &position, const float pointSize, const Colo
     
     _customCommandGLPoint.updateVertexBuffer(point, _bufferCountGLPoint*sizeof(V2F_C4B_T2F), sizeof(V2F_C4B_T2F));
     _bufferCountGLPoint += 1;
-    _dirtyGLPoint = true;
     _customCommandGLPoint.setVertexDrawInfo(0, _bufferCountGLPoint);   
 }
 
@@ -277,7 +272,6 @@ void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, con
     
     _customCommandGLPoint.updateVertexBuffer(point, _bufferCountGLPoint*sizeof(V2F_C4B_T2F), numberOfPoints*sizeof(V2F_C4B_T2F));
     _bufferCountGLPoint += numberOfPoints;
-    _dirtyGLPoint = true;
     _customCommandGLPoint.setVertexDrawInfo(0, _bufferCountGLPoint);
 }
 
@@ -297,7 +291,6 @@ void DrawNode::drawLine(const Vec2 &origin, const Vec2 &destination, const Color
     
     _customCommandGLLine.updateVertexBuffer(point, _bufferCountGLLine*sizeof(V2F_C4B_T2F), 2*sizeof(V2F_C4B_T2F));
     _bufferCountGLLine += 2;
-    _dirtyGLLine = true;
     _customCommandGLLine.setVertexDrawInfo(0, _bufferCountGLLine);
 }
 
@@ -526,7 +519,6 @@ void DrawNode::drawDot(const Vec2 &pos, float radius, const Color4B &color)
     
     _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
     _bufferCount += vertex_count;
-    _dirty = true;
     _customCommand.setVertexDrawInfo(0, _bufferCount);
 }
 
@@ -642,7 +634,6 @@ void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float width, float 
     
     _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
     _bufferCount += vertex_count;
-    _dirty = true;
     _customCommand.setVertexDrawInfo(0, _bufferCount);
 }
 
@@ -735,7 +726,6 @@ void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4B &fillColo
     _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
     _bufferCount += vertex_count;
     _customCommand.setVertexDrawInfo(0, _bufferCount);
-    _dirty = true;
 }
 
 void DrawNode::drawPolygon(const Vec2 *vert, int count, float borderWidth, float borderHeight, const Color4B &borderColor, const Color4B &fillColor)
@@ -850,7 +840,6 @@ void DrawNode::drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, cons
 
     _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
     _bufferCount += vertex_count;
-    _dirty = true;
     _customCommand.setVertexDrawInfo(0, _bufferCount);
 }
 
@@ -862,11 +851,8 @@ void DrawNode::drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, cons
 void DrawNode::clear()
 {
     _bufferCount = 0;
-    _dirty = true;
     _bufferCountGLLine = 0;
-    _dirtyGLLine = true;
     _bufferCountGLPoint = 0;
-    _dirtyGLPoint = true;
     _lineWidth = _defaultLineWidth;
 }
 

@@ -383,9 +383,6 @@ protected:
     CustomCommand _customCommandGLPoint;
     CustomCommand _customCommandGLLine;
 
-    bool        _dirty = false;
-    bool        _dirtyGLPoint = false;
-    bool        _dirtyGLLine = false;
     bool        _isolated = false;
     float       _lineWidth = 0.0f;
     float       _defaultLineWidth = 0.0f;
