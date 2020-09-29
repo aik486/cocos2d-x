@@ -237,6 +237,7 @@ Node *Node::clone() const
     auto result = new Node;
     
     result->copyPropertiesFrom(this);
+    result->copyNodeChildrenFrom(this);
     
     return result;
 }
@@ -266,6 +267,29 @@ void Node::copyPropertiesFrom(const Node *from)
     setVisible(from->isVisible());
     setProgramState(from->getProgramState()->clone());
     setContentSize(from->getContentSize());
+}
+
+void Node::copyNodeChildrenFrom(const Node *from, bool skipHidden)
+{
+    if (!from)
+           return;
+   const_cast<Node*>(from)->sortAllChildren();
+   
+   int order = 0;
+   for (auto childNode : from->getChildren())
+   {
+       if (skipHidden && !childNode->isVisible()) {
+           continue;
+       }
+       
+       auto node = static_cast<Node *>(childNode->clone());
+       
+       if (node)
+       {
+           addChild(node, order++);
+           node->release();
+       }
+   }
 }
 
 // MARK: getters / setters

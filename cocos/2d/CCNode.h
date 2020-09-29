@@ -147,6 +147,7 @@ public:
     virtual Node* clone() const override;
     
     void copyPropertiesFrom(const Node *from);
+    void copyNodeChildrenFrom(const Node *from, bool skipHidden = true);
 
     /// @} end of initializers
 
