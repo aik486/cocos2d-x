@@ -2219,6 +2219,7 @@ public:
 	explicit QtScriptNode(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_PROPERTY(const cocos2d::Mat4* additionalTransform READ getAdditionalTransform WRITE setAdditionalTransform)
 	Q_PROPERTY(cocos2d::Vec2 anchorPoint READ getAnchorPoint WRITE setAnchorPoint)
 	Q_PROPERTY(unsigned short cameraMask READ getCameraMask WRITE setCameraMask)
 	Q_PROPERTY(bool cascadeColorEnabled READ isCascadeColorEnabled WRITE setCascadeColorEnabled)
@@ -2271,6 +2272,7 @@ public:
 	Q_INVOKABLE void copyPropertiesFrom(const cocos2d::Node* from);
 	Q_INVOKABLE void enumerateChildren(const QByteArray& name, QScriptValue callback);
 	Q_INVOKABLE cocos2d::Action* getActionByTag(int tag);
+	const cocos2d::Mat4* getAdditionalTransform();
 	cocos2d::Vec2 getAnchorPoint();
 	Q_INVOKABLE cocos2d::Vec2 getAnchorPointInPoints();
 	Q_INVOKABLE cocos2d::Rect getBoundingBox();
@@ -2352,7 +2354,8 @@ public:
 	Q_INVOKABLE void scheduleOnce(QScriptValue callback, float delay, const QByteArray& key);
 	Q_INVOKABLE void scheduleUpdate();
 	Q_INVOKABLE void scheduleUpdateWithPriority(int priority);
-	Q_INVOKABLE void setAdditionalTransform(const cocos2d::Mat4* additionalTransform);
+	void setAdditionalTransform(const cocos2d::Mat4* additionalTransform);
+	Q_INVOKABLE void setAffineTransform(const cocos2d::AffineTransform& additionalTransform);
 	void setAnchorPoint(const cocos2d::Vec2& anchorPoint);
 	void setCameraMask(unsigned short mask);
 	void setCameraMask(unsigned short mask, bool applyChildren);
@@ -9849,7 +9852,6 @@ public:
 	Q_INVOKABLE cocos2d::Mat4 getInvBindPose(const cocos2d::Bone3D* bone);
 	Q_INVOKABLE cocos2d::Bone3D* getRootBone();
 	Q_INVOKABLE void removeAllBones();
-	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d

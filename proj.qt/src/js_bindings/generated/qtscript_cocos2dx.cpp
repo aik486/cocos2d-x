@@ -9977,6 +9977,16 @@ cocos2d::Action* QtScriptNode::getActionByTag(int tag)
 	return nullptr;
 }
 
+const cocos2d::Mat4* QtScriptNode::getAdditionalTransform()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return const_cast<const cocos2d::Mat4*>(__o->getAdditionalTransform());
+	}
+	return nullptr;
+}
+
 cocos2d::Vec2 QtScriptNode::getAnchorPoint()
 {
 	auto __o = this->thiz<Node *>();
@@ -10795,6 +10805,15 @@ void QtScriptNode::scheduleUpdateWithPriority(int priority)
 }
 
 void QtScriptNode::setAdditionalTransform(const cocos2d::Mat4* additionalTransform)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setAdditionalTransform(additionalTransform);
+	}
+}
+
+void QtScriptNode::setAffineTransform(const cocos2d::AffineTransform& additionalTransform)
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
@@ -43970,10 +43989,6 @@ void QtScriptMeshSkin::Register(const QScriptValue &targetNamespace)
 	auto inherit = engine->defaultPrototype(qMetaTypeId<Ref *>());
 	auto ctor = RegisterT<MeshSkin, QtScriptMeshSkin>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("create", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptMeshSkin::create)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 void QtScriptMeshSkin::addSkinBone(cocos2d::Bone3D* bone)
@@ -44052,31 +44067,6 @@ void QtScriptMeshSkin::removeAllBones()
 	{
 		__o->removeAllBones();
 	}
-}
-
-QScriptValue QtScriptMeshSkin::create(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 3, 3))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 3:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::Skeleton3D*>(context->argument(0));
-			auto tmp_1 = qscriptvalue_cast<QByteArray>(context->argument(1));
-			auto arg1 = tmp_1.toStdString();
-			auto tmp_2 = qscriptvalue_cast<QByteArray>(context->argument(2));
-			auto arg2 = tmp_2.toStdString();
-			return __e->toScriptValue(MeshSkin::create(arg0, arg1, arg2));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::MeshSkin::create");
-	return __e->uncaughtException();
 }
 
 int QtScriptMeshSkin::constructorArgumentCountMin() const

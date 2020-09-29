@@ -5,7 +5,7 @@ include($$COCOS2DX_PATH/external/freetype2/qt/freetype_depend.pri)
 DEFINES += \
     QT_COCOS \
     QT_COCOS_SCRIPT_BINDING \
-    CC_STATIC_LIB \
+    CC_STATIC \
     CC_ENABLE_CACHE_TEXTURE_DATA=0 \
     CC_USE_CULLING=0 \
     CC_ENABLE_CHIPMUNK_INTEGRATION=0 \

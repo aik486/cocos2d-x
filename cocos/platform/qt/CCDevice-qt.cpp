@@ -31,6 +31,11 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 
+int Device::getDPI()
+{
+	return 0;
+}
+
 void Device::setAccelerometerEnabled(bool)
 {
 

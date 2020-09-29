@@ -1598,6 +1598,7 @@ public:
      *
      * @param additionalTransform An additional transform matrix.
      */
+    const Mat4 *getAdditionalTransform() const;
     void setAdditionalTransform(const Mat4* additionalTransform);
     void setAdditionalTransform(const Mat4& additionalTransform);
     void setAdditionalTransform(const AffineTransform& additionalTransform);

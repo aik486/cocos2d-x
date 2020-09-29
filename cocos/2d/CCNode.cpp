@@ -1946,6 +1946,15 @@ Vec2 Node::convertTouchToNodeSpaceAR(Touch *touch) const
     return this->convertToNodeSpaceAR(point);
 }
 
+const Mat4 *Node::getAdditionalTransform() const
+{
+    if (_additionalTransform) {
+        return &_additionalTransform[0];
+    }
+    
+    return nullptr;
+}
+
 void Node::updateTransform()
 {
     // Recursively iterate over children

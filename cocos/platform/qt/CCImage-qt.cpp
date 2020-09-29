@@ -18,6 +18,8 @@ static ssize_t imageSize(const QImage &image)
 #endif	
 }
 
+bool Image::PNG_PREMULTIPLIED_ALPHA_ENABLED = false;
+
 Image::Image()
 	: _data(nullptr)
 	, _dataLen(0)

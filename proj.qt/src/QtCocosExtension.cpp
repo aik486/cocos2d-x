@@ -205,6 +205,7 @@ void CCSpriteEx::setProgramState(backend::ProgramType type)
 
 		mAdditiveColorUniform =
 			programState->getUniformLocation("u_additiveColor");
+		updateAdditiveColor();
 		return;
 	}
 
@@ -214,6 +215,11 @@ void CCSpriteEx::setProgramState(backend::ProgramType type)
 
 CCScale9SpriteEx::CCScale9SpriteEx()
 	: CCAdditiveColor(this)
+{
+	// do nothing
+}
+
+CCScale9SpriteEx::~CCScale9SpriteEx()
 {
 	// do nothing
 }
@@ -274,6 +280,7 @@ void CCScale9SpriteEx::setProgramState(ProgramType type)
 
 		mAdditiveColorUniform =
 			programState->getUniformLocation("u_additiveColor");
+		updateAdditiveColor();
 		return;
 	}
 
@@ -305,6 +312,11 @@ void CCNodeEx::updateAdditiveColor()
 	//
 }
 
+CCCustomEffect::CCCustomEffect()
+	: mUniformsDirty(false)
+{
+}
+
 CCCustomEffect *CCCustomEffect::create()
 {
 	auto result = new CCCustomEffect;
@@ -327,6 +339,7 @@ CCCustomEffect *CCCustomEffect::clone() const
 	result->mShaderTextures = mShaderTextures;
 	result->mCopyCallback = mCopyCallback;
 	result->mPreDrawCallback = mPreDrawCallback;
+	result->mUniformsDirty = true;
 
 	if (mCopyCallback)
 	{
@@ -343,6 +356,7 @@ void CCCustomEffect::addTextureForShader(
 	entry.texture.setObject(texture);
 	entry.uniformName = uniformName;
 	mShaderTextures.append(entry);
+	mUniformsDirty = true;
 }
 
 void CCCustomEffect::setPreDrawCallback(const PreDrawCallback &callback)
@@ -358,6 +372,12 @@ void CCCustomEffect::setCopyCallback(const CopyCallback &callback)
 void CCCustomEffect::draw(
 	Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
+	if (mUniformsDirty)
+	{
+		mUniformsDirty = false;
+		updateUniforms();
+	}
+
 	if (mPreDrawCallback)
 	{
 		mPreDrawCallback(this);
@@ -375,7 +395,7 @@ void CCCustomEffect::setProgramState(ProgramState *state)
 	}
 	Sprite::setProgramState(state);
 
-	updateUniforms();
+	mUniformsDirty = true;
 }
 
 void CCCustomEffect::updateUniforms()

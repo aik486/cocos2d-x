@@ -88,6 +88,8 @@ public:
 class CCCustomEffect : public Sprite
 {
 public:
+	CCCustomEffect();
+
 	using PreDrawCallback = std::function<void(CCCustomEffect *)>;
 	using CopyCallback =
 		std::function<void(const CCCustomEffect *, CCCustomEffect *)>;
@@ -120,6 +122,7 @@ private:
 	QList<TextureEntry> mShaderTextures;
 	PreDrawCallback mPreDrawCallback;
 	CopyCallback mCopyCallback;
+	bool mUniformsDirty;
 };
 
 class CCSpriteEx
@@ -151,12 +154,11 @@ class CCScale9SpriteEx
 {
 public:
 	CCScale9SpriteEx();
+	virtual ~CCScale9SpriteEx() override;
 
 	static CCScale9SpriteEx *create();
 	static CCScale9SpriteEx *createWithSpriteFrame(
 		SpriteFrame *frame, const Rect &capInsets);
-
-	virtual void setProgramState(backend::ProgramState *programState) override;
 
 	virtual void updateAdditiveColor() override;
 
