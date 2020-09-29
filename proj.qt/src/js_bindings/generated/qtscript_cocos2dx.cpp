@@ -7835,6 +7835,15 @@ bool QtScriptShaderCache::constructObject(QScriptContext *context, NativeObjectT
 	return false;
 }
 
+void QtScriptShaderCache::removeAllShaders()
+{
+	auto __o = this->thiz<ShaderCache *>();
+	if (__o)
+	{
+		__o->removeAllShaders();
+	}
+}
+
 void QtScriptShaderCache::removeUnusedShader()
 {
 	auto __o = this->thiz<ShaderCache *>();

@@ -1021,7 +1021,7 @@ void Director::reset()
     FileUtils::destroyInstance();
     AsyncTaskPool::destroyInstance();
     backend::ProgramCache::destroyInstance();
-    
+    backend::ShaderCache::destroyInstance();
     
     // cocos2d-x specific data structures
 #ifndef QT_COCOS

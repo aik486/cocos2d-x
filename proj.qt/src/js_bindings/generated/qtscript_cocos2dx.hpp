@@ -1816,6 +1816,7 @@ public:
 	explicit QtScriptShaderCache(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_INVOKABLE void removeAllShaders();
 	Q_INVOKABLE void removeUnusedShader();
 	static QScriptValue destroyInstance(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
