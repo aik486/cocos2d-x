@@ -431,9 +431,8 @@ QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
 
 	Rect rect(0, 0, float(image.width()), float(image.height()));
 	auto texture = new Texture2D;
-	bool textureOk =
-		texture->initWithData(image.constBits(), image.sizeInBytes(),
-			textureFormat, image.width(), image.height(), rect.size, true);
+	bool textureOk = texture->initWithData(image.constBits(), qImageSize(image),
+		textureFormat, image.width(), image.height(), rect.size, true);
 
 	Q_ASSERT(textureOk);
 	Q_UNUSED(textureOk);

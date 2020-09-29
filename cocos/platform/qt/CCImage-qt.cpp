@@ -9,7 +9,7 @@
 namespace cocos2d
 {
 
-static ssize_t imageSize(const QImage &image)
+ssize_t CC_DLL qImageSize(const QImage &image)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 	return image.sizeInBytes();
@@ -101,7 +101,7 @@ bool Image::initWithDevice(QIODevice *device)
 	_data = _image->bits();
 	_width = quint16(image.width());
 	_height = quint16(image.height());
-	_dataLen = imageSize(image);
+	_dataLen = qImageSize(image);
 	_numberOfMipmaps = 0;
 
 	return true;
@@ -224,7 +224,7 @@ bool Image::initWithRawData(
 	_data = _image->bits();
 	_width = quint16(_image->width());
 	_height = quint16(_image->height());
-	_dataLen = imageSize(*_image);
+	_dataLen = qImageSize(*_image);
 	_numberOfMipmaps = 0;
 
 	return true;

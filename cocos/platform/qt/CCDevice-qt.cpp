@@ -21,6 +21,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "platform/CCDevice.h"
 #include "base/ccTypes.h"
+#include "platform/qt/CCApplication-qt.h"
 
 #include <QImage>
 #include <QFont>
@@ -120,11 +121,7 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
 	painter.drawStaticText(0, 0, staticText);
 
 	Data data;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)	
-	data.copy(image.bits(), image.sizeInBytes());
-#else
-	data.copy(image.bits(), image.byteCount());
-#endif
+	data.copy(image.bits(), qImageSize(image));
 	hasPremultipliedAlpha = false;
 	return data;
 }

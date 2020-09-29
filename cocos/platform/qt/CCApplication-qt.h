@@ -27,7 +27,11 @@ THE SOFTWARE.
 #include "platform/CCApplicationProtocol.h"
 #include <string>
 
+class QImage;
+
 NS_CC_BEGIN
+
+ssize_t CC_DLL qImageSize(const QImage &image);
 
 class CC_DLL Application : public ApplicationProtocol
 {
