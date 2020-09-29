@@ -1127,7 +1127,7 @@ public:
      * @param parentFlags Renderer flag.
      */
     virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    virtual void visit() final;
+    void visit();
 
 
     /** Returns the Scene that contains the Node.
