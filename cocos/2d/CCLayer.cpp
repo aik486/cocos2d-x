@@ -833,7 +833,7 @@ float LayerRadialGradient::getExpand() const
     return _expand;
 }
 
-void LayerRadialGradient::setStartColor(const Color3B& color)
+void LayerRadialGradient::setStartColor3B(const Color3B& color)
 {
     setStartColor(Color4B(color));
 }
@@ -854,7 +854,7 @@ Color3B LayerRadialGradient::getStartColor3B() const
     return Color3B(_startColor);
 }
 
-void LayerRadialGradient::setEndColor(const Color3B& color)
+void LayerRadialGradient::setEndColor3B(const Color3B& color)
 {
     setEndColor(Color4B(color));
 }

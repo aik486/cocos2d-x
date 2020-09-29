@@ -38,12 +38,12 @@ QSizeF ccSizeToQSizeF(const Size &size);
 QRect ccRectToQRect(const Rect &rect);
 QRectF ccRectToQRectF(const Rect &rect);
 
-Point qPointToPoint(const QPoint &point);
-Point qPointFToPoint(const QPointF &point);
-Size qSizeToSize(const QSize &size);
-Size qSizeFToSize(const QSizeF &size);
-Rect qRectToRect(const QRect &rect);
-Rect qRectFToRect(const QRectF &rect);
+Point qPointToCCPoint(const QPoint &point);
+Point qPointFToCCPoint(const QPointF &point);
+Size qSizeToCCSize(const QSize &size);
+Size qSizeFToCCSize(const QSizeF &size);
+Rect qRectToCCRect(const QRect &rect);
+Rect qRectFToCCRect(const QRectF &rect);
 
 qreal getMinPixelWidthForNode(Node *node);
 qreal getMinPixelHeightForNode(Node *node);

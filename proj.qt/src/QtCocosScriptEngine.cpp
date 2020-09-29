@@ -1,7 +1,5 @@
 #include "QtCocosScriptEngine.h"
 
-Q_DECLARE_METATYPE(std::vector<std::string>)
-
 #include "cocos2d.h"
 
 #include "QtScriptInstall.h"
@@ -9,15 +7,6 @@ Q_DECLARE_METATYPE(std::vector<std::string>)
 #include "js_bindings/manual/QtScriptRefHolder.h"
 #include "js_bindings/manual/QtScriptCCCustomEffect.h"
 #include "js_bindings/generated/qtscript_cocos2dx.hpp"
-
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Node *>)
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Layer *>)
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::AnimationFrame *>)
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::SpriteFrame *>)
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::FiniteTimeAction *>)
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::MenuItem *>)
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Pass *>)
-Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::ParticleSystem *>)
 
 #include "js_bindings/QtCocosScriptUtils.hpp"
 
@@ -45,15 +34,14 @@ const char *QtCocosScriptEngine::STRING_IDS[] = {
 static QScriptValue stringVecToScriptValue(
 	QScriptEngine *eng, const std::vector<std::string> &cont)
 {
-	QScriptValue a = eng->newArray();
+	QScriptValue a = eng->newArray(uint(cont.size()));
 	auto begin = cont.begin();
 	auto end = cont.end();
 	auto it = begin;
 	quint32 i;
 	for (i = 0; it != end; ++it, ++i)
 	{
-		a.setProperty(
-			i, eng->toScriptValue(QByteArray(it->c_str(), int(it->size()))));
+		a.setProperty(i, eng->toScriptValue(QByteArray::fromStdString(*it)));
 	}
 	return a;
 }
@@ -61,13 +49,13 @@ static QScriptValue stringVecToScriptValue(
 static void stringVecFromScriptValue(
 	const QScriptValue &value, std::vector<std::string> &cont)
 {
-	quint32 len = value.property(QLatin1String("length")).toUInt32();
-	cont.reserve(len);
-	for (quint32 i = 0; i < len; ++i)
+	quint32 length = value.property(QLatin1String(CSTRKEY(length))).toUInt32();
+	cont.reserve(length);
+	for (quint32 i = 0; i < length; ++i)
 	{
 		QScriptValue item = value.property(i);
 		auto ba = qscriptvalue_cast<QByteArray>(item);
-		cont.push_back(std::string(ba.data(), size_t(ba.size())));
+		cont.emplace_back(ba.toStdString());
 	}
 }
 
@@ -78,81 +66,47 @@ static QScriptValue qColorToScriptValue(QScriptEngine *eng, const QColor &color)
 
 static void qColorFromScriptValue(const QScriptValue &value, QColor &color)
 {
-	color = ccColor4BToQColor(qscriptvalue_cast<cocos2d::_ccColor4B>(value));
+	color = ccColor4BToQColor(qscriptvalue_cast<cocos2d::Color4B>(value));
 }
 
-static _ccColor4B ccColor3Bto4B(const _ccColor3B &from)
+static Color4B ccColor3Bto4B(const Color3B &from)
 {
-	_ccColor4B result;
-	result.r = from.r;
-	result.g = from.g;
-	result.b = from.b;
-	result.a = 255;
-	return result;
+	return Color4B(from);
 }
 
-static _ccColor3B ccColor4Bto3B(const _ccColor4B &from)
+static Color3B ccColor4Bto3B(const Color4B &from)
 {
-	_ccColor3B result;
-	result.r = from.r;
-	result.g = from.g;
-	result.b = from.b;
-	return result;
+	return Color3B(from);
 }
 
-static _ccColor4F ccColor3Bto4F(const _ccColor3B &from)
+static Color4F ccColor3Bto4F(const Color3B &from)
 {
-	_ccColor4F result;
-	result.r = from.r / 255.f;
-	result.g = from.g / 255.f;
-	result.b = from.b / 255.f;
-	result.a = 1.f;
-	return result;
+	return Color4F(from);
 }
 
-static _ccColor3B ccColor4Fto3B(const _ccColor4F &from)
+static Color3B ccColor4Fto3B(const Color4F &from)
 {
-	_ccColor3B result;
-	result.r = GLubyte(std::max(0, std::min(255, int(from.r * 255.f))));
-	result.g = GLubyte(std::max(0, std::min(255, int(from.g * 255.f))));
-	result.b = GLubyte(std::max(0, std::min(255, int(from.b * 255.f))));
-	return result;
+	return Color3B(from);
 }
 
-static _ccColor4B ccColor4Fto4B(const _ccColor4F &from)
+static Color4B ccColor4Fto4B(const Color4F &from)
 {
-	_ccColor4B result;
-	result.r = GLubyte(std::max(0, std::min(255, int(from.r * 255.f))));
-	result.g = GLubyte(std::max(0, std::min(255, int(from.g * 255.f))));
-	result.b = GLubyte(std::max(0, std::min(255, int(from.b * 255.f))));
-	result.a = GLubyte(std::max(0, std::min(255, int(from.a * 255.f))));
-	return result;
+	return Color4B(from);
 }
 
-static _ccColor4F ccColor4Bto4F(const _ccColor4B &from)
+static Color4F ccColor4Bto4F(const Color4B &from)
 {
-	_ccColor4F result;
-	result.r = from.r / 255.f;
-	result.g = from.g / 255.f;
-	result.b = from.b / 255.f;
-	result.a = from.a / 255.f;
-	return result;
+	return Color4F(from);
 }
 
-static CCSize ccPointToCCSize(const CCPoint &point)
+static Size ccPointToCCSize(const Point &point)
 {
-	CCSize result;
-	result.width = point.x;
-	result.height = point.y;
-	return result;
+	return Size(point);
 }
 
-static CCPoint ccSizeToCCPoint(const CCSize &size)
+static Point ccSizeToCCPoint(const Size &size)
 {
-	CCPoint result;
-	result.x = size.width;
-	result.y = size.height;
-	return result;
+	return Point(size.width, size.height);
 }
 
 QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
@@ -167,11 +121,7 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 		mStringIds[i] = engine->toStringHandle(STRING_IDS[i]);
 	}
 
-	auto glObject = engine->newObject();
-	glObject.setPrototype(engine->newQMetaObject(&gl_enum::staticMetaObject));
-
 	auto global = engine->globalObject();
-	global.setProperty("gl", glObject, STATIC_PROPERTY);
 
 	mRootObject = engine->newObject();
 	mRootObject.setPrototype(
@@ -192,14 +142,14 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	QtCocosScriptUtils::registerVector<ParticleSystem *>(engine);
 
 	QtScriptInstallQtCore(engine);
-	QtScriptCCObject::Register(mRootObject);
+	QtScriptRef::Register(mRootObject);
 	QtScriptRefHolder::Register(mRootObject);
 	qtscript_register_all_cocos2dx(engine);
 	QtScriptCCCustomEffect::Register(mRootObject);
 
 	qScriptRegisterMetaType<QColor>(mEngine, qColorToScriptValue,
 		qColorFromScriptValue,
-		engine->defaultPrototype(qMetaTypeId<_ccColor4B>()));
+		engine->defaultPrototype(qMetaTypeId<Color4B>()));
 
 	mRootObject.setProperty(QSTRKEY(spriteFrameByName),
 		mEngine->newFunction(spriteFrameByName), STATIC_PROPERTY);
@@ -210,91 +160,99 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	mRootObject.setProperty(QSTRKEY(addShaderProgram),
 		mEngine->newFunction(addShaderProgram), STATIC_PROPERTY);
 
+	mRootObject.setProperty(QSTRKEY(VERSION_CODE),
+		mEngine->newFunction(cocos2dVersionCode),
+		STATIC_PROPERTY | QScriptValue::PropertyGetter);
+
+	mRootObject.setProperty(QSTRKEY(VERSION_STRING),
+		mEngine->newFunction(cocos2dVersionString),
+		STATIC_PROPERTY | QScriptValue::PropertyGetter);
+
 	static const bool cvtColor3Bto4B =
-		QMetaType::registerConverter<_ccColor3B, _ccColor4B>(ccColor3Bto4B);
+		QMetaType::registerConverter<Color3B, Color4B>(ccColor3Bto4B);
 	Q_UNUSED(cvtColor3Bto4B);
 	static const bool cvtColor4Bto3B =
-		QMetaType::registerConverter<_ccColor4B, _ccColor3B>(ccColor4Bto3B);
+		QMetaType::registerConverter<Color4B, Color3B>(ccColor4Bto3B);
 	Q_UNUSED(cvtColor4Bto3B);
 	static const bool cvtColor3Bto4F =
-		QMetaType::registerConverter<_ccColor3B, _ccColor4F>(ccColor3Bto4F);
+		QMetaType::registerConverter<Color3B, Color4F>(ccColor3Bto4F);
 	Q_UNUSED(cvtColor3Bto4F);
 	static const bool cvtColor4Fto3B =
-		QMetaType::registerConverter<_ccColor4F, _ccColor3B>(ccColor4Fto3B);
+		QMetaType::registerConverter<Color4F, Color3B>(ccColor4Fto3B);
 	Q_UNUSED(cvtColor4Fto3B);
 	static const bool cvtColor4Fto4B =
-		QMetaType::registerConverter<_ccColor4F, _ccColor4B>(ccColor4Fto4B);
+		QMetaType::registerConverter<Color4F, Color4B>(ccColor4Fto4B);
 	Q_UNUSED(cvtColor4Fto4B);
 	static const bool cvtColor4Bto4F =
-		QMetaType::registerConverter<_ccColor4B, _ccColor4F>(ccColor4Bto4F);
+		QMetaType::registerConverter<Color4B, Color4F>(ccColor4Bto4F);
 	Q_UNUSED(cvtColor4Bto4F);
 
 	static const bool cvtColor3BtoQColor =
-		QMetaType::registerConverter<_ccColor3B, QColor>(ccColor3BToQColor);
+		QMetaType::registerConverter<Color3B, QColor>(ccColor3BToQColor);
 	Q_UNUSED(cvtColor3BtoQColor);
 	static const bool cvtColor4BtoQColor =
-		QMetaType::registerConverter<_ccColor4B, QColor>(ccColor4BToQColor);
+		QMetaType::registerConverter<Color4B, QColor>(ccColor4BToQColor);
 	Q_UNUSED(cvtColor4BtoQColor);
 	static const bool cvtColor4FtoQColor =
-		QMetaType::registerConverter<_ccColor4F, QColor>(ccColor4FToQColor);
+		QMetaType::registerConverter<Color4F, QColor>(ccColor4FToQColor);
 	Q_UNUSED(cvtColor4FtoQColor);
 	static const bool cvtQColorToColor3B =
-		QMetaType::registerConverter<QColor, _ccColor3B>(qColorToCcColor3B);
+		QMetaType::registerConverter<QColor, Color3B>(qColorToCcColor3B);
 	Q_UNUSED(cvtQColorToColor3B);
 	static const bool cvtQColorToColor4B =
-		QMetaType::registerConverter<QColor, _ccColor4B>(qColorToCcColor4B);
+		QMetaType::registerConverter<QColor, Color4B>(qColorToCcColor4B);
 	Q_UNUSED(cvtQColorToColor4B);
 	static const bool cvtQColorToColor4F =
-		QMetaType::registerConverter<QColor, _ccColor4F>(qColorToCcColor4F);
+		QMetaType::registerConverter<QColor, Color4F>(qColorToCcColor4F);
 	Q_UNUSED(cvtQColorToColor4F);
 
 	static const bool cvtPointToSize =
-		QMetaType::registerConverter<CCPoint, CCSize>(ccPointToCCSize);
+		QMetaType::registerConverter<Point, Size>(ccPointToCCSize);
 	Q_UNUSED(cvtPointToSize);
 	static const bool cvtSizeToPoint =
-		QMetaType::registerConverter<CCSize, CCPoint>(ccSizeToCCPoint);
+		QMetaType::registerConverter<Size, Point>(ccSizeToCCPoint);
 	Q_UNUSED(cvtSizeToPoint);
 
 	static const bool cvtSizeToQSize =
-		QMetaType::registerConverter<CCSize, QSize>(ccSizeToQSize);
+		QMetaType::registerConverter<Size, QSize>(ccSizeToQSize);
 	Q_UNUSED(cvtSizeToQSize);
 	static const bool cvtSizeToQSizeF =
-		QMetaType::registerConverter<CCSize, QSizeF>(ccSizeToQSizeF);
+		QMetaType::registerConverter<Size, QSizeF>(ccSizeToQSizeF);
 	Q_UNUSED(cvtSizeToQSizeF);
 
 	static const bool cvtPointToQPoint =
-		QMetaType::registerConverter<CCPoint, QPoint>(ccPointToQPoint);
+		QMetaType::registerConverter<Point, QPoint>(ccPointToQPoint);
 	Q_UNUSED(cvtPointToQPoint);
 	static const bool cvtPointToQPointF =
-		QMetaType::registerConverter<CCPoint, QPointF>(ccPointToQPointF);
+		QMetaType::registerConverter<Point, QPointF>(ccPointToQPointF);
 	Q_UNUSED(cvtPointToQPointF);
 
 	static const bool cvtPointToQRect =
-		QMetaType::registerConverter<CCRect, QRect>(ccRectToQRect);
+		QMetaType::registerConverter<Rect, QRect>(ccRectToQRect);
 	Q_UNUSED(cvtPointToQRect);
 	static const bool cvtPointToQRectF =
-		QMetaType::registerConverter<CCRect, QRectF>(ccRectToQRectF);
+		QMetaType::registerConverter<Rect, QRectF>(ccRectToQRectF);
 	Q_UNUSED(cvtPointToQRectF);
 
 	static const bool cvtQSizeToSize =
-		QMetaType::registerConverter<QSize, CCSize>(qSizeToCCSize);
+		QMetaType::registerConverter<QSize, Size>(qSizeToCCSize);
 	Q_UNUSED(cvtQSizeToSize);
 	static const bool cvtQSizeFToSize =
-		QMetaType::registerConverter<QSizeF, CCSize>(qSizeFToCCSize);
+		QMetaType::registerConverter<QSizeF, Size>(qSizeFToCCSize);
 	Q_UNUSED(cvtQSizeFToSize);
 
 	static const bool cvtQPointToPoint =
-		QMetaType::registerConverter<QPoint, CCPoint>(qPointToCCPoint);
+		QMetaType::registerConverter<QPoint, Point>(qPointToCCPoint);
 	Q_UNUSED(cvtQPointToPoint);
 	static const bool cvtQPointFToPoint =
-		QMetaType::registerConverter<QPointF, CCPoint>(qPointFToCCPoint);
+		QMetaType::registerConverter<QPointF, Point>(qPointFToCCPoint);
 	Q_UNUSED(cvtQPointFToPoint);
 
 	static const bool cvtQRectToRect =
-		QMetaType::registerConverter<QRect, CCRect>(qRectToCCRect);
+		QMetaType::registerConverter<QRect, Rect>(qRectToCCRect);
 	Q_UNUSED(cvtQRectToRect);
 	static const bool cvtQRectFToRect =
-		QMetaType::registerConverter<QRectF, CCRect>(qRectFToCCRect);
+		QMetaType::registerConverter<QRectF, Rect>(qRectFToCCRect);
 	Q_UNUSED(cvtQRectFToRect);
 }
 
@@ -302,79 +260,6 @@ QtCocosScriptEngine::~QtCocosScriptEngine()
 {
 	Q_ASSERT(_instance == this);
 	_instance = nullptr;
-}
-
-qint64 QtCocosScriptEngine::retainJSObject(const QScriptValue &v)
-{
-	if (!v.isObject() && !v.isFunction())
-		return 0;
-
-	auto result = v.objectId();
-	mJSObjectMap[result] = v;
-	return result;
-}
-
-void QtCocosScriptEngine::releaseJSObject(qint64 objectId)
-{
-	Q_ASSERT(objectId);
-	mJSObjectMap.erase(objectId);
-}
-
-bool QtCocosScriptEngine::isArgumentCountLessThan(
-	QScriptContext *context, int minArgs)
-{
-	Q_ASSERT(context);
-	if (context->argumentCount() < minArgs)
-	{
-		context->throwError(
-			tr("Expected at least %1 arguments, but %2 provided")
-				.arg(minArgs)
-				.arg(context->argumentCount()));
-		return true;
-	}
-
-	return false;
-}
-
-bool QtCocosScriptEngine::isArgumentCountGreaterThan(
-	QScriptContext *context, int maxArgs)
-{
-	Q_ASSERT(context);
-	if (context->argumentCount() > maxArgs)
-	{
-		context->throwError(tr("Expected at most %1 arguments, but %2 provided")
-								.arg(maxArgs)
-								.arg(context->argumentCount()));
-		return true;
-	}
-
-	return false;
-}
-
-bool QtCocosScriptEngine::checkArgumentCount(
-	QScriptContext *context, int min, int max)
-{
-	if (isArgumentCountLessThan(context, min) ||
-		isArgumentCountGreaterThan(context, max))
-	{
-		return false;
-	}
-	return true;
-}
-
-void QtCocosScriptEngine::noPublicConstructorException(
-	QScriptContext *context, const QString &className)
-{
-	Q_ASSERT(context);
-	context->throwError(
-		tr("No public constructor for class %1").arg(className));
-}
-
-void QtCocosScriptEngine::badArgumentsException(
-	QScriptContext *context, const QString &funcName)
-{
-	Q_ASSERT(context);
-	context->throwError(tr("Bad arguments for %1 call").arg(funcName));
 }
 
 const QScriptValue &QtCocosScriptEngine::ccRootObject() const
@@ -392,178 +277,35 @@ ccScriptType QtCocosScriptEngine::getScriptType()
 	return kScriptTypeJavascript;
 }
 
-void QtCocosScriptEngine::removeScriptObjectByCCObject(CCObject *)
+int QtCocosScriptEngine::executeString(const char *codes)
 {
-	//do nothing
+	auto result = checkResult(mEngine->evaluate(QString::fromUtf8(codes)));
+
+	return result.isError() ? 1 : 0;
 }
 
-void QtCocosScriptEngine::removeScriptHandler(int64_t nHandler)
+int QtCocosScriptEngine::executeScriptFile(const char *filePath)
 {
-	if (nHandler == 0)
-		return;
+	int result = checkResult(
+		mEngine->evaluate(
+			QString::fromStdString(
+				FileUtils::getInstance()->getStringFromFile(filePath)),
+			QString::fromUtf8(filePath)))
+					 .toInt32();
 
-	releaseJSObject(nHandler);
-}
-
-int QtCocosScriptEngine::executeString(const char *)
-{
-	return 0;
-}
-
-int QtCocosScriptEngine::executeScriptFile(const char *)
-{
-	return 0;
+	checkResult(QScriptValue());
+	return result;
 }
 
 int QtCocosScriptEngine::executeGlobalFunction(const char *functionName)
 {
 	auto func = mEngine->globalObject().property(QLatin1String(functionName));
-	checkResult(func.call());
-	return 1;
+	int result = checkResult(func.call()).toInt32();
+	checkResult(QScriptValue());
+	return result;
 }
 
-int QtCocosScriptEngine::executeNodeEvent(CCNode *pNode, int nAction)
-{
-	auto func = getRegisteredJSObject(pNode->getScriptHandler());
-	if (!func.isFunction())
-		return 0;
-
-	executeEventHandler(func, mEngine->toScriptValue(pNode),
-		QScriptValueList() << QScriptValue(mEngine, nAction));
-	return 1;
-}
-
-int QtCocosScriptEngine::executeMenuItemEvent(CCMenuItem *pMenuItem)
-{
-	auto func = getRegisteredJSObject(pMenuItem->getScriptTapHandler());
-	if (func.isFunction())
-	{
-		executeEventHandler(func, mEngine->toScriptValue(pMenuItem));
-		return 1;
-	}
-	return 0;
-}
-
-int QtCocosScriptEngine::executeNotificationEvent(
-	CCNotificationCenter *pCenter, const char *pszName)
-{
-	if (!pCenter || !pszName)
-		return 0;
-
-	auto func = getRegisteredJSObject(pCenter->getScriptHandler());
-	if (!func.isFunction())
-		return 0;
-
-	executeEventHandler(func, QScriptValue(),
-		QScriptValueList() << QScriptValue(
-			mEngine, QString::fromUtf8(pszName)));
-
-	return 1;
-}
-
-int QtCocosScriptEngine::executeCallFuncActionEvent(
-	CCCallFunc *pAction, CCObject *pTarget)
-{
-	if (!pAction || !pTarget)
-		return 0;
-
-	auto func = getRegisteredJSObject(pAction->getScriptHandler());
-	if (!func.isFunction())
-		return 0;
-
-	auto node = dynamic_cast<CCNode *>(pTarget);
-	auto object =
-		node ? mEngine->toScriptValue(node) : mEngine->toScriptValue(pTarget);
-
-	executeEventHandler(func, object);
-	return 1;
-}
-
-int QtCocosScriptEngine::executeSchedule(int64_t nHandler, float dt, Node *node)
-{
-	QScriptValue func = getRegisteredJSObject(nHandler);
-	if (func.isFunction())
-	{
-		QScriptValueList args;
-		args << QScriptValue(mEngine, dt);
-		executeEventHandler(func, mEngine->toScriptValue(node), args);
-		return 1;
-	}
-	return 0;
-}
-
-int QtCocosScriptEngine::executeLayerTouchesEvent(
-	Layer *pLayer, int eventType, std::vector<Touch *> *pTouches)
-{
-	Q_ASSERT(pLayer);
-	auto handler = pLayer->getScriptTouchHandlerEntry();
-	if (!handler)
-		return 0;
-
-	QScriptValue func = getRegisteredJSObject(handler->getHandler());
-	if (!func.isFunction())
-		return 0;
-
-	QScriptValueList args;
-	args << QScriptValue(mEngine, eventType);
-	auto array = mEngine->newArray(pTouches->count());
-	quint32 i = 0;
-	for (auto it = pTouches->begin(); it != pTouches->end(); ++it, ++i)
-	{
-		array.setProperty(
-			i, mEngine->toScriptValue(reinterpret_cast<CCTouch *>(*it)));
-	}
-	args << array;
-	auto result =
-		executeEventHandler(func, mEngine->toScriptValue(pLayer), args);
-	return result.isError() ? 0 : result.toBool();
-}
-
-int QtCocosScriptEngine::executeLayerTouchEvent(
-	Layer *pLayer, int eventType, Touch *pTouch)
-{
-	Q_ASSERT(pLayer);
-	auto handler = pLayer->getScriptTouchHandlerEntry();
-	if (!handler)
-		return 0;
-
-	QScriptValue func = getRegisteredJSObject(handler->getHandler());
-	if (!func.isFunction())
-		return 0;
-
-	QScriptValueList args;
-	args << QScriptValue(mEngine, eventType);
-	args << mEngine->toScriptValue(pTouch);
-	auto result =
-		executeEventHandler(func, mEngine->toScriptValue(pLayer), args);
-	return result.isError() ? 0 : result.toBool();
-}
-
-int QtCocosScriptEngine::executeLayerKeypadEvent(Layer *pLayer, int eventType)
-{
-	Q_ASSERT(pLayer);
-	auto handler = pLayer->getScriptKeypadHandlerEntry();
-	if (!handler)
-		return 0;
-
-	QScriptValue func = getRegisteredJSObject(handler->getHandler());
-	if (!func.isFunction())
-		return 0;
-
-	QScriptValueList args;
-	args << QScriptValue(mEngine, eventType);
-	auto result =
-		executeEventHandler(func, mEngine->toScriptValue(pLayer), args);
-	return result.isError() ? 0 : result.toBool();
-}
-
-int QtCocosScriptEngine::executeAccelerometerEvent(CCLayer *, CCAcceleration *)
-{
-	return 0;
-}
-
-int QtCocosScriptEngine::executeEvent(
-	int64_t, const char *, CCObject *, const char *)
+int QtCocosScriptEngine::sendEvent(ScriptEvent *)
 {
 	return 0;
 }
@@ -578,14 +320,9 @@ bool QtCocosScriptEngine::parseConfig(ConfigType, const std::string &)
 	return false;
 }
 
-QScriptValue QtCocosScriptEngine::getRegisteredJSObject(qint64 id) const
+void QtCocosScriptEngine::garbageCollect()
 {
-	if (!id)
-		return QScriptValue();
-
-	auto it = mJSObjectMap.find(id);
-	Q_ASSERT(it != mJSObjectMap.end());
-	return it->second;
+	mEngine->collectGarbage();
 }
 
 QScriptValue QtCocosScriptEngine::checkResult(QScriptValue value)
@@ -599,18 +336,42 @@ QScriptValue QtCocosScriptEngine::checkResult(QScriptValue value)
 	return value;
 }
 
+QScriptValue QtCocosScriptEngine::cocos2dVersionCode(
+	QScriptContext *context, QScriptEngine *engine)
+{
+	if (context->argumentCount() != 0)
+	{
+		QtScriptUtils::badArgumentsException(context, "cc.VERSION_CODE");
+		return engine->uncaughtException();
+	}
+
+	return QScriptValue(engine, COCOS2D_VERSION);
+}
+
+QScriptValue QtCocosScriptEngine::cocos2dVersionString(
+	QScriptContext *context, QScriptEngine *engine)
+{
+	if (context->argumentCount() != 0)
+	{
+		QtScriptUtils::badArgumentsException(context, "cc.VERSION_STRING");
+		return engine->uncaughtException();
+	}
+
+	return QScriptValue(engine, QString::fromUtf8(cocos2d::cocos2dVersion()));
+}
+
 QScriptValue QtCocosScriptEngine::spriteFrameByName(
 	QScriptContext *context, QScriptEngine *engine)
 {
 	if (context->argumentCount() != 1)
 	{
-		badArgumentsException(context, "cc.spriteFrameByName");
+		QtScriptUtils::badArgumentsException(context, "cc.spriteFrameByName");
 		return engine->uncaughtException();
 	}
 
 	return engine->toScriptValue(
-		CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(
-			qscriptvalue_cast<QByteArray>(context->argument(0)).constData()));
+		SpriteFrameCache::getInstance()->getSpriteFrameByName(
+			qscriptvalue_cast<QByteArray>(context->argument(0)).toStdString()));
 }
 
 QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
@@ -624,7 +385,8 @@ QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
 			break;
 
 		default:
-			badArgumentsException(context, "cc.addImageSpriteFrame");
+			QtScriptUtils::badArgumentsException(
+				context, "cc.addImageSpriteFrame");
 			return engine->uncaughtException();
 	}
 
@@ -642,7 +404,7 @@ QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
 		image.loadFromData(qscriptvalue_cast<QByteArray>(arg1));
 	}
 
-	CCTexture2DPixelFormat textureFormat;
+	backend::PixelFormat textureFormat;
 	if (image.hasAlphaChannel())
 	{
 		if (image.format() != QImage::Format_RGBA8888_Premultiplied)
@@ -651,12 +413,12 @@ QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
 				image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
 		}
 
-		textureFormat = kCCTexture2DPixelFormat_RGBA8888;
+		textureFormat = backend::PixelFormat::RGBA8888;
 	} else
 	{
 		if (image.format() != QImage::Format_RGB888)
 			image = image.convertToFormat(QImage::Format_RGB888);
-		textureFormat = kCCTexture2DPixelFormat_RGB888;
+		textureFormat = backend::PixelFormat::RGB888;
 	}
 
 	if (image.isNull())
@@ -667,23 +429,24 @@ QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
 
 	QtCocosContext::makeCurrent();
 
-	CCRect rect(0, 0, float(image.width()), float(image.height()));
-	auto texture = new CCTexture2D;
-	bool textureOk = texture->initWithData(image.constBits(), textureFormat,
-		image.width(), image.height(), rect.size, true);
+	Rect rect(0, 0, float(image.width()), float(image.height()));
+	auto texture = new Texture2D;
+	bool textureOk =
+		texture->initWithData(image.constBits(), image.sizeInBytes(),
+			textureFormat, image.width(), image.height(), rect.size, true);
 
 	Q_ASSERT(textureOk);
 	Q_UNUSED(textureOk);
 
 	if (argc == 3)
 	{
-		auto params = qscriptvalue_cast<ccTexParams>(context->argument(2));
-		texture->setTexParameters(&params);
+		auto params =
+			qscriptvalue_cast<backend::SamplerDescriptor>(context->argument(2));
+		texture->setTexParameters(params);
 	}
 
-	auto spriteFrame = CCSpriteFrame::createWithTexture(texture, rect);
-	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFrame(
-		spriteFrame, key.data());
+	auto spriteFrame = SpriteFrame::createWithTexture(texture, rect);
+	SpriteFrameCache::getInstance()->addSpriteFrame(spriteFrame, key.data());
 
 	texture->release();
 	return engine->toScriptValue(spriteFrame);
@@ -694,13 +457,13 @@ QScriptValue QtCocosScriptEngine::shaderProgramByName(
 {
 	if (context->argumentCount() != 1)
 	{
-		badArgumentsException(context, "cc.shaderProgramByName");
+		QtScriptUtils::badArgumentsException(context, "cc.shaderProgramByName");
 		return engine->uncaughtException();
 	}
 
 	return engine->toScriptValue(
-		CCShaderCache::sharedShaderCache()->programForKey(
-			qscriptvalue_cast<QByteArray>(context->argument(0)).constData()));
+		backend::ProgramCache::getInstance()->getCustomProgram(
+			qscriptvalue_cast<QByteArray>(context->argument(0)).toStdString()));
 }
 
 QScriptValue QtCocosScriptEngine::addShaderProgram(
@@ -710,17 +473,15 @@ QScriptValue QtCocosScriptEngine::addShaderProgram(
 	switch (argc)
 	{
 		case 3:
-		case 4:
 			break;
 
 		default:
-			badArgumentsException(context, "cc.addShaderProgram");
+			QtScriptUtils::badArgumentsException(
+				context, "cc.addShaderProgram");
 			return engine->uncaughtException();
 	}
 
 	QtCocosContext::makeCurrent();
-
-	auto program = new CCGLProgram;
 
 	auto key = qscriptvalue_cast<QByteArray>(context->argument(0));
 
@@ -735,26 +496,11 @@ QScriptValue QtCocosScriptEngine::addShaderProgram(
 	auto frag =
 		fDevice ? fDevice->readAll() : qscriptvalue_cast<QByteArray>(arg2);
 
-	program->initWithVertexShaderByteArray(vert.constData(), frag.constData());
+	auto program = backend::Device::getInstance()->newProgram(
+		vert.toStdString(), frag.toStdString());
 
-	if (argc == 4)
-	{
-		QScriptValueIterator it(context->argument(3));
-		while (it.hasNext())
-		{
-			it.next();
-			if (it.flags() & QScriptValue::SkipInEnumeration)
-				continue;
-
-			program->addAttribute(
-				it.name().toUtf8().constData(), it.value().toUInt32());
-		}
-	}
-
-	program->link();
-	program->updateUniforms();
-
-	CCShaderCache::sharedShaderCache()->addProgram(program, key.constData());
+	backend::ProgramCache::getInstance()->addCustomProgram(
+		key.toStdString(), program);
 
 	program->release();
 
@@ -773,11 +519,4 @@ QScriptValue QtCocosScriptEngine::propertyById(
 	int id, const QScriptValue &object) const
 {
 	return object.property(jsString(id));
-}
-
-QScriptValue QtCocosScriptEngine::executeEventHandler(
-	QScriptValue func, const QScriptValue &object, const QScriptValueList &args)
-{
-	Q_ASSERT(func.isFunction());
-	return checkResult(func.call(object, args));
 }

@@ -82,6 +82,9 @@ enum class ResolutionPolicy
  *
  * There are six opengl Context Attrs. 
  */
+
+NS_CC_BEGIN
+
 struct GLContextAttrs
 {
     int redBits;
@@ -92,8 +95,6 @@ struct GLContextAttrs
     int stencilBits;
     int multisamplingCount;
 };
-
-NS_CC_BEGIN
 
 class Scene;
 class Renderer;

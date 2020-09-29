@@ -41,7 +41,7 @@
  * @{
  */
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
 
 typedef struct lua_State lua_State;
 
@@ -52,6 +52,7 @@ class Layer;
 class MenuItem;
 class CallFunc;
 class Action;
+struct ScriptEvent;
 
 enum ccScriptType {
     kScriptTypeNone = 0,
@@ -59,6 +60,7 @@ enum ccScriptType {
     kScriptTypeJavascript
 };
 
+#ifndef QT_COCOS_SCRIPT_BINDING
 /**
  * This classes is wrapped to store the handler corresponding to the Lua function pointer and assign the handler a unique id
  * @js NA
@@ -611,6 +613,7 @@ struct ScriptEvent
     {
     }
 };
+#endif // !defined(QT_COCOS_SCRIPT_BINDING)
 
 /** 
  * Don't make ScriptEngineProtocol inherits from Object since setScriptEngine is invoked only once in AppDelegate.cpp,
@@ -801,7 +804,7 @@ public:
 
     /** Remove proxy for a native object
      */
-    virtual void removeObjectProxy(Ref* obj) {}
+    virtual void removeObjectProxy(Ref* /*obj*/) {}
 
     /** Triggers the garbage collector */
     virtual void garbageCollect() {}

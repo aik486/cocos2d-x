@@ -157,8 +157,8 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/base/CCProperties.cpp \
     $$COCOS2DX_PATH/cocos/base/ccRandom.cpp \
     $$COCOS2DX_PATH/cocos/base/CCRef.cpp \
-    $$COCOS2DX_PATH/cocos/base/CCScheduler.cpp \
     $$COCOS2DX_PATH/cocos/base/CCScriptSupport.cpp \
+    $$COCOS2DX_PATH/cocos/base/CCScheduler.cpp \
     $$COCOS2DX_PATH/cocos/base/CCStencilStateManager.cpp \
     $$COCOS2DX_PATH/cocos/base/CCTouch.cpp \
     $$COCOS2DX_PATH/cocos/base/ccTypes.cpp \

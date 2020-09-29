@@ -1540,16 +1540,16 @@ void Node::scheduleUpdateWithPriority(int priority)
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
 
+#if CC_ENABLE_SCRIPT_BINDING
 void Node::scheduleUpdateWithPriorityLua(int64_t nHandler, int priority)
 {
     unscheduleUpdate();
     
-#if CC_ENABLE_SCRIPT_BINDING
     _updateScriptHandler = nHandler;
-#endif
     
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
+#endif
 
 void Node::unscheduleUpdate()
 {

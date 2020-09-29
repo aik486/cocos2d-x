@@ -4,7 +4,7 @@ namespace cocos2d
 {
 QtScriptCCCustomEffect::QtScriptCCCustomEffect(
 	QScriptEngine *engine, const QByteArray &className)
-	: QtScriptCCSprite(engine, className)
+	: QtScriptSprite(engine, className)
 {
 }
 
@@ -19,7 +19,7 @@ int QtScriptCCCustomEffect::constructorArgumentCountMax() const
 }
 
 bool QtScriptCCCustomEffect::constructObject(
-	QScriptContext *context, QtScriptCCObject::NativeObjectType &out)
+	QScriptContext *context, NativeObjectType &out)
 {
 	bool ok = false;
 	switch (context->argumentCount())
@@ -41,7 +41,7 @@ bool QtScriptCCCustomEffect::constructObject(
 }
 
 QtScriptCCCustomEffect::QtScriptCCCustomEffect(QScriptEngine *engine)
-	: QtScriptCCSprite(engine, "CustomEffect")
+	: QtScriptSprite(engine, "CustomEffect")
 {
 }
 
@@ -49,7 +49,7 @@ void QtScriptCCCustomEffect::Register(const QScriptValue &targetNamespace)
 {
 	auto engine = targetNamespace.engine();
 	Q_ASSERT(engine);
-	auto inherit = engine->defaultPrototype(qMetaTypeId<CCSprite *>());
+	auto inherit = engine->defaultPrototype(qMetaTypeId<Sprite *>());
 	auto ctor = RegisterT<CCCustomEffect, QtScriptCCCustomEffect>(
 		targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
@@ -61,12 +61,12 @@ void QtScriptCCCustomEffect::Register(const QScriptValue &targetNamespace)
 }
 
 void QtScriptCCCustomEffect::addTextureForShader(
-	CCTexture2D *texture, const QByteArray &uniformName)
+	Texture2D *texture, const QByteArray &uniformName)
 {
 	auto o = this->thiz<CCCustomEffect *>();
 	if (o)
 	{
-		o->addTextureForShader(texture, uniformName);
+		o->addTextureForShader(texture, uniformName.toStdString());
 	}
 }
 
@@ -81,9 +81,15 @@ void QtScriptCCCustomEffect::setPreDrawCallback(QScriptValue callback)
 	if (o)
 	{
 		auto thiz = thisObject();
-		o->setPreDrawCallback([callback, thiz](CCCustomEffect *) mutable {
-			callback.call(thiz);
-		});
+		if (callback.isFunction())
+		{
+			o->setPreDrawCallback([callback, thiz](CCCustomEffect *) mutable {
+				callback.call(thiz);
+			});
+		} else
+		{
+			o->setPreDrawCallback(nullptr);
+		}
 	}
 }
 
@@ -98,12 +104,18 @@ void QtScriptCCCustomEffect::setCopyCallback(QScriptValue callback)
 	if (o)
 	{
 		auto thiz = thisObject();
-		o->setCopyCallback(
-			[callback, thiz](CCCustomEffect *, CCCustomEffect *dst) mutable {
+		if (callback.isFunction())
+		{
+			o->setCopyCallback([callback, thiz](const CCCustomEffect *,
+								   CCCustomEffect *dst) mutable {
 				auto engine = callback.engine();
 				callback.call(
 					thiz, QScriptValueList() << engine->toScriptValue(dst));
 			});
+		} else
+		{
+			o->setCopyCallback(nullptr);
+		}
 	}
 }
 

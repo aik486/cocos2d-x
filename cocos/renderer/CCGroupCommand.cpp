@@ -81,9 +81,6 @@ GroupCommand::GroupCommand()
 void GroupCommand::init(float globalOrder)
 {
     _globalOrder = globalOrder;
-    auto manager = Director::getInstance()->getRenderer()->getGroupCommandManager();
-    manager->releaseGroupID(_renderQueueID);
-    _renderQueueID = manager->getGroupID();
 }
 
 GroupCommand::~GroupCommand()

@@ -1,5 +1,7 @@
 #include "QtCocosScriptUtils.hpp"
 
+#include "js_bindings/generated/qtscript_cocos2dx.hpp"
+
 namespace cocos2d
 {
 QtCocosScriptUtils::PixelsCallback QtCocosScriptUtils::getPixelsCallback(

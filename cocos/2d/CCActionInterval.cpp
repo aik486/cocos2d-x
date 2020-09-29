@@ -105,6 +105,9 @@ bool ActionInterval::sendUpdateEventToScript(float dt, Action *actionObject)
         if (ScriptEngineManager::sendActionEventToJS(actionObject, kActionUpdate, (void *)&dt))
             return true;
     }
+#else
+    CC_UNUSED_PARAM(dt);
+    CC_UNUSED_PARAM(actionObject);
 #endif
     return false;
 }

@@ -61,7 +61,7 @@ THE SOFTWARE.
 #include "platform/CCApplication.h"
 #include "renderer/backend/ProgramCache.h"
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
 #include "base/CCScriptSupport.h"
 #endif
 
@@ -189,7 +189,7 @@ Director::~Director()
 
     s_SharedDirector = nullptr;
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
     ScriptEngineManager::destroyInstance();
 #endif
 

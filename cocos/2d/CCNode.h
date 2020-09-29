@@ -1044,6 +1044,7 @@ public:
      */
     virtual bool isRunning() const;
 
+#if CC_ENABLE_SCRIPT_BINDING
     /**
      * Schedules for lua script.
      * @js NA
@@ -1054,6 +1055,7 @@ public:
     void scheduleUpdateWithPriorityLua(int64_t handler, int priority);
 
     /// @}  end Script Bindings
+#endif
 
 
     /// @{
