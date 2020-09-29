@@ -10465,6 +10465,16 @@ cocos2d::Scene* QtScriptNode::getScene()
 	return nullptr;
 }
 
+cocos2d::backend::Program* QtScriptNode::getShaderProgram()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getShaderProgram();
+	}
+	return nullptr;
+}
+
 float QtScriptNode::getSkewX()
 {
 	auto __o = this->thiz<Node *>();
@@ -11204,6 +11214,15 @@ void QtScriptNode::setScaleZ(float scaleZ)
 	if (__o)
 	{
 		__o->setScaleZ(scaleZ);
+	}
+}
+
+void QtScriptNode::setShaderProgram(cocos2d::backend::Program* program)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setShaderProgram(program);
 	}
 }
 

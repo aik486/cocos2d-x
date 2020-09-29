@@ -2274,6 +2274,28 @@ backend::ProgramState* Node::getProgramState() const
     return _programState;
 }
 
+backend::Program *Node::getShaderProgram() const
+{
+    auto state = getProgramState();
+    return state ? state->getProgram() : nullptr;
+}
+
+void Node::setShaderProgram(backend::Program *program)
+{
+    if (getShaderProgram() == program) {
+        return;
+    }
+
+    if (!program) {
+        setProgramState(nullptr);
+        return;
+    }
+    
+    auto programState = new (std::nothrow) backend::ProgramState(program);
+    setProgramState(programState);
+    CC_SAFE_RELEASE(programState);
+}
+
 void Node::setUseInvertedAdditionalTransformOrder(bool value) {
     if (_useInvertedAdditionalTransformOrder == value) {
         return;

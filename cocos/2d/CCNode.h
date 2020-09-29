@@ -1785,6 +1785,9 @@ public:
     virtual void setProgramState(backend::ProgramState* programState);
     virtual backend::ProgramState* getProgramState() const;
     
+    backend::Program* getShaderProgram() const;
+    void setShaderProgram(backend::Program* program);
+    
     bool isUseInvertedAdditionalTransformOrder() const;
     void setUseInvertedAdditionalTransformOrder(bool value);
 

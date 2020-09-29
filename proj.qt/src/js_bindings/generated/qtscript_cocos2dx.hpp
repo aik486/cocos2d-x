@@ -2250,6 +2250,7 @@ public:
 	Q_PROPERTY(float scaleX READ getScaleX WRITE setScaleX)
 	Q_PROPERTY(float scaleY READ getScaleY WRITE setScaleY)
 	Q_PROPERTY(float scaleZ READ getScaleZ WRITE setScaleZ)
+	Q_PROPERTY(cocos2d::backend::Program* shaderProgram READ getShaderProgram WRITE setShaderProgram)
 	Q_PROPERTY(float skewX READ getSkewX WRITE setSkewX)
 	Q_PROPERTY(float skewY READ getSkewY WRITE setSkewY)
 	Q_PROPERTY(int tag READ getTag WRITE setTag)
@@ -2321,6 +2322,7 @@ public:
 	float getScaleY();
 	float getScaleZ();
 	Q_INVOKABLE cocos2d::Scene* getScene();
+	cocos2d::backend::Program* getShaderProgram();
 	float getSkewX();
 	float getSkewY();
 	int getTag();
@@ -2396,6 +2398,7 @@ public:
 	void setScaleX(float scaleX);
 	void setScaleY(float scaleY);
 	void setScaleZ(float scaleZ);
+	void setShaderProgram(cocos2d::backend::Program* program);
 	void setSkewX(float skewX);
 	void setSkewY(float skewY);
 	void setTag(int tag);
