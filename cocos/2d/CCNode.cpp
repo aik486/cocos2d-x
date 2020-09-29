@@ -360,7 +360,7 @@ void Node::setGlobalZOrder(float globalZOrder)
 /// rotation getter
 float Node::getRotation() const
 {
-    CCASSERT(_rotationZ_X == _rotationZ_Y, "CCNode#rotation. RotationX != RotationY. Don't know which one to return");
+    CCASSERT(_rotationZ_X == _rotationZ_Y, "Node#rotation. RotationX != RotationY. Don't know which one to return");
     return _rotationZ_X;
 }
 
@@ -477,7 +477,7 @@ void Node::setRotationSkewY(float rotationY)
 /// scale getter
 float Node::getScale() const
 {
-    CCASSERT( _scaleX == _scaleY, "CCNode#scale. ScaleX != ScaleY. Don't know which one to return");
+    CCASSERT( _scaleX == _scaleY, "Node#scale. ScaleX != ScaleY. Don't know which one to return");
     return _scaleX;
 }
 

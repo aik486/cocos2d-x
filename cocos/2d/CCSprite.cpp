@@ -1190,7 +1190,7 @@ void Sprite::addChild(Node *child, int zOrder, int tag)
             setReorderChildDirtyRecursively();
         }
     }
-    //CCNode already sets isReorderChildDirty_ so this needs to be after batchNode check
+    //Node already sets isReorderChildDirty_ so this needs to be after batchNode check
     Node::addChild(child, zOrder, tag);
 }
 
@@ -1214,7 +1214,7 @@ void Sprite::addChild(Node *child, int zOrder, const std::string &name)
             setReorderChildDirtyRecursively();
         }
     }
-    //CCNode already sets isReorderChildDirty_ so this needs to be after batchNode check
+    //Node already sets isReorderChildDirty_ so this needs to be after batchNode check
     Node::addChild(child, zOrder, name);
 }
 
