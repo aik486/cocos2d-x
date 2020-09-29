@@ -9033,32 +9033,22 @@ bool QtScriptTexture2D::initWithBackendTexture(cocos2d::backend::TextureBackend*
 	return false;
 }
 
-bool QtScriptTexture2D::initWithData(const void* data, ssize_t dataLen, int pixelFormat, int pixelsWide, int pixelsHigh, const cocos2d::Size& contentSize)
+bool QtScriptTexture2D::initWithData(const QByteArray& arg0, int arg1, int arg2, int arg3, const cocos2d::Size& arg4, bool arg5)
 {
 	auto __o = this->thiz<Texture2D *>();
 	if (__o)
 	{
-		return __o->initWithData(data, dataLen, cocos2d::backend::PixelFormat(pixelFormat), pixelsWide, pixelsHigh, contentSize);
+		return __o->initWithData(arg0.data(), arg0.size(), PixelFormat(arg1), arg2, arg3, arg4, arg5);
 	}
 	return false;
 }
 
-bool QtScriptTexture2D::initWithData(const void* data, ssize_t dataLen, int pixelFormat, int pixelsWide, int pixelsHigh, const cocos2d::Size& contentSize, bool preMultipliedAlpha)
+bool QtScriptTexture2D::initWithData(const QByteArray& arg0, int arg1, int arg2, int arg3, int arg4, const cocos2d::Size& arg5, bool arg6)
 {
 	auto __o = this->thiz<Texture2D *>();
 	if (__o)
 	{
-		return __o->initWithData(data, dataLen, cocos2d::backend::PixelFormat(pixelFormat), pixelsWide, pixelsHigh, contentSize, preMultipliedAlpha);
-	}
-	return false;
-}
-
-bool QtScriptTexture2D::initWithData(const void* data, ssize_t dataLen, int pixelFormat, int renderFormat, int pixelsWide, int pixelsHigh, const cocos2d::Size& contentSize, bool preMultipliedAlpha)
-{
-	auto __o = this->thiz<Texture2D *>();
-	if (__o)
-	{
-		return __o->initWithData(data, dataLen, cocos2d::backend::PixelFormat(pixelFormat), cocos2d::backend::PixelFormat(renderFormat), pixelsWide, pixelsHigh, contentSize, preMultipliedAlpha);
+		return __o->initWithData(arg0.data(), arg0.size(), PixelFormat(arg1), PixelFormat(arg2), arg3, arg4, arg5, arg6);
 	}
 	return false;
 }
@@ -9941,6 +9931,24 @@ cocos2d::Vec2 QtScriptNode::convertTouchToNodeSpaceAR(cocos2d::Touch* touch)
 		return __o->convertTouchToNodeSpaceAR(touch);
 	}
 	return cocos2d::Vec2();
+}
+
+void QtScriptNode::copyNodeChildrenFrom(const cocos2d::Node* from)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->copyNodeChildrenFrom(from);
+	}
+}
+
+void QtScriptNode::copyNodeChildrenFrom(const cocos2d::Node* from, bool skipHidden)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->copyNodeChildrenFrom(from, skipHidden);
+	}
 }
 
 void QtScriptNode::copyPropertiesFrom(const cocos2d::Node* from)
@@ -13555,12 +13563,12 @@ bool QtScriptImage::hasPremultipliedAlpha()
 	return false;
 }
 
-bool QtScriptImage::initWithImageData(const QByteArray& data, ssize_t dataLen)
+bool QtScriptImage::initWithImageData(const QByteArray& arg0)
 {
 	auto __o = this->thiz<Image *>();
 	if (__o)
 	{
-		return __o->initWithImageData(reinterpret_cast<const unsigned char*>(data.data()), dataLen);
+		return __o->initWithImageData(reinterpret_cast<const unsigned char*>(arg0.data()), arg0.size());
 	}
 	return false;
 }
@@ -13575,22 +13583,12 @@ bool QtScriptImage::initWithImageFile(const QByteArray& path)
 	return false;
 }
 
-bool QtScriptImage::initWithRawData(const QByteArray& data, ssize_t dataLen, int width, int height, int bitsPerComponent)
+bool QtScriptImage::initWithRawData(const QByteArray& arg0, int arg1, int arg2, int arg3, bool arg4)
 {
 	auto __o = this->thiz<Image *>();
 	if (__o)
 	{
-		return __o->initWithRawData(reinterpret_cast<const unsigned char*>(data.data()), dataLen, width, height, bitsPerComponent);
-	}
-	return false;
-}
-
-bool QtScriptImage::initWithRawData(const QByteArray& data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti)
-{
-	auto __o = this->thiz<Image *>();
-	if (__o)
-	{
-		return __o->initWithRawData(reinterpret_cast<const unsigned char*>(data.data()), dataLen, width, height, bitsPerComponent, preMulti);
+		return __o->initWithRawData(reinterpret_cast<const unsigned char*>(arg0.data()), arg0.size(), arg1, arg2, arg3, arg4);
 	}
 	return false;
 }
@@ -18433,12 +18431,12 @@ void QtScriptData::clear()
 	}
 }
 
-ssize_t QtScriptData::copy(const QByteArray& bytes, const ssize_t size)
+ssize_t QtScriptData::copy(const QByteArray& arg0)
 {
 	auto __o = this->thiz<Data *>();
 	if (__o)
 	{
-		return __o->copy(reinterpret_cast<const unsigned char*>(bytes.data()), size);
+		return __o->copy(reinterpret_cast<const unsigned char*>(arg0.data()), arg0.size());
 	}
 	return static_cast<ssize_t>(0);
 }
@@ -42477,12 +42475,12 @@ void QtScriptAnimationCache::addAnimation(cocos2d::Animation* animation, const Q
 	}
 }
 
-void QtScriptAnimationCache::addAnimationsWithData(const QByteArray& data, int dataSize)
+void QtScriptAnimationCache::addAnimationsWithData(const QByteArray& arg0)
 {
 	auto __o = this->thiz<AnimationCache *>();
 	if (__o)
 	{
-		__o->addAnimationsWithData(data.data(), dataSize);
+		__o->addAnimationsWithData(arg0.data(), arg0.size());
 	}
 }
 

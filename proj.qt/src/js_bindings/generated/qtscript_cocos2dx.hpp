@@ -2064,9 +2064,8 @@ public:
 	Q_INVOKABLE bool hasPremultipliedAlpha();
 	Q_INVOKABLE bool initWithBackendTexture(cocos2d::backend::TextureBackend* texture);
 	Q_INVOKABLE bool initWithBackendTexture(cocos2d::backend::TextureBackend* texture, bool preMultipliedAlpha);
-	Q_INVOKABLE bool initWithData(const void* data, ssize_t dataLen, int pixelFormat, int pixelsWide, int pixelsHigh, const cocos2d::Size& contentSize);
-	Q_INVOKABLE bool initWithData(const void* data, ssize_t dataLen, int pixelFormat, int pixelsWide, int pixelsHigh, const cocos2d::Size& contentSize, bool preMultipliedAlpha);
-	Q_INVOKABLE bool initWithData(const void* data, ssize_t dataLen, int pixelFormat, int renderFormat, int pixelsWide, int pixelsHigh, const cocos2d::Size& contentSize, bool preMultipliedAlpha);
+	Q_INVOKABLE bool initWithData(const QByteArray& arg0, int arg1, int arg2, int arg3, const cocos2d::Size& arg4, bool arg5);
+	Q_INVOKABLE bool initWithData(const QByteArray& arg0, int arg1, int arg2, int arg3, int arg4, const cocos2d::Size& arg5, bool arg6);
 	Q_INVOKABLE bool initWithImage(cocos2d::Image* image);
 	Q_INVOKABLE bool initWithImage(cocos2d::Image* image, int format);
 	Q_INVOKABLE bool initWithString(const QByteArray& text, const cocos2d::FontDefinition& textDefinition);
@@ -2269,6 +2268,8 @@ public:
 	Q_INVOKABLE cocos2d::Vec2 convertToWorldSpaceAR(const cocos2d::Vec2& nodePoint);
 	Q_INVOKABLE cocos2d::Vec2 convertTouchToNodeSpace(cocos2d::Touch* touch);
 	Q_INVOKABLE cocos2d::Vec2 convertTouchToNodeSpaceAR(cocos2d::Touch* touch);
+	Q_INVOKABLE void copyNodeChildrenFrom(const cocos2d::Node* from);
+	Q_INVOKABLE void copyNodeChildrenFrom(const cocos2d::Node* from, bool skipHidden);
 	Q_INVOKABLE void copyPropertiesFrom(const cocos2d::Node* from);
 	Q_INVOKABLE void enumerateChildren(const QByteArray& name, QScriptValue callback);
 	Q_INVOKABLE cocos2d::Action* getActionByTag(int tag);
@@ -2897,10 +2898,9 @@ public:
 	Q_INVOKABLE int getWidth();
 	Q_INVOKABLE bool hasAlpha();
 	Q_INVOKABLE bool hasPremultipliedAlpha();
-	Q_INVOKABLE bool initWithImageData(const QByteArray& data, ssize_t dataLen);
+	Q_INVOKABLE bool initWithImageData(const QByteArray& arg0);
 	Q_INVOKABLE bool initWithImageFile(const QByteArray& path);
-	Q_INVOKABLE bool initWithRawData(const QByteArray& data, ssize_t dataLen, int width, int height, int bitsPerComponent);
-	Q_INVOKABLE bool initWithRawData(const QByteArray& data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti);
+	Q_INVOKABLE bool initWithRawData(const QByteArray& arg0, int arg1, int arg2, int arg3, bool arg4);
 	Q_INVOKABLE bool isCompressed();
 	Q_INVOKABLE void premultiplyAlpha();
 	Q_INVOKABLE void reversePremultipliedAlpha();
@@ -4034,7 +4034,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE void clear();
-	Q_INVOKABLE ssize_t copy(const QByteArray& bytes, const ssize_t size);
+	Q_INVOKABLE ssize_t copy(const QByteArray& arg0);
 	Q_INVOKABLE QByteArray getBytes();
 	Q_INVOKABLE ssize_t getSize();
 	Q_INVOKABLE bool isNull();
@@ -9549,7 +9549,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE void addAnimation(cocos2d::Animation* animation, const QByteArray& name);
-	Q_INVOKABLE void addAnimationsWithData(const QByteArray& data, int dataSize);
+	Q_INVOKABLE void addAnimationsWithData(const QByteArray& arg0);
 	Q_INVOKABLE void addAnimationsWithFile(const QByteArray& plist);
 	Q_INVOKABLE cocos2d::Animation* getAnimation(const QByteArray& name);
 	Q_INVOKABLE bool init();
