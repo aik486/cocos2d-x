@@ -139,33 +139,39 @@ Q_ENUM_NS(SamplerAddressMode);
 
 enum BlendFactor
 {
-	ZERO = int(backend::BlendFactor::ZERO),
+	BlendFactor_ZERO = int(backend::BlendFactor::ZERO),
 
-	ONE = int(backend::BlendFactor::ONE),
+	BlendFactor_ONE = int(backend::BlendFactor::ONE),
 
-	SRC_COLOR = int(backend::BlendFactor::SRC_COLOR),
+	BlendFactor_SRC_COLOR = int(backend::BlendFactor::SRC_COLOR),
 
-	ONE_MINUS_SRC_COLOR = int(backend::BlendFactor::ONE_MINUS_SRC_COLOR),
+	BlendFactor_ONE_MINUS_SRC_COLOR =
+		int(backend::BlendFactor::ONE_MINUS_SRC_COLOR),
 
-	SRC_ALPHA = int(backend::BlendFactor::SRC_ALPHA),
+	BlendFactor_SRC_ALPHA = int(backend::BlendFactor::SRC_ALPHA),
 
-	ONE_MINUS_SRC_ALPHA = int(backend::BlendFactor::ONE_MINUS_SRC_ALPHA),
+	BlendFactor_ONE_MINUS_SRC_ALPHA =
+		int(backend::BlendFactor::ONE_MINUS_SRC_ALPHA),
 
-	DST_COLOR = int(backend::BlendFactor::DST_COLOR),
+	BlendFactor_DST_COLOR = int(backend::BlendFactor::DST_COLOR),
 
-	ONE_MINUS_DST_COLOR = int(backend::BlendFactor::ONE_MINUS_DST_COLOR),
+	BlendFactor_ONE_MINUS_DST_COLOR =
+		int(backend::BlendFactor::ONE_MINUS_DST_COLOR),
 
-	DST_ALPHA = int(backend::BlendFactor::DST_ALPHA),
+	BlendFactor_DST_ALPHA = int(backend::BlendFactor::DST_ALPHA),
 
-	ONE_MINUS_DST_ALPHA = int(backend::BlendFactor::ONE_MINUS_DST_ALPHA),
+	BlendFactor_ONE_MINUS_DST_ALPHA =
+		int(backend::BlendFactor::ONE_MINUS_DST_ALPHA),
 
-	CONSTANT_ALPHA = int(backend::BlendFactor::CONSTANT_ALPHA),
+	BlendFactor_CONSTANT_ALPHA = int(backend::BlendFactor::CONSTANT_ALPHA),
 
-	SRC_ALPHA_SATURATE = int(backend::BlendFactor::SRC_ALPHA_SATURATE),
+	BlendFactor_SRC_ALPHA_SATURATE =
+		int(backend::BlendFactor::SRC_ALPHA_SATURATE),
 
-	ONE_MINUS_CONSTANT_ALPHA =
+	BlendFactor_ONE_MINUS_CONSTANT_ALPHA =
 		int(backend::BlendFactor::ONE_MINUS_CONSTANT_ALPHA),
-	BLEND_CLOLOR = int(backend::BlendFactor::BLEND_CLOLOR),
+
+	BlendFactor_BLEND_CLOLOR = int(backend::BlendFactor::BLEND_CLOLOR),
 };
 Q_ENUM_NS(BlendFactor);
 }
