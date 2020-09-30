@@ -367,6 +367,13 @@ float Director::getDeltaTime() const
 {
     return _deltaTime;
 }
+
+int64_t Director::getFrameStartTimeMicros() const
+{
+   return std::chrono::time_point_cast<std::chrono::microseconds>(
+               _lastUpdate).time_since_epoch().count();
+}
+
 void Director::setOpenGLView(GLView *openGLView)
 {
     CCASSERT(openGLView, "opengl view should not be null");

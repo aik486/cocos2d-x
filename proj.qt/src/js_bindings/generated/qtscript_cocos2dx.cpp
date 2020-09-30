@@ -10514,6 +10514,16 @@ int QtScriptNode::getTag()
 	return 0;
 }
 
+cocos2d::Node* QtScriptNode::getTransformParent()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getTransformParent();
+	}
+	return nullptr;
+}
+
 cocos2d::Ref* QtScriptNode::getUserObject()
 {
 	auto __o = this->thiz<Node *>();
@@ -12037,6 +12047,16 @@ float QtScriptDirector::getFrameRate()
 		return __o->getFrameRate();
 	}
 	return static_cast<float>(0);
+}
+
+int64_t QtScriptDirector::getFrameStartTimeMicros()
+{
+	auto __o = this->thiz<Director *>();
+	if (__o)
+	{
+		return __o->getFrameStartTimeMicros();
+	}
+	return static_cast<int64_t>(0);
 }
 
 cocos2d::Mat4 QtScriptDirector::getMatrix(int type)

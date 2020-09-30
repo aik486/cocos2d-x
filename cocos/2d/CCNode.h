@@ -852,6 +852,7 @@ public:
      */
     virtual Node* getParent() { return _parent; }
     virtual const Node* getParent() const { return _parent; }
+    virtual Node* getTransformParent();
 
 
     ////// REMOVES //////

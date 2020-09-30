@@ -449,6 +449,8 @@ public:
      * @js NA
      */
     float getFrameRate() const { return _frameRate; }
+    
+    int64_t getFrameStartTimeMicros() const;
 
     /** 
      * Clones a specified type matrix and put it to the top of specified type of matrix stack.

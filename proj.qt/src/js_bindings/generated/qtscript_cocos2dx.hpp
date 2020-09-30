@@ -2327,6 +2327,7 @@ public:
 	float getSkewX();
 	float getSkewY();
 	int getTag();
+	Q_INVOKABLE cocos2d::Node* getTransformParent();
 	cocos2d::Ref* getUserObject();
 	Q_INVOKABLE cocos2d::AffineTransform getWorldToNodeAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getWorldToNodeTransform();
@@ -2563,6 +2564,7 @@ public:
 	Q_INVOKABLE float getContentScaleFactor();
 	Q_INVOKABLE float getDeltaTime();
 	Q_INVOKABLE float getFrameRate();
+	Q_INVOKABLE int64_t getFrameStartTimeMicros();
 	Q_INVOKABLE cocos2d::Mat4 getMatrix(int type);
 	Q_INVOKABLE cocos2d::Node* getNotificationNode();
 	Q_INVOKABLE cocos2d::GLView* getOpenGLView();

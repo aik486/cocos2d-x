@@ -718,6 +718,11 @@ void Node::setParent(Node * parent)
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 
+Node *Node::getTransformParent()
+{
+    return getParent();
+}
+
 /// isRelativeAnchorPoint getter
 bool Node::isIgnoreAnchorPointForPosition() const
 {
@@ -1702,7 +1707,7 @@ Mat4 Node::getNodeToParentTransform(Node* ancestor) const
 {
     Mat4 t(this->getNodeToParentTransform());
 
-    for (Node *p = _parent;  p != nullptr && p != ancestor ; p = p->getParent())
+    for (Node *p = _parent;  p != nullptr && p != ancestor ; p = p->getTransformParent())
     {
         t = p->getNodeToParentTransform() * t;
     }
@@ -1714,7 +1719,7 @@ AffineTransform Node::getNodeToParentAffineTransform(Node* ancestor) const
 {
     AffineTransform t(this->getNodeToParentAffineTransform());
 
-    for (Node *p = _parent; p != nullptr && p != ancestor; p = p->getParent())
+    for (Node *p = _parent; p != nullptr && p != ancestor; p = p->getTransformParent())
         t = AffineTransformConcat(t, p->getNodeToParentAffineTransform());
 
     return t;

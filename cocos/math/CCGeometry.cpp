@@ -80,7 +80,7 @@ Size Size::operator*(float a) const
 
 Size Size::operator/(float a) const
 {
-	CCASSERT(a!=0, "CCSize division by 0.");
+	CCASSERT(a!=0, "Size division by 0.");
     return Size(this->width / a, this->height / a);
 }
 

@@ -18,7 +18,7 @@ using CCShape = QVector<Point>;
 QPolygonF shapeFromNode(Node *node);
 
 QPolygonF ccShapeToQPolygonF(const CCShape &shape);
-CCShape qPolygonFToShape(const QPolygonF &poly);
+CCShape qPolygonFToCCShape(const QPolygonF &poly);
 
 void transformShape(QPolygonF &poly, const AffineTransform &t);
 void transformShape(CCShape &shape, const AffineTransform &t);
