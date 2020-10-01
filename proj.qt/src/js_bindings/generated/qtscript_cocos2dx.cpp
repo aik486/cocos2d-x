@@ -9999,7 +9999,7 @@ const cocos2d::Mat4* QtScriptNode::getAdditionalTransform()
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		return const_cast<const cocos2d::Mat4*>(__o->getAdditionalTransform());
+		return __o->getAdditionalTransform();
 	}
 	return nullptr;
 }
@@ -10042,6 +10042,16 @@ unsigned short QtScriptNode::getCameraMask()
 		return __o->getCameraMask();
 	}
 	return static_cast<unsigned short>(0);
+}
+
+cocos2d::Node* QtScriptNode::getChildAt(int index)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getChildAt(index);
+	}
+	return nullptr;
 }
 
 cocos2d::Node* QtScriptNode::getChildByName(const QByteArray& name)
@@ -29532,7 +29542,7 @@ const cocos2d::Font* QtScriptFontAtlas::getFont()
 	auto __o = this->thiz<FontAtlas *>();
 	if (__o)
 	{
-		return const_cast<const cocos2d::Font*>(__o->getFont());
+		return __o->getFont();
 	}
 	return nullptr;
 }
@@ -44425,7 +44435,7 @@ const cocos2d::MeshVertexData* QtScriptMeshIndexData::getMeshVertexData()
 	auto __o = this->thiz<MeshIndexData *>();
 	if (__o)
 	{
-		return const_cast<const cocos2d::MeshVertexData*>(__o->getMeshVertexData());
+		return __o->getMeshVertexData();
 	}
 	return nullptr;
 }

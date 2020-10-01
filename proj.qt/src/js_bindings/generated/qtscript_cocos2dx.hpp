@@ -2280,6 +2280,7 @@ public:
 	Q_INVOKABLE cocos2d::Vec2 getAnchorPointInPoints();
 	Q_INVOKABLE cocos2d::Rect getBoundingBox();
 	unsigned short getCameraMask();
+	Q_INVOKABLE cocos2d::Node* getChildAt(int index);
 	Q_INVOKABLE cocos2d::Node* getChildByName(const QByteArray& name);
 	Q_INVOKABLE cocos2d::Node* getChildByTag(int tag);
 	Q_INVOKABLE cocos2d::Vector<cocos2d::Node *> getChildren();

@@ -898,6 +898,16 @@ void Node::enumerateChildren(const std::string &name, std::function<bool (Node *
     }
 }
 
+Node *Node::getChildAt(int index) const
+{
+    auto&children = getChildren();
+    if (index < 0 || index > children.size()) {
+        return nullptr;
+    }
+    
+    return children.at(index);
+}
+
 bool Node::doEnumerateRecursive(const Node* node, const std::string &name, std::function<bool (Node *)> callback) const
 {
     bool ret =false;

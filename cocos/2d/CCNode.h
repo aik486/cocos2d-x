@@ -830,6 +830,8 @@ public:
     virtual Vector<Node*>& getChildren() { return _children; }
     virtual const Vector<Node*>& getChildren() const { return _children; }
     
+    Node *getChildAt(int index) const;
+    
     /** 
      * Returns the amount of children.
      *
