@@ -37770,7 +37770,7 @@ bool QtScriptRenderTexture::saveToFile(const QByteArray& filename, bool isRGBA, 
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		return __o->saveToFile(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string)>() : [=](cocos2d::RenderTexture* larg0, const std::string larg1) mutable -> void
+		return __o->saveToFile(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string&)>() : [=](cocos2d::RenderTexture* larg0, const std::string& larg1) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -37807,7 +37807,7 @@ bool QtScriptRenderTexture::saveToFileAsNonPMA(const QByteArray& filename, bool 
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		return __o->saveToFileAsNonPMA(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string)>() : [=](cocos2d::RenderTexture* larg0, const std::string larg1) mutable -> void
+		return __o->saveToFileAsNonPMA(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string&)>() : [=](cocos2d::RenderTexture* larg0, const std::string& larg1) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
