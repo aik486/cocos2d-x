@@ -37612,6 +37612,15 @@ int QtScriptRenderTexture::getClearStencil()
 	return 0;
 }
 
+void QtScriptRenderTexture::getPixels(const QScriptValue& arg0, bool arg1)
+{
+	auto __o = this->thiz<RenderTexture *>();
+	if (__o)
+	{
+		__o->getPixels(QtCocosScriptUtils::getPixelsCallback(arg0), arg1);
+	}
+}
+
 cocos2d::Sprite* QtScriptRenderTexture::getSprite()
 {
 	auto __o = this->thiz<RenderTexture *>();
@@ -37652,32 +37661,32 @@ bool QtScriptRenderTexture::isAutoDraw()
 	return false;
 }
 
-void QtScriptRenderTexture::newImage(QScriptValue imageCallback)
+void QtScriptRenderTexture::newImage(QScriptValue callback)
 {
 	auto __e = this->engine();
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		__o->newImage(!imageCallback.isFunction() ? std::function<void (cocos2d::Image *)>() : [=](cocos2d::Image* larg0) mutable -> void
+		__o->newImage(!callback.isFunction() ? std::function<void (cocos2d::Image *)>() : [=](cocos2d::Image* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
-	imageCallback.call(QScriptValue(), arguments);
+	callback.call(QScriptValue(), arguments);
 });
 	}
 }
 
-void QtScriptRenderTexture::newImage(QScriptValue imageCallback, bool flipImage)
+void QtScriptRenderTexture::newImage(QScriptValue callback, bool flipImage)
 {
 	auto __e = this->engine();
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		__o->newImage(!imageCallback.isFunction() ? std::function<void (cocos2d::Image *)>() : [=](cocos2d::Image* larg0) mutable -> void
+		__o->newImage(!callback.isFunction() ? std::function<void (cocos2d::Image *)>() : [=](cocos2d::Image* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
-	imageCallback.call(QScriptValue(), arguments);
+	callback.call(QScriptValue(), arguments);
 }, flipImage);
 	}
 }

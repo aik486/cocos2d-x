@@ -313,29 +313,31 @@ void TextureMTL::createSampler(id<MTLDevice> mtlDevice, const SamplerDescriptor 
     [mtlDescriptor release];
 }
 
-void TextureMTL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
+void TextureMTL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, PixelsCallback callback)
 {
     CC_ASSERT(width <= _width && height <= _height);
-    
+
     auto bitsPerElement = _bitsPerElement;
     auto flipImageFunc = [callback, flipImage, bitsPerElement](const unsigned char* image, int width, int height){
         //consistent with opengl behavior
-        auto bytePerRow = width * bitsPerElement / 8;
+        size_t pixelSize = bitsPerElement / 8;
+        size_t bytePerRow = size_t(width) * pixelSize;
+        size_t imageSize = bytePerRow * size_t(height);
         if(!flipImage)
         {
-            unsigned char* flippedImage = new unsigned char[bytePerRow * height];
+            unsigned char* flippedImage = new unsigned char[imageSize];
             for (int i = 0; i < height; ++i)
             {
                 memcpy(&flippedImage[i * bytePerRow],
                        &image[(height - i - 1) * bytePerRow],
                        bytePerRow);
             }
-            callback(flippedImage, width, height);
+            callback(flippedImage, pixelSize, width, height);
             CC_SAFE_DELETE_ARRAY(flippedImage);
         }
         else
         {
-            callback(image, width, height);
+            callback(image, pixelSize, width, height);
         }
     };
     auto flipImageCallback = std::bind(flipImageFunc, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -447,29 +449,31 @@ void TextureCubeMTL::updateFaceData(TextureCubeFace side, void *data)
                  bytesPerImage:_bytesPerImage];
 }
 
-void TextureCubeMTL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
+void TextureCubeMTL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, PixelsCallback callback)
 {
     CC_ASSERT(width <= _mtlTexture.width && height <= _mtlTexture.height);
-    
+
     auto bitsPerElement = _bitsPerElement;
     auto flipImageFunc = [callback, flipImage, bitsPerElement](const unsigned char* image, int width, int height){
         //consistent with opengl behavior
-        auto bytePerRow = width * bitsPerElement / 8;
+        size_t pixelSize = bitsPerElement / 8;
+        size_t bytePerRow = size_t(width) * pixelSize;
+        size_t imageSize = bytePerRow * size_t(height);
         if(!flipImage)
         {
-            unsigned char* flippedImage = new unsigned char[bytePerRow * height];
+            unsigned char* flippedImage = new unsigned char[imageSize];
             for (int i = 0; i < height; ++i)
             {
                 memcpy(&flippedImage[i * bytePerRow],
                        &image[(height - i - 1) * bytePerRow],
                        bytePerRow);
             }
-            callback(flippedImage, width, height);
+            callback(flippedImage, pixelSize, width, height);
             CC_SAFE_DELETE_ARRAY(flippedImage);
         }
         else
         {
-            callback(image, width, height);
+            callback(image, pixelSize, width, height);
         }
     };
     auto flipImageCallback = std::bind(flipImageFunc, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);

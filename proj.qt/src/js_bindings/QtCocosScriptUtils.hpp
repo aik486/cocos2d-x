@@ -31,7 +31,7 @@ class QtCocosScriptUtils
 {
 public:
 	using PixelsCallback = // data, width, height
-		std::function<void(const unsigned char *, size_t, size_t)>;
+		std::function<void(const unsigned char *, size_t, size_t, size_t)>;
 
 	using Sprite3DCallback = std::function<void(Sprite3D *, void *)>;
 

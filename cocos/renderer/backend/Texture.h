@@ -69,7 +69,8 @@ public:
      * @param flipImage Specifies if needs to flip the image.
      * @param callback Specifies a call back function to deal with the image.
      */
-    virtual void getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback) = 0;
+    using PixelsCallback = std::function<void(const unsigned char*, std::size_t, std::size_t, size_t)>;
+    virtual void getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, PixelsCallback callback) = 0;
     
     /// Generate mipmaps.
     virtual void generateMipmaps() = 0;

@@ -622,14 +622,14 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
     }
 }
 
-void CommandBufferGL::captureScreen(std::function<void(const unsigned char*, int, int)> callback)
+void CommandBufferGL::captureScreen(PixelsCallback callback)
 {
     int bufferSize = _viewPort.w * _viewPort.h *4;
     std::shared_ptr<GLubyte> buffer(new GLubyte[bufferSize], [](GLubyte* p){ CC_SAFE_DELETE_ARRAY(p); });
     memset(buffer.get(), 0, bufferSize);
     if (!buffer)
     {
-        callback(nullptr, 0, 0);
+        callback(nullptr, 0, 0, 0);
         return;
     }
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -639,7 +639,7 @@ void CommandBufferGL::captureScreen(std::function<void(const unsigned char*, int
     memset(flippedBuffer.get(), 0, bufferSize);
     if (!flippedBuffer)
     {
-        callback(nullptr, 0, 0);
+        callback(nullptr, 0, 0, 0);
         return;
     }
     for (int row = 0; row < _viewPort.h; ++row)
@@ -647,7 +647,7 @@ void CommandBufferGL::captureScreen(std::function<void(const unsigned char*, int
         memcpy(flippedBuffer.get() + (_viewPort.h - row - 1) * _viewPort.w * 4, buffer.get() + row * _viewPort.w * 4, _viewPort.w * 4);
     }
 
-    callback(flippedBuffer.get(), _viewPort.w, _viewPort.h);
+    callback(flippedBuffer.get(), 4, _viewPort.w, _viewPort.h);
 }
 
 CC_BACKEND_END

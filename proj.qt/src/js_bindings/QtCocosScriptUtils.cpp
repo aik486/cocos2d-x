@@ -12,11 +12,12 @@ QtCocosScriptUtils::PixelsCallback QtCocosScriptUtils::getPixelsCallback(
 		return nullptr;
 	}
 
-	return [=](const unsigned char *data, size_t width, size_t height) mutable {
+	return [=](const unsigned char *data, size_t pixelSize, size_t width,
+			   size_t height) mutable {
 		QScriptValueList arguments;
 		auto engine = callback.engine();
 		arguments << engine->toScriptValue(QByteArray::fromRawData(
-			reinterpret_cast<const char *>(data), width * 4 * height));
+			reinterpret_cast<const char *>(data), width * pixelSize * height));
 		arguments << engine->toScriptValue(width);
 		arguments << engine->toScriptValue(height);
 		callback.call(QScriptValue(), arguments);

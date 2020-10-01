@@ -8565,12 +8565,13 @@ public:
 	float getClearDepth();
 	int getClearFlags();
 	int getClearStencil();
+	Q_INVOKABLE void getPixels(const QScriptValue& arg0, bool arg1);
 	cocos2d::Sprite* getSprite();
 	Q_INVOKABLE bool initWithWidthAndHeight(int w, int h, int format);
 	Q_INVOKABLE bool initWithWidthAndHeight(int w, int h, int format, int depthStencilFormat);
 	bool isAutoDraw();
-	Q_INVOKABLE void newImage(QScriptValue imageCallback);
-	Q_INVOKABLE void newImage(QScriptValue imageCallback, bool flipImage);
+	Q_INVOKABLE void newImage(QScriptValue callback);
+	Q_INVOKABLE void newImage(QScriptValue callback, bool flipImage);
 	Q_INVOKABLE bool saveToFile(const QByteArray& filename);
 	Q_INVOKABLE bool saveToFile(const QByteArray& filename, bool isRGBA);
 	Q_INVOKABLE bool saveToFile(const QByteArray& filename, bool isRGBA, QScriptValue callback);

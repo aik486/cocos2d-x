@@ -169,7 +169,8 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void captureScreen(std::function<void(const unsigned char*, int, int)> callback) = 0;
+    using PixelsCallback = std::function<void(const unsigned char*, size_t, size_t, size_t)>;
+    virtual void captureScreen(PixelsCallback callback) = 0;
     
     /**
      * Update both front and back stencil reference value.
