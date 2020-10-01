@@ -91,6 +91,8 @@ public:
     bool is3D() const { return _is3D; }
     /**Set the command rendered in 3D mode or not.*/
     void set3D(bool value) { _is3D = value; }
+    bool is2DQueue() const { return _is2DQueue; }
+    void set2DQueue(bool value) { _is2DQueue = value; }
     /**Get the depth by current model view matrix.*/
     float getDepth() const { return _depth; }
     /// Can use the result to change the descriptor content.
@@ -123,7 +125,8 @@ protected:
     
     /** Is the command been rendered on 3D pass. */
     bool _is3D = false;
-    
+    bool _is2DQueue = false;
+
     /** Depth from the model view matrix.*/
     float _depth = 0.f;
 

@@ -624,6 +624,7 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_colorNormal.frag \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_colorNormalTexture.frag \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_colorTexture.frag \
+    $$COCOS2DX_PATH/cocos/renderer/shaders/3D_colorTextureAlphaTest.frag \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_particle.frag \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_skybox.frag \
     $$COCOS2DX_PATH/cocos/renderer/shaders/3D_terrain.frag \

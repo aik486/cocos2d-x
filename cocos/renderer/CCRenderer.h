@@ -531,7 +531,6 @@ protected:
     unsigned int _drawnVertices = 0;
     //the flag for checking whether renderer is rendering
     bool _isRendering = false;
-    bool _isDepthTestFor2D = false;
         
     GroupCommandManager* _groupCommandManager = nullptr;
 

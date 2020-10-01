@@ -70,6 +70,7 @@ extern CC_DLL const char * CC3D_color_frag;
 extern CC_DLL const char * CC3D_colorNormal_frag;
 extern CC_DLL const char * CC3D_colorNormalTexture_frag;
 extern CC_DLL const char * CC3D_colorTexture_frag;
+extern CC_DLL const char * CC3D_colorTextureAlphaTest_frag;
 extern CC_DLL const char * CC3D_particleTexture_frag;
 extern CC_DLL const char * CC3D_particleColor_frag;
 extern CC_DLL const char * CC3D_particle_vert;

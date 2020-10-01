@@ -136,6 +136,9 @@ public:
 
     void setVertexData(const std::vector<float> &vertexData);
     
+    /// unique Id for _attribs set
+    size_t getAtrSetId() const;
+    
 CC_CONSTRUCTOR_ACCESS:
     MeshVertexData();
     virtual ~MeshVertexData();

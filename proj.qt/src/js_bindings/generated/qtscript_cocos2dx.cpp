@@ -8132,6 +8132,15 @@ cocos2d::backend::ProgramState* QtScriptProgramState::clone()
 	return nullptr;
 }
 
+void QtScriptProgramState::forkVertexLayout()
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->forkVertexLayout();
+	}
+}
+
 int QtScriptProgramState::getAttributeLocation(const QByteArray& name)
 {
 	auto __o = this->thiz<ProgramState *>();
@@ -8202,6 +8211,78 @@ void QtScriptProgramState::setUniform(const cocos2d::backend::UniformLocation& a
 	if (__o)
 	{
 		__o->setUniform(arg0, arg1.data(), size_t(arg1.length()));
+	}
+}
+
+void QtScriptProgramState::setUniformWith1f(const cocos2d::backend::UniformLocation& uniformLocation, float f1)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith1f(uniformLocation, f1);
+	}
+}
+
+void QtScriptProgramState::setUniformWith1i(const cocos2d::backend::UniformLocation& uniformLocation, int i1)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith1i(uniformLocation, i1);
+	}
+}
+
+void QtScriptProgramState::setUniformWith2f(const cocos2d::backend::UniformLocation& uniformLocation, float f1, float f2)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith2f(uniformLocation, f1, f2);
+	}
+}
+
+void QtScriptProgramState::setUniformWith2i(const cocos2d::backend::UniformLocation& uniformLocation, int i1, int i2)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith2i(uniformLocation, i1, i2);
+	}
+}
+
+void QtScriptProgramState::setUniformWith3f(const cocos2d::backend::UniformLocation& uniformLocation, float f1, float f2, float f3)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith3f(uniformLocation, f1, f2, f3);
+	}
+}
+
+void QtScriptProgramState::setUniformWith3i(const cocos2d::backend::UniformLocation& uniformLocation, int i1, int i2, int i3)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith3i(uniformLocation, i1, i2, i3);
+	}
+}
+
+void QtScriptProgramState::setUniformWith4f(const cocos2d::backend::UniformLocation& uniformLocation, float f1, float f2, float f3, float f4)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith4f(uniformLocation, f1, f2, f3, f4);
+	}
+}
+
+void QtScriptProgramState::setUniformWith4i(const cocos2d::backend::UniformLocation& uniformLocation, int i1, int i2, int i3, int i4)
+{
+	auto __o = this->thiz<ProgramState *>();
+	if (__o)
+	{
+		__o->setUniformWith4i(uniformLocation, i1, i2, i3, i4);
 	}
 }
 
@@ -8419,6 +8500,16 @@ void QtScriptRenderCommand::init(float globalZOrder, const cocos2d::Mat4& modelV
 	}
 }
 
+bool QtScriptRenderCommand::is2DQueue()
+{
+	auto __o = this->thiz<RenderCommand *>();
+	if (__o)
+	{
+		return __o->is2DQueue();
+	}
+	return false;
+}
+
 bool QtScriptRenderCommand::is3D()
 {
 	auto __o = this->thiz<RenderCommand *>();
@@ -8447,6 +8538,15 @@ bool QtScriptRenderCommand::isTransparent()
 		return __o->isTransparent();
 	}
 	return false;
+}
+
+void QtScriptRenderCommand::set2DQueue(bool value)
+{
+	auto __o = this->thiz<RenderCommand *>();
+	if (__o)
+	{
+		__o->set2DQueue(value);
+	}
 }
 
 void QtScriptRenderCommand::set3D(bool value)
@@ -43853,6 +43953,16 @@ bool QtScriptMesh::hasVertexAttrib(int attrib)
 	return false;
 }
 
+bool QtScriptMesh::isForceDisableDepthTest()
+{
+	auto __o = this->thiz<Mesh *>();
+	if (__o)
+	{
+		return __o->isForceDisableDepthTest();
+	}
+	return false;
+}
+
 bool QtScriptMesh::isVisible()
 {
 	auto __o = this->thiz<Mesh *>();
@@ -43878,6 +43988,15 @@ void QtScriptMesh::setForce2DQueue(bool force2D)
 	if (__o)
 	{
 		__o->setForce2DQueue(force2D);
+	}
+}
+
+void QtScriptMesh::setForceDisableDepthTest(bool is)
+{
+	auto __o = this->thiz<Mesh *>();
+	if (__o)
+	{
+		__o->setForceDisableDepthTest(is);
 	}
 }
 
@@ -44525,6 +44644,16 @@ bool QtScriptMeshVertexData::constructObject(QScriptContext *context, NativeObje
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::MeshVertexData");
 	return false;
+}
+
+size_t QtScriptMeshVertexData::getAtrSetId()
+{
+	auto __o = this->thiz<MeshVertexData *>();
+	if (__o)
+	{
+		return __o->getAtrSetId();
+	}
+	return static_cast<size_t>(0);
 }
 
 cocos2d::MeshIndexData* QtScriptMeshVertexData::getMeshIndexDataById(const QByteArray& id)
@@ -45242,6 +45371,128 @@ QScriptValue QtScriptSkybox::create(QScriptContext *context, QScriptEngine* __e)
 } // end of cocos2d
 
 namespace cocos2d {
+QtScriptSprite3DCache::QtScriptSprite3DCache(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptBaseClassPrototype<Sprite3DCache, false>(engine, className)
+{
+}
+
+QtScriptSprite3DCache::QtScriptSprite3DCache(QScriptEngine *engine)
+	: QtScriptSprite3DCache(engine, "Sprite3DCache")
+{
+}
+
+void QtScriptSprite3DCache::Register(const QScriptValue &targetNamespace)
+{
+	auto engine = targetNamespace.engine();
+	Q_ASSERT(engine);
+	QScriptValue inherit;
+	auto ctor = RegisterT<Sprite3DCache, QtScriptSprite3DCache>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+	ctor.setProperty("destroyInstance", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptSprite3DCache::destroyInstance)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("getInstance", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptSprite3DCache::getInstance)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+}
+
+void QtScriptSprite3DCache::removeAllSprite3DData()
+{
+	auto __o = this->thiz<Sprite3DCache *>();
+	if (__o)
+	{
+		__o->removeAllSprite3DData();
+	}
+}
+
+void QtScriptSprite3DCache::removeSprite3DData(const QByteArray& key)
+{
+	auto __o = this->thiz<Sprite3DCache *>();
+	if (__o)
+	{
+		__o->removeSprite3DData(key.toStdString());
+	}
+}
+
+QScriptValue QtScriptSprite3DCache::destroyInstance(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			Sprite3DCache::destroyInstance();
+			return __e->undefinedValue();
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Sprite3DCache::destroyInstance");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptSprite3DCache::getInstance(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			return __e->toScriptValue(Sprite3DCache::getInstance());
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Sprite3DCache::getInstance");
+	return __e->uncaughtException();
+}
+
+int QtScriptSprite3DCache::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptSprite3DCache::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptSprite3DCache::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	auto __e = context->engine();
+	Q_UNUSED(__e);
+	bool ok = false;
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			Q_UNUSED(out);
+			ok = true;
+			break;
+		}
+	}
+
+	if (!ok)
+	{
+		QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Sprite3DCache constructor");
+	}
+	return ok;
+}
+
+} // end of cocos2d
+
+namespace cocos2d {
 QtScriptSprite3D::QtScriptSprite3D(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptNode(engine, className)
 {
@@ -45267,9 +45518,21 @@ void QtScriptSprite3D::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3D::createAsync)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("createAsyncWithSkeleton", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptSprite3D::createAsyncWithSkeleton)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	ctor.setProperty("getAABBRecursivelyImp", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3D::getAABBRecursivelyImp)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("getOverrideTextureExtension", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptSprite3D::getOverrideTextureExtension)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("setOverrideTextureExtension", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptSprite3D::setOverrideTextureExtension)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
@@ -45439,6 +45702,26 @@ bool QtScriptSprite3D::initWithFile(const QByteArray& path)
 	return false;
 }
 
+bool QtScriptSprite3D::initWithFile(const QByteArray& path, cocos2d::Skeleton3D* skele)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->initWithFile(path.toStdString(), skele);
+	}
+	return false;
+}
+
+bool QtScriptSprite3D::isForce2Dqueue()
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->isForce2Dqueue();
+	}
+	return false;
+}
+
 bool QtScriptSprite3D::isForceDepthWrite()
 {
 	auto __o = this->thiz<Sprite3D *>();
@@ -45449,12 +45732,32 @@ bool QtScriptSprite3D::isForceDepthWrite()
 	return false;
 }
 
+bool QtScriptSprite3D::isForceDisableDepthTest()
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->isForceDisableDepthTest();
+	}
+	return false;
+}
+
 bool QtScriptSprite3D::loadFromCache(const QByteArray& path)
 {
 	auto __o = this->thiz<Sprite3D *>();
 	if (__o)
 	{
 		return __o->loadFromCache(path.toStdString());
+	}
+	return false;
+}
+
+bool QtScriptSprite3D::loadFromCache(const QByteArray& path, cocos2d::Skeleton3D* skele)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->loadFromCache(path.toStdString(), skele);
 	}
 	return false;
 }
@@ -45519,6 +45822,15 @@ void QtScriptSprite3D::setForceDepthWrite(bool value)
 	if (__o)
 	{
 		__o->setForceDepthWrite(value);
+	}
+}
+
+void QtScriptSprite3D::setForceDisableDepthTest(bool is)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		__o->setForceDisableDepthTest(is);
 	}
 }
 
@@ -45594,7 +45906,7 @@ QScriptValue QtScriptSprite3D::create(QScriptContext *context, QScriptEngine* __
 
 QScriptValue QtScriptSprite3D::createAsync(QScriptContext *context, QScriptEngine* __e)
 {
-	if (!QtScriptUtils::checkArgumentCount(context, 2, 3))
+	if (!QtScriptUtils::checkArgumentCount(context, 2, 4))
 	{
 		return __e->uncaughtException();
 	}
@@ -45619,10 +45931,48 @@ QScriptValue QtScriptSprite3D::createAsync(QScriptContext *context, QScriptEngin
 			Sprite3D::createAsync(arg0, arg1, QtCocosScriptUtils::getSprite3DCallback(arg2), nullptr);
 			return __e->undefinedValue();
 		}
+		case 4:
+		{
+			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
+			auto arg0 = tmp_0.toStdString();
+			auto tmp_1 = qscriptvalue_cast<QByteArray>(context->argument(1));
+			auto arg1 = tmp_1.toStdString();
+			auto tmp_2 = qscriptvalue_cast<QByteArray>(context->argument(2));
+			auto arg2 = tmp_2.toStdString();
+			auto arg3 = context->argument(3);
+			Sprite3D::createAsync(arg0, arg1, arg2, QtCocosScriptUtils::getSprite3DCallback(arg3), nullptr);
+			return __e->undefinedValue();
+		}
 	}
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Sprite3D::createAsync");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptSprite3D::createAsyncWithSkeleton(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 3, 3))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 3:
+		{
+			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
+			auto arg0 = tmp_0.toStdString();
+			auto tmp_1 = qscriptvalue_cast<QByteArray>(context->argument(1));
+			auto arg1 = tmp_1.toStdString();
+			auto arg2 = context->argument(2);
+			Sprite3D::createAsyncWithSkeleton(arg0, arg1, QtCocosScriptUtils::getSprite3DCallback(arg2), nullptr);
+			return __e->undefinedValue();
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Sprite3D::createAsyncWithSkeleton");
 	return __e->uncaughtException();
 }
 
@@ -45647,55 +45997,7 @@ QScriptValue QtScriptSprite3D::getAABBRecursivelyImp(QScriptContext *context, QS
 	return __e->uncaughtException();
 }
 
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptSprite3DCache::QtScriptSprite3DCache(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<Sprite3DCache, false>(engine, className)
-{
-}
-
-QtScriptSprite3DCache::QtScriptSprite3DCache(QScriptEngine *engine)
-	: QtScriptSprite3DCache(engine, "Sprite3DCache")
-{
-}
-
-void QtScriptSprite3DCache::Register(const QScriptValue &targetNamespace)
-{
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
-	QScriptValue inherit;
-	auto ctor = RegisterT<Sprite3DCache, QtScriptSprite3DCache>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("destroyInstance", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptSprite3DCache::destroyInstance)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("getInstance", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptSprite3DCache::getInstance)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-}
-
-void QtScriptSprite3DCache::removeAllSprite3DData()
-{
-	auto __o = this->thiz<Sprite3DCache *>();
-	if (__o)
-	{
-		__o->removeAllSprite3DData();
-	}
-}
-
-void QtScriptSprite3DCache::removeSprite3DData(const QByteArray& key)
-{
-	auto __o = this->thiz<Sprite3DCache *>();
-	if (__o)
-	{
-		__o->removeSprite3DData(key.toStdString());
-	}
-}
-
-QScriptValue QtScriptSprite3DCache::destroyInstance(QScriptContext *context, QScriptEngine* __e)
+QScriptValue QtScriptSprite3D::getOverrideTextureExtension(QScriptContext *context, QScriptEngine* __e)
 {
 	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
 	{
@@ -45706,67 +46008,36 @@ QScriptValue QtScriptSprite3DCache::destroyInstance(QScriptContext *context, QSc
 	{
 		case 0:
 		{
-			Sprite3DCache::destroyInstance();
+			return __e->toScriptValue(QByteArray::fromStdString(Sprite3D::getOverrideTextureExtension()));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Sprite3D::getOverrideTextureExtension");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptSprite3D::setOverrideTextureExtension(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 1:
+		{
+			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
+			auto arg0 = tmp_0.toStdString();
+			Sprite3D::setOverrideTextureExtension(arg0);
 			return __e->undefinedValue();
 		}
 	}
 
 	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3DCache::destroyInstance");
+			"cocos2d::Sprite3D::setOverrideTextureExtension");
 	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptSprite3DCache::getInstance(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			return __e->toScriptValue(Sprite3DCache::getInstance());
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3DCache::getInstance");
-	return __e->uncaughtException();
-}
-
-int QtScriptSprite3DCache::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptSprite3DCache::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptSprite3DCache::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			Q_UNUSED(out);
-			ok = true;
-			break;
-		}
-	}
-
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3DCache constructor");
-	}
-	return ok;
 }
 
 } // end of cocos2d
@@ -45855,7 +46126,7 @@ void QtScriptSprite3DMaterial::setTexture(cocos2d::Texture2D* tex, int usage)
 
 QScriptValue QtScriptSprite3DMaterial::createBuiltInMaterial(QScriptContext *context, QScriptEngine* __e)
 {
-	if (!QtScriptUtils::checkArgumentCount(context, 0, 2))
+	if (!QtScriptUtils::checkArgumentCount(context, 0, 4))
 	{
 		return __e->uncaughtException();
 	}
@@ -45873,10 +46144,20 @@ QScriptValue QtScriptSprite3DMaterial::createBuiltInMaterial(QScriptContext *con
 		}
 		case 2:
 		{
+			break;
+		}
+		case 3:
+		{
+			break;
+		}
+		case 4:
+		{
 			auto tmp_0 = qscriptvalue_cast<int>(context->argument(0));
 			auto arg0 = cocos2d::Sprite3DMaterial::MaterialType(tmp_0);
 			auto arg1 = qscriptvalue_cast<bool>(context->argument(1));
-			return __e->toScriptValue(Sprite3DMaterial::createBuiltInMaterial(arg0, arg1));
+			auto arg2 = qscriptvalue_cast<size_t>(context->argument(2));
+			auto arg3 = qscriptvalue_cast<bool>(context->argument(3));
+			return __e->toScriptValue(Sprite3DMaterial::createBuiltInMaterial(arg0, arg1, arg2, arg3));
 		}
 	}
 

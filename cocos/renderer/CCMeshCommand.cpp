@@ -51,6 +51,7 @@ MeshCommand::MeshCommand()
 {
     _type = RenderCommand::Type::MESH_COMMAND;
     _is3D = true;
+    _forceDisableDepthTest = false;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, CC_CALLBACK_1(MeshCommand::listenRendererRecreated, this));
@@ -63,13 +64,9 @@ void MeshCommand::init(float globalZOrder)
     CustomCommand::init(globalZOrder);
 }
 
-void MeshCommand::init(float globalZOrder, const Mat4 &transform)
+void MeshCommand::init(float globalZOrder, const Mat4 &transform, unsigned int flags)
 {
-    CustomCommand::init(globalZOrder);        
-    if (Camera::getVisitingCamera())
-    {
-        _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-    }
+    CustomCommand::init(globalZOrder, transform, flags);
     _mv = transform;
 }
 

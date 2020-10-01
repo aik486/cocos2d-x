@@ -52,6 +52,7 @@ class GLProgramState;
 class Node;
 class Properties;
 class RenderState;
+class Renderer;
 
 namespace backend
 {
@@ -96,9 +97,9 @@ public:
      */
     static Material* createWithProperties(Properties* materialProperties);
 
-    void draw(MeshCommand* meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
+    void draw(Renderer *renderer, MeshCommand* meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
               CustomCommand::PrimitiveType primitive, CustomCommand::IndexFormat indexFormat,
-              unsigned int indexCount, const Mat4& modelView);
+              unsigned int indexCount, const Mat4& modelView, unsigned int flags);
 
     /// returns the material name
     std::string getName() const;

@@ -118,9 +118,11 @@ bool ProgramCache::init()
     addProgram(ProgramType::CAMERA_CLEAR);
     addProgram(ProgramType::SKYBOX_3D);
     addProgram(ProgramType::SKINPOSITION_TEXTURE_3D);
+    addProgram(ProgramType::SKINPOSITION_TEXTURE_3D_ALPHA_TEST);
     addProgram(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
     addProgram(ProgramType::POSITION_NORMAL_TEXTURE_3D);
     addProgram(ProgramType::POSITION_TEXTURE_3D);
+    addProgram(ProgramType::POSITION_TEXTURE_3D_ALPHA_TEST);
     addProgram(ProgramType::POSITION_3D);
     addProgram(ProgramType::POSITION_NORMAL_3D);
     addProgram(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
@@ -195,6 +197,9 @@ void ProgramCache::addProgram(ProgramType type)
         case ProgramType::SKINPOSITION_TEXTURE_3D:
             program = backend::Device::getInstance()->newProgram(CC3D_skinPositionTexture_vert, CC3D_colorTexture_frag);
             break;
+        case ProgramType::SKINPOSITION_TEXTURE_3D_ALPHA_TEST:
+            program = backend::Device::getInstance()->newProgram(CC3D_skinPositionTexture_vert, CC3D_colorTextureAlphaTest_frag);
+            break;
         case ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D:
             {
                 std::string def = getShaderMacrosForLight();
@@ -209,6 +214,9 @@ void ProgramCache::addProgram(ProgramType type)
             break;
         case ProgramType::POSITION_TEXTURE_3D:
             program = backend::Device::getInstance()->newProgram(CC3D_positionTexture_vert, CC3D_colorTexture_frag);
+            break;
+        case ProgramType::POSITION_TEXTURE_3D_ALPHA_TEST:
+            program = backend::Device::getInstance()->newProgram(CC3D_positionTexture_vert, CC3D_colorTextureAlphaTest_frag);
             break;
         case ProgramType::POSITION_3D:
             program = backend::Device::getInstance()->newProgram(CC3D_positionTexture_vert, CC3D_color_frag);

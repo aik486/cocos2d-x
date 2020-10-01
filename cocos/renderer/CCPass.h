@@ -44,6 +44,7 @@ class Node;
 class VertexAttribBinding;
 class MeshIndexData;
 class RenderState;
+class Renderer;
 
 namespace backend
 {
@@ -67,9 +68,9 @@ public:
     /** Returns the ProgramState */
     backend::ProgramState* getProgramState() const;
 
-    void draw(MeshCommand *meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
+    void draw(Renderer *renderer, MeshCommand *meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
               MeshCommand::PrimitiveType primitive, MeshCommand::IndexFormat indexFormat,
-              unsigned int indexCount, const Mat4& modelView);
+              unsigned int indexCount, const Mat4& modelView, unsigned int flags);
 
     /**
      * Sets a vertex attribute binding for this pass.

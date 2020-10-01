@@ -193,4 +193,16 @@ MeshVertexData::~MeshVertexData()
 #endif
 }
 
+size_t MeshVertexData::getAtrSetId() const
+{
+    size_t ret = 0;
+    for(auto& a : _attribs){
+        int aId =  int(a.vertexAttrib);
+        if(aId <= int(sizeof(size_t) * 8)){
+            ret |= (1 << aId);
+        }
+    }
+    return ret;
+}
+
 NS_CC_END

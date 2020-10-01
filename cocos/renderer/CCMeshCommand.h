@@ -66,7 +66,10 @@ public:
     */
     void init(float globalZOrder);
 
-    void init(float globalZOrder, const Mat4 &transform);
+    void init(float globalZOrder, const Mat4 &transform, unsigned int flags);
+    
+    bool isForceDisableDepthTest();
+    void setForceDisableDepthTest(bool is);
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     void listenRendererRecreated(EventCustom* event);
@@ -76,7 +79,18 @@ protected:
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _rendererRecreatedListener;
 #endif
+    bool _forceDisableDepthTest;
 };
+
+inline bool MeshCommand::isForceDisableDepthTest()
+{
+    return _forceDisableDepthTest;
+}
+
+inline void MeshCommand::setForceDisableDepthTest(bool is)
+{
+    _forceDisableDepthTest = is;
+}
 
 NS_CC_END
 

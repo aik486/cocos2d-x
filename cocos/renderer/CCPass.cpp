@@ -178,22 +178,18 @@ void Pass::initUniformLocations()
     _locAmbientLigthColor = ps->getUniformLocation(s_ambientLightUniformColorName);
 }
 
-void Pass::draw(MeshCommand *meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
+void Pass::draw(Renderer*renderer, MeshCommand *meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
                 MeshCommand::PrimitiveType primitive, MeshCommand::IndexFormat indexFormat,
-                unsigned int indexCount, const Mat4& modelView)
+                unsigned int indexCount, const Mat4& modelView, unsigned int flags)
 {
-
     meshCommand->setBeforeCallback(CC_CALLBACK_0(Pass::onBeforeVisitCmd, this, meshCommand));
     meshCommand->setAfterCallback(CC_CALLBACK_0(Pass::onAfterVisitCmd, this, meshCommand));
-    meshCommand->init(globalZOrder, modelView);
+    meshCommand->init(globalZOrder, modelView, flags);
     meshCommand->setPrimitiveType(primitive);
     meshCommand->setIndexBuffer(indexBuffer, indexFormat);
     meshCommand->setVertexBuffer(vertexBuffer);
     meshCommand->setIndexDrawInfo(0, indexCount);
     meshCommand->getPipelineDescriptor().programState = _programState;
-
-
-    auto *renderer = Director::getInstance()->getRenderer();
 
     renderer->addCommand(meshCommand);
 }
@@ -202,6 +198,17 @@ void Pass::updateMVPUniform(const Mat4& modelView)
 {
     auto &matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto mvp = matrixP * modelView;
+#ifdef CC_USE_METAL
+    //Fixing OpenGL matrix for Metal
+    //NDC - Normalized Device Coordinate
+    //OpenGL defines NDC as a 2x2x2 cube with its center at (0,0,0)
+    //Metal defines NDC as a 2x2x1 cube with its center at (0,0,0.5)
+    Mat4 fixNDC(1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.5f, 0.5f,
+                0.0f, 0.0f, 0.0f, 1.0f);
+    mvp = fixNDC * mvp;
+#endif
     _programState->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
     if (_locMVMatrix)
     {

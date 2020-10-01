@@ -352,10 +352,12 @@ enum class ProgramType : size_t
     LINE_COLOR_3D,                          //lineColor3D_vert,                     lineColor3D_frag
     SKYBOX_3D,                              //CC3D_skybox_vert,                     CC3D_skybox_frag
     SKINPOSITION_TEXTURE_3D,                //CC3D_skinPositionTexture_vert,        CC3D_colorTexture_frag
+    SKINPOSITION_TEXTURE_3D_ALPHA_TEST,     //CC3D_skinPositionTexture_vert,        CC3D_colorTextureAlphaTest_frag
     SKINPOSITION_NORMAL_TEXTURE_3D,         //CC3D_skinPositionNormalTexture_vert,  CC3D_colorNormalTexture_frag
     POSITION_NORMAL_TEXTURE_3D,             //CC3D_positionNormalTexture_vert,      CC3D_colorNormalTexture_frag
     POSITION_NORMAL_3D,                     //CC3D_positionNormalTexture_vert,      CC3D_colorNormal_frag
     POSITION_TEXTURE_3D,                    //CC3D_positionTexture_vert,            CC3D_colorTexture_frag
+    POSITION_TEXTURE_3D_ALPHA_TEST,         //CC3D_positionTexture_vert,            CC3D_colorTextureAlphaTest_frag
     POSITION_3D,                            //CC3D_positionTexture_vert,            CC3D_color_frag
     POSITION_BUMPEDNORMAL_TEXTURE_3D,       //CC3D_positionNormalTexture_vert,      CC3D_colorNormalTexture_frag
     SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,   //CC3D_skinPositionNormalTexture_vert,  CC3D_colorNormalTexture_frag

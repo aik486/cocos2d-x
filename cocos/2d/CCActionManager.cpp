@@ -93,10 +93,15 @@ void ActionManager::removeActionAtIndex(ssize_t index, tHashElement *element)
 {
     Action *action = static_cast<Action*>(element->actions->arr[index]);
 
-    if (action == element->currentAction && (! element->currentActionSalvaged))
+    if (action == element->currentAction)
     {
-        element->currentAction->retain();
-        element->currentActionSalvaged = true;
+        if (!element->currentActionSalvaged)
+        {
+            element->currentAction->retain();
+            element->currentActionSalvaged = true;
+        }
+    } else {
+        action->stop();
     }
 
     ccArrayRemoveObjectAtIndex(element->actions, index, true);
@@ -220,10 +225,20 @@ void ActionManager::removeAllActionsFromTarget(Node *target)
     HASH_FIND_PTR(_targets, &target, element);
     if (element)
     {
-        if (ccArrayContainsObject(element->actions, element->currentAction) && (! element->currentActionSalvaged))
+        for (ssize_t i = 0; i < element->actions->num; ++i)
         {
-            element->currentAction->retain();
-            element->currentActionSalvaged = true;
+            Ref *action = element->actions->arr[i];
+            
+            if (element->currentAction == action)
+            {
+                if (!element->currentActionSalvaged)
+                {
+                    element->currentAction->retain();
+                    element->currentActionSalvaged = true;
+                }
+            } else {
+                static_cast<Action*>(action)->stop();
+            }
         }
 
         ccArrayRemoveAllObjects(element->actions);
@@ -465,16 +480,15 @@ void ActionManager::update(float dt)
                     // The currentAction told the node to remove it. To prevent the action from
                     // accidentally deallocating itself before finishing its step, we retained
                     // it. Now that step is done, it's safe to release it.
+                    _currentTarget->currentAction->stop();
                     _currentTarget->currentAction->release();
                 } else
                 if (_currentTarget->currentAction->isDone())
                 {
-                    _currentTarget->currentAction->stop();
-
                     Action *action = _currentTarget->currentAction;
                     // Make currentAction nil to prevent removeAction from salvaging it.
                     _currentTarget->currentAction = nullptr;
-                    removeAction(action);
+                    removeAction(action); // stop will be called inside
                 }
 
                 _currentTarget->currentAction = nullptr;

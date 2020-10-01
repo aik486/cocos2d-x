@@ -88,7 +88,7 @@ public:
     /**
      * Deep clone ProgramState
      */
-    ProgramState *clone() const;
+    virtual ProgramState *clone() const;
     
     /**
      * Get the program object.
@@ -102,6 +102,18 @@ public:
      * @param size Specifies the uniform data size.
      */
     void setUniform(const backend::UniformLocation& uniformLocation, const void* data, std::size_t size);
+    void setUniform(const std::string& uniform, const void* data, std::size_t size);
+    
+    // cocos2d_v3 style:
+    void setUniformWith1i(const backend::UniformLocation& uniformLocation, int i1);
+    void setUniformWith2i(const backend::UniformLocation& uniformLocation, int i1, int i2);
+    void setUniformWith3i(const backend::UniformLocation& uniformLocation, int i1, int i2, int i3);
+    void setUniformWith4i(const backend::UniformLocation& uniformLocation, int i1, int i2, int i3, int i4);
+    void setUniformWith1f(const backend::UniformLocation& uniformLocation, float f1);
+    void setUniformWith2f(const backend::UniformLocation& uniformLocation, float f1, float f2);
+    void setUniformWith3f(const backend::UniformLocation& uniformLocation, float f1, float f2, float f3);
+    void setUniformWith4f(const backend::UniformLocation& uniformLocation, float f1, float f2, float f3, float f4);
+    
 
     /**
      * Get uniform location in given uniform name.
@@ -253,6 +265,9 @@ public:
     void setParameterAutoBinding(const std::string &uniformName, const std::string &autoBinding);
 
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
+
+    /// make another instance of _vertexLayout shared pointed data
+    void forkVertexLayout();
 protected:
 
     ProgramState();

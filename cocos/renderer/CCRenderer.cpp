@@ -78,7 +78,7 @@ void RenderQueue::push_back(RenderCommand* command)
     }
     else
     {
-        if(command->is3D())
+        if(command->is3D() && !command->is2DQueue())
         {
             if(command->isTransparent())
             {

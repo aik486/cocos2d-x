@@ -88,7 +88,7 @@ void ExtraAction::step(float /*dt*/)
 
 bool ActionInterval::initWithDuration(float d)
 {
-    _duration = d;
+    _duration = abs(d) <= MATH_EPSILON ? MATH_EPSILON : d;
 
     _elapsed = 0;
     _firstTick = true;
@@ -122,7 +122,7 @@ void ActionInterval::step(float dt)
     if (_firstTick)
     {
         _firstTick = false;
-        _elapsed = 0;
+        _elapsed = MATH_EPSILON;
     }
     else
     {
@@ -320,6 +320,9 @@ void Sequence::startWithTarget(Node *target)
         log("Sequence::startWithTarget error: _actions[0] or _actions[1] is nullptr!");
         return;
     }
+    
+    _duration = _actions[0]->getDuration() + _actions[1]->getDuration();
+    
     if (_duration > FLT_EPSILON)
         // fix #14936 - FLT_EPSILON (instant action) / very fast duration (0.001) leads to wrong split, that leads to call instant action few times
         _split = _actions[0]->getDuration() > FLT_EPSILON ? _actions[0]->getDuration() / _duration : 0;
@@ -330,11 +333,10 @@ void Sequence::startWithTarget(Node *target)
 
 void Sequence::stop()
 {
-    // Issue #1305
-    if( _last != - 1 && _actions[_last])
-    {
-        _actions[_last]->stop();
-    }
+    if (_actions[0])
+        _actions[0]->stop();
+    if (_actions[1])
+        _actions[1]->stop();
 
     ActionInterval::stop();
 }
@@ -590,6 +592,12 @@ void RepeatForever::startWithTarget(Node* target)
     _innerAction->startWithTarget(target);
 }
 
+void RepeatForever::stop()
+{
+    _innerAction->stop();
+    ActionInterval::stop();
+}
+
 void RepeatForever::step(float dt)
 {
     _innerAction->step(dt);
@@ -779,6 +787,8 @@ void Spawn::startWithTarget(Node *target)
         log("Spawn::startWithTarget error: _one or _two is nullptr!");
         return;
     }
+    
+    _duration = MAX(_one->getDuration(), _two->getDuration());
     
     ActionInterval::startWithTarget(target);
     _one->startWithTarget(target);

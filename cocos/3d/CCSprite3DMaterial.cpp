@@ -40,6 +40,7 @@ Sprite3DMaterialCache* Sprite3DMaterialCache::_cacheInstance = nullptr;
 
 std::unordered_map<std::string, Sprite3DMaterial*> Sprite3DMaterial::_materials;
 Sprite3DMaterial* Sprite3DMaterial::_unLitMaterial = nullptr;
+Sprite3DMaterial* Sprite3DMaterial::_unLitMaterialAlphaTest = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_unLitNoTexMaterial = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_vertexLitMaterial = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_diffuseMaterial = nullptr;
@@ -47,6 +48,7 @@ Sprite3DMaterial* Sprite3DMaterial::_diffuseNoTexMaterial = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_bumpedDiffuseMaterial = nullptr;
 
 Sprite3DMaterial* Sprite3DMaterial::_unLitMaterialSkin = nullptr;
+Sprite3DMaterial* Sprite3DMaterial::_unLitMaterialSkinAlphaTest = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_vertexLitMaterialSkin = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_diffuseMaterialSkin = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_bumpedDiffuseMaterialSkin = nullptr;
@@ -74,6 +76,15 @@ void Sprite3DMaterial::createBuiltInMaterial()
     {
         _unLitMaterialSkin->_type = Sprite3DMaterial::MaterialType::UNLIT;
     }
+    
+    program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_TEXTURE_3D_ALPHA_TEST);
+    auto unLitMaterialSkinAlphaTestProgState = new (std::nothrow) backend::ProgramState(program);
+    _unLitMaterialSkinAlphaTest = new (std::nothrow) Sprite3DMaterial();
+    if (_unLitMaterialSkinAlphaTest && _unLitMaterialSkinAlphaTest->initWithProgramState(unLitMaterialSkinAlphaTestProgState))
+    {
+        _unLitMaterialSkinAlphaTest->_type = Sprite3DMaterial::MaterialType::UNLIT;
+    }
+    CC_SAFE_RELEASE_NULL(unLitMaterialSkinAlphaTestProgState);
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
     _diffuseMaterialSkinProgState = new (std::nothrow) backend::ProgramState(program);
@@ -98,6 +109,15 @@ void Sprite3DMaterial::createBuiltInMaterial()
     {
         _unLitMaterial->_type = Sprite3DMaterial::MaterialType::UNLIT;
     }
+    
+    program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D);
+    auto _unLitMaterialAlphaTestProgState = new (std::nothrow) backend::ProgramState(program);
+    _unLitMaterialAlphaTest = new (std::nothrow) Sprite3DMaterial();
+    if (_unLitMaterialAlphaTest && _unLitMaterialAlphaTest->initWithProgramState(_unLitMaterialAlphaTestProgState))
+    {
+        _unLitMaterialAlphaTest->_type = Sprite3DMaterial::MaterialType::UNLIT;
+    }
+    CC_SAFE_RELEASE_NULL(_unLitMaterialAlphaTestProgState);
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_3D);
     _unLitNoTexMaterialProgState = new (std::nothrow) backend::ProgramState(program);
@@ -135,7 +155,9 @@ void Sprite3DMaterial::createBuiltInMaterial()
 void Sprite3DMaterial::releaseBuiltInMaterial()
 {
     CC_SAFE_RELEASE_NULL(_unLitMaterial);
+    CC_SAFE_RELEASE_NULL(_unLitMaterialAlphaTest);
     CC_SAFE_RELEASE_NULL(_unLitMaterialSkin);
+    CC_SAFE_RELEASE_NULL(_unLitMaterialSkinAlphaTest);
     
     CC_SAFE_RELEASE_NULL(_unLitNoTexMaterial);
     CC_SAFE_RELEASE_NULL(_vertexLitMaterial);
@@ -191,12 +213,13 @@ Material* Sprite3DMaterial::clone() const
         auto name = _currentTechnique->getName();
         material->_currentTechnique = material->getTechniqueByName(name);
         material->_type = _type;
+        material->_vertexAtrSetId = _vertexAtrSetId;
         material->autorelease();
     }
     return material;
 }
 
-Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, bool skinned)
+Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, bool skinned, size_t atrSetId, bool alphaTest)
 {
     /////
     if (_diffuseMaterial == nullptr)
@@ -205,7 +228,11 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
     Sprite3DMaterial* material = nullptr;
     switch (type) {
         case Sprite3DMaterial::MaterialType::UNLIT:
-            material = skinned ? _unLitMaterialSkin : _unLitMaterial;
+            if (alphaTest) {
+                material = skinned ? _unLitMaterialSkinAlphaTest : _unLitMaterialAlphaTest;
+            } else {
+                material = skinned ? _unLitMaterialSkin : _unLitMaterial;
+            }
             break;
             
         case Sprite3DMaterial::MaterialType::UNLIT_NOTEX:
@@ -231,8 +258,24 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
         default:
             break;
     }
-    if (material)
-        return (Sprite3DMaterial*)material->clone();
+    if (material){
+        if(material->_vertexAtrSetId == 0)
+            material->_vertexAtrSetId = atrSetId;
+        
+        auto* ret = (Sprite3DMaterial*)material->clone();
+        if(ret->_vertexAtrSetId != atrSetId){
+            for(Technique* t : ret->getTechniques()){
+                for(Pass* p : t->getPasses()){
+                    p->getProgramState()->forkVertexLayout();
+                }
+            }
+            ret->_vertexAtrSetId = atrSetId;
+        }
+        
+        CCASSERT(ret->_vertexAtrSetId == atrSetId, "trying to reuse material created for different vertex atribute set");
+        
+        return ret;
+    }
 
     return nullptr;
 }

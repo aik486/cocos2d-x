@@ -1885,6 +1885,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE cocos2d::backend::ProgramState* clone();
+	Q_INVOKABLE void forkVertexLayout();
 	Q_INVOKABLE int getAttributeLocation(const QByteArray& name);
 	Q_INVOKABLE cocos2d::backend::Program* getProgram();
 	Q_INVOKABLE cocos2d::backend::UniformLocation getUniformLocation(const QByteArray& uniform);
@@ -1892,6 +1893,14 @@ public:
 	Q_INVOKABLE void setParameterAutoBinding(const QByteArray& uniformName, const QByteArray& autoBinding);
 	Q_INVOKABLE void setTexture(const cocos2d::backend::UniformLocation& uniformLocation, uint32_t slot, cocos2d::backend::TextureBackend* texture);
 	Q_INVOKABLE void setUniform(const cocos2d::backend::UniformLocation& arg0, const QByteArray& arg1);
+	Q_INVOKABLE void setUniformWith1f(const cocos2d::backend::UniformLocation& uniformLocation, float f1);
+	Q_INVOKABLE void setUniformWith1i(const cocos2d::backend::UniformLocation& uniformLocation, int i1);
+	Q_INVOKABLE void setUniformWith2f(const cocos2d::backend::UniformLocation& uniformLocation, float f1, float f2);
+	Q_INVOKABLE void setUniformWith2i(const cocos2d::backend::UniformLocation& uniformLocation, int i1, int i2);
+	Q_INVOKABLE void setUniformWith3f(const cocos2d::backend::UniformLocation& uniformLocation, float f1, float f2, float f3);
+	Q_INVOKABLE void setUniformWith3i(const cocos2d::backend::UniformLocation& uniformLocation, int i1, int i2, int i3);
+	Q_INVOKABLE void setUniformWith4f(const cocos2d::backend::UniformLocation& uniformLocation, float f1, float f2, float f3, float f4);
+	Q_INVOKABLE void setUniformWith4i(const cocos2d::backend::UniformLocation& uniformLocation, int i1, int i2, int i3, int i4);
 };
 
 } // end of backend
@@ -1947,6 +1956,7 @@ public:
 	explicit QtScriptRenderCommand(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_PROPERTY(bool _2DQueue READ is2DQueue WRITE set2DQueue)
 	Q_PROPERTY(bool _3D READ is3D WRITE set3D)
 	Q_PROPERTY(bool skipBatching READ isSkipBatching WRITE setSkipBatching)
 	Q_PROPERTY(bool transparent READ isTransparent WRITE setTransparent)
@@ -1956,9 +1966,11 @@ public:
 	Q_INVOKABLE cocos2d::PipelineDescriptor getPipelineDescriptor();
 	Q_INVOKABLE int getType();
 	Q_INVOKABLE void init(float globalZOrder, const cocos2d::Mat4& modelViewTransform, unsigned int flags);
+	bool is2DQueue();
 	bool is3D();
 	bool isSkipBatching();
 	bool isTransparent();
+	void set2DQueue(bool value);
 	void set3D(bool value);
 	void setSkipBatching(bool value);
 	void setTransparent(bool isTransparent);
@@ -9789,6 +9801,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_PROPERTY(cocos2d::BlendFunc blendFunc READ getBlendFunc WRITE setBlendFunc)
+	Q_PROPERTY(bool forceDisableDepthTest READ isForceDisableDepthTest WRITE setForceDisableDepthTest)
 	Q_PROPERTY(cocos2d::Material* material READ getMaterial WRITE setMaterial)
 	Q_PROPERTY(cocos2d::MeshIndexData* meshIndexData READ getMeshIndexData WRITE setMeshIndexData)
 	Q_PROPERTY(QByteArray name READ getName WRITE setName)
@@ -9816,9 +9829,11 @@ public:
 	Q_INVOKABLE cocos2d::backend::Buffer* getVertexBuffer();
 	Q_INVOKABLE int getVertexSizeInBytes();
 	Q_INVOKABLE bool hasVertexAttrib(int attrib);
+	bool isForceDisableDepthTest();
 	bool isVisible();
 	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
 	Q_INVOKABLE void setForce2DQueue(bool force2D);
+	void setForceDisableDepthTest(bool is);
 	void setMaterial(cocos2d::Material* material);
 	void setMeshIndexData(cocos2d::MeshIndexData* indexdata);
 	void setName(const QByteArray& name);
@@ -9960,6 +9975,7 @@ public:
 	explicit QtScriptMeshVertexData(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_INVOKABLE size_t getAtrSetId();
 	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexDataById(const QByteArray& id);
 	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexDataByIndex(int index);
 	Q_INVOKABLE ssize_t getMeshIndexDataCount();
@@ -10110,63 +10126,6 @@ Q_DECLARE_METATYPE(cocos2d::Skybox *)
 Q_DECLARE_METATYPE(const cocos2d::Skybox *)
 
 namespace cocos2d {
-class QtScriptSprite3D : public QtScriptNode
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptSprite3D(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptSprite3D(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_PROPERTY(cocos2d::BlendFunc blendFunc READ getBlendFunc WRITE setBlendFunc)
-	Q_PROPERTY(bool forceDepthWrite READ isForceDepthWrite WRITE setForceDepthWrite)
-	Q_PROPERTY(unsigned int lightMask READ getLightMask WRITE setLightMask)
-	Q_INVOKABLE void genMaterial();
-	Q_INVOKABLE void genMaterial(bool useLight);
-	Q_INVOKABLE cocos2d::AABB getAABB();
-	Q_INVOKABLE cocos2d::AABB getAABBRecursively();
-	Q_INVOKABLE cocos2d::AttachNode* getAttachNode(const QByteArray& boneName);
-	cocos2d::BlendFunc getBlendFunc();
-	unsigned int getLightMask();
-	Q_INVOKABLE cocos2d::Material* getMaterial(int meshIndex);
-	Q_INVOKABLE cocos2d::Mesh* getMesh();
-	Q_INVOKABLE cocos2d::Mesh* getMeshByIndex(int index);
-	Q_INVOKABLE cocos2d::Mesh* getMeshByName(const QByteArray& name);
-	Q_INVOKABLE ssize_t getMeshCount();
-	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexData(const QByteArray& indexId);
-	Q_INVOKABLE cocos2d::Skeleton3D* getSkeleton();
-	Q_INVOKABLE bool initWithFile(const QByteArray& path);
-	bool isForceDepthWrite();
-	Q_INVOKABLE bool loadFromCache(const QByteArray& path);
-	Q_INVOKABLE void removeAllAttachNode();
-	Q_INVOKABLE void removeAttachNode(const QByteArray& boneName);
-	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
-	Q_INVOKABLE void setCullFace(int side);
-	Q_INVOKABLE void setCullFaceEnabled(bool enable);
-	Q_INVOKABLE void setForce2DQueue(bool force2D);
-	void setForceDepthWrite(bool value);
-	void setLightMask(unsigned int mask);
-	Q_INVOKABLE void setMaterial(cocos2d::Material* material);
-	Q_INVOKABLE void setMaterial(cocos2d::Material* material, int meshIndex);
-	Q_INVOKABLE void setTexture(cocos2d::Texture2D* texture);
-	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue createAsync(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue getAABBRecursivelyImp(QScriptContext *context, QScriptEngine* engine);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::Sprite3D *)
-Q_DECLARE_METATYPE(const cocos2d::Sprite3D *)
-
-namespace cocos2d {
 class QtScriptSprite3DCache final : public QtScriptBaseClassPrototype<Sprite3DCache, false>
 {
 	Q_OBJECT
@@ -10193,6 +10152,72 @@ public:
 Q_DECLARE_METATYPE(cocos2d::Sprite3DCache)
 Q_DECLARE_METATYPE(cocos2d::Sprite3DCache *)
 Q_DECLARE_METATYPE(const cocos2d::Sprite3DCache *)
+
+namespace cocos2d {
+class QtScriptSprite3D : public QtScriptNode
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptSprite3D(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptSprite3D(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_PROPERTY(cocos2d::BlendFunc blendFunc READ getBlendFunc WRITE setBlendFunc)
+	Q_PROPERTY(bool forceDepthWrite READ isForceDepthWrite WRITE setForceDepthWrite)
+	Q_PROPERTY(bool forceDisableDepthTest READ isForceDisableDepthTest WRITE setForceDisableDepthTest)
+	Q_PROPERTY(unsigned int lightMask READ getLightMask WRITE setLightMask)
+	Q_INVOKABLE void genMaterial();
+	Q_INVOKABLE void genMaterial(bool useLight);
+	Q_INVOKABLE cocos2d::AABB getAABB();
+	Q_INVOKABLE cocos2d::AABB getAABBRecursively();
+	Q_INVOKABLE cocos2d::AttachNode* getAttachNode(const QByteArray& boneName);
+	cocos2d::BlendFunc getBlendFunc();
+	unsigned int getLightMask();
+	Q_INVOKABLE cocos2d::Material* getMaterial(int meshIndex);
+	Q_INVOKABLE cocos2d::Mesh* getMesh();
+	Q_INVOKABLE cocos2d::Mesh* getMeshByIndex(int index);
+	Q_INVOKABLE cocos2d::Mesh* getMeshByName(const QByteArray& name);
+	Q_INVOKABLE ssize_t getMeshCount();
+	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexData(const QByteArray& indexId);
+	Q_INVOKABLE cocos2d::Skeleton3D* getSkeleton();
+	Q_INVOKABLE bool initWithFile(const QByteArray& path);
+	Q_INVOKABLE bool initWithFile(const QByteArray& path, cocos2d::Skeleton3D* skele);
+	Q_INVOKABLE bool isForce2Dqueue();
+	bool isForceDepthWrite();
+	bool isForceDisableDepthTest();
+	Q_INVOKABLE bool loadFromCache(const QByteArray& path);
+	Q_INVOKABLE bool loadFromCache(const QByteArray& path, cocos2d::Skeleton3D* skele);
+	Q_INVOKABLE void removeAllAttachNode();
+	Q_INVOKABLE void removeAttachNode(const QByteArray& boneName);
+	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
+	Q_INVOKABLE void setCullFace(int side);
+	Q_INVOKABLE void setCullFaceEnabled(bool enable);
+	Q_INVOKABLE void setForce2DQueue(bool force2D);
+	void setForceDepthWrite(bool value);
+	void setForceDisableDepthTest(bool is);
+	void setLightMask(unsigned int mask);
+	Q_INVOKABLE void setMaterial(cocos2d::Material* material);
+	Q_INVOKABLE void setMaterial(cocos2d::Material* material, int meshIndex);
+	Q_INVOKABLE void setTexture(cocos2d::Texture2D* texture);
+	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue createAsync(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue createAsyncWithSkeleton(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue getAABBRecursivelyImp(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue getOverrideTextureExtension(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue setOverrideTextureExtension(QScriptContext *context, QScriptEngine* engine);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::Sprite3D *)
+Q_DECLARE_METATYPE(const cocos2d::Sprite3D *)
 
 namespace cocos2d {
 class QtScriptSprite3DMaterial : public QtScriptMaterial
