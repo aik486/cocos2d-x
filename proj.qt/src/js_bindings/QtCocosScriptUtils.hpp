@@ -77,10 +77,26 @@ public:
 		const QScriptValue &scriptValue, ValueMapIntKey &out);
 
 	static Value qVariantToCcValue(const QVariant &v);
+
 	static ValueMap qVariantMapToCcValueMap(const QVariantMap &vmap);
+
 	static ValueMap qVariantHashToCcValueMap(const QVariantHash &vhash);
+
+	static ValueMapIntKey qVariantMapToCcValueMapIntKey(
+		const QVariantMap &vmap);
+
+	static ValueMapIntKey qVariantHashToCcValueMapIntKey(
+		const QVariantHash &vhash);
+
 	static ValueVector qVariantListToCcValueVector(const QVariantList &vlist);
+
 	static ValueVector qStringListToCcValueVector(const QStringList &list);
+
+	static ValueMapIntKey qVariantListToCcValueMapIntKey(
+		const QVariantList &vlist);
+
+	static ValueMapIntKey qStringListToCcValueMapIntKey(
+		const QStringList &list);
 
 private:
 	template <typename ELEMENT_T>

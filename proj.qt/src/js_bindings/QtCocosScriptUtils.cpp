@@ -133,11 +133,26 @@ QScriptValue QtCocosScriptUtils::ccValueMapToQScriptValue(
 QScriptValue QtCocosScriptUtils::ccValueMapIntKeyToQScriptValue(
 	QScriptEngine *engine, const ValueMapIntKey &map)
 {
-	auto result = engine->newArray();
-
-	for (auto &it : map)
+	QScriptValue result;
+	bool isArray = map.empty() || map.begin()->first >= 0;
+	if (isArray)
 	{
-		result.setProperty(it.first, ccValueToQScriptValue(engine, it.second));
+		result = engine->newArray();
+
+		for (auto &it : map)
+		{
+			result.setProperty(
+				quint32(it.first), ccValueToQScriptValue(engine, it.second));
+		}
+	} else
+	{
+		result = engine->newObject();
+
+		for (auto &it : map)
+		{
+			result.setProperty(QString::number(it.first),
+				ccValueToQScriptValue(engine, it.second));
+		}
 	}
 
 	return result;
@@ -275,6 +290,56 @@ void QtCocosScriptUtils::qScriptValueToCcValueMap(
 	}
 }
 
+void QtCocosScriptUtils::qScriptValueToCcValueMapIntKey(
+	const QScriptValue &scriptValue, ValueMapIntKey &out)
+{
+	out.clear();
+	if (scriptValue.isVariant())
+	{
+		auto v = scriptValue.toVariant();
+		switch (v.type())
+		{
+			case QVariant::Map:
+				out = qVariantMapToCcValueMapIntKey(v.toMap());
+				break;
+
+			case QVariant::Hash:
+				out = qVariantHashToCcValueMapIntKey(v.toHash());
+				break;
+
+			case QVariant::List:
+				out = qVariantListToCcValueMapIntKey(v.toList());
+				break;
+
+			case QVariant::StringList:
+				out = qStringListToCcValueMapIntKey(v.toStringList());
+				break;
+
+			default:
+				break;
+		}
+	} else if (scriptValue.isObject() && !scriptValue.isQObject() &&
+		!scriptValue.isFunction() && !scriptValue.isQMetaObject())
+	{
+		QScriptValueIterator it(scriptValue);
+		while (it.hasNext())
+		{
+			it.next();
+			if (it.flags() & QScriptValue::SkipInEnumeration)
+			{
+				continue;
+			}
+
+			bool ok;
+			int i = it.name().toInt(&ok);
+			if (ok)
+			{
+				qScriptValueToCcValue(it.value(), out[i]);
+			}
+		}
+	}
+}
+
 Value QtCocosScriptUtils::qVariantToCcValue(const QVariant &v)
 {
 	Value result;
@@ -375,6 +440,40 @@ ValueMap QtCocosScriptUtils::qVariantHashToCcValueMap(const QVariantHash &vhash)
 	return result;
 }
 
+ValueMapIntKey QtCocosScriptUtils::qVariantMapToCcValueMapIntKey(
+	const QVariantMap &vmap)
+{
+	ValueMapIntKey result;
+	for (auto it = vmap.cbegin(); it != vmap.cend(); ++it)
+	{
+		bool ok;
+		int i = it.key().toInt(&ok);
+		if (ok)
+		{
+			result[i] = qVariantToCcValue(it.value());
+		}
+	}
+
+	return result;
+}
+
+ValueMapIntKey QtCocosScriptUtils::qVariantHashToCcValueMapIntKey(
+	const QVariantHash &vhash)
+{
+	ValueMapIntKey result;
+	for (auto it = vhash.cbegin(); it != vhash.cend(); ++it)
+	{
+		bool ok;
+		int i = it.key().toInt(&ok);
+		if (ok)
+		{
+			result[i] = qVariantToCcValue(it.value());
+		}
+	}
+
+	return result;
+}
+
 ValueVector QtCocosScriptUtils::qVariantListToCcValueVector(
 	const QVariantList &vlist)
 {
@@ -398,6 +497,39 @@ ValueVector QtCocosScriptUtils::qStringListToCcValueVector(
 	for (auto &s : list)
 	{
 		result.emplace_back(s.toStdString());
+	}
+
+	return result;
+}
+
+ValueMapIntKey QtCocosScriptUtils::qVariantListToCcValueMapIntKey(
+	const QVariantList &vlist)
+{
+	ValueMapIntKey result;
+	for (int i = 0, count = vlist.count(); i < count; i++)
+	{
+		auto &v = vlist.at(i);
+		if (!v.isValid() || v.isNull() ||
+			(v.type() == QVariant::String && v.toString().isEmpty()))
+		{
+			continue;
+		}
+		result[i] = qVariantToCcValue(v);
+	}
+
+	return result;
+}
+
+ValueMapIntKey QtCocosScriptUtils::qStringListToCcValueMapIntKey(
+	const QStringList &list)
+{
+	ValueMapIntKey result;
+	for (int i = 0, count = list.count(); i < count; i++)
+	{
+		auto &str = list.at(i);
+		if (str.isEmpty())
+			continue;
+		result[i] = str.toStdString();
 	}
 
 	return result;
