@@ -49,14 +49,6 @@ NS_CC_BEGIN
 
 // Layer
 Layer::Layer()
-: _touchEnabled(false)
-, _accelerometerEnabled(false)
-, _keyboardEnabled(false)
-, _touchListener(nullptr)
-, _keyboardListener(nullptr)
-, _accelerationListener(nullptr)
-, _touchMode(Touch::DispatchMode::ALL_AT_ONCE)
-, _swallowsTouches(true)
 {
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));

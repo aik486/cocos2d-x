@@ -171,12 +171,6 @@ protected:
     int executeScriptTouchHandler(EventTouch::EventCode eventType, Touch* touch, Event* event);
     int executeScriptTouchesHandler(EventTouch::EventCode eventType, const std::vector<Touch*>& touches, Event* event);
 
-    bool _touchEnabled;
-    bool _accelerometerEnabled;
-    bool _keyboardEnabled;
-    EventListener* _touchListener;
-    EventListenerKeyboard* _keyboardListener;
-    EventListenerAcceleration* _accelerationListener;
 
     Touch::DispatchMode _touchMode;
     bool _swallowsTouches;
