@@ -208,7 +208,10 @@ void QtCocosScriptUtils::qScriptValueToCcValueVector(
 	out.clear();
 	if (scriptValue.isArray())
 	{
-		quint32 length = scriptValue.property(QSTRKEY(length)).toUInt32();
+		quint32 length =
+			QtCocosScriptEngine::instance()
+				->propertyById(QtCocosScriptEngine::LENGTH, scriptValue)
+				.toUInt32();
 		out.reserve(length);
 		for (quint32 i = 0; i < length; i++)
 		{

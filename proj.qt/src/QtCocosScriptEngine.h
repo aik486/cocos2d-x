@@ -23,6 +23,7 @@ public:
 		CC,
 		OBJECT,
 		PROTOTYPE,
+		LENGTH,
 
 		STRING_ID_COUNT
 	};

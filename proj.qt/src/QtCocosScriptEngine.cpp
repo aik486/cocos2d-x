@@ -26,6 +26,7 @@ static QtCocosScriptEngine *_instance = nullptr;
 const char *QtCocosScriptEngine::STRING_IDS[] = {
 	"cc",
 	"Object",
+	"length",
 	"prototype",
 };
 
@@ -49,7 +50,9 @@ static QScriptValue stringVecToScriptValue(
 static void stringVecFromScriptValue(
 	const QScriptValue &value, std::vector<std::string> &cont)
 {
-	quint32 length = value.property(QLatin1String(CSTRKEY(length))).toUInt32();
+	quint32 length = QtCocosScriptEngine::instance()
+						 ->propertyById(QtCocosScriptEngine::LENGTH, value)
+						 .toUInt32();
 	cont.reserve(length);
 	for (quint32 i = 0; i < length; ++i)
 	{
