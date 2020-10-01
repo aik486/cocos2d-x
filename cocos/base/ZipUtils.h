@@ -273,7 +273,7 @@ typedef struct unz_file_info_s unz_file_info;
         *
         * @since v2.0.5
         */
-        unsigned char *getFileData(const std::string &fileName, ssize_t *size);
+        Data getFileData(const std::string &fileName) const;
         
         /**
         * Get resource file data from a zip file.

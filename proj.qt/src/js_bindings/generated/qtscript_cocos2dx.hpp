@@ -4067,32 +4067,6 @@ Q_DECLARE_METATYPE(cocos2d::Data *)
 Q_DECLARE_METATYPE(const cocos2d::Data *)
 
 namespace cocos2d {
-class QtScriptResizableBuffer : public QtScriptBaseClassPrototype<ResizableBuffer *, false>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptResizableBuffer(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptResizableBuffer(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_INVOKABLE void* buffer();
-	Q_INVOKABLE void resize(size_t size);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::QtScriptResizableBuffer::StorageType)
-Q_DECLARE_METATYPE(cocos2d::ResizableBuffer *)
-Q_DECLARE_METATYPE(const cocos2d::ResizableBuffer *)
-
-namespace cocos2d {
 class QtScriptFileUtils : public QtScriptBaseClassPrototype<FileUtils *, false>
 {
 	Q_OBJECT
@@ -4124,7 +4098,7 @@ public:
 	Q_INVOKABLE cocos2d::Data getDataFromFile(const QByteArray& filename);
 	Q_INVOKABLE void getDataFromFile(const QByteArray& filename, QScriptValue callback);
 	QByteArray getDefaultResourceRootPath();
-	Q_INVOKABLE QByteArray getFileDataFromZip(const QByteArray& zipFilePath, const QByteArray& filename, long* size);
+	Q_INVOKABLE cocos2d::Data getFileDataFromZip(const QByteArray& zipFilePath, const QByteArray& filename);
 	Q_INVOKABLE QByteArray getFileExtension(const QByteArray& filePath);
 	Q_INVOKABLE long getFileSize(const QByteArray& filepath);
 	Q_INVOKABLE void getFileSize(const QByteArray& filepath, QScriptValue callback);
@@ -4189,7 +4163,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool fileExists(const QByteArray& fileName);
-	Q_INVOKABLE QByteArray getFileData(const QByteArray& fileName, long* size);
+	Q_INVOKABLE cocos2d::Data getFileData(const QByteArray& fileName);
 	Q_INVOKABLE QByteArray getFirstFilename();
 	Q_INVOKABLE QByteArray getNextFilename();
 	Q_INVOKABLE std::vector<std::string> listFiles(const QByteArray& pathname);

@@ -18681,63 +18681,6 @@ bool QtScriptData::constructObject(QScriptContext *context, NativeObjectType &ou
 } // end of cocos2d
 
 namespace cocos2d {
-QtScriptResizableBuffer::QtScriptResizableBuffer(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<ResizableBuffer *, false>(engine, className)
-{
-}
-
-QtScriptResizableBuffer::QtScriptResizableBuffer(QScriptEngine *engine)
-	: QtScriptResizableBuffer(engine, "ResizableBuffer")
-{
-}
-
-void QtScriptResizableBuffer::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<ResizableBuffer, QtScriptResizableBuffer>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-int QtScriptResizableBuffer::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptResizableBuffer::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptResizableBuffer::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	Q_UNUSED(out);
-	QtScriptUtils::noPublicConstructorException(context,
-		"cocos2d::ResizableBuffer");
-	return false;
-}
-
-void* QtScriptResizableBuffer::buffer()
-{
-	auto __o = this->thiz<ResizableBuffer *>();
-	if (__o)
-	{
-		return __o->buffer();
-	}
-	return nullptr;
-}
-
-void QtScriptResizableBuffer::resize(size_t size)
-{
-	auto __o = this->thiz<ResizableBuffer *>();
-	if (__o)
-	{
-		__o->resize(size);
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
 QtScriptFileUtils::QtScriptFileUtils(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptBaseClassPrototype<FileUtils *, false>(engine, className)
 {
@@ -18899,14 +18842,14 @@ QByteArray QtScriptFileUtils::getDefaultResourceRootPath()
 	return QByteArray();
 }
 
-QByteArray QtScriptFileUtils::getFileDataFromZip(const QByteArray& zipFilePath, const QByteArray& filename, long* size)
+cocos2d::Data QtScriptFileUtils::getFileDataFromZip(const QByteArray& zipFilePath, const QByteArray& filename)
 {
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		return QByteArray(reinterpret_cast<const char*>(__o->getFileDataFromZip(zipFilePath.toStdString(), filename.toStdString(), size)));
+		return __o->getFileDataFromZip(zipFilePath.toStdString(), filename.toStdString());
 	}
-	return QByteArray();
+	return cocos2d::Data();
 }
 
 QByteArray QtScriptFileUtils::getFileExtension(const QByteArray& filePath)
@@ -19403,14 +19346,14 @@ bool QtScriptZipFile::fileExists(const QByteArray& fileName)
 	return false;
 }
 
-QByteArray QtScriptZipFile::getFileData(const QByteArray& fileName, long* size)
+cocos2d::Data QtScriptZipFile::getFileData(const QByteArray& fileName)
 {
 	auto __o = this->thiz<ZipFile *>();
 	if (__o)
 	{
-		return QByteArray(reinterpret_cast<const char*>(__o->getFileData(fileName.toStdString(), size)));
+		return __o->getFileData(fileName.toStdString());
 	}
-	return QByteArray();
+	return cocos2d::Data();
 }
 
 QByteArray QtScriptZipFile::getFirstFilename()
@@ -47149,7 +47092,6 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptRenderer::Register(targetNamespace);
 	cocos2d::QtScriptRepeat::Register(targetNamespace);
 	cocos2d::QtScriptRepeatForever::Register(targetNamespace);
-	cocos2d::QtScriptResizableBuffer::Register(targetNamespace);
 	cocos2d::QtScriptResizeBy::Register(targetNamespace);
 	cocos2d::QtScriptResizeTo::Register(targetNamespace);
 	cocos2d::QtScriptReuseGrid::Register(targetNamespace);

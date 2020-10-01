@@ -644,11 +644,11 @@ std::vector<std::string> ZipFile::listFiles(const std::string &pathname) const
     return std::vector<std::string>(fileSet.begin(), fileSet.end());
 }
 
-unsigned char *ZipFile::getFileData(const std::string &fileName, ssize_t *size)
+Data ZipFile::getFileData(const std::string &fileName) const
 {
     unsigned char * buffer = nullptr;
-    if (size)
-        *size = 0;
+    ssize_t size = 0;
+    Data result;
 
     do
     {
@@ -670,14 +670,16 @@ unsigned char *ZipFile::getFileData(const std::string &fileName, ssize_t *size)
         int CC_UNUSED nSize = unzReadCurrentFile(_data->zipFile, buffer, static_cast<unsigned int>(fileInfo.uncompressed_size));
         CCASSERT(nSize == 0 || nSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
         
-        if (size)
-        {
-            *size = fileInfo.uncompressed_size;
-        }
+  
+        size = fileInfo.uncompressed_size;
+   
         unzCloseCurrentFile(_data->zipFile);
     } while (0);
     
-    return buffer;
+    if (size > 0) {
+        result.fastSet(buffer, size);
+    }
+    return result;
 }
 
 bool ZipFile::getFileData(const std::string &fileName, ResizableBuffer* buffer)
