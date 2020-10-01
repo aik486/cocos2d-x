@@ -67,6 +67,8 @@ Application::Platform Application::getTargetPlatform()
             return Platform::OS_WINDOWS;
         case CC_PLATFORM_LINUX:
             return Platform::OS_LINUX;
+        case CC_PLATFORM_EMSCRIPTEN:
+            return Platform::OS_EMSCRIPTEN;
     }
     
     return Platform(-1);
