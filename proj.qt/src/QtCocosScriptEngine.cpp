@@ -140,6 +140,7 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	QtCocosScriptUtils::registerVector<MenuItem *>(engine);
 	QtCocosScriptUtils::registerVector<Pass *>(engine);
 	QtCocosScriptUtils::registerVector<ParticleSystem *>(engine);
+	QtCocosScriptUtils::registerCcValueConvesions(engine);
 
 	QtScriptInstallQtCore(engine);
 	QtScriptRef::Register(mRootObject);

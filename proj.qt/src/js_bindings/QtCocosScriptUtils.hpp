@@ -23,6 +23,10 @@ Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::FiniteTimeAction *>)
 Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::MenuItem *>)
 Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::Pass *>)
 Q_DECLARE_METATYPE(cocos2d::Vector<cocos2d::ParticleSystem *>)
+Q_DECLARE_METATYPE(cocos2d::Value)
+Q_DECLARE_METATYPE(cocos2d::ValueVector)
+Q_DECLARE_METATYPE(cocos2d::ValueMap)
+Q_DECLARE_METATYPE(cocos2d::ValueMapIntKey)
 
 namespace cocos2d
 {
@@ -45,6 +49,38 @@ public:
 		qScriptRegisterMetaType<Vector<ELEMENT_T>>(
 			engine, vecToScriptValue<ELEMENT_T>, vecFromScriptValue<ELEMENT_T>);
 	}
+
+	static void registerCcValueConvesions(QScriptEngine *engine);
+
+	static QScriptValue ccValueToQScriptValue(
+		QScriptEngine *engine, const Value &value);
+
+	static QScriptValue ccValueVectorToQScriptValue(
+		QScriptEngine *engine, const ValueVector &vec);
+
+	static QScriptValue ccValueMapToQScriptValue(
+		QScriptEngine *engine, const ValueMap &map);
+
+	static QScriptValue ccValueMapIntKeyToQScriptValue(
+		QScriptEngine *engine, const ValueMapIntKey &map);
+
+	static void qScriptValueToCcValue(
+		const QScriptValue &scriptValue, Value &out);
+
+	static void qScriptValueToCcValueVector(
+		const QScriptValue &scriptValue, ValueVector &out);
+
+	static void qScriptValueToCcValueMap(
+		const QScriptValue &scriptValue, ValueMap &out);
+
+	static void qScriptValueToCcValueMapIntKey(
+		const QScriptValue &scriptValue, ValueMapIntKey &out);
+
+	static Value qVariantToCcValue(const QVariant &v);
+	static ValueMap qVariantMapToCcValueMap(const QVariantMap &vmap);
+	static ValueMap qVariantHashToCcValueMap(const QVariantHash &vhash);
+	static ValueVector qVariantListToCcValueVector(const QVariantList &vlist);
+	static ValueVector qStringListToCcValueVector(const QStringList &list);
 
 private:
 	template <typename ELEMENT_T>
