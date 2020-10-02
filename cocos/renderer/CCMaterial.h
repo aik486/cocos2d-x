@@ -134,6 +134,7 @@ public:
     /** returns a clone (deep-copy) of the material */
     virtual Material* clone() const;
 
+     inline const RenderState::StateBlock &getStateBlock() const { return _renderState._state; }
     inline RenderState::StateBlock &getStateBlock() { return _renderState._state; }
 
     inline void setStateBlock(const RenderState::StateBlock &state) { 

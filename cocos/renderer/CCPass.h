@@ -92,6 +92,7 @@ public:
     void setName(const std::string &name) { _name = name; }
     const std::string &getName() const { return _name; }
 
+    inline const RenderState::StateBlock &getStateBlock() const { return _renderState._state; }
     inline RenderState::StateBlock &getStateBlock() { return _renderState._state; }
 
     /**

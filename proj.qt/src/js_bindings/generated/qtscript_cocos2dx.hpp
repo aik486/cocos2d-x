@@ -1956,14 +1956,14 @@ public:
 	explicit QtScriptRenderCommand(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(bool _2DQueue READ is2DQueue WRITE set2DQueue)
-	Q_PROPERTY(bool _3D READ is3D WRITE set3D)
+	Q_PROPERTY(bool is2DQueue READ is2DQueue WRITE set2DQueue)
+	Q_PROPERTY(bool is3D READ is3D WRITE set3D)
 	Q_PROPERTY(bool skipBatching READ isSkipBatching WRITE setSkipBatching)
 	Q_PROPERTY(bool transparent READ isTransparent WRITE setTransparent)
 	Q_INVOKABLE float getDepth();
 	Q_INVOKABLE float getGlobalOrder();
 	Q_INVOKABLE cocos2d::Mat4 getMV();
-	Q_INVOKABLE cocos2d::PipelineDescriptor getPipelineDescriptor();
+	Q_INVOKABLE cocos2d::PipelineDescriptor* getPipelineDescriptor();
 	Q_INVOKABLE int getType();
 	Q_INVOKABLE void init(float globalZOrder, const cocos2d::Mat4& modelViewTransform, unsigned int flags);
 	bool is2DQueue();
@@ -2723,6 +2723,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE float getDuration();
+	Q_INVOKABLE bool initWithFile(const QByteArray& filename, const QByteArray& animationName);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
@@ -3240,7 +3241,6 @@ public:
 	explicit QtScriptRotateTo(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE void calculateAngles(float& startAngle, float& diffAngle, float dstAngle);
 	Q_INVOKABLE cocos2d::RotateTo* clone();
 	Q_INVOKABLE bool initWithDuration(float duration, const cocos2d::Vec3& dstAngle3D);
 	Q_INVOKABLE bool initWithDuration(float duration, float dstAngleX, float dstAngleY);
@@ -4194,6 +4194,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	static QScriptValue lerp(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue smoothed(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
@@ -7045,11 +7046,11 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_PROPERTY(float lineHeight READ getLineHeight WRITE setLineHeight)
-	Q_INVOKABLE void addLetterDefinition(char32_t utf32Char, const cocos2d::FontLetterDefinition& letterDefinition);
+	Q_INVOKABLE void addLetterDefinition(QString utf32Char, const cocos2d::FontLetterDefinition& letterDefinition);
 	Q_INVOKABLE void addTexture(cocos2d::Texture2D* texture, int slot);
 	Q_INVOKABLE const cocos2d::Font* getFont();
 	Q_INVOKABLE QByteArray getFontName();
-	Q_INVOKABLE bool getLetterDefinitionForChar(char32_t utf32Char, cocos2d::FontLetterDefinition& letterDefinition);
+	Q_INVOKABLE bool getLetterDefinitionForChar(QString utf32Char, cocos2d::FontLetterDefinition* letterDefinition);
 	float getLineHeight();
 	Q_INVOKABLE cocos2d::Texture2D* getTexture(int slot);
 	Q_INVOKABLE bool prepareLetterDefinitions(const QString& utf16String);
@@ -7699,6 +7700,8 @@ public:
 	Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
 	Q_INVOKABLE void alignItemsHorizontally();
 	Q_INVOKABLE void alignItemsHorizontallyWithPadding(float padding);
+	Q_INVOKABLE void alignItemsInColumnsWithArray(const cocos2d::ValueVector& rows);
+	Q_INVOKABLE void alignItemsInRowsWithArray(const cocos2d::ValueVector& columns);
 	Q_INVOKABLE void alignItemsVertically();
 	Q_INVOKABLE void alignItemsVerticallyWithPadding(float padding);
 	Q_INVOKABLE bool initWithArray(const cocos2d::Vector<cocos2d::MenuItem *>& arrayOfItems);
@@ -9178,7 +9181,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE QByteArray getName();
-	Q_INVOKABLE cocos2d::RenderState::StateBlock getStateBlock();
+	Q_INVOKABLE cocos2d::RenderState::StateBlock* getStateBlock();
 };
 
 } // end of cocos2d
@@ -9208,7 +9211,7 @@ public:
 	Q_INVOKABLE cocos2d::Pass* getPassByIndex(ssize_t index);
 	Q_INVOKABLE ssize_t getPassCount();
 	Q_INVOKABLE cocos2d::Vector<cocos2d::Pass *> getPasses();
-	Q_INVOKABLE cocos2d::RenderState::StateBlock getStateBlock();
+	Q_INVOKABLE cocos2d::RenderState::StateBlock* getStateBlock();
 	Q_INVOKABLE void setMaterial(cocos2d::Material* material);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithProgramState(QScriptContext *context, QScriptEngine* engine);
@@ -9444,6 +9447,42 @@ Q_DECLARE_METATYPE(cocos2d::TextureCache *)
 Q_DECLARE_METATYPE(const cocos2d::TextureCache *)
 
 namespace cocos2d {
+class QtScriptTextPixelsInfo final : public QtScriptBaseClassPrototype<TextPixelsInfo, false>
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptTextPixelsInfo(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptTextPixelsInfo(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_PROPERTY(int height READ _public_field_get_height WRITE _public_field_set_height)
+	int _public_field_get_height() const;
+	void _public_field_set_height(int value);
+	Q_PROPERTY(cocos2d::Data pixels READ _public_field_get_pixels WRITE _public_field_set_pixels)
+	cocos2d::Data _public_field_get_pixels() const;
+	void _public_field_set_pixels(const cocos2d::Data& value);
+	Q_PROPERTY(bool premultiplied READ _public_field_get_premultiplied WRITE _public_field_set_premultiplied)
+	bool _public_field_get_premultiplied() const;
+	void _public_field_set_premultiplied(const bool& value);
+	Q_PROPERTY(int width READ _public_field_get_width WRITE _public_field_set_width)
+	int _public_field_get_width() const;
+	void _public_field_set_width(int value);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::TextPixelsInfo)
+Q_DECLARE_METATYPE(cocos2d::TextPixelsInfo *)
+Q_DECLARE_METATYPE(const cocos2d::TextPixelsInfo *)
+
+namespace cocos2d {
 class QtScriptDeviceUtils : public QtScriptBaseClassPrototype<Device *, false>
 {
 	Q_OBJECT
@@ -9461,8 +9500,6 @@ public:
 
 	static QScriptValue getDPI(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getTextureDataForText(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue setAccelerometerEnabled(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue setAccelerometerInterval(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue setKeepScreenOn(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue vibrate(QScriptContext *context, QScriptEngine* engine);
 };
@@ -9580,7 +9617,6 @@ public:
 	Q_INVOKABLE void appendChild(cocos2d::Sprite* sprite);
 	Q_INVOKABLE ssize_t atlasIndexForChild(cocos2d::Sprite* sprite, int z);
 	cocos2d::BlendFunc getBlendFunc();
-	Q_INVOKABLE std::vector<cocos2d::Sprite *> getDescendants();
 	cocos2d::Texture2D* getTexture();
 	cocos2d::TextureAtlas* getTextureAtlas();
 	Q_INVOKABLE ssize_t highestAtlasIndexInChild(cocos2d::Sprite* sprite);

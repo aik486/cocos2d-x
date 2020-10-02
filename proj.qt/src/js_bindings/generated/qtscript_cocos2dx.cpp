@@ -8177,7 +8177,7 @@ void QtScriptProgramState::setCallbackUniform(const cocos2d::backend::UniformLoc
 	auto __o = this->thiz<ProgramState *>();
 	if (__o)
 	{
-		__o->setCallbackUniform(arg0, !arg1.isFunction() ? std::function<void (cocos2d::backend::ProgramState *, const cocos2d::backend::UniformLocation &)>() : [=](cocos2d::backend::ProgramState* larg0, const cocos2d::backend::UniformLocation& larg1) mutable -> void
+		__o->setCallbackUniform(arg0, !arg1.isFunction() ? cocos2d::backend::ProgramState::UniformCallback() : [=](cocos2d::backend::ProgramState* larg0, const cocos2d::backend::UniformLocation& larg1) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -8471,14 +8471,14 @@ cocos2d::Mat4 QtScriptRenderCommand::getMV()
 	return cocos2d::Mat4();
 }
 
-cocos2d::PipelineDescriptor QtScriptRenderCommand::getPipelineDescriptor()
+cocos2d::PipelineDescriptor* QtScriptRenderCommand::getPipelineDescriptor()
 {
 	auto __o = this->thiz<RenderCommand *>();
 	if (__o)
 	{
-		return __o->getPipelineDescriptor();
+		return &__o->getPipelineDescriptor();
 	}
-	return cocos2d::PipelineDescriptor();
+	return nullptr;
 }
 
 int QtScriptRenderCommand::getType()
@@ -8769,7 +8769,7 @@ void QtScriptCustomCommand::setAfterCallback(QScriptValue after)
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		__o->setAfterCallback(!after.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		__o->setAfterCallback(!after.isFunction() ? cocos2d::CustomCommand::CallBackFunc() : [=]() mutable -> void
 {
 	QScriptValueList arguments;
 	after.call(QScriptValue(), arguments);
@@ -8783,7 +8783,7 @@ void QtScriptCustomCommand::setBeforeCallback(QScriptValue before)
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		__o->setBeforeCallback(!before.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		__o->setBeforeCallback(!before.isFunction() ? cocos2d::CustomCommand::CallBackFunc() : [=]() mutable -> void
 {
 	QScriptValueList arguments;
 	before.call(QScriptValue(), arguments);
@@ -12856,6 +12856,16 @@ float QtScriptAnimation3D::getDuration()
 	return static_cast<float>(0);
 }
 
+bool QtScriptAnimation3D::initWithFile(const QByteArray& filename, const QByteArray& animationName)
+{
+	auto __o = this->thiz<Animation3D *>();
+	if (__o)
+	{
+		return __o->initWithFile(filename.toStdString(), animationName.toStdString());
+	}
+	return false;
+}
+
 QScriptValue QtScriptAnimation3D::create(QScriptContext *context, QScriptEngine* __e)
 {
 	if (!QtScriptUtils::checkArgumentCount(context, 1, 2))
@@ -15332,15 +15342,6 @@ bool QtScriptRotateTo::constructObject(QScriptContext *context, NativeObjectType
 	QtScriptUtils::noPublicConstructorException(context,
 		"cocos2d::RotateTo");
 	return false;
-}
-
-void QtScriptRotateTo::calculateAngles(float& startAngle, float& diffAngle, float dstAngle)
-{
-	auto __o = this->thiz<RotateTo *>();
-	if (__o)
-	{
-		__o->calculateAngles(startAngle, diffAngle, dstAngle);
-	}
 }
 
 cocos2d::RotateTo* QtScriptRotateTo::clone()
@@ -17858,7 +17859,7 @@ bool QtScriptActionFloat::initWithDuration(float duration, float from, float to,
 	auto __o = this->thiz<ActionFloat *>();
 	if (__o)
 	{
-		return __o->initWithDuration(duration, from, to, !callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable -> void
+		return __o->initWithDuration(duration, from, to, !callback.isFunction() ? cocos2d::ActionFloat::ActionFloatCallback() : [=](float larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -17893,7 +17894,7 @@ QScriptValue QtScriptActionFloat::create(QScriptContext *context, QScriptEngine*
 			auto arg1 = qscriptvalue_cast<float>(context->argument(1));
 			auto arg2 = qscriptvalue_cast<float>(context->argument(2));
 			auto tmp_3 = context->argument(3);
-			auto arg3 = !tmp_3.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable -> void
+			auto arg3 = !tmp_3.isFunction() ? cocos2d::ActionFloat::ActionFloatCallback() : [=](float larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -19486,6 +19487,10 @@ void QtScriptMathUtil::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptMathUtil::lerp)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("smoothed", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptMathUtil::smoothed)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 int QtScriptMathUtil::constructorArgumentCountMin() const
@@ -19531,6 +19536,39 @@ QScriptValue QtScriptMathUtil::lerp(QScriptContext *context, QScriptEngine* __e)
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::MathUtil::lerp");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptMathUtil::smoothed(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 4, 5))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 4:
+		{
+			auto arg0 = qscriptvalue_cast<float>(context->argument(0));
+			auto arg1 = qscriptvalue_cast<float>(context->argument(1));
+			auto arg2 = qscriptvalue_cast<float>(context->argument(2));
+			auto arg3 = qscriptvalue_cast<float>(context->argument(3));
+			return __e->toScriptValue(MathUtil::smoothed(arg0, arg1, arg2, arg3));
+		}
+		case 5:
+		{
+			auto arg0 = qscriptvalue_cast<float>(context->argument(0));
+			auto arg1 = qscriptvalue_cast<float>(context->argument(1));
+			auto arg2 = qscriptvalue_cast<float>(context->argument(2));
+			auto arg3 = qscriptvalue_cast<float>(context->argument(3));
+			auto arg4 = qscriptvalue_cast<float>(context->argument(4));
+			return __e->toScriptValue(MathUtil::smoothed(arg0, arg1, arg2, arg3, arg4));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::MathUtil::smoothed");
 	return __e->uncaughtException();
 }
 
@@ -29562,12 +29600,12 @@ void QtScriptFontAtlas::Register(const QScriptValue &targetNamespace)
 	Q_ASSERT(ctor.isFunction());
 }
 
-void QtScriptFontAtlas::addLetterDefinition(char32_t utf32Char, const cocos2d::FontLetterDefinition& letterDefinition)
+void QtScriptFontAtlas::addLetterDefinition(QString utf32Char, const cocos2d::FontLetterDefinition& letterDefinition)
 {
 	auto __o = this->thiz<FontAtlas *>();
 	if (__o)
 	{
-		__o->addLetterDefinition(utf32Char, letterDefinition);
+		__o->addLetterDefinition(utf32Char.toStdU32String().c_str()[0], letterDefinition);
 	}
 }
 
@@ -29600,12 +29638,12 @@ QByteArray QtScriptFontAtlas::getFontName()
 	return QByteArray();
 }
 
-bool QtScriptFontAtlas::getLetterDefinitionForChar(char32_t utf32Char, cocos2d::FontLetterDefinition& letterDefinition)
+bool QtScriptFontAtlas::getLetterDefinitionForChar(QString utf32Char, cocos2d::FontLetterDefinition* letterDefinition)
 {
 	auto __o = this->thiz<FontAtlas *>();
 	if (__o)
 	{
-		return __o->getLetterDefinitionForChar(utf32Char, letterDefinition);
+		return __o->getLetterDefinitionForChar(utf32Char.toStdU32String().c_str()[0], *letterDefinition);
 	}
 	return false;
 }
@@ -32254,7 +32292,7 @@ bool QtScriptMenuItem::initWithCallback(QScriptValue callback)
 	auto __o = this->thiz<MenuItem *>();
 	if (__o)
 	{
-		return __o->initWithCallback(!callback.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithCallback(!callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32300,7 +32338,7 @@ void QtScriptMenuItem::setCallback(QScriptValue callback)
 	auto __o = this->thiz<MenuItem *>();
 	if (__o)
 	{
-		__o->setCallback(!callback.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+		__o->setCallback(!callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32334,7 +32372,7 @@ QScriptValue QtScriptMenuItem::create(QScriptContext *context, QScriptEngine* __
 		case 1:
 		{
 			auto tmp_0 = context->argument(0);
-			auto arg0 = !tmp_0.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg0 = !tmp_0.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32429,7 +32467,7 @@ bool QtScriptMenuItemLabel::initWithLabel(cocos2d::Node* label, QScriptValue cal
 	auto __o = this->thiz<MenuItemLabel *>();
 	if (__o)
 	{
-		return __o->initWithLabel(label, !callback.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithLabel(label, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32484,7 +32522,7 @@ QScriptValue QtScriptMenuItemLabel::create(QScriptContext *context, QScriptEngin
 		{
 			auto arg0 = qscriptvalue_cast<cocos2d::Node*>(context->argument(0));
 			auto tmp_1 = context->argument(1);
-			auto arg1 = !tmp_1.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg1 = !tmp_1.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32549,7 +32587,7 @@ bool QtScriptMenuItemAtlasFont::initWithString(const QByteArray& value, const QB
 	auto __o = this->thiz<MenuItemAtlasFont *>();
 	if (__o)
 	{
-		return __o->initWithString(value.toStdString(), charMapFile.toStdString(), itemWidth, itemHeight, startCharMap, !callback.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithString(value.toStdString(), charMapFile.toStdString(), itemWidth, itemHeight, startCharMap, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32589,7 +32627,7 @@ QScriptValue QtScriptMenuItemAtlasFont::create(QScriptContext *context, QScriptE
 			auto arg3 = qscriptvalue_cast<int>(context->argument(3));
 			auto arg4 = qscriptvalue_cast<char>(context->argument(4));
 			auto tmp_5 = context->argument(5);
-			auto arg5 = !tmp_5.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg5 = !tmp_5.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32690,7 +32728,7 @@ bool QtScriptMenuItemFont::initWithString(const QByteArray& value, QScriptValue 
 	auto __o = this->thiz<MenuItemFont *>();
 	if (__o)
 	{
-		return __o->initWithString(value.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithString(value.toStdString(), !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32742,7 +32780,7 @@ QScriptValue QtScriptMenuItemFont::create(QScriptContext *context, QScriptEngine
 			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
 			auto arg0 = tmp_0.toStdString();
 			auto tmp_1 = context->argument(1);
-			auto arg1 = !tmp_1.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg1 = !tmp_1.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32922,7 +32960,7 @@ bool QtScriptMenuItemSprite::initWithNormalSprite(cocos2d::Node* normalSprite, c
 	auto __o = this->thiz<MenuItemSprite *>();
 	if (__o)
 	{
-		return __o->initWithNormalSprite(normalSprite, selectedSprite, disabledSprite, !callback.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithNormalSprite(normalSprite, selectedSprite, disabledSprite, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -32987,7 +33025,7 @@ QScriptValue QtScriptMenuItemSprite::create(QScriptContext *context, QScriptEngi
 			auto arg1 = qscriptvalue_cast<cocos2d::Node*>(context->argument(1));
 			auto arg2 = qscriptvalue_cast<cocos2d::Node*>(context->argument(2));
 			auto tmp_3 = context->argument(3);
-			auto arg3 = !tmp_3.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg3 = !tmp_3.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -33052,7 +33090,7 @@ bool QtScriptMenuItemImage::initWithNormalImage(const QByteArray& normalImage, c
 	auto __o = this->thiz<MenuItemImage *>();
 	if (__o)
 	{
-		return __o->initWithNormalImage(normalImage.toStdString(), selectedImage.toStdString(), disabledImage.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithNormalImage(normalImage.toStdString(), selectedImage.toStdString(), disabledImage.toStdString(), !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -33133,7 +33171,7 @@ QScriptValue QtScriptMenuItemImage::create(QScriptContext *context, QScriptEngin
 			auto tmp_2 = qscriptvalue_cast<QByteArray>(context->argument(2));
 			auto arg2 = tmp_2.toStdString();
 			auto tmp_3 = context->argument(3);
-			auto arg3 = !tmp_3.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg3 = !tmp_3.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -33300,7 +33338,7 @@ QScriptValue QtScriptMenuItemToggle::createWithCallback(QScriptContext *context,
 		case 2:
 		{
 			auto tmp_0 = context->argument(0);
-			auto arg0 = !tmp_0.isFunction() ? std::function<void (cocos2d::Ref *)>() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg0 = !tmp_0.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -33383,6 +33421,24 @@ void QtScriptMenu::alignItemsHorizontallyWithPadding(float padding)
 	if (__o)
 	{
 		__o->alignItemsHorizontallyWithPadding(padding);
+	}
+}
+
+void QtScriptMenu::alignItemsInColumnsWithArray(const cocos2d::ValueVector& rows)
+{
+	auto __o = this->thiz<Menu *>();
+	if (__o)
+	{
+		__o->alignItemsInColumnsWithArray(rows);
+	}
+}
+
+void QtScriptMenu::alignItemsInRowsWithArray(const cocos2d::ValueVector& columns)
+{
+	auto __o = this->thiz<Menu *>();
+	if (__o)
+	{
+		__o->alignItemsInRowsWithArray(columns);
 	}
 }
 
@@ -37720,7 +37776,7 @@ void QtScriptRenderTexture::newImage(QScriptValue callback)
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		__o->newImage(!callback.isFunction() ? std::function<void (cocos2d::Image *)>() : [=](cocos2d::Image* larg0) mutable -> void
+		__o->newImage(!callback.isFunction() ? cocos2d::RenderTexture::ImageCallback() : [=](cocos2d::Image* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -37735,7 +37791,7 @@ void QtScriptRenderTexture::newImage(QScriptValue callback, bool flipImage)
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		__o->newImage(!callback.isFunction() ? std::function<void (cocos2d::Image *)>() : [=](cocos2d::Image* larg0) mutable -> void
+		__o->newImage(!callback.isFunction() ? cocos2d::RenderTexture::ImageCallback() : [=](cocos2d::Image* larg0) mutable -> void
 {
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
@@ -40711,14 +40767,14 @@ QByteArray QtScriptRenderState::getName()
 	return QByteArray();
 }
 
-cocos2d::RenderState::StateBlock QtScriptRenderState::getStateBlock()
+cocos2d::RenderState::StateBlock* QtScriptRenderState::getStateBlock()
 {
 	auto __o = this->thiz<RenderState *>();
 	if (__o)
 	{
-		return __o->getStateBlock();
+		return &__o->getStateBlock();
 	}
-	return cocos2d::RenderState::StateBlock();
+	return nullptr;
 }
 
 } // end of cocos2d
@@ -40828,14 +40884,14 @@ cocos2d::Vector<cocos2d::Pass *> QtScriptTechnique::getPasses()
 	return cocos2d::Vector<cocos2d::Pass *>();
 }
 
-cocos2d::RenderState::StateBlock QtScriptTechnique::getStateBlock()
+cocos2d::RenderState::StateBlock* QtScriptTechnique::getStateBlock()
 {
 	auto __o = this->thiz<Technique *>();
 	if (__o)
 	{
-		return __o->getStateBlock();
+		return &__o->getStateBlock();
 	}
-	return cocos2d::RenderState::StateBlock();
+	return nullptr;
 }
 
 void QtScriptTechnique::setMaterial(cocos2d::Material* material)
@@ -42197,6 +42253,125 @@ bool QtScriptTextureCache::constructObject(QScriptContext *context, NativeObject
 } // end of cocos2d
 
 namespace cocos2d {
+QtScriptTextPixelsInfo::QtScriptTextPixelsInfo(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptBaseClassPrototype<TextPixelsInfo, false>(engine, className)
+{
+}
+
+QtScriptTextPixelsInfo::QtScriptTextPixelsInfo(QScriptEngine *engine)
+	: QtScriptTextPixelsInfo(engine, "TextPixelsInfo")
+{
+}
+
+void QtScriptTextPixelsInfo::Register(const QScriptValue &targetNamespace)
+{
+	QScriptValue inherit;
+	auto ctor = RegisterT<TextPixelsInfo, QtScriptTextPixelsInfo>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+}
+
+int QtScriptTextPixelsInfo::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptTextPixelsInfo::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptTextPixelsInfo::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	if (context->argumentCount() == 0)
+	{
+		Q_UNUSED(out);
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::TextPixelsInfo constructor");
+	return false;
+}
+
+int QtScriptTextPixelsInfo::_public_field_get_height() const
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		return object->height;
+	}
+	return static_cast<int>(0);
+}
+
+void QtScriptTextPixelsInfo::_public_field_set_height(int value)
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		object->height = value;
+	}
+}
+
+cocos2d::Data QtScriptTextPixelsInfo::_public_field_get_pixels() const
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		return object->pixels;
+	}
+	return cocos2d::Data();
+}
+
+void QtScriptTextPixelsInfo::_public_field_set_pixels(const cocos2d::Data& value)
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		object->pixels = value;
+	}
+}
+
+bool QtScriptTextPixelsInfo::_public_field_get_premultiplied() const
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		return object->premultiplied;
+	}
+	return false;
+}
+
+void QtScriptTextPixelsInfo::_public_field_set_premultiplied(const bool& value)
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		object->premultiplied = value;
+	}
+}
+
+int QtScriptTextPixelsInfo::_public_field_get_width() const
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		return object->width;
+	}
+	return static_cast<int>(0);
+}
+
+void QtScriptTextPixelsInfo::_public_field_set_width(int value)
+{
+	auto object = thiz<TextPixelsInfo *>();
+	if (object)
+	{
+		object->width = value;
+	}
+}
+
+} // end of cocos2d
+
+namespace cocos2d {
 QtScriptDeviceUtils::QtScriptDeviceUtils(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptBaseClassPrototype<Device *, false>(engine, className)
 {
@@ -42221,14 +42396,6 @@ void QtScriptDeviceUtils::Register(const QScriptValue &targetNamespace)
 	ctor.setProperty("getTextureDataForText", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptDeviceUtils::getTextureDataForText)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("setAccelerometerEnabled", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptDeviceUtils::setAccelerometerEnabled)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("setAccelerometerInterval", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptDeviceUtils::setAccelerometerInterval)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	ctor.setProperty("setKeepScreenOn", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
@@ -42280,14 +42447,14 @@ QScriptValue QtScriptDeviceUtils::getDPI(QScriptContext *context, QScriptEngine*
 
 QScriptValue QtScriptDeviceUtils::getTextureDataForText(QScriptContext *context, QScriptEngine* __e)
 {
-	if (!QtScriptUtils::checkArgumentCount(context, 6, 6))
+	if (!QtScriptUtils::checkArgumentCount(context, 5, 5))
 	{
 		return __e->uncaughtException();
 	}
 
 	switch (context->argumentCount())
 	{
-		case 6:
+		case 5:
 		{
 			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
 			auto arg0 = tmp_0.data();
@@ -42296,57 +42463,12 @@ QScriptValue QtScriptDeviceUtils::getTextureDataForText(QScriptContext *context,
 			auto arg2 = cocos2d::Device::TextAlign(tmp_2);
 			auto arg3 = qscriptvalue_cast<int>(context->argument(3));
 			auto arg4 = qscriptvalue_cast<int>(context->argument(4));
-			auto arg5 = qscriptvalue_cast<bool>(context->argument(5));
-			return __e->toScriptValue(Device::getTextureDataForText(arg0, arg1, arg2, arg3, arg4, arg5));
+			return __e->toScriptValue(Device::getTextureDataForText(arg0, arg1, arg2, arg3, arg4));
 		}
 	}
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Device::getTextureDataForText");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptDeviceUtils::setAccelerometerEnabled(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<bool>(context->argument(0));
-			Device::setAccelerometerEnabled(arg0);
-			return __e->undefinedValue();
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Device::setAccelerometerEnabled");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptDeviceUtils::setAccelerometerInterval(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<float>(context->argument(0));
-			Device::setAccelerometerInterval(arg0);
-			return __e->undefinedValue();
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Device::setAccelerometerInterval");
 	return __e->uncaughtException();
 }
 
@@ -42791,16 +42913,6 @@ cocos2d::BlendFunc QtScriptSpriteBatchNode::getBlendFunc()
 		return __o->getBlendFunc();
 	}
 	return cocos2d::BlendFunc();
-}
-
-std::vector<cocos2d::Sprite *> QtScriptSpriteBatchNode::getDescendants()
-{
-	auto __o = this->thiz<SpriteBatchNode *>();
-	if (__o)
-	{
-		return __o->getDescendants();
-	}
-	return std::vector<cocos2d::Sprite *>();
 }
 
 cocos2d::Texture2D* QtScriptSpriteBatchNode::getTexture()
@@ -44026,7 +44138,7 @@ void QtScriptMesh::setVisible(bool visible)
 
 QScriptValue QtScriptMesh::create(QScriptContext *context, QScriptEngine* __e)
 {
-	if (!QtScriptUtils::checkArgumentCount(context, 2, 4))
+	if (!QtScriptUtils::checkArgumentCount(context, 2, 3))
 	{
 		return __e->uncaughtException();
 	}
@@ -44047,14 +44159,6 @@ QScriptValue QtScriptMesh::create(QScriptContext *context, QScriptEngine* __e)
 			auto arg1 = qscriptvalue_cast<cocos2d::MeshIndexData*>(context->argument(1));
 			auto arg2 = qscriptvalue_cast<cocos2d::MeshSkin*>(context->argument(2));
 			return __e->toScriptValue(Mesh::create(arg0, arg1, arg2));
-		}
-		case 4:
-		{
-			auto arg0 = qscriptvalue_cast<std::vector<float>>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<std::vector<float>>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<std::vector<float>>(context->argument(2));
-			auto arg3 = qscriptvalue_cast<std::vector<unsigned short>>(context->argument(3));
-			return __e->toScriptValue(Mesh::create(arg0, arg1, arg2, arg3));
 		}
 	}
 
@@ -47134,6 +47238,7 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptTargetedAction::Register(targetNamespace);
 	cocos2d::QtScriptTechnique::Register(targetNamespace);
 	cocos2d::QtScriptTex2F::Register(targetNamespace);
+	cocos2d::QtScriptTextPixelsInfo::Register(targetNamespace);
 	cocos2d::QtScriptTexture2D::Register(targetNamespace);
 	cocos2d::QtScriptTextureAtlas::Register(targetNamespace);
 	cocos2d::QtScriptTextureCache::Register(targetNamespace);

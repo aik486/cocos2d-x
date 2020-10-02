@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "base/ccMacros.h"
 #include "base/CCData.h"
 
+#include "math/CCGeometry.h"
+
 NS_CC_BEGIN
 
 struct FontDefinition;
@@ -39,6 +41,13 @@ struct FontDefinition;
  * @addtogroup platform
  * @{
  */
+
+struct CC_DLL TextPixelsInfo {
+    Data pixels;
+    int width = 0;
+    int height = 0;
+    bool premultiplied = false;
+};
 
 /**
  * @class Device
@@ -97,6 +106,16 @@ public:
      * Gets texture data for text.
      */
     static Data getTextureDataForText(const char * text, const FontDefinition& textDefinition, TextAlign align, int &width, int &height, bool& hasPremultipliedAlpha);
+    
+
+    
+    static inline TextPixelsInfo getTextureDataForText(const char* text, const FontDefinition& textDefinition, TextAlign align, int width, int height) {
+        TextPixelsInfo result;
+        result.width = width;
+        result.height = height;
+        result.pixels = getTextureDataForText(text, textDefinition, align, result.width, result.height, result.premultiplied);
+        return result;
+    }
 
 private:
     CC_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);

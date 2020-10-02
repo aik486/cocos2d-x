@@ -827,8 +827,8 @@ public:
      *
      * @return the array the node's children.
      */
-    virtual Vector<Node*>& getChildren() { return _children; }
     virtual const Vector<Node*>& getChildren() const { return _children; }
+    virtual Vector<Node*>& getChildren() { return _children; }
     
     Node *getChildAt(int index) const;
     
