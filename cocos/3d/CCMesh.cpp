@@ -335,7 +335,7 @@ void Mesh::setMaterial(Material* material)
                     auto& attributes = program->getActiveAttributes();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
-                    CCASSERT(attributes.size() <= attributeCount, "missing attribute data");
+                    CCASSERT(ssize_t(attributes.size()) <= attributeCount, "missing attribute data");
                 }
 #endif
                 //TODO

@@ -480,7 +480,7 @@ void SpriteBatchNode::increaseAtlasCapacity()
 
 void SpriteBatchNode::reserveCapacity(ssize_t newCapacity)
 {
-    if (newCapacity <= _textureAtlas->getCapacity())
+    if (newCapacity <= ssize_t(_textureAtlas->getCapacity()))
         return;
 
     if (! _textureAtlas->resizeCapacity(newCapacity))
@@ -726,7 +726,7 @@ void SpriteBatchNode::insertQuadFromSprite(Sprite *sprite, ssize_t index)
     CCASSERT( dynamic_cast<Sprite*>(sprite), "CCSpriteBatchNode only supports Sprites as children");
 
     // make needed room
-    while(index >= _textureAtlas->getCapacity() || _textureAtlas->getCapacity() == _textureAtlas->getTotalQuads())
+    while(index >= ssize_t(_textureAtlas->getCapacity()) || _textureAtlas->getCapacity() == _textureAtlas->getTotalQuads())
     {
         this->increaseAtlasCapacity();
     }
@@ -751,7 +751,7 @@ void SpriteBatchNode::updateQuadFromSprite(Sprite *sprite, ssize_t index)
     CCASSERT(dynamic_cast<Sprite*>(sprite) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
     
     // make needed room
-    while (index >= _textureAtlas->getCapacity() || _textureAtlas->getCapacity() == _textureAtlas->getTotalQuads())
+    while (index >= ssize_t(_textureAtlas->getCapacity()) || _textureAtlas->getCapacity() == _textureAtlas->getTotalQuads())
     {
         this->increaseAtlasCapacity();
     }
@@ -780,7 +780,7 @@ SpriteBatchNode * SpriteBatchNode::addSpriteWithoutQuad(Sprite*child, int z, int
     auto it = _descendants.begin();
     for (auto itEnd = _descendants.end(); it != itEnd; ++it)
     {
-        if((*it)->getAtlasIndex() >= z)
+        if(z < 0 || (*it)->getAtlasIndex() >= static_cast<unsigned int>(z))
             break;
     }
 

@@ -140,6 +140,7 @@ void ProgramGL::computeLocations()
 
     ///a_position
     auto location = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION);
+    
     _builtinAttributeLocation[Attribute::POSITION] = location;
 
     ///a_color
@@ -263,8 +264,8 @@ void ProgramGL::computeUniformInfos()
             }
         }
         uniform.location = glGetUniformLocation(_program, uniformName);
-        uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
-        uniform.bufferOffset = (uniform.size == 0) ? 0 : _totalBufferSize;
+        uniform.size = unsigned(UtilsGL::getGLDataTypeSize(uniform.type));
+        uniform.bufferOffset = unsigned((uniform.size == 0) ? 0 : _totalBufferSize);
         _activeUniformInfos[uniformName] = uniform;
         _totalBufferSize += uniform.size * uniform.count;
         _maxLocation = _maxLocation <= uniform.location ? (uniform.location + 1) : _maxLocation;
@@ -332,7 +333,10 @@ int ProgramGL::getOriginalLocation(int location) const
 
 const UniformInfo& ProgramGL::getActiveUniformInfo(ShaderStage stage, int location) const
 {
-    return std::move(UniformInfo{});
+    CC_UNUSED_PARAM(stage);
+    CC_UNUSED_PARAM(location);
+    static const UniformInfo dummy;
+    return dummy;
 }
 
 const std::unordered_map<std::string, UniformInfo>& ProgramGL::getAllActiveUniformInfo(ShaderStage stage) const

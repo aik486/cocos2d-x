@@ -244,7 +244,7 @@ void FontAtlas::conversionU32TOGB2312(const std::u32string& u32Text, std::unorde
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
         std::u16string u16Text;
         cocos2d::StringUtils::UTF32ToUTF16(u32Text, u16Text);
-        WideCharToMultiByte(936, NULL, (LPCWCH)u16Text.c_str(), strLen, (LPSTR)gb2312Text, gb2312StrSize, NULL, NULL);
+        WideCharToMultiByte(936, NULL, (LPCWCH)u16Text.c_str(), int(strLen), (LPSTR)gb2312Text, int(gb2312StrSize), NULL, NULL);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
         conversionEncodingJNI((char*)u32Text.c_str(), gb2312StrSize, "UTF-32LE", gb2312Text, "GB2312");
 #elif defined(QT_COCOS)

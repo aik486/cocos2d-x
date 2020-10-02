@@ -277,8 +277,8 @@ void Renderer::processRenderCommand(RenderCommand* command)
             _queuedIndexCount += cmd->getIndexCount();
             _queuedVertexCount += cmd->getVertexCount();
 #endif
-            _queuedTotalVertexCount += cmd->getVertexCount();
-            _queuedTotalIndexCount += cmd->getIndexCount();
+            _queuedTotalVertexCount += unsigned(cmd->getVertexCount());
+            _queuedTotalIndexCount += unsigned(cmd->getIndexCount());
 
         }
             break;
@@ -545,8 +545,8 @@ void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int 
         _indices[_filledIndex + i] = vertexBufferOffset + _filledVertex + indices[i];
     }
     
-    _filledVertex += vertexCount;
-    _filledIndex += indexCount;
+    _filledVertex += unsigned(vertexCount);
+    _filledIndex += unsigned(indexCount);
 }
 
 void Renderer::drawBatchedTriangles()
@@ -585,7 +585,7 @@ void Renderer::drawBatchedTriangles()
         if (batchable && (prevMaterialID == currentMaterialID || firstCommand))
         {
             CC_ASSERT((firstCommand || _triBatchesToDraw[batchesTotal].cmd->getMaterialID() == cmd->getMaterialID()) && "argh... error in logic");
-            _triBatchesToDraw[batchesTotal].indicesToDraw += cmd->getIndexCount();
+            _triBatchesToDraw[batchesTotal].indicesToDraw += unsigned(cmd->getIndexCount());
             _triBatchesToDraw[batchesTotal].cmd = cmd;
         }
         else
@@ -671,14 +671,14 @@ void Renderer::drawCustomCommand(RenderCommand *command)
                                      cmd->getIndexFormat(),
                                      cmd->getIndexDrawCount(),
                                      cmd->getIndexDrawOffset());
-        _drawnVertices += cmd->getIndexDrawCount();
+        _drawnVertices += unsigned(cmd->getIndexDrawCount());
     }
     else
     {
         _commandBuffer->drawArrays(cmd->getPrimitiveType(),
                                    cmd->getVertexDrawStart(),
                                    cmd->getVertexDrawCount());
-        _drawnVertices += cmd->getVertexDrawCount();
+        _drawnVertices += unsigned(cmd->getVertexDrawCount());
     }
     _drawnBatches++;
     _commandBuffer->endRenderPass();

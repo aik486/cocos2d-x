@@ -11,3 +11,7 @@ msvc {
 } else {
     PRE_TARGETDEPS += $$COCOS2DX_LIB/libcocos2dx.a
 }
+
+msvc {
+    QMAKE_LFLAGS += /ignore:4099 /ignore:4098
+}

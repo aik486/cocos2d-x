@@ -33,8 +33,8 @@ THE SOFTWARE.
 #define _USE_MATH_DEFINES
 #endif
 
-#include "base/CCConsole.h"
 #include "platform/CCStdC.h"
+#include "base/CCConsole.h"
 
 #ifndef CCASSERT
 #if COCOS2D_DEBUG > 0

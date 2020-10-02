@@ -183,3 +183,4 @@ temp/
 *.zip
 **/simulator/
 *.user
+proj.qt/bin-*

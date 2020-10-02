@@ -124,14 +124,14 @@ void NavMeshDebugDraw::begin(duDebugDrawPrimitives prim, float size /*= 1.0f*/)
     _currentPrimitive = new (std::nothrow) Primitive;
     _currentPrimitive->type = getPrimitiveType(prim);
     _currentPrimitive->depthMask = _currentDepthMask;
-    _currentPrimitive->start = _vertices.size();
+    _currentPrimitive->start = uint16_t(_vertices.size());
     _currentPrimitive->size = size;
 }
 
 void NavMeshDebugDraw::end()
 {
     if (!_currentPrimitive) return;
-    _currentPrimitive->end = _vertices.size();
+    _currentPrimitive->end = uint16_t(_vertices.size());
     _primitiveList.push_back(_currentPrimitive);
     _currentPrimitive = nullptr;
 }

@@ -32,6 +32,8 @@ THE SOFTWARE.
 #define CC_USE_QT_OPENGL
 #endif
 
+#include "platform/CCStdC.h"
+
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
@@ -235,9 +237,9 @@ inline void glGetAttachedShaders(GLuint program, GLsizei maxcount, GLsizei *coun
 	CC_QT_OPENGL_FUNCTIONS->glGetAttachedShaders(program, maxcount, count, shaders);
 }
 
-inline void glGetAttribLocation(GLuint program, const char *name)
+inline GLint glGetAttribLocation(GLuint program, const char *name)
 {
-	CC_QT_OPENGL_FUNCTIONS->glGetAttribLocation(program, name);
+	return CC_QT_OPENGL_FUNCTIONS->glGetAttribLocation(program, name);
 }
 
 inline void glGetBufferParameteriv(GLenum target, GLenum pname, GLint *params)

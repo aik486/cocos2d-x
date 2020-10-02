@@ -96,7 +96,7 @@ namespace {
     // Free functions to log
     //
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && !defined(QT_COCOS))
     void SendLogToWindow(const char *log)
     {
         static const int CCLOG_STRING_TAG = 1;
@@ -185,7 +185,9 @@ void log(const char * format, ...)
         pos += MAX_LOG_LENGTH;
 
     } while (pos < len);
+#ifndef QT_COCOS
     SendLogToWindow(buf);
+#endif
     fflush(stdout);
 #else
     // Linux, Mac, iOS, etc
@@ -271,7 +273,7 @@ ssize_t Console::Utility::sendToConsole(int fd, const void* buffer, size_t lengt
     for (size_t i = 0; i < length; ) {
         size_t len = length - i;
         if (SEND_BUFSIZ < len) len = SEND_BUFSIZ;
-        retLen += send(fd, buf + i, len, flags);
+        retLen += send(fd, buf + i, int(len), flags);
         i += len;
     }
     return retLen;
@@ -293,7 +295,7 @@ ssize_t Console::Utility::mydprintf(int sock, const char *format, ...)
 void Console::Utility::sendPrompt(int fd)
 {
     const char* prompt = _prompt.c_str();
-    send(fd, prompt, strlen(prompt), 0);
+    send(fd, prompt, int(strlen(prompt)), 0);
 }
 
 void Console::Utility::setPrompt(const std::string &prompt)
@@ -562,7 +564,7 @@ bool Console::listenOnTCP(int port)
             }
         }
 
-        if (bind(listenfd, res->ai_addr, res->ai_addrlen) == 0)
+        if (bind(listenfd, res->ai_addr, int(res->ai_addrlen)) == 0)
             break;          /* success */
 
 /* bind error, close and try next one */

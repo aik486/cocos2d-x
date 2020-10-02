@@ -36,7 +36,9 @@ THE SOFTWARE.
 //
 // all cocos2d include files
 //
+#include "platform/CCStdC.h"
 #include "base/ccConfig.h"
+#include "base/ccMacros.h"
 
 // base
 #include "base/CCAsyncTaskPool.h"
@@ -59,8 +61,6 @@ THE SOFTWARE.
 #include "base/CCVector.h"
 #include "base/ZipUtils.h"
 #include "base/base64.h"
-#include "base/ccConfig.h"
-#include "base/ccMacros.h"
 #include "base/ccTypes.h"
 #include "base/ccUTF8.h"
 #include "base/ccUtils.h"
@@ -181,7 +181,6 @@ THE SOFTWARE.
 #include "platform/CCSAXParser.h"
 
 #include "platform/CCApplication.h"
-#include "platform/CCStdC.h"
 
 #ifdef QT_COCOS
 

@@ -158,7 +158,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(const std::string& 
     }
     if (data.size() >= (sizeof("BMP") - 1) && memcmp("BMF", data.c_str(), sizeof("BMP") - 1) == 0) {
         // Handle fnt file of binary format
-        std::set<unsigned int>* ret = parseBinaryConfigFile((unsigned char*)&data.front(), data.size(), controlFile);
+        std::set<unsigned int>* ret = parseBinaryConfigFile((unsigned char*)&data.front(), static_cast<unsigned long>(data.size()), controlFile);
         return ret;
     }
     if (data[0] == 0)

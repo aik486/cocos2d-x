@@ -480,7 +480,7 @@ void RenderTexture::newImage(ImageCallback imageCallback, bool flipImage)
     Image *image = new (std::nothrow) Image();
     
     auto initCallback = [=](Image* image, const unsigned char* tempData){
-        image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, _texture2D->hasPremultipliedAlpha());
+        image->initWithRawData(tempData, ssize_t(savedBufferWidth * savedBufferHeight * 4), int(savedBufferWidth), int(savedBufferHeight), 8, _texture2D->hasPremultipliedAlpha());
         imageCallback(image);
     };
     auto callback = std::bind(initCallback, image, std::placeholders::_1);

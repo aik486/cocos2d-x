@@ -163,7 +163,7 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
     auto mipmapEnalbed = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
     if(!mipmapEnalbed)
     {
-        unsigned int bytesPerRow = width * _bitsPerElement / 8;
+        size_t bytesPerRow = width * _bitsPerElement / 8;
 
         if(bytesPerRow % 8 == 0)
         {
@@ -196,10 +196,10 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
 
 
     glTexImage2D(GL_TEXTURE_2D,
-                level,
+                GLint(level),
                 _textureInfo.internalFormat,
-                width,
-                height,
+                GLsizei(width),
+                GLsizei(height),
                 0,
                 _textureInfo.format,
                 _textureInfo.type,
@@ -224,12 +224,12 @@ void Texture2DGL::updateCompressedData(uint8_t *data, std::size_t width, std::si
 
 
     glCompressedTexImage2D(GL_TEXTURE_2D,
-                           level,
+                           GLint(level),
                            _textureInfo.internalFormat,
                            (GLsizei)width,
                            (GLsizei)height,
                            0,
-                           dataLen,
+                           GLsizei(dataLen),
                            data);
     CHECK_GL_ERROR_DEBUG();
 
@@ -243,11 +243,11 @@ void Texture2DGL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::s
     glBindTexture(GL_TEXTURE_2D, _textureInfo.texture);
 
     glTexSubImage2D(GL_TEXTURE_2D,
-                    level,
-                    xoffset,
-                    yoffset,
-                    width,
-                    height,
+                    GLint(level),
+                    GLint(xoffset),
+                    GLint(yoffset),
+                    GLsizei(width),
+                    GLsizei(height),
                     _textureInfo.format,
                     _textureInfo.type,
                     data);
@@ -265,13 +265,13 @@ void Texture2DGL::updateCompressedSubData(std::size_t xoffset, std::size_t yoffs
     glBindTexture(GL_TEXTURE_2D, _textureInfo.texture);
 
     glCompressedTexSubImage2D(GL_TEXTURE_2D,
-                              level,
-                              xoffset,
-                              yoffset,
-                              width,
-                              height,
+                              GLint(level),
+                              GLint(xoffset),
+                              GLint(yoffset),
+                              GLsizei(width),
+                              GLsizei(height),
                               _textureInfo.format,
-                              dataLen,
+                              GLsizei(dataLen),
                               data);
     CHECK_GL_ERROR_DEBUG();
 
@@ -321,12 +321,12 @@ void Texture2DGL::getBytes(
         auto imagePtr = &image[imageSize - bytePerRow];
         for (size_t yy = 0; yy < height; yy++, imagePtr -= bytePerRow)
         {
-            glReadPixels(x, y + yy, width, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+            glReadPixels(GLint(x), GLint(y + yy), GLsizei(width), 1, GL_RGBA, GL_UNSIGNED_BYTE,
                 imagePtr);
         }
     } else
     {
-        glReadPixels(x, y, width, height, GL_RGBA,GL_UNSIGNED_BYTE, image);
+        glReadPixels(GLint(x), GLint(y), GLsizei(width), GLsizei(height), GL_RGBA,GL_UNSIGNED_BYTE, image);
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
@@ -434,19 +434,16 @@ void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, st
     size_t bytePerRow = width * pixelSize;
     size_t imageSize = bytePerRow * height;
     unsigned char* image = new unsigned char[imageSize];
-    glReadPixels(x,y,width, height,GL_RGBA,GL_UNSIGNED_BYTE, image);
-
     if(flipImage)
     {
         auto imagePtr = &image[imageSize - bytePerRow];
         for (int yy = 0; yy < int(height); yy++, imagePtr -= bytePerRow)
         {
-            glReadPixels(x, y + yy, width, 1, GL_RGBA, GL_UNSIGNED_BYTE,
-                imagePtr);
+            glReadPixels(GLint(x), GLint(y + yy), GLsizei(width), 1, GL_RGBA, GL_UNSIGNED_BYTE, imagePtr);
         }
     } else
     {
-        glReadPixels(x, y, width, height, GL_RGBA,GL_UNSIGNED_BYTE, image);
+        glReadPixels(GLint(x), GLint(y), GLsizei(width), GLsizei(height), GL_RGBA,GL_UNSIGNED_BYTE, image);
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);

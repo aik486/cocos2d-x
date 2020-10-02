@@ -20,8 +20,9 @@ QtCocosScriptUtils::PixelsCallback QtCocosScriptUtils::getPixelsCallback(
 			   size_t height) mutable {
 		QScriptValueList arguments;
 		auto engine = callback.engine();
-		arguments << engine->toScriptValue(QByteArray::fromRawData(
-			reinterpret_cast<const char *>(data), width * pixelSize * height));
+		arguments << engine->toScriptValue(
+			QByteArray::fromRawData(reinterpret_cast<const char *>(data),
+				int(width * pixelSize * height)));
 		arguments << engine->toScriptValue(width);
 		arguments << engine->toScriptValue(height);
 		callback.call(QScriptValue(), arguments);
@@ -105,7 +106,7 @@ QScriptValue QtCocosScriptUtils::ccValueToQScriptValue(
 QScriptValue QtCocosScriptUtils::ccValueVectorToQScriptValue(
 	QScriptEngine *engine, const ValueVector &vec)
 {
-	auto result = engine->newArray(vec.size());
+	auto result = engine->newArray(uint(vec.size()));
 
 	quint32 i = 0;
 	for (auto it = vec.begin(); it != vec.end(); ++it, ++i)

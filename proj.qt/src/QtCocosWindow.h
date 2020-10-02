@@ -1,11 +1,12 @@
 #pragma once
 
+#include "platform/CCStdC.h"
+#include "platform/CCApplication.h"
+
 #include <QOpenGLWindow>
 #include <QColor>
 
 #include <functional>
-
-#include "platform/CCApplication.h"
 
 namespace cocos2d
 {
