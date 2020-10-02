@@ -334,7 +334,6 @@ backend::Program* ProgramCache::getCustomProgram(const std::string &key) const
         return iter->second;
     }
     
-    CCLOG("Warning: program %s not found in cache.", key.c_str());
     return nullptr;
 }
 

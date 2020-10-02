@@ -222,6 +222,7 @@ void QtCocosWindow::initializeGL()
 {
 	QOpenGLWindow::initializeGL();
 
+	mEGLView->setOpenGLReady(true);
 	QtCocosContext::setContextSetter([this]() { makeCurrent(); });
 
 	auto director = Director::getInstance();

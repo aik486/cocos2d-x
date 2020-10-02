@@ -30,12 +30,21 @@ THE SOFTWARE.
 namespace cocos2d {
 
 class CC_DLL GLViewImpl : public GLView
-{
+{		
 public:
 	enum
 	{
 		DOUBLE_CLICK_FLAG = 0x10000000
 	};
+	
+	static GLViewImpl* instance();
+	
+	GLViewImpl();
+	virtual ~GLViewImpl() override;
+	
+	static bool isReady();
+	
+	void setOpenGLReady(bool ready);
 	
     virtual bool isOpenGLReady() override;
     virtual void end() override;
@@ -60,7 +69,10 @@ private:
 	void SetTouchInfo(Touch *touch, int id, float x, float y,
 					  float force = 0.f, float maxForce = 0.f);
 
+private:
 	std::map<intptr_t, Touch *> touches;
+	bool ready = false;
+	static GLViewImpl* _instance;
 };
 
 } // end of namespace   cocos2d

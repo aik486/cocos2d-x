@@ -47,6 +47,19 @@ Vec2 Touch::getStartLocationInView() const
     return _startPoint; 
 }
 
+Touch::Touch() 
+{
+    reset();
+}
+
+void Touch::reset()
+{
+    _id = 0;
+     _startPointCaptured = false;
+    _curForce = 0.f;
+    _maxForce = 0.f;
+}
+
 // returns the current touch location in OpenGL coordinates
 Vec2 Touch::getLocation() const
 { 

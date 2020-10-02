@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 namespace cocos2d {
 
+GLViewImpl* GLViewImpl::_instance = nullptr;
+
 static std::unique_ptr<Touch> touchPool[10];
 static int curTouch = 10;
 
@@ -41,7 +43,9 @@ static Touch *getFreeTouch()
     if (!touch) {
         return new Touch;
     }
-    return touch.release();
+    auto touchp = touch.release();
+    touchp->reset();
+    return touchp;
 }
 
 static void releaseTouch(Touch *touch)
@@ -50,9 +54,35 @@ static void releaseTouch(Touch *touch)
 }
 
 
+GLViewImpl::GLViewImpl()
+{
+    CC_ASSERT(!_instance);
+    _instance = this;
+}
+
+GLViewImpl::~GLViewImpl()
+{
+    CC_ASSERT(_instance == this);
+    _instance = nullptr;
+}
+
+bool GLViewImpl::isReady()
+{
+    if (_instance) {
+        return _instance->isOpenGLReady();
+    }
+    
+    return false;
+}
+
+void GLViewImpl::setOpenGLReady(bool ready)
+{
+    this->ready = ready;
+}
+
 bool GLViewImpl::isOpenGLReady()
 {
-    return true;
+    return ready;
 }
 
 void GLViewImpl::end()
@@ -185,8 +215,6 @@ void GLViewImpl::FillTouchesEndOrCancel(EventTouch::EventCode eventCode, int num
 			SetTouchInfo(touch, id, xs[i], ys[i]);
 
 			touchEvent._touches.push_back(touch);
-
-			touch->release();
 
 			touches.erase(it);
 		}

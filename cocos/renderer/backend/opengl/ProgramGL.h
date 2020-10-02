@@ -158,6 +158,7 @@ public:
     virtual const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override ;
 
 private:
+    static std::string getErrorLog(GLuint shader);
     void compileProgram();
     bool getAttributeLocation(const std::string& attributeName, unsigned int& location) const;
     void computeUniformInfos();

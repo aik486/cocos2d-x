@@ -56,18 +56,20 @@ void ShaderModuleGL::compileShader(ShaderStage stage, const std::string &source)
     if (! status)
     {
         CCLOG("cocos2d: ERROR: Failed to compile shader:\n%s", source.c_str());
-        CCLOG("cocos2d: %s", getErrorLog(_shader));
+        CCLOG("cocos2d: %s", getErrorLog(_shader).c_str());
         deleteShader();
-        CCASSERT(false, "Shader compile failed!");
     }
+    
+    CHECK_GL_ERROR_DEBUG();
 }
 
-char* ShaderModuleGL::getErrorLog(GLuint shader) const
+std::string ShaderModuleGL::getErrorLog(GLuint shader)
 {
     GLint logLength = 0;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
-    char* log = (char*)malloc(sizeof(char) * logLength);
-    glGetShaderInfoLog(shader, logLength, nullptr, log);
+    std::string log;
+    log.resize(logLength);
+    glGetShaderInfoLog(shader, logLength, nullptr, &log[0]);
     return log;
 }
 

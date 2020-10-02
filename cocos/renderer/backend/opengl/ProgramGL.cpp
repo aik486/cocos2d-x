@@ -120,17 +120,20 @@ void ProgramGL::compileProgram()
     
     glAttachShader(_program, vertShader);
     glAttachShader(_program, fragShader);
-    
+   
     glLinkProgram(_program);
     
     GLint status = 0;
     glGetProgramiv(_program, GL_LINK_STATUS, &status);
     if (GL_FALSE == status)
     {
-        printf("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
+        CCLOG("cocos2d: ERROR: Failed to link program");
+        CCLOG("cocos2d: %s", getErrorLog(_program).c_str());
         glDeleteProgram(_program);
         _program = 0;
     }
+    
+    CHECK_GL_ERROR_DEBUG();
 }
 
 void ProgramGL::computeLocations()
@@ -342,6 +345,16 @@ const UniformInfo& ProgramGL::getActiveUniformInfo(ShaderStage stage, int locati
 const std::unordered_map<std::string, UniformInfo>& ProgramGL::getAllActiveUniformInfo(ShaderStage stage) const
 {
     return _activeUniformInfos;
+}
+
+std::string ProgramGL::getErrorLog(GLuint program)
+{
+    GLint logLength = 0;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+    std::string log;
+    log.resize(logLength);
+    glGetProgramInfoLog(program, logLength, nullptr, &log[0]);
+    return log;
 }
 
 std::size_t ProgramGL::getUniformBufferSize(ShaderStage stage) const

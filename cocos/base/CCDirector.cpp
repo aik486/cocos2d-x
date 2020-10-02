@@ -241,6 +241,7 @@ void Director::setGLDefaultValues()
 
     _renderer->setDepthTest(false);
     _renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
+    _winSizeInPoints = _openGLView->getDesignResolutionSize();
     setProjection(_projection);
 }
 
@@ -600,7 +601,6 @@ void Director::setProjection(Projection projection)
 
     if (size.width == 0 || size.height == 0)
     {
-        CCLOGERROR("cocos2d: warning, Director::setProjection() failed because size is 0");
         return;
     }
 

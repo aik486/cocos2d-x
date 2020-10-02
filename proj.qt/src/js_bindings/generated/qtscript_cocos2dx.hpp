@@ -2132,6 +2132,7 @@ public:
 	Q_INVOKABLE cocos2d::Vec2 getPreviousLocationInView();
 	Q_INVOKABLE cocos2d::Vec2 getStartLocation();
 	Q_INVOKABLE cocos2d::Vec2 getStartLocationInView();
+	Q_INVOKABLE void reset();
 	Q_INVOKABLE void setTouchInfo(int id, float x, float y);
 	Q_INVOKABLE void setTouchInfo(int id, float x, float y, float force, float maxForce);
 };

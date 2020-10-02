@@ -9533,6 +9533,15 @@ cocos2d::Vec2 QtScriptTouch::getStartLocationInView()
 	return cocos2d::Vec2();
 }
 
+void QtScriptTouch::reset()
+{
+	auto __o = this->thiz<Touch *>();
+	if (__o)
+	{
+		__o->reset();
+	}
+}
+
 void QtScriptTouch::setTouchInfo(int id, float x, float y)
 {
 	auto __o = this->thiz<Touch *>();

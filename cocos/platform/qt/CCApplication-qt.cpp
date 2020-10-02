@@ -85,7 +85,6 @@ std::string Application::getVersion()
 
 Application* Application::getInstance()
 {
-    CCASSERT(sm_pSharedApplication, "sm_pSharedApplication not set");
     return sm_pSharedApplication;
 }
 
