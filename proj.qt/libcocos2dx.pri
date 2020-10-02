@@ -26,10 +26,6 @@ linux {
     
 }
 
-clang {
-    QMAKE_CXXFLAGS += -Wno-missing-field-initializers
-}
-
 macx {
     LIBS += \
         -framework Foundation \
