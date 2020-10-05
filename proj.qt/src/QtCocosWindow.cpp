@@ -236,6 +236,7 @@ void QtCocosWindow::initializeGL()
 	mMainNode->Node::setScale(mScale / 100.f);
 
 	mScene = Scene::create();
+	mScene->retain();
 	mScene->addChild(mMainNode);
 
 	director->setClearColor(qColorToCcColor4F(mBgColor));

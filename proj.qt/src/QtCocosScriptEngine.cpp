@@ -505,8 +505,6 @@ QScriptValue QtCocosScriptEngine::addShaderProgram(
 	backend::ProgramCache::getInstance()->addCustomProgram(
 		key.toStdString(), program);
 
-	program->release();
-
 	return engine->toScriptValue(program);
 }
 
