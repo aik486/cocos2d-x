@@ -140,6 +140,9 @@ void ProgramGL::computeLocations()
 {
     std::fill(_builtinAttributeLocation, _builtinAttributeLocation + ATTRIBUTE_MAX, -1);
 //    std::fill(_builtinUniformLocation, _builtinUniformLocation + UNIFORM_MAX, -1);
+    
+    if (!_program)
+        return;
 
     ///a_position
     auto location = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION);
@@ -185,6 +188,10 @@ void ProgramGL::computeLocations()
 
 bool ProgramGL::getAttributeLocation(const std::string& attributeName, unsigned int& location) const
 {
+    if (!_program) {
+        return false;
+    }
+    
     GLint loc = glGetAttribLocation(_program, attributeName.c_str());
     if (-1 == loc)
     {
@@ -267,10 +274,13 @@ void ProgramGL::computeUniformInfos()
             }
         }
         uniform.location = glGetUniformLocation(_program, uniformName);
-        uniform.size = unsigned(UtilsGL::getGLDataTypeSize(uniform.type));
-        uniform.bufferOffset = unsigned((uniform.size == 0) ? 0 : _totalBufferSize);
+        uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
+        auto bufferSizeAligned =  (_totalBufferSize + 3) & ~3;
+        uniform.bufferOffset = (uniform.size == 0) ? 0 : bufferSizeAligned;
         _activeUniformInfos[uniformName] = uniform;
-        _totalBufferSize += uniform.size * uniform.count;
+        if (uniform.size > 0) {
+            _totalBufferSize = bufferSizeAligned + uniform.size * uniform.count;
+        }
         _maxLocation = _maxLocation <= uniform.location ? (uniform.location + 1) : _maxLocation;
     }
     free(uniformName);
@@ -283,6 +293,9 @@ int ProgramGL::getAttributeLocation(Attribute name) const
 
 int ProgramGL::getAttributeLocation(const std::string& name) const
 {
+    if (!_program) {
+        return -1;
+    }
     return glGetAttribLocation(_program, name.c_str());
 }
 

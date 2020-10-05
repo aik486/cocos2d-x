@@ -43,10 +43,17 @@ ShaderModuleGL::~ShaderModuleGL()
 void ShaderModuleGL::compileShader(ShaderStage stage, const std::string &source)
 {
     GLenum shaderType = stage == ShaderStage::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
-    const GLchar* sourcePtr = reinterpret_cast<const GLchar*>(source.c_str());
     _shader = glCreateShader(shaderType);
     if (!_shader)
         return;
+    const GLchar* sourcePtr = reinterpret_cast<const GLchar*>(source.c_str());
+#if CC_TARGET_PLATFORM == CC_PLATFORM_EMSCRIPTEN
+    std::string src;
+    if (source.find("precision") == std::string::npos) {
+        src = "#ifdef GL_ES\nprecision lowp float;\n#endif\n" + source;	  
+        sourcePtr = reinterpret_cast<const GLchar*>(src.c_str());
+    }
+#endif
     
     glShaderSource(_shader, 1, &sourcePtr, nullptr);
     glCompileShader(_shader);
