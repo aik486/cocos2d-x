@@ -30,7 +30,7 @@
 
 CC_BACKEND_BEGIN
 
-enum class FeatureType : uint32_t
+enum class FeatureType : unsigned
 {
     ETC1,
     S3TC,

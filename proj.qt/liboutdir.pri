@@ -9,7 +9,7 @@ macx:COCOS2DX_LIB = $$COCOS2DX_LIB-macx
 linux:COCOS2DX_LIB = $$COCOS2DX_LIB-linux
 win32 {
     COCOS2DX_LIB = $$COCOS2DX_LIB-win32
-    msvc:COCOS2DX_LIB = $$COCOS2DX_LIB-msvc
+    msvc:COCOS2DX_LIB = $$COCOS2DX_LIB-msvc$$QMAKE_MSC_VER
 }
 emscripten:COCOS2DX_LIB = $$COCOS2DX_LIB-emscripten
 clang:COCOS2DX_LIB = $$COCOS2DX_LIB-clang

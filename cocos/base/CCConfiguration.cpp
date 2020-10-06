@@ -78,7 +78,7 @@ bool Configuration::init()
     _valueDict["cocos2d.x.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
-#if COCOS2D_DEBUG
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
 	_valueDict["cocos2d.x.build_type"] = Value("DEBUG");
 #else
     _valueDict["cocos2d.x.build_type"] = Value("RELEASE");

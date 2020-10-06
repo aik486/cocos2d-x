@@ -430,7 +430,7 @@ backend::CompareFunction Renderer::getDepthCompareFunction() const
     return _depthStencilDescriptor.depthCompareFunction;
 }
 
-bool Renderer::Renderer::getDepthTest() const
+bool Renderer::getDepthTest() const
 {
     return _depthStencilDescriptor.depthTestEnabled;
 }

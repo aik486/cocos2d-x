@@ -300,7 +300,7 @@ protected:
     Vec3 _up;
     Camera::Type _type;
     float _fieldOfView = 0.f;
-    float _zoom[2] = {0.f};
+    float _zoom[2];
     float _aspectRatio = 0.f;
     float _nearPlane = 0.f;
     float _farPlane = 0.f;

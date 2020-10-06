@@ -105,6 +105,8 @@ const Camera* Camera::getVisitingCamera()
 
 Camera::Camera()
 {
+    _zoom[0] = 0.f;
+    _zoom[1] = 0.f;
     // minggo comment
     // _frustum.setClipZ(true);
 }

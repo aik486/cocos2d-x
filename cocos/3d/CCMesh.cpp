@@ -327,7 +327,7 @@ void Mesh::setMaterial(Material* material)
             int i = 0;
             for (auto pass: technique->getPasses())
             {
-#ifdef COCOS2D_DEBUG
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
                 //make it crashed when missing attribute data
                 if(_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {

@@ -14,7 +14,8 @@ DEFINES += \
     CC_ENABLE_SCRIPT_BINDING=0
 
 CONFIG(debug, debug|release)|!isEmpty(DEBUG_COCOS) {
-    DEFINES += COCOS2D_DEBUG=1
+    emscripten:DEFINES += COCOS2D_DEBUG=0
+    else:DEFINES += COCOS2D_DEBUG=1
     DEBUG_COCOS = 1
 }
 
@@ -54,16 +55,6 @@ macx {
     DEFINES += TARGET_OS_MAC
 }
 
-
-greaterThan(QT_MINOR_VERSION,9) {
-    win32-msvc {
-       DEFINES += HAVE_STRUCT_TIMESPEC=1
-    }
-} else {
-    win32-msvc2015 {
-       DEFINES += HAVE_STRUCT_TIMESPEC=1
-    }
-}
 
 INCLUDEPATH += \
     $$COCOS2DX_QT_PATH/src \

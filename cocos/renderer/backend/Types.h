@@ -292,9 +292,12 @@ struct UniformLocation
      * in metal, those two locations represent to vertex and fragment location. 
      * in opengl, location[0] represent the location, and location[1] represent location offset in uniform buffer. 
      */
-    int location[2] = {-1, -1};
+    int location[2];
     ShaderStage shaderStage = ShaderStage::VERTEX;
-    UniformLocation() = default;
+    UniformLocation() {
+         location[0] = -1;
+         location[1] = -1;
+    };
     operator bool()
     {
         if(shaderStage == ShaderStage::VERTEX_AND_FRAGMENT)

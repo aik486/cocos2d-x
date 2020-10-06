@@ -49,7 +49,7 @@ struct RenderPassDescriptor
 
     float clearDepthValue = 0.f;
     float clearStencilValue = 0.f;
-    std::array<float, 4> clearColorValue {{0.f, 0.f, 0.f, 0.f}}; // double-braces required in C++11
+    std::array<float, 4> clearColorValue;
     bool needColorAttachment = true;
     bool depthTestEnabled = false;
     bool stencilTestEnabled = false;
@@ -58,7 +58,12 @@ struct RenderPassDescriptor
     bool needClearStencil = false;
     TextureBackend* depthAttachmentTexture = nullptr;
     TextureBackend* stencilAttachmentTexture = nullptr;
-    TextureBackend* colorAttachmentsTexture[MAX_COLOR_ATTCHMENT] = { nullptr };
+    TextureBackend* colorAttachmentsTexture[MAX_COLOR_ATTCHMENT];
+    
+    RenderPassDescriptor() {
+        memset(colorAttachmentsTexture, 0, sizeof(colorAttachmentsTexture));
+        clearColorValue = {0.f, 0.f, 0.f, 0.f};
+    }
 };
 
 //end of _backend group

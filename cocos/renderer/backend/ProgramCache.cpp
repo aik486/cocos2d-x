@@ -29,6 +29,7 @@
 #include "base/ccMacros.h"
 #include "base/CCConfiguration.h"
 
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 namespace std
 {
     template <>
@@ -42,6 +43,7 @@ namespace std
         }
     };
 }
+#endif
 
 CC_BACKEND_BEGIN
 

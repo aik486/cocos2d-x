@@ -425,7 +425,7 @@ void BMFontConfiguration::parseCommonArguments(const char* line)
     auto tmp = strstr(line, "lineHeight=") + 11;
     sscanf(tmp, "%d", &_commonHeight);
     
-#if COCOS2D_DEBUG > 0
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
     // scaleW. sanity check
     int value;
     tmp = strstr(tmp, "scaleW=") + 7;

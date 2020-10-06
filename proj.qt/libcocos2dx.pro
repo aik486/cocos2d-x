@@ -24,7 +24,7 @@ msvc {
     DEFINES += _CRT_SECURE_NO_WARNINGS
     DEFINES += _SCL_SECURE_NO_WARNINGS
     CONFIG += no_batch
-    QMAKE_CXXFLAGS += /wd4005 /wd4244 /bigobj
+    QMAKE_CXXFLAGS += /wd4005 /wd4244 /wd4503 /bigobj
 } else {
     DEFINES += USE_FILE32API
 }

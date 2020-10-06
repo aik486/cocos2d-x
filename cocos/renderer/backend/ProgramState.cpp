@@ -110,13 +110,17 @@ TextureInfo::~TextureInfo()
 void TextureInfo::retainTextures()
 {
     for (auto& texture : textures)
+    {
         CC_SAFE_RETAIN(texture);
+    }
 }
 
 void TextureInfo::releaseTextures()
 {
     for (auto& texture : textures)
+    {
         CC_SAFE_RELEASE(texture);
+    }
 }
 
 TextureInfo& TextureInfo::operator=(TextureInfo&& rhs)

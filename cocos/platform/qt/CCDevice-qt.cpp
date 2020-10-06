@@ -61,7 +61,7 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
 			break;
 
 		case TextAlign::TOP_RIGHT:
-			alignment |= Qt::AlignTop | Qt::AlignRight;
+			alignment |= Qt::Alignment(Qt::AlignTop | Qt::AlignRight);
 			break;
 
 		case TextAlign::RIGHT:
@@ -69,7 +69,7 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
 			break;
 
 		case TextAlign::BOTTOM_RIGHT:
-			alignment |= Qt::AlignBottom | Qt::AlignRight;
+			alignment |= Qt::Alignment(Qt::AlignBottom | Qt::AlignRight);
 			break;
 
 		case TextAlign::BOTTOM:
@@ -77,7 +77,7 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
 			break;
 
 		case TextAlign::BOTTOM_LEFT:
-			alignment |= Qt::AlignBottom | Qt::AlignLeft;
+			alignment |= Qt::Alignment(Qt::AlignBottom | Qt::AlignLeft);
 			break;
 
 		case TextAlign::LEFT:
@@ -85,7 +85,7 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
 			break;
 
 		case TextAlign::TOP_LEFT:
-			alignment |= Qt::AlignTop | Qt::AlignLeft;
+			alignment |= Qt::Alignment(Qt::AlignTop | Qt::AlignLeft);
 			break;
 	}
 	QStaticText staticText;
