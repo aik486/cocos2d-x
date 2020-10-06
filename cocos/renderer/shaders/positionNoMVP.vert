@@ -24,6 +24,9 @@
 
 const char* positionNoMVP_vert = R"(
 
+#ifdef GL_ES
+precision lowp float;
+#endif
 attribute vec4 a_position;
 
 #ifdef GL_ES

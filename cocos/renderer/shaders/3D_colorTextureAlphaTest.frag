@@ -1,6 +1,8 @@
 const char* CC3D_colorTextureAlphaTest_frag = R"(
 
 #ifdef GL_ES
+precision lowp float;
+
 varying mediump vec2 TextureCoordOut;
 precision lowp float;
 #else

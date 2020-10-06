@@ -24,6 +24,7 @@
  */
 
 const char* etc1Gray_frag = R"(
+
 #ifdef GL_ES
     precision mediump float;
 #endif

@@ -24,6 +24,10 @@
  */
 
 const char* lineColor3D_vert = R"(
+        
+#ifdef GL_ES
+precision lowp float;
+#endif
 attribute vec3 a_position;
 attribute vec4 a_color;
 

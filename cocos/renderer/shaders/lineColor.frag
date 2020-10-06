@@ -24,7 +24,8 @@
  */
 
 const char* lineColor3D_frag = R"(
-#ifdef GL_ES
+
+                               #ifdef GL_ES
 precision lowp float;
 #endif
 
