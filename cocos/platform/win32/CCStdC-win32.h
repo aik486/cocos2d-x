@@ -88,15 +88,16 @@ typedef SSIZE_T ssize_t;
     #include "platform/win32/compat/stdint.h"
 #endif
 
-#define _WINSOCKAPI_
 #ifndef NOMINMAX
   #define NOMINMAX
 #endif
 
 #ifndef __MINGW32__
 
+#ifndef _WINSOCKAPI_
 #include <WinSock2.h>
 // Structure timeval has define in winsock.h, include windows.h for it.
+#endif
 #include <Windows.h>
 
 NS_CC_BEGIN
