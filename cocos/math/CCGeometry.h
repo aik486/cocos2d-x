@@ -46,7 +46,7 @@ public:
     /**Height of the Size.*/
     float height;
 public:
-    /**Conversion from Vec2 to Size.*/
+    /**Conversion from Size to Vec2.*/
     operator Vec2() const
     {
         return Vec2(width, height);
