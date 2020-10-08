@@ -265,7 +265,8 @@ void Node::copyPropertiesFrom(const Node *from)
     setOpacity(from->getOpacity());
     setColor(from->getColor());
     setVisible(from->isVisible());
-    setProgramState(from->getProgramState()->clone());
+    auto fromProgramState=from->getProgramState();
+    setProgramState(fromProgramState ? fromProgramState->clone(): nullptr);
     setContentSize(from->getContentSize());
 }
 
