@@ -24,6 +24,8 @@
  
 const char* CC3D_skybox_frag = R"(
 #ifdef GL_ES
+precision lowp float;
+
 varying mediump vec3        v_reflect;
 #else
 varying vec3        v_reflect;

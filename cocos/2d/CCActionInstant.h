@@ -372,7 +372,7 @@ private:
 * @brief Calls a 'callback' with the node as the first argument. N means Node.
 * @js NA
 */
-class CC_DLL CallFuncN : public CallFunc
+class CC_DLL CallFuncN : public ActionInstant
 {
 public:
     /** Creates the action with the callback of type std::function<void()>.
@@ -386,8 +386,11 @@ public:
     //
     // Overrides
     //
+    virtual CallFuncN* reverse() const override;
     virtual CallFuncN* clone() const override;
-    virtual void execute() override;
+    virtual void execute();
+    
+    virtual void update(float time) override;
     
 CC_CONSTRUCTOR_ACCESS:
     CallFuncN():_functionN(nullptr){}

@@ -35,6 +35,13 @@ _dist(0.f)
     
 }
 
+Plane::Plane(const Plane &p)
+    : _normal(p._normal)
+    , _dist(p._dist)
+{
+    
+}
+
 // create plane from tree point
 Plane::Plane(const Vec3& p1, const Vec3& p2, const Vec3& p3)
 {

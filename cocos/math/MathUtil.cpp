@@ -96,6 +96,18 @@ void MathUtil::smooth(float* x, float target, float elapsedTime, float riseTime,
     }
 }
 
+float MathUtil::smoothed(float x, float target, float elapsedTime, float responseTime)
+{
+    smooth(&x, target, elapsedTime, responseTime);
+    return x;
+}
+
+float MathUtil::smoothed(float x, float target, float elapsedTime, float riseTime, float fallTime)
+{   
+    smooth(&x, target, elapsedTime, riseTime, fallTime);
+    return x;
+}
+
 float MathUtil::lerp(float from, float to, float alpha)
 {
     return from * (1.0f - alpha) + to * alpha;

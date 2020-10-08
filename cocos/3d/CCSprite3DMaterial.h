@@ -80,7 +80,7 @@ public:
      * @param skinned Has skin?
      * @return Created material
      */
-    static Sprite3DMaterial* createBuiltInMaterial(MaterialType type, bool skinned);
+    static Sprite3DMaterial* createBuiltInMaterial(MaterialType type, bool skinned, size_t atrSetId, bool alphaTest);
     
     /**
      * Create material with file name, it creates material from cache if it is previously loaded
@@ -122,14 +122,18 @@ public:
 protected:
     
     MaterialType _type;
+    size_t _vertexAtrSetId = 0;
+    
     static std::unordered_map<std::string, Sprite3DMaterial*> _materials; //cached material
     static Sprite3DMaterial* _unLitMaterial;
+    static Sprite3DMaterial* _unLitMaterialAlphaTest;
     static Sprite3DMaterial* _unLitNoTexMaterial;
     static Sprite3DMaterial* _vertexLitMaterial;
     static Sprite3DMaterial* _diffuseMaterial;
     static Sprite3DMaterial* _diffuseNoTexMaterial;
     static Sprite3DMaterial* _bumpedDiffuseMaterial;
     
+    static Sprite3DMaterial* _unLitMaterialSkinAlphaTest;
     static Sprite3DMaterial* _unLitMaterialSkin;
     static Sprite3DMaterial* _vertexLitMaterialSkin;
     static Sprite3DMaterial* _diffuseMaterialSkin;

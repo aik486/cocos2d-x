@@ -111,6 +111,7 @@ bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength)
     }
     catch (rapidxml::parse_error& e)
     {
+        CC_UNUSED_PARAM(e);
         CCLOG("cocos2d: SAXParser: Error parsing xml: %s at %s", e.what(), e.where<char>());
         return false;
     }

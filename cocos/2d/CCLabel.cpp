@@ -140,7 +140,7 @@ public:
 
             if (_textureAtlas)
             {
-                _textureAtlas->updateQuad(&_quad, _atlasIndex);
+                _textureAtlas->updateQuad(_quad, _atlasIndex);
             }
 
             _recursiveDirty = false;
@@ -175,7 +175,7 @@ public:
         _quad.tl.colors = color4;
         _quad.tr.colors = color4;
 
-        _textureAtlas->updateQuad(&_quad, _atlasIndex);
+        _textureAtlas->updateQuad(_quad, _atlasIndex);
     }
 
     void setVisible(bool visible) override
@@ -2318,15 +2318,15 @@ void Label::updateColor()
     {
         textureAtlas = batchNode->getTextureAtlas();
         quads = textureAtlas->getQuads();
-        auto count = textureAtlas->getTotalQuads();
+        size_t count = textureAtlas->getTotalQuads();
 
-        for (int index = 0; index < count; ++index)
+        for (size_t index = 0; index < count; ++index)
         {
             quads[index].bl.colors = color4;
             quads[index].br.colors = color4;
             quads[index].tl.colors = color4;
             quads[index].tr.colors = color4;
-            textureAtlas->updateQuad(&quads[index], index);
+            textureAtlas->updateQuad(quads[index], index);
         }
     }
 }

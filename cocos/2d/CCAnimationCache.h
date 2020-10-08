@@ -115,6 +115,7 @@ public:
      * @param plist An animation from a plist file.
      */
     void addAnimationsWithFile(const std::string& plist);
+    void addAnimationsWithData(const char* data, int dataSize);
 
 private:
     void parseVersion1(const ValueMap& animations);

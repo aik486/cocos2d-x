@@ -394,12 +394,23 @@ CallFuncN * CallFuncN::create(const std::function<void(Node*)> &func)
     return nullptr;
 }
 
+CallFuncN *CallFuncN::reverse() const
+{
+    return clone();
+}
+
 void CallFuncN::execute()
 {
     if (_functionN)
     {
         _functionN(_target);
     }
+}
+
+void CallFuncN::update(float time)
+{
+    ActionInstant::update(time);
+    execute();
 }
 
 bool CallFuncN::initWithFunction(const std::function<void (Node *)> &func)

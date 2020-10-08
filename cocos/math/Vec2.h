@@ -69,6 +69,7 @@ public:
      * Constructs a new vector initialized to all zeros.
      */
     Vec2();
+    Vec2(const Vec2& vec);
 
     /**
      * Constructs a new vector initialized to the specified values.

@@ -24,7 +24,7 @@
  
 #pragma once
 
-#include "CCPlatformMacros.h"
+#include "platform/CCPlatformMacros.h"
 #include "renderer/CCTexture2D.h"
 
 NS_CC_BEGIN

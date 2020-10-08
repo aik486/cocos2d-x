@@ -24,6 +24,10 @@
  */
 
 const char* positionTextureColor_vert = R"(
+        
+#ifdef GL_ES
+precision lowp float;
+#endif
 attribute vec4 a_position;
 attribute vec2 a_texCoord;
 attribute vec4 a_color;

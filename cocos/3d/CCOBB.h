@@ -44,6 +44,7 @@ class CC_DLL OBB
 {
 public:
     OBB();
+    OBB(const OBB& obb);
 
     /*
      * Construct obb from oriented bounding box
@@ -68,6 +69,8 @@ public:
      * Specify obb values
      */
     void set(const Vec3& center, const Vec3& _xAxis, const Vec3& _yAxis, const Vec3& _zAxis, const Vec3& _extents);
+    
+    void setAABB(const AABB& aabb);
     
     /*
      * Clear obb

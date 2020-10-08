@@ -31,12 +31,14 @@ THE SOFTWARE.
 
 // 0x00 HI ME LO
 // 00   03 08 00
-#define COCOS2D_VERSION 0x00040000
+#define COCOS2D_VERSION 0x01040000
 
 //
 // all cocos2d include files
 //
+#include "platform/CCStdC.h"
 #include "base/ccConfig.h"
+#include "base/ccMacros.h"
 
 // base
 #include "base/CCAsyncTaskPool.h"
@@ -59,8 +61,6 @@ THE SOFTWARE.
 #include "base/CCVector.h"
 #include "base/ZipUtils.h"
 #include "base/base64.h"
-#include "base/ccConfig.h"
-#include "base/ccMacros.h"
 #include "base/ccTypes.h"
 #include "base/ccUTF8.h"
 #include "base/ccUtils.h"
@@ -180,41 +180,42 @@ THE SOFTWARE.
 #include "platform/CCPlatformMacros.h"
 #include "platform/CCSAXParser.h"
 
+#include "platform/CCApplication.h"
+
+#ifdef QT_COCOS
+
+#include "platform/qt/CCFileUtils-qt.h"
+#include "platform/qt/CCGLViewImpl-qt.h"
+#include "platform/qt/CCGL-qt.h"
+
+#else
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    #include "platform/ios/CCApplication-ios.h"
     #include "platform/ios/CCGLViewImpl-ios.h"
-    #include "platform/ios/CCStdC-ios.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/android/CCApplication-android.h"
     #include "platform/android/CCGLViewImpl-android.h"
     #include "platform/android/CCGL-android.h"
-    #include "platform/android/CCStdC-android.h"
 //Enhance modification begin
     #include "platform/android/CCEnhanceAPI-android.h"
 //Enhance modification end
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-    #include "platform/win32/CCApplication-win32.h"
     #include "platform/desktop/CCGLViewImpl-desktop.h"
     #include "platform/win32/CCGL-win32.h"
-    #include "platform/win32/CCStdC-win32.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     #include "platform/desktop/CCGLViewImpl-desktop.h"
-    #include "platform/mac/CCApplication-mac.h"
-    #include "platform/mac/CCStdC-mac.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-    #include "platform/linux/CCApplication-linux.h"
     #include "platform/desktop/CCGLViewImpl-desktop.h"
     #include "platform/linux/CCGL-linux.h"
-    #include "platform/linux/CCStdC-linux.h"
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#endif
 
 // script_support
 #include "base/CCScriptSupport.h"

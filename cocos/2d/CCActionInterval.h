@@ -305,6 +305,7 @@ public:
     virtual RepeatForever* clone() const override;
     virtual RepeatForever* reverse() const override;
     virtual void startWithTarget(Node* target) override;
+    virtual void stop() override;
     /**
      * @param dt In seconds.
      */

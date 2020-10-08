@@ -170,8 +170,8 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void captureScreen(std::function<void(const unsigned char*, int, int)> callback) override;
-    
+    virtual void captureScreen(PixelsCallback callback) override;
+
 private:
     void prepareDrawing() const;
     void setTextures() const;

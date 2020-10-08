@@ -68,6 +68,7 @@ public:
      * Constructs a new vector initialized to all zeros.
      */
     Vec3();
+    Vec3(const Vec3& vec);
 
     /**
      * Constructs a new vector initialized to the specified values.

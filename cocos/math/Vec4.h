@@ -44,7 +44,7 @@ class Mat4;
 class CC_DLL Vec4
 {
 public:
-#ifdef __SSE__
+#if defined(__SSE__) && !defined(GEN_SCRIPT_BINDINGS)
     union {
         struct {
             float x;

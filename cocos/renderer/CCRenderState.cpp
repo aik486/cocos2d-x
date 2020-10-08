@@ -67,6 +67,10 @@ void RenderState::bindPass(Pass* pass, MeshCommand* command)
 
     material->getStateBlock().apply(&pipelineDescriptor);
     technique->getStateBlock().apply(&pipelineDescriptor);
+    if(command->isForceDisableDepthTest()){        
+        Director::getInstance()->getRenderer()->setDepthTest(false);
+    }
+    
     _state.apply(&pipelineDescriptor);
 
 }

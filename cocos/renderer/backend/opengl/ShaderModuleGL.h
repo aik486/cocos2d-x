@@ -55,7 +55,7 @@ public:
     
 private:
     void compileShader(ShaderStage stage, const std::string& source);
-    char* getErrorLog(GLuint shader) const;
+    static std::string getErrorLog(GLuint shader);
     void deleteShader();
     
     GLuint _shader = 0;

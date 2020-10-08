@@ -146,7 +146,7 @@ void LabelAtlas::updateAtlasValues()
         itemHeightInPixels = _itemHeight;
     }
 
-    CCASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
+    CCASSERT(n <= ssize_t(_textureAtlas->getCapacity()), "updateAtlasValues: Invalid String length");
     V3F_C4B_T2F_Quad* quads = _textureAtlas->getQuads();
     for(ssize_t i = 0; i < n; i++) {
 
@@ -207,7 +207,7 @@ void LabelAtlas::updateAtlasValues()
 void LabelAtlas::setString(const std::string &label)
 {
     ssize_t len = label.size();
-    if (len > _textureAtlas->getTotalQuads())
+    if (len > ssize_t(_textureAtlas->getTotalQuads()))
     {
         _textureAtlas->resizeCapacity(len);
     }
@@ -246,7 +246,7 @@ void LabelAtlas::updateColor()
             quads[index].br.colors = color4;
             quads[index].tl.colors = color4;
             quads[index].tr.colors = color4;
-            _textureAtlas->updateQuad(&quads[index], index);
+            _textureAtlas->updateQuad(quads[index], index);
         }
     }
 }

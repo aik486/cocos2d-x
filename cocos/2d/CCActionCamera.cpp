@@ -219,7 +219,7 @@ void OrbitCamera::update(float dt)
     setEye(i,j,k);
 }
 
-void OrbitCamera::sphericalRadius(float *newRadius, float *zenith, float *azimuth)
+void OrbitCamera::sphericalRadius(float *newRadius, float *zenith, float *azimuth) const
 {
     float r; // radius
     float s;
@@ -242,6 +242,13 @@ void OrbitCamera::sphericalRadius(float *newRadius, float *zenith, float *azimut
         *azimuth = asinf(y/s);
 
     *newRadius = r / FLT_EPSILON;
+}
+
+SphericalRadius OrbitCamera::getSphericalRadius() const
+{
+    SphericalRadius result;
+    sphericalRadius(&result.radius, &result.zenith, &result.azimuth);
+    return result;
 }
 
 NS_CC_END

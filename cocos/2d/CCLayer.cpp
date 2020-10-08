@@ -45,22 +45,10 @@ THE SOFTWARE.
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-#include "platform/desktop/CCGLViewImpl-desktop.h"
-#endif
-
 NS_CC_BEGIN
 
 // Layer
 Layer::Layer()
-: _touchEnabled(false)
-, _accelerometerEnabled(false)
-, _keyboardEnabled(false)
-, _touchListener(nullptr)
-, _keyboardListener(nullptr)
-, _accelerationListener(nullptr)
-, _touchMode(Touch::DispatchMode::ALL_AT_ONCE)
-, _swallowsTouches(true)
 {
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -837,7 +825,7 @@ float LayerRadialGradient::getExpand() const
     return _expand;
 }
 
-void LayerRadialGradient::setStartColor(const Color3B& color)
+void LayerRadialGradient::setStartColor3B(const Color3B& color)
 {
     setStartColor(Color4B(color));
 }
@@ -858,7 +846,7 @@ Color3B LayerRadialGradient::getStartColor3B() const
     return Color3B(_startColor);
 }
 
-void LayerRadialGradient::setEndColor(const Color3B& color)
+void LayerRadialGradient::setEndColor3B(const Color3B& color)
 {
     setEndColor(Color4B(color));
 }

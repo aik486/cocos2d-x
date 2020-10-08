@@ -225,7 +225,6 @@ void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary,cons
 /** Read an NSDictionary from a plist file and parse it automatically for animations */
 void AnimationCache::addAnimationsWithFile(const std::string& plist)
 {
-    CCASSERT(!plist.empty(), "Invalid texture file name");
     if (plist.empty()) {
         log("%s error:file name is empty!", __FUNCTION__);
         return;
@@ -233,12 +232,23 @@ void AnimationCache::addAnimationsWithFile(const std::string& plist)
     
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(plist);
 
-    CCASSERT( !dict.empty(), "CCAnimationCache: File could not be found");
     if (dict.empty()) {
         log("AnimationCache::addAnimationsWithFile error:%s not exist!", plist.c_str());
+        return;
     }
 
     addAnimationsWithDictionary(dict,plist);
+}
+
+void AnimationCache::addAnimationsWithData(const char *data, int dataSize)
+{
+    ValueMap dict = FileUtils::getInstance()->getValueMapFromData(data, dataSize);
+
+    if (dict.empty()) {
+        return;
+    }
+
+    addAnimationsWithDictionary(dict, std::string());
 }
 
 

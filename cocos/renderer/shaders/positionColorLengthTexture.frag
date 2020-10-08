@@ -22,8 +22,9 @@
 const char* positionColorLengthTexture_frag = R"(
 
 #ifdef GL_ES
-// #extension GL_OES_standard_derivatives : enable
 
+precision lowp float;
+                                              
 varying mediump vec4 v_color;
 varying mediump vec2 v_texcoord;
 #else

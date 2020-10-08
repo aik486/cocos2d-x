@@ -346,10 +346,11 @@ void CommandBufferMTL::endRenderPass()
     afterDraw();
 }
 
-void CommandBufferMTL::captureScreen(std::function<void(const unsigned char*, int, int)> callback)
+void CommandBufferMTL::captureScreen(PixelsCallback callback)
 {
     [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
-        Utils::getTextureBytes(0, 0, _drawableTexture.width, _drawableTexture.height, _drawableTexture, callback);
+        auto cb = std::bind(callback, std::placeholders::_1, 4, std::placeholders::_2, std::placeholders::_3);
+        Utils::getTextureBytes(0, 0, _drawableTexture.width, _drawableTexture.height, _drawableTexture, cb);
         Device::getInstance()->setFrameBufferOnly(true);
     }];
 }

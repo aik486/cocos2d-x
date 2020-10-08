@@ -68,6 +68,8 @@ public:
      */
     void removeUnusedShader();
     
+    void removeAllShaders();
+    
 protected:
     virtual ~ShaderCache();
     

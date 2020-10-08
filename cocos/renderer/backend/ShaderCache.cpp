@@ -50,11 +50,8 @@ void ShaderCache::destroyInstance()
 
 ShaderCache::~ShaderCache()
 {
-    for(auto& shaderModule : _cachedShaders)
-    {
-        CC_SAFE_RELEASE(shaderModule.second);
-    }
-    CCLOGINFO("deallocing ProgramCache: %p", this);
+    removeAllShaders();
+    CCLOGINFO("deallocing ShaderCache: %p", this);
 }
 
 bool ShaderCache::init()
@@ -104,6 +101,15 @@ void ShaderCache::removeUnusedShader()
             ++iter;
         }
     }
+}
+
+void ShaderCache::removeAllShaders()
+{
+    for(auto& shaderModule : _cachedShaders)
+    {
+        CC_SAFE_RELEASE(shaderModule.second);
+    }
+    _cachedShaders.clear();
 }
 
 CC_BACKEND_END

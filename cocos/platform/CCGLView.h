@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 Alexandra Cherdantseva
 
 http://www.cocos2d-x.org
 
@@ -32,6 +33,7 @@ THE SOFTWARE.
 
 #include <vector>
 
+#ifndef QT_COCOS
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include <windows.h>
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
@@ -43,6 +45,7 @@ typedef void* id;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 #define CC_ICON_SET_SUPPORT true
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) */
+#endif
 
 /** There are some Resolution Policy for Adapt to the screen. */
 enum class ResolutionPolicy
@@ -79,6 +82,9 @@ enum class ResolutionPolicy
  *
  * There are six opengl Context Attrs. 
  */
+
+NS_CC_BEGIN
+
 struct GLContextAttrs
 {
     int redBits;
@@ -89,8 +95,6 @@ struct GLContextAttrs
     int stencilBits;
     int multisamplingCount;
 };
-
-NS_CC_BEGIN
 
 class Scene;
 class Renderer;
@@ -213,9 +217,11 @@ public:
      */
     virtual bool isRetinaDisplay() const { return false; }
  
+#ifndef QT_COCOS
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     virtual void* getEAGLView() const { return nullptr; }
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
+#endif
 
     /**
      * Get the visible area size of opengl viewport.
@@ -358,20 +364,20 @@ public:
      *
      * @param filename A path to image file, e.g., "icons/cusom.png". 
      */
-    virtual void setIcon(const std::string& filename) const {};
+    virtual void setIcon(const std::string& filename) const;
 
     /** Set window icon (implemented for windows and linux).
      * Best icon (based on size) will be auto selected.
      * 
      * @param filelist The array contains icons.
      */
-    virtual void setIcon(const std::vector<std::string>& filelist) const {};
+    virtual void setIcon(const std::vector<std::string>& filelist) const;
 
     /** Set default window icon (implemented for windows and linux).
      * On windows it will use icon from .exe file (if included).
      * On linux it will use default window icon.
      */
-    virtual void setDefaultIcon() const {};
+    virtual void setDefaultIcon() const;
 
     /**
      * Get the opengl view port rectangle.
@@ -407,6 +413,7 @@ public:
      */
     ResolutionPolicy getResolutionPolicy() const { return _resolutionPolicy; }
 
+#ifndef QT_COCOS
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     virtual HWND getWin32Window() = 0;
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
@@ -415,7 +422,7 @@ public:
     virtual id getCocoaWindow() = 0;
     virtual id getNSGLContext() = 0; // stevetranby: added
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
-
+#endif
     /**
      * Renders a Scene with a Renderer
      * This method is called directly by the Director

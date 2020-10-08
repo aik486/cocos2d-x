@@ -33,11 +33,11 @@ THE SOFTWARE.
 #define _USE_MATH_DEFINES
 #endif
 
-#include "base/CCConsole.h"
 #include "platform/CCStdC.h"
+#include "base/CCConsole.h"
 
 #ifndef CCASSERT
-#if COCOS2D_DEBUG > 0
+#ifdef COCOS2D_DEBUG
     #if CC_ENABLE_SCRIPT_BINDING
     extern bool CC_DLL cc_assert_script_compatible(const char *msg);
     #define CCASSERT(cond, msg) do {                              \
@@ -233,7 +233,7 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 
 #endif
 
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+#if !defined(COCOS2D_DEBUG)
 #define CHECK_GL_ERROR_DEBUG()
 #else
 #define CHECK_GL_ERROR_DEBUG() \

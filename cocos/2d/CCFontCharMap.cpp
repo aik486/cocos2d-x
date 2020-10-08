@@ -106,7 +106,7 @@ int* FontCharMap::getHorizontalKerningForTextUTF32(const std::u32string& /*text*
 
 FontAtlas * FontCharMap::createFontAtlas()
 {
-    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(*this);
+    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(this);
     if (!tempAtlas)
         return nullptr;
     

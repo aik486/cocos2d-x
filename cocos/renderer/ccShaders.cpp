@@ -62,6 +62,7 @@ NS_CC_BEGIN
 #include "renderer/shaders/3D_colorNormal.frag"
 #include "renderer/shaders/3D_colorNormalTexture.frag"
 #include "renderer/shaders/3D_colorTexture.frag"
+#include "renderer/shaders/3D_colorTextureAlphaTest.frag"
 #include "renderer/shaders/3D_particle.vert"
 #include "renderer/shaders/3D_particle.frag"
 #include "renderer/shaders/3D_positionNormalTexture.vert"

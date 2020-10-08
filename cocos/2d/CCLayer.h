@@ -171,12 +171,6 @@ protected:
     int executeScriptTouchHandler(EventTouch::EventCode eventType, Touch* touch, Event* event);
     int executeScriptTouchesHandler(EventTouch::EventCode eventType, const std::vector<Touch*>& touches, Event* event);
 
-    bool _touchEnabled;
-    bool _accelerometerEnabled;
-    bool _keyboardEnabled;
-    EventListener* _touchListener;
-    EventListenerKeyboard* _keyboardListener;
-    EventListenerAcceleration* _accelerationListener;
 
     Touch::DispatchMode _touchMode;
     bool _swallowsTouches;
@@ -470,13 +464,13 @@ public:
     void setExpand(float expand);
     float getExpand() const;
     
-    void setStartColor(const Color3B& color);
     void setStartColor(const Color4B& color);
+    void setStartColor3B(const Color3B& color);
     Color4B getStartColor() const;
     Color3B getStartColor3B() const;
     
-    void setEndColor(const Color3B& color);
     void setEndColor(const Color4B& color);
+    void setEndColor3B(const Color3B& color);
     Color4B getEndColor() const;
     Color3B getEndColor3B() const;
     

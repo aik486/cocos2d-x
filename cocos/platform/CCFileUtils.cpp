@@ -38,7 +38,7 @@ THE SOFTWARE.
 #ifdef MINIZIP_FROM_SYSTEM
 #include <minizip/unzip.h>
 #else // from our embedded sources
-#include "unzip.h"
+#include "unzip/unzip.h"
 #endif
 #include <sys/stat.h>
 
@@ -48,7 +48,7 @@ NS_CC_BEGIN
 
 // Implement DictMaker
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS) && (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
+#if defined(QT_COCOS) || ((CC_TARGET_PLATFORM != CC_PLATFORM_IOS) && (CC_TARGET_PLATFORM != CC_PLATFORM_MAC))
 
 typedef enum
 {
@@ -699,11 +699,12 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
     return Status::OK;
 }
 
-unsigned char* FileUtils::getFileDataFromZip(const std::string& zipFilePath, const std::string& filename, ssize_t *size) const
+Data FileUtils::getFileDataFromZip(const std::string& zipFilePath, const std::string& filename) const
 {
     unsigned char * buffer = nullptr;
     unzFile file = nullptr;
-    *size = 0;
+    Data result;
+    ssize_t size = 0;
 
     do
     {
@@ -729,7 +730,7 @@ unsigned char* FileUtils::getFileDataFromZip(const std::string& zipFilePath, con
         int CC_UNUSED readedSize = unzReadCurrentFile(file, buffer, static_cast<unsigned>(fileInfo.uncompressed_size));
         CCASSERT(readedSize == 0 || readedSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
 
-        *size = fileInfo.uncompressed_size;
+        size = fileInfo.uncompressed_size;
         unzCloseCurrentFile(file);
     } while (0);
 
@@ -738,7 +739,10 @@ unsigned char* FileUtils::getFileDataFromZip(const std::string& zipFilePath, con
         unzClose(file);
     }
 
-    return buffer;
+    if (size > 0) {
+        result.fastSet(buffer, size);
+    }
+    return result;
 }
 
 void FileUtils::writeValueMapToFile(ValueMap dict, const std::string& fullPath, std::function<void(bool)> callback) const

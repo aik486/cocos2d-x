@@ -358,7 +358,7 @@ void CommandBufferGL::setProgramState(ProgramState* programState)
 void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start,  std::size_t count)
 {
     prepareDrawing();
-    glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
+    glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), GLint(start), GLsizei(count));
     
     cleanResources();
 }
@@ -367,7 +367,7 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType, IndexFormat inde
 {
     prepareDrawing();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
-    glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType), (GLvoid*)offset);
+    glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), GLsizei(count), UtilsGL::toGLIndexType(indexType), (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
     cleanResources();
 }
@@ -435,12 +435,12 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL *program) const
     for (const auto& attributeInfo : attributes)
     {
         const auto& attribute = attributeInfo.second;
-        glEnableVertexAttribArray(attribute.index);
-        glVertexAttribPointer(attribute.index,
+        glEnableVertexAttribArray(GLuint(attribute.index));
+        glVertexAttribPointer(GLuint(attribute.index),
             UtilsGL::getGLAttributeSize(attribute.format),
             UtilsGL::toGLAttributeType(attribute.format),
             attribute.needToBeNormallized,
-            vertexLayout->getStride(),
+            GLsizei(vertexLayout->getStride()),
             (GLvoid*)attribute.offset);
     }
 }
@@ -622,14 +622,14 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
     }
 }
 
-void CommandBufferGL::captureScreen(std::function<void(const unsigned char*, int, int)> callback)
+void CommandBufferGL::captureScreen(PixelsCallback callback)
 {
     int bufferSize = _viewPort.w * _viewPort.h *4;
     std::shared_ptr<GLubyte> buffer(new GLubyte[bufferSize], [](GLubyte* p){ CC_SAFE_DELETE_ARRAY(p); });
     memset(buffer.get(), 0, bufferSize);
     if (!buffer)
     {
-        callback(nullptr, 0, 0);
+        callback(nullptr, 0, 0, 0);
         return;
     }
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -639,15 +639,15 @@ void CommandBufferGL::captureScreen(std::function<void(const unsigned char*, int
     memset(flippedBuffer.get(), 0, bufferSize);
     if (!flippedBuffer)
     {
-        callback(nullptr, 0, 0);
+        callback(nullptr, 0, 0, 0);
         return;
     }
-    for (int row = 0; row < _viewPort.h; ++row)
+    for (unsigned row = 0; row < _viewPort.h; ++row)
     {
         memcpy(flippedBuffer.get() + (_viewPort.h - row - 1) * _viewPort.w * 4, buffer.get() + row * _viewPort.w * 4, _viewPort.w * 4);
     }
 
-    callback(flippedBuffer.get(), _viewPort.w, _viewPort.h);
+    callback(flippedBuffer.get(), 4, _viewPort.w, _viewPort.h);
 }
 
 CC_BACKEND_END

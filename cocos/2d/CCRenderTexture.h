@@ -158,7 +158,11 @@ public:
      * @return An image.
      * @js NA
      */
-    void newImage(std::function<void(Image*)> imageCallback, bool flipImage = true);
+    using ImageCallback = std::function<void(Image*)>;
+    void newImage(ImageCallback callback, bool flipImage = true);
+    
+    using PixelsCallback = std::function<void(const unsigned char*, size_t, size_t, size_t)>;
+    void getPixels(PixelsCallback callback, bool flipImage = true);
     
     /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
      * Returns true if the operation is successful.
@@ -389,6 +393,7 @@ protected:
      call saveToFile twice will overwrite this command and callback
      and the command and callback will be executed twice.
     */
+    CallbackCommand _getPixelsCommand;
     CallbackCommand _saveToFileCommand;
     std::function<void (RenderTexture*, const std::string&)> _saveFileCallback = nullptr;
     

@@ -25,6 +25,9 @@
 
 const char* CC3D_colorNormalTexture_frag = R"(
 
+#ifdef GL_ES
+precision lowp float;
+#endif
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
 uniform vec3 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];
 uniform vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];

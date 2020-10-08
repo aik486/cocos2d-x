@@ -26,7 +26,7 @@
 
 #include "base/CCScriptSupport.h"
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
 
 #include "base/CCScheduler.h"
 #include "2d/CCNode.h"
@@ -43,10 +43,13 @@ bool CC_DLL cc_assert_script_compatible(const char *msg)
 
 NS_CC_BEGIN
 
+
+#ifndef QT_COCOS_SCRIPT_BINDING
+
 // 
 // // ScriptHandlerEntry
 
-ScriptHandlerEntry* ScriptHandlerEntry::create(int handler)
+ScriptHandlerEntry* ScriptHandlerEntry::create(int64_t handler)
 {
     ScriptHandlerEntry* entry = new (std::nothrow) ScriptHandlerEntry(handler);
     entry->autorelease();
@@ -66,7 +69,7 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
 // 
 // // SchedulerScriptHandlerEntry
 
-SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int handler, float interval, bool paused)
+SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int64_t handler, float interval, bool paused)
 {
     SchedulerScriptHandlerEntry* entry = new (std::nothrow) SchedulerScriptHandlerEntry(handler);
     entry->init(interval, paused);
@@ -93,7 +96,7 @@ SchedulerScriptHandlerEntry::~SchedulerScriptHandlerEntry()
 // 
 // // TouchScriptHandlerEntry
 
-TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int handler,
+TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int64_t handler,
                                                              bool isMultiTouches,
                                                              int priority,
                                                              bool swallowsTouches)
@@ -116,7 +119,7 @@ bool TouchScriptHandlerEntry::init(bool isMultiTouches, int priority, bool swall
     
     return true;
 }
-
+#endif // QT_COCOS_SCRIPT_BINDING
 // 
 // // ScriptEngineManager
 
@@ -166,18 +169,24 @@ void ScriptEngineManager::destroyInstance()
 
 bool ScriptEngineManager::sendActionEventToJS(Action* actionObject, int eventType, void* param)
 {
+#ifndef QT_COCOS_SCRIPT_BINDING
     auto scriptEngine = getInstance()->getScriptEngine();
     
     ActionObjectScriptData data(actionObject,(int*)&eventType, param);
     ScriptEvent scriptEvent(kScriptActionEvent,(void*)&data);
     if (scriptEngine->sendEvent(&scriptEvent))
         return true;
-    
+#else
+    CC_UNUSED_PARAM(actionObject);
+    CC_UNUSED_PARAM(eventType);
+    CC_UNUSED_PARAM(param);
+#endif
     return false;
 }
 
 bool ScriptEngineManager::sendNodeEventToJS(Node* node, int action)
 {
+#ifndef QT_COCOS_SCRIPT_BINDING
     auto scriptEngine = getInstance()->getScriptEngine();
     
     if (scriptEngine->isCalledFromScript())
@@ -192,12 +201,16 @@ bool ScriptEngineManager::sendNodeEventToJS(Node* node, int action)
         if (scriptEngine->sendEvent(&scriptEvent))
             return true;
     }
-    
+#else
+    CC_UNUSED_PARAM(node);
+    CC_UNUSED_PARAM(action);
+#endif
     return false;
 }
 
 bool ScriptEngineManager::sendNodeEventToJSExtended(Node* node, int action)
 {
+#ifndef QT_COCOS_SCRIPT_BINDING
     auto scriptEngine = getInstance()->getScriptEngine();
     
     if (!scriptEngine->isCalledFromScript())
@@ -207,20 +220,27 @@ bool ScriptEngineManager::sendNodeEventToJSExtended(Node* node, int action)
         if (scriptEngine->sendEvent(&scriptEvent))
             return true;
     }
-    
+#else
+    CC_UNUSED_PARAM(node);
+    CC_UNUSED_PARAM(action);
+#endif  
     return false;
 }
 
 void ScriptEngineManager::sendNodeEventToLua(Node* node, int action)
 {
+#ifndef QT_COCOS_SCRIPT_BINDING
     auto scriptEngine = getInstance()->getScriptEngine();
     
     BasicScriptData data(node,(void*)&action);
     ScriptEvent scriptEvent(kNodeEvent,(void*)&data);
     
     scriptEngine->sendEvent(&scriptEvent);
+#else
+    CC_UNUSED_PARAM(node);
+    CC_UNUSED_PARAM(action);
+#endif 
 }
-
 NS_CC_END
 
 #endif // #if CC_ENABLE_SCRIPT_BINDING

@@ -35,6 +35,8 @@
 
 NS_CC_BEGIN
 
+class FontFNT;
+
 /**
 @struct BMFontDef
 BMFont definition
@@ -72,8 +74,7 @@ typedef struct _BMFontPadding {
 */
 class CC_DLL BMFontConfiguration : public Ref
 {
-    // FIXME: Creating a public interface so that the bitmapFontArray[] is accessible
-public://@public
+private:
     // BMFont definitions
     std::unordered_map<int /* key */, BMFontDef /* fontDef */> _fontDefDictionary;
 
@@ -94,6 +95,8 @@ public://@public
 
     //! Font Size
     int _fontSize;
+    
+    friend class FontFNT;
 public:
     /**
      * @js ctor
@@ -144,7 +147,7 @@ public:
     static FontFNT* create(const std::string& fntFilePath, const std::string& subTextureKey);
     static FontFNT* create(const std::string& fntFilePath);
 
-    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(const std::string& fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
+    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(const std::string& fntFilePath, const Vec2& imageOffset);
 
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.

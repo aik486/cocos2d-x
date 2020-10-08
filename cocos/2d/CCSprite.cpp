@@ -123,7 +123,7 @@ Sprite* Sprite::createWithSpriteFrameName(const std::string& spriteFrameName)
 {
     SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
-#if COCOS2D_DEBUG > 0
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
     char msg[256] = {0};
     sprintf(msg, "Invalid spriteFrameName: %s", spriteFrameName.c_str());
     CCASSERT(frame != nullptr, msg);
@@ -419,7 +419,7 @@ void Sprite::setTexture(Texture2D *texture)
 {
     auto isETC1 = texture && texture->getAlphaTextureName();
     setProgramState((isETC1) ? backend::ProgramType::ETC1 : backend::ProgramType::POSITION_TEXTURE_COLOR);
-    CCASSERT(! _batchNode || (texture &&  texture == _batchNode->getTexture()), "CCSprite: Batched sprites should use the same texture as the batchnode");
+    CCASSERT(! _batchNode || (texture &&  texture == _batchNode->getTexture()), "Sprite: Batched sprites should use the same texture as the batchnode");
     // accept texture==nil as argument
     CCASSERT( !texture || dynamic_cast<Texture2D*>(texture), "setTexture expects a Texture2D. Invalid argument");
     
@@ -1085,13 +1085,32 @@ void Sprite::updateTransform()
 
         // MARMALADE CHANGE: ADDED CHECK FOR nullptr, TO PERMIT SPRITES WITH NO BATCH NODE / TEXTURE ATLAS
         if (_textureAtlas)
-            _textureAtlas->updateQuad(&_quad, _atlasIndex);
+            _textureAtlas->updateQuad(_quad, _atlasIndex);
 
         _recursiveDirty = false;
         setDirty(false);
     }
 
     Node::updateTransform();
+}
+
+Sprite *Sprite::clone() const
+{
+    auto sprite = new Sprite;
+    sprite->copyPropertiesFrom(this);
+    
+    return sprite;
+}
+
+void Sprite::copyPropertiesFrom(const Sprite *from)
+{
+	_flippedX = from->_flippedX;
+	_flippedY = from->_flippedY;
+	_unflippedOffsetPositionFromCenter =
+		from->_unflippedOffsetPositionFromCenter;
+	initWithTexture(from->_texture, from->_rect, from->_rectRotated);
+	
+    Node::copyPropertiesFrom(from);
 }
 
 // draw
@@ -1161,7 +1180,7 @@ void Sprite::addChild(Node *child, int zOrder, int tag)
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
-        CCASSERT( childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
+        CCASSERT( childSprite, "Sprite only supports Sprites as children when using SpriteBatchNode");
         CCASSERT(childSprite->getTexture() == _textureAtlas->getTexture(), "childSprite's texture name should be equal to _textureAtlas's texture name!");
         //put it in descendants array of batch node
         _batchNode->appendChild(childSprite);
@@ -1171,7 +1190,7 @@ void Sprite::addChild(Node *child, int zOrder, int tag)
             setReorderChildDirtyRecursively();
         }
     }
-    //CCNode already sets isReorderChildDirty_ so this needs to be after batchNode check
+    //Node already sets isReorderChildDirty_ so this needs to be after batchNode check
     Node::addChild(child, zOrder, tag);
 }
 
@@ -1184,7 +1203,7 @@ void Sprite::addChild(Node *child, int zOrder, const std::string &name)
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
-        CCASSERT( childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
+        CCASSERT( childSprite, "Sprite only supports Sprites as children when using SpriteBatchNode");
         CCASSERT(childSprite->getTexture() == _textureAtlas->getTexture(),
                  "childSprite's texture name should be equal to _textureAtlas's texture name.");
         //put it in descendants array of batch node
@@ -1195,7 +1214,7 @@ void Sprite::addChild(Node *child, int zOrder, const std::string &name)
             setReorderChildDirtyRecursively();
         }
     }
-    //CCNode already sets isReorderChildDirty_ so this needs to be after batchNode check
+    //Node already sets isReorderChildDirty_ so this needs to be after batchNode check
     Node::addChild(child, zOrder, name);
 }
 
@@ -1551,8 +1570,8 @@ void Sprite::updateColor()
     // renders using batch node
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
-        if (_atlasIndex != INDEX_NOT_INITIALIZED)
-            _textureAtlas->updateQuad(&_quad, _atlasIndex);
+        if (_atlasIndex != unsigned(INDEX_NOT_INITIALIZED))
+            _textureAtlas->updateQuad(_quad, _atlasIndex);
         else
             // no need to set it recursively
             // update dirty_, don't update recursiveDirty_
@@ -1630,17 +1649,17 @@ void Sprite::setSpriteFrame(SpriteFrame *spriteFrame)
 
 void Sprite::setDisplayFrameWithAnimationName(const std::string& animationName, unsigned int frameIndex)
 {
-    CCASSERT(!animationName.empty(), "CCSprite#setDisplayFrameWithAnimationName. animationName must not be nullptr");
+    CCASSERT(!animationName.empty(), "Sprite#setDisplayFrameWithAnimationName. animationName must not be nullptr");
     if (animationName.empty())
         return;
 
     Animation *a = AnimationCache::getInstance()->getAnimation(animationName);
 
-    CCASSERT(a, "CCSprite#setDisplayFrameWithAnimationName: Frame not found");
+    CCASSERT(a, "Sprite#setDisplayFrameWithAnimationName: Frame not found");
 
     AnimationFrame* frame = a->getFrames().at(frameIndex);
 
-    CCASSERT(frame, "CCSprite#setDisplayFrame. Invalid frame");
+    CCASSERT(frame, "Sprite#setDisplayFrame. Invalid frame");
 
     setSpriteFrame(frame->getSpriteFrame());
 }
@@ -1708,7 +1727,7 @@ void Sprite::setBatchNode(SpriteBatchNode *spriteBatchNode)
 // MARK: Texture protocol
 void Sprite::updateBlendFunc()
 {
-    CCASSERT(_renderMode != RenderMode::QUAD_BATCHNODE, "CCSprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
+    CCASSERT(_renderMode != RenderMode::QUAD_BATCHNODE, "Sprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
     
     // it is possible to have an untextured sprite
     backend::BlendDescriptor& blendDescriptor = _trianglesCommand.getPipelineDescriptor().blendDescriptor;

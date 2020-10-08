@@ -108,7 +108,7 @@ class EventListener;
 
  */
 
-class CC_DLL Node : public Ref
+class CC_DLL Node : public Ref, public Clonable
 {
 public:
     /** Default tag used for all the nodes */
@@ -143,6 +143,11 @@ public:
      * @lua NA
      */
     virtual std::string getDescription() const;
+    
+    virtual Node* clone() const override;
+    
+    void copyPropertiesFrom(const Node *from);
+    void copyNodeChildrenFrom(const Node *from, bool skipHidden = true);
 
     /// @} end of initializers
 
@@ -822,8 +827,10 @@ public:
      *
      * @return the array the node's children.
      */
-    virtual Vector<Node*>& getChildren() { return _children; }
     virtual const Vector<Node*>& getChildren() const { return _children; }
+    virtual Vector<Node*>& getChildren() { return _children; }
+    
+    Node *getChildAt(int index) const;
     
     /** 
      * Returns the amount of children.
@@ -847,6 +854,7 @@ public:
      */
     virtual Node* getParent() { return _parent; }
     virtual const Node* getParent() const { return _parent; }
+    virtual Node* getTransformParent();
 
 
     ////// REMOVES //////
@@ -1040,6 +1048,7 @@ public:
      */
     virtual bool isRunning() const;
 
+#if CC_ENABLE_SCRIPT_BINDING
     /**
      * Schedules for lua script.
      * @js NA
@@ -1047,9 +1056,10 @@ public:
      * @param handler The key to search lua function.
      * @param priority A given priority value.
      */
-    void scheduleUpdateWithPriorityLua(int handler, int priority);
+    void scheduleUpdateWithPriorityLua(int64_t handler, int priority);
 
     /// @}  end Script Bindings
+#endif
 
 
     /// @{
@@ -1120,7 +1130,7 @@ public:
      * @param parentFlags Renderer flag.
      */
     virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    virtual void visit() final;
+    void visit();
 
 
     /** Returns the Scene that contains the Node.
@@ -1592,6 +1602,7 @@ public:
      *
      * @param additionalTransform An additional transform matrix.
      */
+    const Mat4 *getAdditionalTransform() const;
     void setAdditionalTransform(const Mat4* additionalTransform);
     void setAdditionalTransform(const Mat4& additionalTransform);
     void setAdditionalTransform(const AffineTransform& additionalTransform);
@@ -1755,6 +1766,13 @@ public:
      */
     const std::function<void()>& getOnExitTransitionDidStartCallback() const { return _onExitTransitionDidStartCallback; }
     
+    const std::function<void(float)>& getOnUpdateCallback() const {
+        return _onUpdateCallback;
+    }
+    void setOnUpdateCallback(const std::function<void(float)>&callback) {
+        _onUpdateCallback = callback;
+    }
+    
     /**
      * get & set camera mask, the node is visible by the camera whose camera flag & node's camera mask is true
      */
@@ -1769,6 +1787,12 @@ public:
     
     virtual void setProgramState(backend::ProgramState* programState);
     virtual backend::ProgramState* getProgramState() const;
+    
+    backend::Program* getShaderProgram() const;
+    void setShaderProgram(backend::Program* program);
+    
+    bool isUseInvertedAdditionalTransformOrder() const;
+    void setUseInvertedAdditionalTransformOrder(bool value);
 
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
@@ -1904,8 +1928,7 @@ protected:
     bool _isTransitionFinished;       ///< flag to indicate whether the transition was finished
 
 #if CC_ENABLE_SCRIPT_BINDING
-    int _scriptHandler;               ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
-    int _updateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
+    int64_t _updateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
     ccScriptType _scriptType;         ///< type of script binding, lua or javascript
 #endif
     
@@ -1918,6 +1941,7 @@ protected:
     Color3B     _realColor;
     bool        _cascadeColorEnabled;
     bool        _cascadeOpacityEnabled;
+    bool _useInvertedAdditionalTransformOrder = false;
 
     // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
     unsigned short _cameraMask;
@@ -1926,6 +1950,7 @@ protected:
     std::function<void()> _onExitCallback;
     std::function<void()> _onEnterTransitionDidFinishCallback;
     std::function<void()> _onExitTransitionDidStartCallback;
+    std::function<void(float)> _onUpdateCallback;
     
     backend::ProgramState* _programState = nullptr;
 
@@ -1952,6 +1977,11 @@ public:
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Node);
 };
+
+inline bool Node::isUseInvertedAdditionalTransformOrder() const
+{
+    return _useInvertedAdditionalTransformOrder;
+}
 
 /**
  * This is a helper function, checks a GL screen point is in content rectangle space.

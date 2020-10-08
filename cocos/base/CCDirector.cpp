@@ -61,7 +61,7 @@ THE SOFTWARE.
 #include "platform/CCApplication.h"
 #include "renderer/backend/ProgramCache.h"
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
 #include "base/CCScriptSupport.h"
 #endif
 
@@ -189,7 +189,7 @@ Director::~Director()
 
     s_SharedDirector = nullptr;
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
     ScriptEngineManager::destroyInstance();
 #endif
 
@@ -241,6 +241,7 @@ void Director::setGLDefaultValues()
 
     _renderer->setDepthTest(false);
     _renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
+    _winSizeInPoints = _openGLView->getDesignResolutionSize();
     setProjection(_projection);
 }
 
@@ -354,7 +355,7 @@ void Director::calculateDeltaTime()
         _deltaTime = MAX(0, _deltaTime);
     }
 
-#if COCOS2D_DEBUG
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
     // If we are debugging our code, prevent big delta time
     if (_deltaTime > 0.2f)
     {
@@ -367,6 +368,13 @@ float Director::getDeltaTime() const
 {
     return _deltaTime;
 }
+
+int64_t Director::getFrameStartTimeMicros() const
+{
+   return std::chrono::time_point_cast<std::chrono::microseconds>(
+               _lastUpdate).time_since_epoch().count();
+}
+
 void Director::setOpenGLView(GLView *openGLView)
 {
     CCASSERT(openGLView, "opengl view should not be null");
@@ -593,7 +601,6 @@ void Director::setProjection(Projection projection)
 
     if (size.width == 0 || size.height == 0)
     {
-        CCLOGERROR("cocos2d: warning, Director::setProjection() failed because size is 0");
         return;
     }
 
@@ -1021,10 +1028,12 @@ void Director::reset()
     FileUtils::destroyInstance();
     AsyncTaskPool::destroyInstance();
     backend::ProgramCache::destroyInstance();
-    
+    backend::ShaderCache::destroyInstance();
     
     // cocos2d-x specific data structures
+#ifndef QT_COCOS
     UserDefault::destroyInstance();
+#endif
     resetMatrixStack();
 
     destroyTextureCache();

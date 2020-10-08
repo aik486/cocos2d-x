@@ -25,6 +25,9 @@
 
 const char* positionUColor_vert = R"(
 
+#ifdef GL_ES
+precision lowp float;
+#endif
 attribute vec4 a_position;
 uniform vec4 u_color;
 uniform mat4 u_MVPMatrix;

@@ -28,14 +28,7 @@
 /// @cond DO_NOT_SHOW
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
-#include <BaseTsd.h>
-#include <WinSock2.h>
-
-#ifndef __SSIZE_T
-#define __SSIZE_T
-typedef SSIZE_T ssize_t;
-#endif // __SSIZE_T
-
+#include "platform/CCStdC.h"
 #else
 #include <sys/select.h>
 #endif

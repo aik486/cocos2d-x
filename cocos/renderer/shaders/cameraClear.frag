@@ -26,6 +26,10 @@
 const char * cameraClear_frag = R"(
 
 #ifdef GL_ES
+precision lowp float;
+#endif
+
+#ifdef GL_ES
 varying mediump vec2 v_texCoord;
 varying mediump vec4 v_color;
 #else

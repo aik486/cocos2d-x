@@ -45,7 +45,7 @@ public:
     static const int DistanceMapSpread;
 
     static FontFreeType* create(const std::string &fontName, float fontSize, GlyphCollection glyphs,
-        const char *customGlyphs,bool distanceFieldEnabled = false, float outline = 0);
+        const std::string &customGlyphs,bool distanceFieldEnabled = false, float outline = 0);
 
     static void shutdownFreeType();
 
@@ -87,7 +87,7 @@ private:
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
     unsigned char* getGlyphBitmapWithOutline(uint64_t code, FT_BBox &bbox);
 
-    void setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs = nullptr);
+    void setGlyphCollection(GlyphCollection glyphs, const std::string &customGlyphs = std::string());
     const char* getGlyphCollection() const;
     
     FT_Face _fontRef;

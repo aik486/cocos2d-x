@@ -118,6 +118,13 @@ protected:
  * Orbits the camera around the center of the screen using spherical coordinates.
  * @ingroup Actions
  */
+
+struct CC_DLL SphericalRadius{
+    float radius = 0.f;
+    float zenith = 0.f;
+    float azimuth = 0.f;
+};
+
 class CC_DLL OrbitCamera : public ActionCamera
 {
 public:
@@ -140,7 +147,8 @@ public:
      * @param zenith The spherical zenith.
      * @param azimuth The spherical azimuth.
      */
-    void sphericalRadius(float *r, float *zenith, float *azimuth);
+    void sphericalRadius(float *r, float *zenith, float *azimuth) const;
+    SphericalRadius getSphericalRadius() const;
 
     // Overrides
     OrbitCamera *clone() const override;

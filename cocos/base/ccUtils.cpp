@@ -65,7 +65,7 @@ namespace utils
 /**
 * Capture screen implementation, don't use it directly.
 */
-void onCaptureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename, const unsigned char* imageData, int width, int height)
+void onCaptureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename, const unsigned char* imageData, size_t width, size_t height)
 {
     if(!imageData)
     {
@@ -90,14 +90,14 @@ void onCaptureScreen(const std::function<void(bool, const std::string&)>& afterC
     }
 
     bool succeed = false;
-    std::string outputFile = "";
+    std::string outputFile;
 
     do
     {
         Image* image = new (std::nothrow) Image;
         if (image)
         {
-            image->initWithRawData(imageData, width * height * 4, width, height, 8);
+            image->initWithRawData(imageData, ssize_t(width * height * 4), int(width), int(height), 8);
             if (FileUtils::getInstance()->isAbsolutePath(filename))
             {
                 outputFile = filename;
@@ -150,7 +150,7 @@ void captureScreen(const std::function<void(bool, const std::string&)>& afterCap
         return;
     }
     s_captureScreenCommand.init(std::numeric_limits<float>::max());
-    s_captureScreenCommand.func = std::bind(onCaptureScreen, afterCaptured, filename, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    s_captureScreenCommand.func = std::bind(onCaptureScreen, afterCaptured, filename, std::placeholders::_1, std::placeholders::_3, std::placeholders::_4);
     
     s_captureScreenListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_DRAW, [](EventCustom* /*event*/) {
         auto director = Director::getInstance();

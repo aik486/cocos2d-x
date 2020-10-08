@@ -46,25 +46,6 @@ using namespace std;
 
 NS_CC_BEGIN
 
-// Helpers
-
-//sampler uniform names, only diffuse and normal texture are supported for now
-std::string s_uniformSamplerName[] =
-{
-    "",//NTextureData::Usage::Unknown,
-    "",//NTextureData::Usage::None
-    "",//NTextureData::Usage::Diffuse
-    "",//NTextureData::Usage::Emissive
-    "",//NTextureData::Usage::Ambient
-    "",//NTextureData::Usage::Specular
-    "",//NTextureData::Usage::Shininess
-    "u_normalTex",//NTextureData::Usage::Normal
-    "",//NTextureData::Usage::Bump
-    "",//NTextureData::Usage::Transparency
-    "",//NTextureData::Usage::Reflection
-};
-
-
 // helpers
 void Mesh::resetLightUniformValues()
 {
@@ -121,6 +102,7 @@ Mesh::Mesh()
 , _blendDirty(true)
 , _material(nullptr)
 , _texFile("")
+, _forceDisableDepthTest(false)
 {
     
 }
@@ -287,8 +269,6 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
         }
         
         bindMeshCommand();
-        if (cacheFileName)
-            _texFile = tex->getPath();
     }
     else if (usage == NTextureData::Usage::Normal) // currently only diffuse and normal are supported
     {
@@ -300,6 +280,9 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
             }
         }
     }
+    
+    if (cacheFileName)
+        _texFile = tex->getPath();
 }
 
 void Mesh::setTexture(const std::string& texPath, NTextureData::Usage usage)
@@ -310,12 +293,17 @@ void Mesh::setTexture(const std::string& texPath, NTextureData::Usage usage)
 
 Texture2D* Mesh::getTexture() const
 {
-    return _textures.at(NTextureData::Usage::Diffuse);
+    return getTexture(NTextureData::Usage::Diffuse);
 }
 
-Texture2D* Mesh::getTexture(NTextureData::Usage usage)
+Texture2D* Mesh::getTexture(NTextureData::Usage usage) const
 {
-    return _textures[usage];
+    auto it = _textures.find(usage);
+    if (it == _textures.end()) {
+        return nullptr;
+    }
+    
+    return it->second;
 }
 
 void Mesh::setMaterial(Material* material)
@@ -339,7 +327,7 @@ void Mesh::setMaterial(Material* material)
             int i = 0;
             for (auto pass: technique->getPasses())
             {
-#ifdef COCOS2D_DEBUG
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
                 //make it crashed when missing attribute data
                 if(_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
@@ -347,7 +335,7 @@ void Mesh::setMaterial(Material* material)
                     auto& attributes = program->getActiveAttributes();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
-                    CCASSERT(attributes.size() <= attributeCount, "missing attribute data");
+                    CCASSERT(ssize_t(attributes.size()) <= attributeCount, "missing attribute data");
                 }
 #endif
                 //TODO
@@ -373,34 +361,21 @@ Material* Mesh::getMaterial() const
     return _material;
 }
 
-void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, uint32_t flags, unsigned int lightMask, const Vec4& color, bool forceDepthWrite)
+void Mesh::draw(Renderer *renderer, float globalZOrder, const Mat4& transform, uint32_t flags, unsigned int lightMask, const Vec4& color, bool forceDepthWrite)
 {
     if (! isVisible())
         return;
 
     bool isTransparent = (_isTransparent || color.w < 1.f);
-    float globalZ = isTransparent ? 0 : globalZOrder;
-    if (isTransparent)
+    if (isTransparent && !_force2DQueue)
         flags |= Node::FLAGS_RENDER_AS_3D;
+    if (_force2DQueue)
+        isTransparent = true;
+    float globalZ = isTransparent ? 0 : globalZOrder;
+    
+    _material->getStateBlock().setDepthWrite(!isTransparent || _force2DQueue || forceDepthWrite);
 
-//TODO
-//    _meshCommand.init(globalZ,
-//                      _material,
-//                      getVertexBuffer(),
-//                      getIndexBuffer(),
-//                      getPrimitiveType(),
-//                      getIndexFormat(),
-//                      getIndexCount(),
-//                      transform,
-//                      flags);
-
-
-    if (isTransparent && !forceDepthWrite)
-        _material->getStateBlock().setDepthWrite(false);
-    else
-        _material->getStateBlock().setDepthWrite(true);
-
-    _material->getStateBlock().setBlend(_force2DQueue || isTransparent);
+    _material->getStateBlock().setBlend(isTransparent);
 
     // set default uniforms for Mesh
     // 'u_color' and others
@@ -408,6 +383,9 @@ void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, u
     auto technique = _material->_currentTechnique;
     for(const auto pass : technique->_passes)
     {
+        if (auto* texture = getTexture())
+            pass->setUniformTexture(0, texture->getBackendTexture());
+        
         pass->setUniformColor(&color, sizeof(color));
 
         if (_skin)
@@ -418,23 +396,26 @@ void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, u
             setLightUniforms(pass, scene, color, lightMask);
         }
     }
+
     auto &commands = _meshCommands[technique->getName()];
 
     for (auto &command : commands)
     {
-        command.init(globalZ, transform);
-        command.setSkipBatching(isTransparent);
+        command.setSkipBatching(isTransparent && !_force2DQueue);
         command.setTransparent(isTransparent);
-        command.set3D(!_force2DQueue);
+        command.set3D(true);
+        command.set2DQueue(_force2DQueue);
+        command.setForceDisableDepthTest(_forceDisableDepthTest);
     }
 
-    _material->draw(commands.data(), globalZ,
+    _material->draw(renderer, commands.data(), globalZ,
                     getVertexBuffer(),
                     getIndexBuffer(),
                     getPrimitiveType(),
                     getIndexFormat(),
                     getIndexCount(),
-                    transform);
+                    transform,
+                    flags);
 
 }
 

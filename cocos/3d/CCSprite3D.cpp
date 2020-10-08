@@ -48,7 +48,29 @@
 
 NS_CC_BEGIN
 
-static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
+std::string Sprite3D::g_ReplaceTextureExtension;
+
+std::string Sprite3D::adjustTextureExtension(const std::string &fileName)
+{
+    if (fileName.empty() || g_ReplaceTextureExtension.empty())
+        return fileName;
+    
+    if (fileName.rfind(g_ReplaceTextureExtension) == fileName.length() - g_ReplaceTextureExtension.length()) {
+        return fileName;
+    }
+    
+    std::string newFileName = fileName;
+    size_t extPos = fileName.rfind(".");
+    if (extPos != std::string::npos)
+    {
+        newFileName.resize(extPos);
+    }
+        
+    newFileName += g_ReplaceTextureExtension;
+    return newFileName;
+}
+
+static Sprite3DMaterial* getSprite3DMaterialForAttribs(const MeshVertexData* meshVertexData, bool usesLight, bool alphaTest);
 
 Sprite3D* Sprite3D::create()
 {
@@ -70,7 +92,6 @@ Sprite3D* Sprite3D::create(const std::string& modelPath)
     auto sprite = new (std::nothrow) Sprite3D();
     if (sprite && sprite->initWithFile(modelPath))
     {
-        sprite->_contentSize = sprite->getBoundingBox().size;
         sprite->autorelease();
         return sprite;
     }
@@ -90,13 +111,26 @@ Sprite3D* Sprite3D::create(const std::string& modelPath, const std::string& text
 
 void Sprite3D::createAsync(const std::string& modelPath, const std::function<void(Sprite3D*, void*)>& callback, void* callbackparam)
 {
-    createAsync(modelPath, "", callback, callbackparam);
+    createAsync(modelPath, std::string(), callback, callbackparam);
 }
 
 void Sprite3D::createAsync(const std::string& modelPath, const std::string& texturePath, const std::function<void(Sprite3D*, void*)>& callback, void* callbackparam)
 {
+    createAsync(modelPath, std::string(), texturePath, callback, callbackparam);
+}
+
+void Sprite3D::createAsyncWithSkeleton(const std::string &modelPath, const std::string &skeletonPath, const std::function<void (Sprite3D *, void *)> &callback,
+                                       void *callbackparam)
+{
+    createAsync(modelPath, skeletonPath, std::string(), callback, callbackparam);
+}
+
+void Sprite3D::createAsync(const std::string& modelPath, const std::string &skeletonPath,
+                           const std::string& texturePath, const std::function<void(Sprite3D*, void*)>& callback, void* callbackparam)
+{
     Sprite3D *sprite = new (std::nothrow) Sprite3D();
-    if (sprite->loadFromCache(modelPath))
+        
+    if (sprite->loadFromCache(modelPath, skeletonPath))
     {
         sprite->autorelease();
         if (!texturePath.empty())
@@ -105,16 +139,36 @@ void Sprite3D::createAsync(const std::string& modelPath, const std::string& text
         return;
     }
     
-    sprite->_asyncLoadParam.afterLoadCallback = callback;
-    sprite->_asyncLoadParam.texPath = texturePath;
-    sprite->_asyncLoadParam.modelPath = modelPath;
-    sprite->_asyncLoadParam.callbackParam = callbackparam;
-    sprite->_asyncLoadParam.materialdatas = new (std::nothrow) MaterialDatas();
-    sprite->_asyncLoadParam.meshdatas = new (std::nothrow) MeshDatas();
-    sprite->_asyncLoadParam.nodeDatas = new (std::nothrow) NodeDatas();
+    auto &param = sprite->_asyncLoadParam;
+    param.afterLoadCallback = callback;
+    param.texPath = texturePath;
+    param.skeletonPath = skeletonPath;
+    param.modelPath = modelPath;
+    param.callbackParam = callbackparam;
+    param.materialdatas = new (std::nothrow) MaterialDatas();
+    param.meshdatas = new (std::nothrow) MeshDatas();
+    param.nodeDatas = new (std::nothrow) NodeDatas();
+    
+    if (!skeletonPath.empty() && skeletonPath != modelPath && !Sprite3DCache::getInstance()->getSpriteData(skeletonPath))
+    {
+        param.skeleMaterialdatas = new (std::nothrow) MaterialDatas();
+        param.skeleMeshdatas = new (std::nothrow) MeshDatas();
+        param.skeleNodeDatas = new (std::nothrow) NodeDatas();
+    } else {
+        param.skeleMaterialdatas = nullptr;
+        param.skeleMeshdatas = nullptr;
+        param.skeleNodeDatas = nullptr;
+    }
+    
     AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(Sprite3D::afterAsyncLoad, sprite), (void*)(&sprite->_asyncLoadParam), [sprite]()
     {
-        sprite->_asyncLoadParam.result = sprite->loadFromFile(sprite->_asyncLoadParam.modelPath, sprite->_asyncLoadParam.nodeDatas, sprite->_asyncLoadParam.meshdatas, sprite->_asyncLoadParam.materialdatas);
+        auto &param = sprite->_asyncLoadParam;
+        bool ok = loadFromFile(param.modelPath, param.nodeDatas, param.meshdatas, param.materialdatas);
+        if (ok && param.skeleMaterialdatas)
+        {
+            ok = loadFromFile(param.skeletonPath, param.skeleNodeDatas, param.skeleMeshdatas, param.skeleMaterialdatas);
+        }
+        param.result = ok;
     });
     
 }
@@ -128,15 +182,51 @@ void Sprite3D::afterAsyncLoad(void* param)
         if (asyncParam->result)
         {
             _meshes.clear();
+            _meshesSorted.clear();
             _meshVertexDatas.clear();
             CC_SAFE_RELEASE_NULL(_skeleton);
             removeAllAttachNode();
             
+            auto& skeleMeshdatas = asyncParam->skeleMeshdatas;
+            auto& skeleMaterialdatas = asyncParam->skeleMaterialdatas;
+            auto& skeleNodeDatas = asyncParam->skeleNodeDatas;
+            
+            Sprite3DCache::Sprite3DData* skeletonData = nullptr;
+            if (skeleNodeDatas)
+            {
+                skeletonData = Sprite3DCache::getInstance()->getSpriteData(asyncParam->skeletonPath);
+                if (!skeletonData)
+                {
+                    skeletonData= new (std::nothrow) Sprite3DCache::Sprite3DData();
+                    auto& meshVertexDatas = skeletonData->meshVertexDatas;
+                    for (const auto& it : skeleMeshdatas->meshDatas)
+                    {
+                        if (!it)
+                            continue;
+                        
+                        auto meshvertex = MeshVertexData::create(*it);
+                        meshVertexDatas.pushBack(meshvertex);
+                    }
+                    
+                    skeletonData->materialdatas = skeleMaterialdatas;
+                    skeletonData->nodedatas = skeleNodeDatas;
+                    
+                    Sprite3DCache::getInstance()->addSprite3DData(asyncParam->skeletonPath, skeletonData);
+                    
+                    CC_SAFE_DELETE(skeleMeshdatas);
+                    skeleMaterialdatas = nullptr;
+                    skeleNodeDatas = nullptr;
+                }
+            }
+            CC_SAFE_DELETE(skeleMeshdatas);
+            CC_SAFE_DELETE(skeleMaterialdatas);
+            CC_SAFE_DELETE(skeleNodeDatas);
+            
             //create in the main thread
             auto& meshdatas = asyncParam->meshdatas;
             auto& materialdatas = asyncParam->materialdatas;
-            auto&   nodeDatas = asyncParam->nodeDatas;
-            if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
+            auto& nodeDatas = asyncParam->nodeDatas;
+            if (initFrom(*nodeDatas, *meshdatas, *materialdatas, skeletonData ? Skeleton3D::create(skeletonData->nodedatas->skeleton) : nullptr))
             {
                 auto spritedata = Sprite3DCache::getInstance()->getSpriteData(asyncParam->modelPath);
                 if (spritedata == nullptr)
@@ -157,11 +247,12 @@ void Sprite3D::afterAsyncLoad(void* param)
                     nodeDatas = nullptr;
                 }
             }
+            
             CC_SAFE_DELETE(meshdatas);
             CC_SAFE_DELETE(materialdatas);
             CC_SAFE_DELETE(nodeDatas);
             
-            if (asyncParam->texPath != "")
+            if (!asyncParam->texPath.empty())
             {
                 setTexture(asyncParam->texPath);
             }
@@ -169,6 +260,8 @@ void Sprite3D::afterAsyncLoad(void* param)
         else
         {
             CCLOG("file load failed: %s ", asyncParam->modelPath.c_str());
+            if (!asyncParam->skeletonPath.empty() && asyncParam->skeletonPath != asyncParam->modelPath)
+                CCLOG("file load failed: %s ", asyncParam->skeletonPath.c_str());
         }
         asyncParam->afterLoadCallback(this, asyncParam->callbackParam);
     }
@@ -188,26 +281,60 @@ AABB Sprite3D::getAABBRecursivelyImp(Node *node)
     return aabb;
 }
 
-bool Sprite3D::loadFromCache(const std::string& path)
+bool Sprite3D::loadFromCache(const std::string& path, const std::string& skeletonPath)
+{
+    if (!skeletonPath.empty() && skeletonPath != path)
+    {
+        auto spritedata = Sprite3DCache::getInstance()->getSpriteData(skeletonPath);
+        if (spritedata)
+        {
+            return loadFromCache(path, spritedata->nodedatas->skeleton);
+        }
+    }
+    
+    return loadFromCache(path);
+}
+
+bool Sprite3D::loadFromCache(const std::string& path, const std::vector<NodeData*>& skeletonData)
 {
     auto spritedata = Sprite3DCache::getInstance()->getSpriteData(path);
     if (spritedata)
     {
-        for (auto it : spritedata->meshVertexDatas) {
-            _meshVertexDatas.pushBack(it);
-        }
-        _skeleton = Skeleton3D::create(spritedata->nodedatas->skeleton);
-        CC_SAFE_RETAIN(_skeleton);
+        applySpriteData(spritedata, Skeleton3D::create(skeletonData));
+        return true;
+    }
+    
+    return false;
+}
 
-        const bool singleSprite = (spritedata->nodedatas->nodes.size() == 1);
-        for(const auto& it : spritedata->nodedatas->nodes)
+void Sprite3D::setSkeleton(Skeleton3D *skeleton)
+{
+    if (skeleton == _skeleton)
+        return;
+    
+    CC_SAFE_RELEASE(_skeleton);
+    _skeleton = skeleton;
+    CC_SAFE_RETAIN(_skeleton);
+}
+
+void Sprite3D::applySpriteData(Sprite3DCache::Sprite3DData *spritedata, Skeleton3D* skele)
+{
+    setSkeleton(skele ? skele : Skeleton3D::create(spritedata->nodedatas->skeleton));
+    
+    for (auto it : spritedata->meshVertexDatas) {
+        _meshVertexDatas.pushBack(it);
+    }
+
+    const bool singleSprite = (spritedata->nodedatas->nodes.size() == 1);
+    for(const auto& it : spritedata->nodedatas->nodes)
+    {
+        if(it)
         {
-            if(it)
-            {
-                createNode(it, this, *(spritedata->materialdatas), singleSprite);
-            }
+            createNode(it, this, *(spritedata->materialdatas), singleSprite);
         }
-        
+    }
+    
+    if(!skele){
         for(const auto& it : spritedata->nodedatas->skeleton)
         {
             if(it)
@@ -215,39 +342,60 @@ bool Sprite3D::loadFromCache(const std::string& path)
                 createAttachSprite3DNode(it,*(spritedata->materialdatas));
             }
         }
+    }
 
-        for (ssize_t i = 0, size = _meshes.size(); i < size; ++i) {
-            // cloning is needed in order to have one state per sprite
-            auto glstate = spritedata->programStates.at(i);
-            _meshes.at(i)->setProgramState(glstate->clone());
-        }
+    for (ssize_t i = 0, size = _meshes.size(); i < size; ++i) {
+        // cloning is needed in order to have one state per sprite
+        auto glstate = spritedata->programStates.at(i);
+        _meshes.at(i)->setProgramState(glstate->clone());
+    }
+}
+
+bool Sprite3D::loadFromCache(const std::string& path, Skeleton3D* skele /*= nullptr*/)
+{
+    auto spritedata = Sprite3DCache::getInstance()->getSpriteData(path);
+    if (spritedata)
+    {
+        applySpriteData(spritedata, skele);
         return true;
     }
     
     return false;
 }
 
+static bool loadFromBundle(Bundle3D* bundle, NodeDatas* nodedatas, MeshDatas* meshdatas,  MaterialDatas* materialdatas)
+{
+    bool isSkeleton = false;
+    if (!bundle->loadMeshDatas(*meshdatas)) {
+        meshdatas->resetData();
+        isSkeleton = true;
+    }
+    if (!bundle->loadMaterials(*materialdatas)){
+        materialdatas->resetData();
+        isSkeleton = true;
+    }
+    bool ret = bundle->loadNodes(*nodedatas);
+    if (isSkeleton) {
+        if (nodedatas->skeleton.empty()) {
+            nodedatas->skeleton.swap(nodedatas->nodes);
+        }
+    }
+    return ret;
+}
+
 bool Sprite3D::loadFromFile(const std::string& path, NodeDatas* nodedatas, MeshDatas* meshdatas,  MaterialDatas* materialdatas)
 {
-    std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
-    
     std::string ext = FileUtils::getInstance()->getFileExtension(path);
     if (ext == ".obj")
     {
-        return Bundle3D::loadObj(*meshdatas, *materialdatas, *nodedatas, fullPath);
+        return Bundle3D::loadObj(*meshdatas, *materialdatas, *nodedatas, path);
     }
     else if (ext == ".c3b" || ext == ".c3t")
     {
         //load from .c3b or .c3t
         auto bundle = Bundle3D::createBundle();
-        if (!bundle->load(fullPath))
-        {
-            Bundle3D::destroyBundle(bundle);
-            return false;
-        }
         
-        auto ret = bundle->loadMeshDatas(*meshdatas)
-            && bundle->loadMaterials(*materialdatas) && bundle->loadNodes(*nodedatas);
+        bool ret = bundle->load(path) && loadFromBundle(bundle, nodedatas, meshdatas, materialdatas);
         Bundle3D::destroyBundle(bundle);
         
         return ret;
@@ -263,12 +411,14 @@ Sprite3D::Sprite3D()
 , _shaderUsingLight(false)
 , _forceDepthWrite(false)
 , _usingAutogeneratedGLProgram(true)
+, _forceDisableDepthTest(false)
 {
 }
 
 Sprite3D::~Sprite3D()
 {
     _meshes.clear();
+    _meshesSorted.clear();
     _meshVertexDatas.clear();
     CC_SAFE_RELEASE_NULL(_skeleton);
     removeAllAttachNode();
@@ -283,15 +433,16 @@ bool Sprite3D::init()
     return false;
 }
 
-bool Sprite3D::initWithFile(const std::string& path)
+bool Sprite3D::initWithFile(const std::string& path, Skeleton3D* skele /*= nullptr*/)
 {
     _aabbDirty = true;
     _meshes.clear();
+    _meshesSorted.clear();
     _meshVertexDatas.clear();
     CC_SAFE_RELEASE_NULL(_skeleton);
     removeAllAttachNode();
     
-    if (loadFromCache(path))
+    if (loadFromCache(path, skele))
         return true;
     
     MeshDatas* meshdatas = new (std::nothrow) MeshDatas();
@@ -299,7 +450,7 @@ bool Sprite3D::initWithFile(const std::string& path)
     NodeDatas* nodeDatas = new (std::nothrow) NodeDatas();
     if (loadFromFile(path, nodeDatas, meshdatas, materialdatas))
     {
-        if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
+        if (initFrom(*nodeDatas, *meshdatas, *materialdatas, skele))
         {
             //add to cache
             auto data = new (std::nothrow) Sprite3DCache::Sprite3DData();
@@ -312,7 +463,6 @@ bool Sprite3D::initWithFile(const std::string& path)
             
             Sprite3DCache::getInstance()->addSprite3DData(path, data);
             CC_SAFE_DELETE(meshdatas);
-            _contentSize = getBoundingBox().size;
             return true;
         }
     }
@@ -323,20 +473,17 @@ bool Sprite3D::initWithFile(const std::string& path)
     return false;
 }
 
-bool Sprite3D::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdatas, const MaterialDatas& materialdatas)
+bool Sprite3D::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdatas, const MaterialDatas& materialdatas, Skeleton3D* skele /* = nullptr*/)
 {
     for(const auto& it : meshdatas.meshDatas)
     {
         if(it)
         {
-//            Mesh* mesh = Mesh::create(*it);
-//            _meshes.pushBack(mesh);
             auto meshvertex = MeshVertexData::create(*it);
             _meshVertexDatas.pushBack(meshvertex);
         }
     }
-    _skeleton = Skeleton3D::create(nodeDatas.skeleton);
-    CC_SAFE_RETAIN(_skeleton);
+    setSkeleton(skele ? skele : Skeleton3D::create(nodeDatas.skeleton));
     
     auto size = nodeDatas.nodes.size();
     for(const auto& it : nodeDatas.nodes)
@@ -346,16 +493,83 @@ bool Sprite3D::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdatas, 
             createNode(it, this, materialdatas, size == 1);
         }
     }
-    for(const auto& it : nodeDatas.skeleton)
-    {
-        if(it)
+    if (!skele) {
+        for(const auto& it : nodeDatas.skeleton)
         {
-             createAttachSprite3DNode(it,materialdatas);
+             if(it)
+             {
+                  createAttachSprite3DNode(it,materialdatas);
+             }
+
         }
     }
     genMaterial();
     
     return true;
+}
+
+Mesh *Sprite3D::createMesh(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas) const
+{
+    auto mesh = Mesh::create(nodedata->id, getMeshIndexData(modeldata->subMeshId));
+    if (!mesh)
+        return mesh;
+    
+    if (_skeleton && modeldata->bones.size())
+    {
+        auto skin = MeshSkin::create(_skeleton, modeldata->bones, modeldata->invBindPose);
+        mesh->setSkin(skin);
+    }
+    
+    const NMaterialData* materialData;
+    if (modeldata->materialId.empty() && materialdatas.materials.size())
+    {
+        materialData = &materialdatas.materials[0];
+        const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
+        mesh->setTexture(adjustTextureExtension(textureData->filename));
+    }
+    else
+    {
+        materialData = materialdatas.getMaterialData(modeldata->materialId);
+        if(materialData)
+        {
+            const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
+            if(textureData)
+            {
+                mesh->setTexture(adjustTextureExtension(textureData->filename));
+                auto tex = mesh->getTexture();
+                if(tex)
+                {
+                    Texture2D::TexParams texParams;
+                    texParams.minFilter = backend::SamplerFilter::LINEAR;
+                    texParams.magFilter = backend::SamplerFilter::LINEAR;
+                    texParams.sAddressMode = textureData->wrapS;
+                    texParams.tAddressMode = textureData->wrapT;
+                    tex->setTexParameters(texParams);
+                }
+            }
+            textureData = materialData->getTextureData(NTextureData::Usage::Normal);
+            if (textureData)
+            {
+                auto tex = Director::getInstance()->getTextureCache()->addImage(adjustTextureExtension(textureData->filename));
+                if(tex)
+                {
+                    Texture2D::TexParams texParams;
+                    texParams.minFilter = backend::SamplerFilter::LINEAR;
+                    texParams.magFilter = backend::SamplerFilter::LINEAR;
+                    texParams.sAddressMode = textureData->wrapS;
+                    texParams.tAddressMode = textureData->wrapT;
+                    tex->setTexParameters(texParams);
+                }
+                mesh->setTexture(tex, NTextureData::Usage::Normal);
+            }
+        }
+    }
+    
+    if (materialData) {
+        mesh->_isTransparent = (materialData->getTextureData(NTextureData::Usage::Transparency) != nullptr);
+    }
+    
+    return mesh;
 }
 
 Sprite3D* Sprite3D::createSprite3DNode(NodeData* nodedata,ModelData* modeldata,const MaterialDatas& materialdatas)
@@ -364,58 +578,7 @@ Sprite3D* Sprite3D::createSprite3DNode(NodeData* nodedata,ModelData* modeldata,c
     if (sprite)
     {
         sprite->setName(nodedata->id);
-        auto mesh = Mesh::create(nodedata->id, getMeshIndexData(modeldata->subMeshId));
-        
-        if (_skeleton && modeldata->bones.size())
-        {
-            auto skin = MeshSkin::create(_skeleton, modeldata->bones, modeldata->invBindPose);
-            mesh->setSkin(skin);
-        }
-        
-        if (modeldata->materialId == "" && materialdatas.materials.size())
-        {
-            const NTextureData* textureData = materialdatas.materials[0].getTextureData(NTextureData::Usage::Diffuse);
-            mesh->setTexture(textureData->filename);
-        }
-        else
-        {
-            const NMaterialData* materialData = materialdatas.getMaterialData(modeldata->materialId);
-            if(materialData)
-            {
-                const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
-                if(textureData)
-                {
-                    mesh->setTexture(textureData->filename);
-                    auto tex = mesh->getTexture();
-                    if(tex)
-                    {
-                        Texture2D::TexParams texParams;
-                        texParams.minFilter = backend::SamplerFilter::LINEAR;
-                        texParams.magFilter = backend::SamplerFilter::LINEAR;
-                        texParams.sAddressMode = textureData->wrapS;
-                        texParams.tAddressMode = textureData->wrapT;
-                        tex->setTexParameters(texParams);
-                        mesh->_isTransparent = (materialData->getTextureData(NTextureData::Usage::Transparency) != nullptr);
-                    }
-                }
-                textureData = materialData->getTextureData(NTextureData::Usage::Normal);
-                if (textureData)
-                {
-                    auto tex = Director::getInstance()->getTextureCache()->addImage(textureData->filename);
-                    if(tex)
-                    {
-                        Texture2D::TexParams texParams;
-                        texParams.minFilter = backend::SamplerFilter::LINEAR;
-                        texParams.magFilter = backend::SamplerFilter::LINEAR;
-                        texParams.sAddressMode = textureData->wrapS;
-                        texParams.tAddressMode = textureData->wrapT;
-                        tex->setTexParameters(texParams);
-                    }
-                    mesh->setTexture(tex, NTextureData::Usage::Normal);
-                }
-            }
-        }
-
+        auto mesh = createMesh(nodedata, modeldata, materialdatas);
         // set locale transform
         Vec3 pos;
         Quaternion qua;
@@ -443,7 +606,7 @@ void Sprite3D::createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas&
             if (sprite)
             {
                 getAttachNode(nodedata->id)->addChild(sprite);
-            } 
+            }
         }
     }
     for(const auto& it : nodedata->children)
@@ -454,7 +617,7 @@ void Sprite3D::createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas&
 
 void Sprite3D::setMaterial(Material *material)
 {
-    setMaterial(material, -1); 
+    setMaterial(material, -1);
 }
 
 void Sprite3D::setMaterial(Material *material, int meshIndex)
@@ -490,17 +653,27 @@ void Sprite3D::genMaterial(bool useLight)
 {
     _shaderUsingLight = useLight;
 
-    std::unordered_map<const MeshVertexData*, Sprite3DMaterial*> materials;
-    for(auto meshVertexData : _meshVertexDatas)
-    {
-        auto material = getSprite3DMaterialForAttribs(meshVertexData, useLight);
-        CCASSERT(material, "material should not be null");
-        materials[meshVertexData] = material;
-    }
+    using MaterialMap = std::unordered_map<const MeshVertexData*, Sprite3DMaterial*>;
+    MaterialMap materials;
+    MaterialMap alphaTestMaterials;
     
     for (auto& mesh: _meshes)
     {
-        auto material = materials[mesh->getMeshIndexData()->getMeshVertexData()];
+        auto meshVertexData = mesh->getMeshIndexData()->getMeshVertexData();
+        Sprite3DMaterial** m;
+        bool isTransparent = mesh->_isTransparent;
+        if (isTransparent) {
+            m = &materials[meshVertexData];
+        } else {
+            m = &alphaTestMaterials[meshVertexData];
+        }
+        auto material = *m;
+        if (!material) {
+            *m = material = getSprite3DMaterialForAttribs(meshVertexData, useLight, !isTransparent);
+        }
+        
+        CCASSERT(material, "material should not be null");
+     
         //keep original state block if exist
         auto oldmaterial = mesh->getMaterial();
         if (oldmaterial)
@@ -526,60 +699,12 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
             {
                 if(singleSprite && root!=nullptr)
                     root->setName(nodedata->id);
-                auto mesh = Mesh::create(nodedata->id, getMeshIndexData(it->subMeshId));
-                if(mesh)
+                auto mesh = createMesh(nodedata, it, materialdatas);
+                if (mesh)
                 {
                     _meshes.pushBack(mesh);
-                    if (_skeleton && it->bones.size())
-                    {
-                        auto skin = MeshSkin::create(_skeleton, it->bones, it->invBindPose);
-                        mesh->setSkin(skin);
-                    }
+                    _meshesSorted.clear();
                     mesh->_visibleChanged = std::bind(&Sprite3D::onAABBDirty, this);
-
-                    if (it->materialId == "" && materialdatas.materials.size())
-                    {
-                        const NTextureData* textureData = materialdatas.materials[0].getTextureData(NTextureData::Usage::Diffuse);
-                        mesh->setTexture(textureData->filename);
-                    }
-                    else
-                    {
-                        const NMaterialData* materialData = materialdatas.getMaterialData(it->materialId);
-                        if(materialData)
-                        {
-                            const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
-                            if(textureData)
-                            {
-                                mesh->setTexture(textureData->filename);
-                                auto tex = mesh->getTexture();
-                                if(tex)
-                                {
-                                    Texture2D::TexParams texParams;
-                                    texParams.minFilter = backend::SamplerFilter::LINEAR;
-                                    texParams.magFilter = backend::SamplerFilter::LINEAR;
-                                    texParams.sAddressMode = textureData->wrapS;
-                                    texParams.tAddressMode = textureData->wrapT;
-                                    tex->setTexParameters(texParams);
-                                    mesh->_isTransparent = (materialData->getTextureData(NTextureData::Usage::Transparency) != nullptr);
-                                }
-                            }
-                            textureData = materialData->getTextureData(NTextureData::Usage::Normal);
-                            if (textureData)
-                            {
-                                auto tex = Director::getInstance()->getTextureCache()->addImage(textureData->filename);
-                                if (tex)
-                                {
-                                    Texture2D::TexParams texParams;
-                                    texParams.minFilter = backend::SamplerFilter::LINEAR;
-                                    texParams.magFilter = backend::SamplerFilter::LINEAR;
-                                    texParams.sAddressMode = textureData->wrapS;
-                                    texParams.tAddressMode = textureData->wrapT;
-                                    tex->setTexParameters(texParams);
-                                }
-                                mesh->setTexture(tex, NTextureData::Usage::Normal);
-                            }
-                        }
-                    }
                     
                     Vec3 pos;
                     Quaternion qua;
@@ -602,13 +727,13 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
                     if(root)
                     {
                         root->addChild(sprite);
-                    } 
+                    }
                 }
                 node=sprite;
-            } 
+            }
         }
     }
-    if(nodedata->modelNodeDatas.size() ==0 )
+    if(nodedata->modelNodeDatas.empty())
     {
         node= Node::create();
         if(node)
@@ -629,7 +754,7 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
             if(root)
             {
                 root->addChild(node);
-            } 
+            }
         }
     }
 
@@ -653,13 +778,15 @@ MeshIndexData* Sprite3D::getMeshIndexData(const std::string& indexId) const
 void  Sprite3D::addMesh(Mesh* mesh)
 {
     auto meshVertex = mesh->getMeshIndexData()->_vertexData;
+    mesh->_visibleChanged = std::bind(&Sprite3D::onAABBDirty, this);
     _meshVertexDatas.pushBack(meshVertex);
     _meshes.pushBack(mesh);
+    _meshesSorted.clear();
 }
 
 void Sprite3D::setTexture(const std::string& texFile)
 {
-    auto tex = Director::getInstance()->getTextureCache()->addImage(texFile);
+    auto tex = Director::getInstance()->getTextureCache()->addImage(adjustTextureExtension(texFile));
     setTexture(tex);
 }
 
@@ -715,6 +842,15 @@ void Sprite3D::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTra
     {
         return;
     }
+    
+    if (_meshesSorted.empty())
+    {
+        _meshesSorted = _meshes;
+        std::stable_sort(_meshesSorted.begin(), _meshesSorted.end(), [](Mesh* a, Mesh* b) -> bool {
+            return !a->_isTransparent;
+        });
+    }
+    
     
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
     flags |= FLAGS_RENDER_AS_3D;
@@ -790,8 +926,11 @@ void Sprite3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
         }
     }
     
-    for (auto mesh: _meshes)
+    
+    for (auto mesh: _meshesSorted)
     {
+        mesh->setForce2DQueue(_force2Dqueue);
+        mesh->setForceDisableDepthTest(_forceDisableDepthTest);
         mesh->draw(renderer,
                    _globalZOrder,
                    transform,
@@ -806,7 +945,7 @@ void Sprite3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 void Sprite3D::setProgramState(backend::ProgramState* programState)
 {
     for (auto state : _meshes) {
-        state->setProgramState(programState);
+        state->setProgramState(programState->clone());
     }
 }
 
@@ -837,7 +976,8 @@ const AABB& Sprite3D::getAABB() const
     Mat4 nodeToWorldTransform(getNodeToWorldTransform());
     
     // If nodeToWorldTransform matrix isn't changed, we don't need to transform aabb.
-    if (memcmp(_nodeToWorldTransform.m, nodeToWorldTransform.m, sizeof(Mat4)) == 0 && !_aabbDirty)
+    //    if (memcmp(_nodeToWorldTransform.m, nodeToWorldTransform.m, sizeof(Mat4)) == 0 && !_aabbDirty)
+    if (!_aabbDirty && memcmp(_nodeToWorldTransform.m, nodeToWorldTransform.m, sizeof(Mat4)) == 0)
     {
         return _aabb;
     }
@@ -863,7 +1003,7 @@ const AABB& Sprite3D::getAABB() const
 
 Action* Sprite3D::runAction(Action *action)
 {
-    setForceDepthWrite(true);
+    // setForceDepthWrite(true);
     return Node::runAction(action);
 }
 
@@ -871,7 +1011,7 @@ Rect Sprite3D::getBoundingBox() const
 {
     AABB aabb = getAABB();
     Rect ret(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
-    return ret; 
+    return ret;
 }
 
 void Sprite3D::setCullFace(CullFaceSide side)
@@ -916,20 +1056,18 @@ std::vector<Mesh*> Sprite3D::getMeshArrayByName(const std::string& name) const
     return meshes;
 }
 
-Mesh* Sprite3D::getMesh() const 
-{ 
+Mesh* Sprite3D::getMesh() const
+{
     if(_meshes.empty())
     {
         return nullptr;
     }
-    return _meshes.at(0); 
+    return _meshes.at(0);
 }
 
 void Sprite3D::setForce2DQueue(bool force2D)
 {
-    for (const auto &mesh : _meshes) {
-        mesh->setForce2DQueue(force2D);
-    }
+    _force2Dqueue = force2D;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -998,7 +1136,7 @@ Sprite3DCache::~Sprite3DCache()
 //
 // MARK: Helpers
 //
-static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)
+static Sprite3DMaterial* getSprite3DMaterialForAttribs(const MeshVertexData* meshVertexData, bool usesLight, bool alphaTest)
 {
     bool textured = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD);
     bool hasSkin = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX)
@@ -1006,6 +1144,7 @@ static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVerte
     bool hasNormal = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL);
     bool hasTangentSpace = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TANGENT)
     && meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BINORMAL);
+    
     Sprite3DMaterial::MaterialType type;
     if(textured)
     {
@@ -1021,7 +1160,19 @@ static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVerte
         type = hasNormal && usesLight ? Sprite3DMaterial::MaterialType::DIFFUSE_NOTEX : Sprite3DMaterial::MaterialType::UNLIT_NOTEX;
     }
     
-    return Sprite3DMaterial::createBuiltInMaterial(type, hasSkin);
+    Sprite3DMaterial* ret = Sprite3DMaterial::createBuiltInMaterial(type, hasSkin, meshVertexData->getAtrSetId(), alphaTest);
+    
+    return ret;
+}
+
+Sprite3DCache::Sprite3DData::~Sprite3DData()
+{
+    if (nodedatas)
+        delete nodedatas;
+    if (materialdatas)
+        delete materialdatas;
+    meshVertexDatas.clear();
+    programStates.clear();
 }
 
 NS_CC_END

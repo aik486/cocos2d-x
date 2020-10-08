@@ -110,13 +110,17 @@ TextureInfo::~TextureInfo()
 void TextureInfo::retainTextures()
 {
     for (auto& texture : textures)
+    {
         CC_SAFE_RETAIN(texture);
+    }
 }
 
 void TextureInfo::releaseTextures()
 {
     for (auto& texture : textures)
+    {
         CC_SAFE_RELEASE(texture);
+    }
 }
 
 TextureInfo& TextureInfo::operator=(TextureInfo&& rhs)
@@ -238,6 +242,11 @@ ProgramState *ProgramState::clone() const
     return cp;
 }
 
+void ProgramState::forkVertexLayout()
+{
+    _vertexLayout = std::make_shared<VertexLayout>(*_vertexLayout);
+}
+
 backend::UniformLocation ProgramState::getUniformLocation(backend::Uniform name) const
 {
     return _program->getUniformLocation(name);
@@ -270,6 +279,54 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
         default:
             break;
     }
+}
+
+void ProgramState::setUniform(const std::string& uniformName, const void* data, std::size_t size)
+{
+    auto uniformLoc = getUniformLocation(uniformName);
+    if (uniformLoc)
+        setUniform(uniformLoc, data, size);
+    else
+        CCLOG("cocos2d: warning: Uniform not found: %s", uniformName.c_str());
+}
+
+void ProgramState::setUniformWith1i(const backend::UniformLocation& uniformLocation, int i1)
+{
+    setUniform(uniformLocation, &i1, sizeof(i1));
+}
+void ProgramState::setUniformWith2i(const backend::UniformLocation& uniformLocation, int i1, int i2)
+{
+    int array[2] = {i1, i2};
+    setUniform(uniformLocation, array, sizeof(array));
+}
+void ProgramState::setUniformWith3i(const backend::UniformLocation& uniformLocation, int i1, int i2, int i3)
+{
+    int array[3] = {i1, i2, i3};
+    setUniform(uniformLocation, array, sizeof(array));
+}
+void ProgramState::setUniformWith4i(const backend::UniformLocation& uniformLocation, int i1, int i2, int i3, int i4)
+{
+    int array[4] = {i1, i2, i3, i4};
+    setUniform(uniformLocation, array, sizeof(array));
+}
+void ProgramState::setUniformWith1f(const backend::UniformLocation& uniformLocation, float f1)
+{
+    setUniform(uniformLocation, &f1, sizeof(f1));
+}
+void ProgramState::setUniformWith2f(const backend::UniformLocation& uniformLocation, float f1, float f2)
+{
+    float array[2] = {f1, f2};
+    setUniform(uniformLocation, array, sizeof(array));
+}
+void ProgramState::setUniformWith3f(const backend::UniformLocation& uniformLocation, float f1, float f2, float f3)
+{
+    float array[3] = {f1, f2, f3};
+    setUniform(uniformLocation, array, sizeof(array));
+}
+void ProgramState::setUniformWith4f(const backend::UniformLocation& uniformLocation, float f1, float f2, float f3, float f4)
+{
+    float array[4] = {f1, f2, f3, f4};
+    setUniform(uniformLocation, array, sizeof(array));
 }
 
 #ifdef CC_USE_METAL

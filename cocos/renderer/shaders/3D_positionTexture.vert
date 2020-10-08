@@ -25,6 +25,10 @@
 
 const char* CC3D_positionTexture_vert = R"(
 
+#ifdef GL_ES
+precision lowp float;
+#endif
+
 attribute vec4 a_position;
 attribute vec2 a_texCoord;
 
@@ -41,6 +45,10 @@ void main(void)
 )";
 
 const char* CC3D_skinPositionTexture_vert = R"(
+
+#ifdef GL_ES
+precision lowp float;
+#endif                                            
 attribute vec3 a_position;
 
 attribute vec4 a_blendWeight;

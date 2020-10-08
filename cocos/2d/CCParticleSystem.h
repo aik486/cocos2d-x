@@ -789,6 +789,7 @@ CC_CONSTRUCTOR_ACCESS:
      @since v0.99.3
      */
     bool initWithFile(const std::string& plistFile);
+    bool initWithData(const char* data, int dataSize);
     
     /** initializes a QuadParticleSystem from a Dictionary.
      @since v0.99.3

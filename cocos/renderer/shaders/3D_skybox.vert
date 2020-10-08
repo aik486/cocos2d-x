@@ -24,6 +24,9 @@
  
 const char* CC3D_skybox_vert = R"(
 
+#ifdef GL_ES
+precision lowp float;
+#endif
 uniform mat4  u_cameraRot;
 attribute vec3 a_position;
 varying vec3 v_reflect;

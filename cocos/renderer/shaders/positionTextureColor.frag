@@ -24,6 +24,7 @@
  */
 
 const char* positionTextureColor_frag = R"(
+
 #ifdef GL_ES
 precision lowp float;
 #endif

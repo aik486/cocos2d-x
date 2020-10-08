@@ -48,9 +48,15 @@ struct RenderPipelineDescriptor
 {
     ProgramState* programState = nullptr;
     BlendState* blendState = nullptr;
-    PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = { PixelFormat::DEFAULT };
+    PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT];
     PixelFormat depthAttachmentFormat = PixelFormat::NONE;
     PixelFormat stencilAttachmentFormat = PixelFormat::NONE;
+    
+    RenderPipelineDescriptor() {
+        for (int i = 0; i < MAX_COLOR_ATTCHMENT; i++) {
+            colorAttachmentsFormat[i] = PixelFormat::DEFAULT;
+        }
+    }
 };
 //end of _backend group
 /// @}

@@ -120,26 +120,33 @@ void ProgramGL::compileProgram()
     
     glAttachShader(_program, vertShader);
     glAttachShader(_program, fragShader);
-    
+   
     glLinkProgram(_program);
     
     GLint status = 0;
     glGetProgramiv(_program, GL_LINK_STATUS, &status);
     if (GL_FALSE == status)
     {
-        printf("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
+        CCLOG("cocos2d: ERROR: Failed to link program");
+        CCLOG("cocos2d: %s", getErrorLog(_program).c_str());
         glDeleteProgram(_program);
         _program = 0;
     }
+    
+    CHECK_GL_ERROR_DEBUG();
 }
 
 void ProgramGL::computeLocations()
 {
     std::fill(_builtinAttributeLocation, _builtinAttributeLocation + ATTRIBUTE_MAX, -1);
 //    std::fill(_builtinUniformLocation, _builtinUniformLocation + UNIFORM_MAX, -1);
+    
+    if (!_program)
+        return;
 
     ///a_position
     auto location = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION);
+    
     _builtinAttributeLocation[Attribute::POSITION] = location;
 
     ///a_color
@@ -181,6 +188,10 @@ void ProgramGL::computeLocations()
 
 bool ProgramGL::getAttributeLocation(const std::string& attributeName, unsigned int& location) const
 {
+    if (!_program) {
+        return false;
+    }
+    
     GLint loc = glGetAttribLocation(_program, attributeName.c_str());
     if (-1 == loc)
     {
@@ -264,9 +275,12 @@ void ProgramGL::computeUniformInfos()
         }
         uniform.location = glGetUniformLocation(_program, uniformName);
         uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
-        uniform.bufferOffset = (uniform.size == 0) ? 0 : _totalBufferSize;
+        auto bufferSizeAligned =  (_totalBufferSize + 3) & ~3;
+        uniform.bufferOffset = (uniform.size == 0) ? 0 : bufferSizeAligned;
         _activeUniformInfos[uniformName] = uniform;
-        _totalBufferSize += uniform.size * uniform.count;
+        if (uniform.size > 0) {
+            _totalBufferSize = bufferSizeAligned + uniform.size * uniform.count;
+        }
         _maxLocation = _maxLocation <= uniform.location ? (uniform.location + 1) : _maxLocation;
     }
     free(uniformName);
@@ -279,6 +293,9 @@ int ProgramGL::getAttributeLocation(Attribute name) const
 
 int ProgramGL::getAttributeLocation(const std::string& name) const
 {
+    if (!_program) {
+        return -1;
+    }
     return glGetAttribLocation(_program, name.c_str());
 }
 
@@ -332,12 +349,25 @@ int ProgramGL::getOriginalLocation(int location) const
 
 const UniformInfo& ProgramGL::getActiveUniformInfo(ShaderStage stage, int location) const
 {
-    return std::move(UniformInfo{});
+    CC_UNUSED_PARAM(stage);
+    CC_UNUSED_PARAM(location);
+    static const UniformInfo dummy;
+    return dummy;
 }
 
 const std::unordered_map<std::string, UniformInfo>& ProgramGL::getAllActiveUniformInfo(ShaderStage stage) const
 {
     return _activeUniformInfos;
+}
+
+std::string ProgramGL::getErrorLog(GLuint program)
+{
+    GLint logLength = 0;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+    std::string log;
+    log.resize(logLength);
+    glGetProgramInfoLog(program, logLength, nullptr, &log[0]);
+    return log;
 }
 
 std::size_t ProgramGL::getUniformBufferSize(ShaderStage stage) const

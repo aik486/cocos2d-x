@@ -191,38 +191,38 @@ void TextureAtlas::setupIndices()
     if (_capacity == 0)
         return;
 
-    for( int i=0; i < _capacity; i++)
+    for( size_t i=0; i < _capacity; i++)
     {
-        _indices[i*6+0] = i*4+0;
-        _indices[i*6+1] = i*4+1;
-        _indices[i*6+2] = i*4+2;
+        _indices[i*6+0] = uint16_t(i*4+0);
+        _indices[i*6+1] = uint16_t(i*4+1);
+        _indices[i*6+2] = uint16_t(i*4+2);
 
         // inverted index. issue #179
-        _indices[i*6+3] = i*4+3;
-        _indices[i*6+4] = i*4+2;
-        _indices[i*6+5] = i*4+1;        
+        _indices[i*6+3] = uint16_t(i*4+3);
+        _indices[i*6+4] = uint16_t(i*4+2);
+        _indices[i*6+5] = uint16_t(i*4+1);        
     }
 }
 
 
 // TextureAtlas - Update, Insert, Move & Remove
 
-void TextureAtlas::updateQuad(V3F_C4B_T2F_Quad *quad, ssize_t index)
+void TextureAtlas::updateQuad(const V3F_C4B_T2F_Quad &quad, ssize_t index)
 {
-    CCASSERT( index >= 0 && index < _capacity, "updateQuadWithTexture: Invalid index");
+    CCASSERT( index >= 0 && size_t(index) < _capacity, "updateQuadWithTexture: Invalid index");
 
-    _totalQuads = MAX( index+1, _totalQuads);
+    _totalQuads = std::max(size_t(index+1), _totalQuads);
 
-    _quads[index] = *quad;    
+    _quads[index] = quad;    
 
 
     _dirty = true;
 
 }
 
-void TextureAtlas::insertQuad(V3F_C4B_T2F_Quad *quad, ssize_t index)
+void TextureAtlas::insertQuad(const V3F_C4B_T2F_Quad &quad, ssize_t index)
 {
-    CCASSERT( index>=0 && index<_capacity, "insertQuadWithTexture: Invalid index");
+    CCASSERT( index>=0 && size_t(index)<_capacity, "insertQuadWithTexture: Invalid index");
 
     _totalQuads++;
     CCASSERT( _totalQuads <= _capacity, "invalid totalQuads");
@@ -237,7 +237,7 @@ void TextureAtlas::insertQuad(V3F_C4B_T2F_Quad *quad, ssize_t index)
         memmove( &_quads[index+1],&_quads[index], sizeof(_quads[0]) * remaining );        
     }
 
-    _quads[index] = *quad;
+    _quads[index] = quad;
 
 
     _dirty = true;
@@ -246,7 +246,7 @@ void TextureAtlas::insertQuad(V3F_C4B_T2F_Quad *quad, ssize_t index)
 
 void TextureAtlas::insertQuads(V3F_C4B_T2F_Quad* quads, ssize_t index, ssize_t amount)
 {
-    CCASSERT(index>=0 && amount>=0 && index+amount<=_capacity, "insertQuadWithTexture: Invalid index + amount");
+    CCASSERT(index>=0 && amount>=0 && size_t(index+amount)<=_capacity, "insertQuadWithTexture: Invalid index + amount");
 
     _totalQuads += amount;
 
@@ -277,8 +277,8 @@ void TextureAtlas::insertQuads(V3F_C4B_T2F_Quad* quads, ssize_t index, ssize_t a
 
 void TextureAtlas::insertQuadFromIndex(ssize_t oldIndex, ssize_t newIndex)
 {
-    CCASSERT( newIndex >= 0 && newIndex < _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
-    CCASSERT( oldIndex >= 0 && oldIndex < _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
+    CCASSERT( newIndex >= 0 && size_t(newIndex) < _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
+    CCASSERT( oldIndex >= 0 && size_t(oldIndex) < _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
 
     if( oldIndex == newIndex )
     {
@@ -306,7 +306,7 @@ void TextureAtlas::insertQuadFromIndex(ssize_t oldIndex, ssize_t newIndex)
 
 void TextureAtlas::removeQuadAtIndex(ssize_t index)
 {
-    CCASSERT( index>=0 && index<_totalQuads, "removeQuadAtIndex: Invalid index");
+    CCASSERT( index>=0 && size_t(index)<_totalQuads, "removeQuadAtIndex: Invalid index");
 
     auto remaining = (_totalQuads-1) - index;
 
@@ -325,7 +325,7 @@ void TextureAtlas::removeQuadAtIndex(ssize_t index)
 
 void TextureAtlas::removeQuadsAtIndex(ssize_t index, ssize_t amount)
 {
-    CCASSERT(index>=0 && amount>=0 && index+amount<=_totalQuads, "removeQuadAtIndex: index + amount out of bounds");
+    CCASSERT(index>=0 && amount>=0 && size_t(index+amount)<=_totalQuads, "removeQuadAtIndex: index + amount out of bounds");
 
     auto remaining = (_totalQuads) - (index + amount);
 
@@ -348,14 +348,14 @@ void TextureAtlas::removeAllQuads()
 bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
 {
     CCASSERT(newCapacity >= 0, "capacity >= 0");
-    if (newCapacity == _capacity)
+    if (size_t(newCapacity) == _capacity)
     {
         return true;
     }
     auto oldCapacity = _capacity;
 
     // update capacity and totalQuads
-    _totalQuads = MIN(_totalQuads, newCapacity);
+    _totalQuads = std::min(_totalQuads, size_t(newCapacity));
     _capacity = newCapacity;
 
     V3F_C4B_T2F_Quad* tmpQuads = nullptr;
@@ -435,8 +435,8 @@ void TextureAtlas::increaseTotalQuadsWith(ssize_t amount)
 void TextureAtlas::moveQuadsFromIndex(ssize_t oldIndex, ssize_t amount, ssize_t newIndex)
 {
     CCASSERT(oldIndex>=0 && amount>=0 && newIndex>=0, "values must be >= 0");
-    CCASSERT(newIndex + amount <= _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
-    CCASSERT(oldIndex < _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
+    CCASSERT(size_t(newIndex + amount) <= _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
+    CCASSERT(size_t(oldIndex) < _totalQuads, "insertQuadFromIndex:atIndex: Invalid index");
 
     if( oldIndex == newIndex )
     {

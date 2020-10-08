@@ -201,39 +201,56 @@ void Bone3D::updateLocalMat()
         Vec3 translate, scale;
         Quaternion quat(Quaternion::ZERO);
         
-        float total = 0.f;
-        for (const auto& it: _blendStates) {
-            total += it.weight;
-        }
-        if (total)
+        if (_blendStates.size() == 1)
         {
-            if (_blendStates.size() == 1)
-            {
-                auto& state = _blendStates[0];
-                translate = state.localTranslate;
-                scale = state.localScale;
-                quat = state.localRot;
+            auto& state = _blendStates[0];
+            translate = state.localTranslate;
+            scale = state.localScale;
+            quat = state.localRot;
+        }
+        else
+        {
+            float total = 0.f;
+            for (auto it: _blendStates) {
+                total += it.weight;
             }
-            else
+            
+            bool blendAll = total == 0.f;
+            if (blendAll) {
+                total = float(_blendStates.size());
+            }
+            
+            float invTotal = 1.f / total;
+            for (const auto& it : _blendStates)
             {
-                float invTotal = 1.f / total;
-                for (const auto& it : _blendStates)
-                {
-                    float weight = (it.weight * invTotal);
-                    translate += it.localTranslate * weight;
-                    scale.x += it.localScale.x * weight;
-                    scale.y += it.localScale.y * weight;
-                    scale.z += it.localScale.z * weight;
-                    if (!quat.isZero())
-                    {
-                        Quaternion& q = _blendStates[0].localRot;
-                        if (q.x * quat.x + q.y * quat.y + q.z * quat.z + q.w * quat.w < 0)
-                            weight = -weight;
-                    }
-                    quat = Quaternion(it.localRot.x * weight + quat.x, it.localRot.y * weight + quat.y, it.localRot.z * weight + quat.z, it.localRot.w * weight + quat.w);
+                float weight;
+                if (blendAll)
+                    weight = invTotal;
+                else
+                    weight = it.weight * invTotal;
+                if (weight == 0.f)
+                    continue;
+                
+                translate += it.localTranslate * weight;
+                scale += it.localScale * weight;
+                if (!quat.isZero()) {
+                    Quaternion& q = _blendStates[0].localRot;
+                    if (q.x * quat.x + q.y * quat.y + q.z * quat.z + q.w * quat.w < 0)
+                        weight = -weight;
                 }
-                quat.normalize();
+                
+                Quaternion nextQuat(it.localRot);
+                nextQuat.x *= (quat.isZero() || it.localRot.x * quat.x >= 0.f) ? weight : -weight;
+                nextQuat.y *= (quat.isZero() || it.localRot.y * quat.y >= 0.f) ? weight : -weight;
+                nextQuat.z *= (quat.isZero() || it.localRot.z * quat.z >= 0.f) ? weight : -weight;
+                nextQuat.w *= (quat.isZero() || it.localRot.w * quat.w >= 0.f) ? weight : -weight;
+                nextQuat.x += quat.x;
+                nextQuat.y += quat.y;
+                nextQuat.z += quat.z;
+                nextQuat.w += quat.w;
+                quat = nextQuat;
             }
+            quat.normalize();
         }
         
         Mat4::createTranslation(translate, &_local);

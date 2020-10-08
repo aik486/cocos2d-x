@@ -24,6 +24,7 @@
  */
 
 const char* etc1_frag = R"(
+
 #ifdef GL_ES
     precision mediump float;
 #endif
@@ -36,8 +37,6 @@ uniform sampler2D u_texture1;
 
 void main() {
     vec4 texColor = vec4(texture2D(u_texture, v_texCoord).rgb, texture2D(u_texture1, v_texCoord).r);
-
-    texColor.rgb *= texColor.a; // Premultiply with Alpha channel
 
     gl_FragColor = v_fragmentColor * texColor;
 }

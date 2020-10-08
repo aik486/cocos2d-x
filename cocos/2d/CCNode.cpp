@@ -232,6 +232,66 @@ std::string Node::getDescription() const
     return StringUtils::format("<Node | Tag = %d", _tag);
 }
 
+Node *Node::clone() const
+{
+    auto result = new Node;
+    
+    result->copyPropertiesFrom(this);
+    result->copyNodeChildrenFrom(this);
+    
+    return result;
+}
+
+void Node::copyPropertiesFrom(const Node *from)
+{
+    setRotation3D(from->getRotation3D());
+    setSkewX(from->getSkewX());
+    setSkewY(from->getSkewY());
+    setScaleX(from->getScaleX());
+    setScaleY(from->getScaleY());
+    setScaleZ(from->getScaleY());
+    setAdditionalTransform(
+        from->_additionalTransform ? &from->_additionalTransform[0] : nullptr);
+    setUseInvertedAdditionalTransformOrder(
+        from->_useInvertedAdditionalTransformOrder);
+    setPosition3D(from->getPosition3D());
+    setAnchorPoint(from->getAnchorPoint());
+    setLocalZOrder(from->getLocalZOrder());
+    setGlobalZOrder(from->getGlobalZOrder());
+    setIgnoreAnchorPointForPosition(from->isIgnoreAnchorPointForPosition());
+    
+    setCascadeColorEnabled(from->isCascadeColorEnabled());
+    setCascadeOpacityEnabled(from->isCascadeOpacityEnabled());
+    setOpacity(from->getOpacity());
+    setColor(from->getColor());
+    setVisible(from->isVisible());
+    setProgramState(from->getProgramState()->clone());
+    setContentSize(from->getContentSize());
+}
+
+void Node::copyNodeChildrenFrom(const Node *from, bool skipHidden)
+{
+    if (!from)
+           return;
+   const_cast<Node*>(from)->sortAllChildren();
+   
+   int order = 0;
+   for (auto childNode : from->getChildren())
+   {
+       if (skipHidden && !childNode->isVisible()) {
+           continue;
+       }
+       
+       auto node = static_cast<Node *>(childNode->clone());
+       
+       if (node)
+       {
+           addChild(node, order++);
+           node->release();
+       }
+   }
+}
+
 // MARK: getters / setters
 
 float Node::getSkewX() const
@@ -272,7 +332,7 @@ void Node::setLocalZOrder(std::int32_t z)
     {
         _parent->reorderChild(this, z);
     }
-
+    
     _eventDispatcher->setDirtyForNode(this);
 }
 
@@ -300,7 +360,7 @@ void Node::setGlobalZOrder(float globalZOrder)
 /// rotation getter
 float Node::getRotation() const
 {
-    CCASSERT(_rotationZ_X == _rotationZ_Y, "CCNode#rotation. RotationX != RotationY. Don't know which one to return");
+    CCASSERT(_rotationZ_X == _rotationZ_Y, "Node#rotation. RotationX != RotationY. Don't know which one to return");
     return _rotationZ_X;
 }
 
@@ -417,7 +477,7 @@ void Node::setRotationSkewY(float rotationY)
 /// scale getter
 float Node::getScale() const
 {
-    CCASSERT( _scaleX == _scaleY, "CCNode#scale. ScaleX != ScaleY. Don't know which one to return");
+    CCASSERT( _scaleX == _scaleY, "Node#scale. ScaleX != ScaleY. Don't know which one to return");
     return _scaleX;
 }
 
@@ -658,6 +718,11 @@ void Node::setParent(Node * parent)
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 
+Node *Node::getTransformParent()
+{
+    return getParent();
+}
+
 /// isRelativeAnchorPoint getter
 bool Node::isIgnoreAnchorPointForPosition() const
 {
@@ -831,6 +896,16 @@ void Node::enumerateChildren(const std::string &name, std::function<bool (Node *
         // name is xxx
         target->doEnumerate(newName, callback);
     }
+}
+
+Node *Node::getChildAt(int index) const
+{
+    auto&children = getChildren();
+    if (index < 0 || index > children.size()) {
+        return nullptr;
+    }
+    
+    return children.at(index);
 }
 
 bool Node::doEnumerateRecursive(const Node* node, const std::string &name, std::function<bool (Node *)> callback) const
@@ -1504,16 +1579,16 @@ void Node::scheduleUpdateWithPriority(int priority)
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
 
-void Node::scheduleUpdateWithPriorityLua(int nHandler, int priority)
+#if CC_ENABLE_SCRIPT_BINDING
+void Node::scheduleUpdateWithPriorityLua(int64_t nHandler, int priority)
 {
     unscheduleUpdate();
     
-#if CC_ENABLE_SCRIPT_BINDING
     _updateScriptHandler = nHandler;
-#endif
     
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
+#endif
 
 void Node::unscheduleUpdate()
 {
@@ -1617,6 +1692,10 @@ void Node::update(float fDelta)
     }
 #endif
     
+    if (_onUpdateCallback) {
+        _onUpdateCallback(fDelta);
+    }
+    
     if (_componentContainer && !_componentContainer->isEmpty())
     {
         _componentContainer->visit(fDelta);
@@ -1638,7 +1717,7 @@ Mat4 Node::getNodeToParentTransform(Node* ancestor) const
 {
     Mat4 t(this->getNodeToParentTransform());
 
-    for (Node *p = _parent;  p != nullptr && p != ancestor ; p = p->getParent())
+    for (Node *p = _parent;  p != nullptr && p != ancestor ; p = p->getTransformParent())
     {
         t = p->getNodeToParentTransform() * t;
     }
@@ -1650,7 +1729,7 @@ AffineTransform Node::getNodeToParentAffineTransform(Node* ancestor) const
 {
     AffineTransform t(this->getNodeToParentAffineTransform());
 
-    for (Node *p = _parent; p != nullptr && p != ancestor; p = p->getParent())
+    for (Node *p = _parent; p != nullptr && p != ancestor; p = p->getTransformParent())
         t = AffineTransformConcat(t, p->getNodeToParentAffineTransform());
 
     return t;
@@ -1759,7 +1838,11 @@ const Mat4& Node::getNodeToParentTransform() const
             _additionalTransform[1] = _transform;
 
         if (_transformUpdated)
-            _transform = _additionalTransform[1] * _additionalTransform[0];
+        {
+            _transform = _useInvertedAdditionalTransformOrder //
+                    ? _additionalTransform[0] * _additionalTransform[1] // cocos2-style order
+                    : _additionalTransform[1] * _additionalTransform[0];// cocos3-style order
+        }
     }
 
     _transformDirty = _additionalTransformDirty = false;
@@ -1780,6 +1863,7 @@ void Node::setNodeToParentTransform(const Mat4& transform)
 
 void Node::setAdditionalTransform(const AffineTransform& additionalTransform)
 {
+    setUseInvertedAdditionalTransformOrder(true);
     Mat4 tmp;
     CGAffineToGL(additionalTransform, tmp.m);
     setAdditionalTransform(&tmp);
@@ -1899,6 +1983,15 @@ Vec2 Node::convertTouchToNodeSpaceAR(Touch *touch) const
 {
     Vec2 point = touch->getLocation();
     return this->convertToNodeSpaceAR(point);
+}
+
+const Mat4 *Node::getAdditionalTransform() const
+{
+    if (_additionalTransform) {
+        return &_additionalTransform[0];
+    }
+    
+    return nullptr;
 }
 
 void Node::updateTransform()
@@ -2194,6 +2287,36 @@ void Node::setProgramState(backend::ProgramState* programState)
 backend::ProgramState* Node::getProgramState() const
 {
     return _programState;
+}
+
+backend::Program *Node::getShaderProgram() const
+{
+    auto state = getProgramState();
+    return state ? state->getProgram() : nullptr;
+}
+
+void Node::setShaderProgram(backend::Program *program)
+{
+    if (getShaderProgram() == program) {
+        return;
+    }
+
+    if (!program) {
+        setProgramState(nullptr);
+        return;
+    }
+    
+    auto programState = new (std::nothrow) backend::ProgramState(program);
+    setProgramState(programState);
+    CC_SAFE_RELEASE(programState);
+}
+
+void Node::setUseInvertedAdditionalTransformOrder(bool value) {
+    if (_useInvertedAdditionalTransformOrder == value) {
+        return;
+    }
+    _useInvertedAdditionalTransformOrder = value;
+    _transformUpdated = _additionalTransformDirty = _inverseDirty = true;
 }
 
 NS_CC_END

@@ -25,7 +25,9 @@
  ****************************************************************************/
 
 #include "2d/CCFontAtlas.h"
-#if CC_TARGET_PLATFORM != CC_PLATFORM_WIN32 && CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
+#ifdef QT_COCOS
+#include <QTextCodec>
+#elif CC_TARGET_PLATFORM != CC_PLATFORM_WIN32 && CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
 #include <iconv.h>
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
@@ -44,8 +46,8 @@ const int FontAtlas::CacheTextureHeight = 512;
 const char* FontAtlas::CMD_PURGE_FONTATLAS = "__cc_PURGE_FONTATLAS";
 const char* FontAtlas::CMD_RESET_FONTATLAS = "__cc_RESET_FONTATLAS";
 
-FontAtlas::FontAtlas(Font &theFont) 
-: _font(&theFont)
+FontAtlas::FontAtlas(Font *theFont) 
+: _font(theFont)
 {
     _font->retain();
 
@@ -126,7 +128,7 @@ FontAtlas::~FontAtlas()
 
     delete []_currentPageData;
 
-#if CC_TARGET_PLATFORM != CC_PLATFORM_WIN32 && CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
+#if !defined(QT_COCOS) && CC_TARGET_PLATFORM != CC_PLATFORM_WIN32 && CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     if (_iconv)
     {
         iconv_close(_iconv);
@@ -242,9 +244,22 @@ void FontAtlas::conversionU32TOGB2312(const std::u32string& u32Text, std::unorde
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
         std::u16string u16Text;
         cocos2d::StringUtils::UTF32ToUTF16(u32Text, u16Text);
-        WideCharToMultiByte(936, NULL, (LPCWCH)u16Text.c_str(), strLen, (LPSTR)gb2312Text, gb2312StrSize, NULL, NULL);
+        WideCharToMultiByte(936, NULL, (LPCWCH)u16Text.c_str(), int(strLen), (LPSTR)gb2312Text, int(gb2312StrSize), NULL, NULL);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
         conversionEncodingJNI((char*)u32Text.c_str(), gb2312StrSize, "UTF-32LE", gb2312Text, "GB2312");
+#elif defined(QT_COCOS)
+        if (!_iconv) {
+            auto codec = QTextCodec::codecForName("GB2312");
+            _iconv = codec;
+        }
+        std::u16string u16Text;
+        cocos2d::StringUtils::UTF32ToUTF16(u32Text, u16Text);
+        auto encoded = reinterpret_cast<QTextCodec *>(_iconv)->fromUnicode(
+                    QString::fromRawData(
+                        reinterpret_cast<const QChar *>(u16Text.data()), 
+                        u16Text.length()));
+        gb2312StrSize = std::min(size_t(encoded.length()), gb2312StrSize);
+        memcpy(gb2312Text, encoded.constData(), gb2312StrSize);
 #else
         if (_iconv == nullptr)
         {

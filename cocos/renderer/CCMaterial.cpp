@@ -142,14 +142,14 @@ bool Material::initWithProperties(Properties* materialProperties)
     return parseProperties(materialProperties);
 }
 
-void Material::draw(MeshCommand* meshCommands, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
+void Material::draw(Renderer* renderer, MeshCommand* meshCommands, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
                     CustomCommand::PrimitiveType primitive, CustomCommand::IndexFormat indexFormat,
-                    unsigned int indexCount, const Mat4& modelView)
+                    unsigned int indexCount, const Mat4& modelView, unsigned int flags)
 {
     int i = 0;
     for (const auto& pass: _currentTechnique->_passes)
     {
-        pass->draw(&meshCommands[i], globalZOrder, vertexBuffer, indexBuffer,primitive, indexFormat, indexCount, modelView);
+        pass->draw(renderer, &meshCommands[i], globalZOrder, vertexBuffer, indexBuffer,primitive, indexFormat, indexCount, modelView, flags);
         i++;
     }
 }

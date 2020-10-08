@@ -290,7 +290,9 @@ bool ParticleSystem::initWithFile(const std::string& plistFile)
     _plistFile = FileUtils::getInstance()->fullPathForFilename(plistFile);
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(_plistFile);
 
-    CCASSERT( !dict.empty(), "Particles: file not found");
+    if (dict.empty()) {
+        return false;
+    }
     
     // FIXME: compute path from a path, should define a function somewhere to do it
     string listFilePath = plistFile;
@@ -301,15 +303,27 @@ bool ParticleSystem::initWithFile(const std::string& plistFile)
     }
     else
     {
-        ret = this->initWithDictionary(dict, "");
+        ret = this->initWithDictionary(dict, std::string());
     }
     
     return ret;
 }
 
+bool ParticleSystem::initWithData(const char *data, int dataSize)
+{
+    ValueMap dict = FileUtils::getInstance()->getValueMapFromData(data, dataSize);
+
+    if (dict.empty()) {
+        return false;
+    }
+    
+    return this->initWithDictionary(dict, std::string());
+    
+}
+
 bool ParticleSystem::initWithDictionary(ValueMap& dictionary)
 {
-    return initWithDictionary(dictionary, "");
+    return initWithDictionary(dictionary, std::string());
 }
 
 bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string& dirname)

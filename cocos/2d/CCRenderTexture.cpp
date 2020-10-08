@@ -412,7 +412,8 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName, Image::Forma
 
     _saveFileCallback = callback;
 
-    std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
+    auto fileUtils = FileUtils::getInstance();
+    std::string fullpath = fileUtils->isAbsolutePath(fileName) ? fileName : fileUtils->getWritablePath() + fileName;
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
 
@@ -429,7 +430,8 @@ bool RenderTexture::saveToFile(const std::string& fileName, Image::Format format
     
     _saveFileCallback = callback;
     
-    std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
+    auto fileUtils = FileUtils::getInstance();
+    std::string fullpath = fileUtils->isAbsolutePath(fileName) ? fileName : fileUtils->getWritablePath() + fileName;
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
     
@@ -458,13 +460,13 @@ void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool 
 }
 
 /* get buffer as Image */
-void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool flipImage)
+void RenderTexture::newImage(ImageCallback imageCallback, bool flipImage)
 {
     CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8888, "only RGBA8888 can be saved as image");
 
-    if ((nullptr == _texture2D))
+    if (nullptr == _texture2D)
     {
-        return ;
+        return;
     }
 
     const Size& s = _texture2D->getContentSizeInPixels();
@@ -472,13 +474,13 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
     // to get the image size to save
     //        if the saving image domain exceeds the buffer texture domain,
     //        it should be cut
-    int savedBufferWidth = (int)s.width;
-    int savedBufferHeight = (int)s.height;
+    size_t savedBufferWidth = size_t(s.width);
+    size_t savedBufferHeight = size_t(s.height);
     
     Image *image = new (std::nothrow) Image();
     
-    auto initCallback = [&, savedBufferWidth, savedBufferHeight, imageCallback](Image* image, const unsigned char* tempData){
-        image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, _texture2D->hasPremultipliedAlpha());
+    auto initCallback = [=](Image* image, const unsigned char* tempData){
+        image->initWithRawData(tempData, ssize_t(savedBufferWidth * savedBufferHeight * 4), int(savedBufferWidth), int(savedBufferHeight), 8, _texture2D->hasPremultipliedAlpha());
         imageCallback(image);
     };
     auto callback = std::bind(initCallback, image, std::placeholders::_1);
@@ -498,7 +500,29 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
 ////            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 ////            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->getName(), 0);
 ////        }
-//    } while (0);
+    //    } while (0);
+}
+
+void RenderTexture::getPixels(PixelsCallback callback, bool flipImage)
+{
+    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8888, "only RGBA8888 can be saved as image");
+
+    if (nullptr == _texture2D)
+    {
+        return;
+    }
+    
+    const Size& s = _texture2D->getContentSizeInPixels();
+    size_t savedBufferWidth = s.width;
+    size_t savedBufferHeight = s.height;
+    
+    _getPixelsCommand.init(_globalZOrder);
+    _getPixelsCommand.func = [=]() {
+        _texture2D->getBackendTexture()->getBytes(
+             0, 0, savedBufferWidth, savedBufferHeight, flipImage, callback);
+    };
+    
+    Director::getInstance()->getRenderer()->addCommand(&_getPixelsCommand);
 }
 
 void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)

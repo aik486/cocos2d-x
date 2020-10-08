@@ -56,12 +56,9 @@ public:
     /** Constructor.
      * @js ctor
      */
-    Touch() 
-        : _id(0),
-        _startPointCaptured(false),
-        _curForce(0.f),
-        _maxForce(0.f)
-    {}
+    Touch();
+    
+    void reset();
 
     /** Returns the current touch location in OpenGL coordinates.
      *

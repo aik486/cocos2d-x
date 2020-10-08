@@ -24,6 +24,11 @@
  
 
 const char * cameraClear_vert = R"(
+
+#ifdef GL_ES
+precision lowp float;
+#endif
+
 uniform float depth;
 attribute vec4 a_position;
 attribute vec4 a_color;

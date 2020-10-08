@@ -90,6 +90,7 @@ public:
     /**
      * Stores the columns of this 4x4 matrix.
      * */
+#ifndef GEN_SCRIPT_BINDINGS    
 #ifdef __SSE__
     union {
         __m128 col[4];
@@ -97,6 +98,7 @@ public:
     };
 #else
     float m[16];
+#endif
 #endif
 
     /** 

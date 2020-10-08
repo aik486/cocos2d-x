@@ -164,7 +164,7 @@ Color3B TileMapAtlas::getTileAt(const Vec2& position) const
 
 void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index)
 {
-    CCASSERT( index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
+    CCASSERT( index >= 0 && size_t(index) < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
 
     V3F_C4B_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
 

@@ -41,7 +41,7 @@
  * @{
  */
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
 
 typedef struct lua_State lua_State;
 
@@ -51,8 +51,8 @@ class TimerScriptHandler;
 class Layer;
 class MenuItem;
 class CallFunc;
-class Acceleration;
 class Action;
+struct ScriptEvent;
 
 enum ccScriptType {
     kScriptTypeNone = 0,
@@ -60,6 +60,7 @@ enum ccScriptType {
     kScriptTypeJavascript
 };
 
+#ifndef QT_COCOS_SCRIPT_BINDING
 /**
  * This classes is wrapped to store the handler corresponding to the Lua function pointer and assign the handler a unique id
  * @js NA
@@ -76,7 +77,7 @@ public:
      * @lua NA
      * @js NA
      */
-    static ScriptHandlerEntry* create(int handler);
+    static ScriptHandlerEntry* create(int64_t handler);
     
     /**
      * Destructor of ScriptHandlerEntry.
@@ -92,7 +93,7 @@ public:
      * @lua NA
      * @js NA
      */
-    int getHandler() {
+    int64_t getHandler() {
         return _handler;
     }
     
@@ -108,7 +109,7 @@ public:
     }
     
 protected:
-    ScriptHandlerEntry(int handler)
+    ScriptHandlerEntry(int64_t handler)
     : _handler(handler)
     {
         static int newEntryId = 0;
@@ -116,7 +117,7 @@ protected:
         _entryId = newEntryId;
     }
     
-    int _handler;
+    int64_t _handler;
     int _entryId;
 };
 
@@ -138,7 +139,7 @@ public:
      * @js NA
      * @lua NA
      */
-    static SchedulerScriptHandlerEntry* create(int handler, float interval, bool paused);
+    static SchedulerScriptHandlerEntry* create(int64_t handler, float interval, bool paused);
     
     /**
      * Destructor of SchedulerScriptHandlerEntry.
@@ -188,7 +189,7 @@ public:
     }
     
 private:
-    SchedulerScriptHandlerEntry(int handler)
+    SchedulerScriptHandlerEntry(int64_t handler)
     : ScriptHandlerEntry(handler)
     , _timer(nullptr)
     , _paused(false)
@@ -211,7 +212,7 @@ class TouchScriptHandlerEntry : public ScriptHandlerEntry
 {
 public:
 
-    static TouchScriptHandlerEntry* create(int handler, bool isMultiTouches, int priority, bool swallowsTouches);
+    static TouchScriptHandlerEntry* create(int64_t handler, bool isMultiTouches, int priority, bool swallowsTouches);
 
     virtual ~TouchScriptHandlerEntry();
 
@@ -228,7 +229,7 @@ public:
     }
     
 private:
-    TouchScriptHandlerEntry(int handler)
+    TouchScriptHandlerEntry(int64_t handler)
     : ScriptHandlerEntry(handler)
     , _isMultiTouches(false)
     , _priority(0)
@@ -353,7 +354,7 @@ struct SchedulerScriptData
      * @js NA
      * @lua NA
      */
-    int handler;
+    int64_t handler;
     /** 
      * the parameter would be passed in to the Lua function, only use in the Lua.
      *
@@ -612,6 +613,7 @@ struct ScriptEvent
     {
     }
 };
+#endif // !defined(QT_COCOS_SCRIPT_BINDING)
 
 /** 
  * Don't make ScriptEngineProtocol inherits from Object since setScriptEngine is invoked only once in AppDelegate.cpp,
@@ -695,7 +697,7 @@ public:
      * @lua NA
      * @js NA
      */
-    virtual void removeScriptHandler(int /*handler*/) {}
+    virtual void removeScriptHandler(int64_t /*handler*/) {}
     
     /** 
      * Reallocate script function handler, only LuaEngine class need to implement this function.
@@ -703,7 +705,7 @@ public:
      * @lua NA
      * @js NA
      */
-    virtual int reallocateScriptHandler(int /*handler*/) { return 0; }
+    virtual int reallocateScriptHandler(int64_t /*handler*/) { return 0; }
     
     /**
      * Execute script code contained in the given string.
@@ -802,7 +804,7 @@ public:
 
     /** Remove proxy for a native object
      */
-    virtual void removeObjectProxy(Ref* obj) {}
+    virtual void removeObjectProxy(Ref* /*obj*/) {}
 
     /** Triggers the garbage collector */
     virtual void garbageCollect() {}

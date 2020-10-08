@@ -211,13 +211,13 @@ private: varType varName; public: virtual inline varType get##funName() const { 
 
 /// @name Cocos2d debug
 /// @{
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+#if !defined(COCOS2D_DEBUG)
 #define CCLOG(...)       do {} while (0)
 #define CCLOGINFO(...)   do {} while (0)
 #define CCLOGERROR(...)  do {} while (0)
 #define CCLOGWARN(...)   do {} while (0)
 
-#elif COCOS2D_DEBUG == 1
+#elif COCOS2D_DEBUG <= 1
 #define CCLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
 #define CCLOGERROR(format,...)  cocos2d::log(format, ##__VA_ARGS__)
 #define CCLOGINFO(format,...)   do {} while (0)

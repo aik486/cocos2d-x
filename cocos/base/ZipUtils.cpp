@@ -29,9 +29,9 @@
 #ifdef MINIZIP_FROM_SYSTEM
 #include <minizip/unzip.h>
 #else // from our embedded sources
-#include "unzip.h"
+#include "unzip/unzip.h"
 #endif
-#include "ioapi_mem.h"
+#include "unzip/ioapi_mem.h"
 #include <memory>
 
 #include <zlib.h>
@@ -417,7 +417,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char *buffer, ssize_t bufferLen, u
 
         decodeEncodedPvr(ints, enclen);
 
-#if COCOS2D_DEBUG > 0
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
         // verify checksum in debug mode
         unsigned int calculated = checksumPvr(ints, enclen);
         unsigned int required = CC_SWAP_INT32_BIG_TO_HOST( header->reserved );
@@ -446,7 +446,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char *buffer, ssize_t bufferLen, u
 
     unsigned long destlen = len;
     size_t source = (size_t) buffer + sizeof(*header);
-    int ret = uncompress(*out, &destlen, (Bytef*)source, bufferLen - sizeof(*header) );
+    int ret = uncompress(*out, &destlen, (Bytef*)source, uLong(bufferLen - sizeof(*header) ));
 
     if( ret != Z_OK )
     {
@@ -644,11 +644,11 @@ std::vector<std::string> ZipFile::listFiles(const std::string &pathname) const
     return std::vector<std::string>(fileSet.begin(), fileSet.end());
 }
 
-unsigned char *ZipFile::getFileData(const std::string &fileName, ssize_t *size)
+Data ZipFile::getFileData(const std::string &fileName) const
 {
     unsigned char * buffer = nullptr;
-    if (size)
-        *size = 0;
+    ssize_t size = 0;
+    Data result;
 
     do
     {
@@ -670,14 +670,16 @@ unsigned char *ZipFile::getFileData(const std::string &fileName, ssize_t *size)
         int CC_UNUSED nSize = unzReadCurrentFile(_data->zipFile, buffer, static_cast<unsigned int>(fileInfo.uncompressed_size));
         CCASSERT(nSize == 0 || nSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
         
-        if (size)
-        {
-            *size = fileInfo.uncompressed_size;
-        }
+  
+        size = fileInfo.uncompressed_size;
+   
         unzCloseCurrentFile(_data->zipFile);
     } while (0);
     
-    return buffer;
+    if (size > 0) {
+        result.fastSet(buffer, size);
+    }
+    return result;
 }
 
 bool ZipFile::getFileData(const std::string &fileName, ResizableBuffer* buffer)

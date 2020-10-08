@@ -65,6 +65,7 @@ public:
      * create a default plan whose normal is (0, 0, 1), and _dist is 0, xoy plan in fact.
      */
     Plane();
+    Plane(const Plane& p);
     
     /**
     * init plane from tree point.

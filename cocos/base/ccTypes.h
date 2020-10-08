@@ -53,6 +53,7 @@ struct CC_DLL Color3B
 {
     Color3B();
     Color3B(uint8_t _r, uint8_t _g, uint8_t _b);
+    Color3B(const Color3B& color);
     explicit Color3B(const Color4B& color);
     explicit Color3B(const Color4F& color);
 
@@ -91,8 +92,9 @@ struct CC_DLL Color4B
 {
     Color4B();
     Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
-    explicit Color4B(const Color3B& color, uint8_t _a = 255);
+    Color4B(const Color4B& color);
     explicit Color4B(const Color4F& color);
+    explicit Color4B(const Color3B& color, uint8_t _a = 255);
     
     inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
     {
@@ -134,8 +136,9 @@ struct CC_DLL Color4F
 {
     Color4F();
     Color4F(float _r, float _g, float _b, float _a);
-    explicit Color4F(const Color3B& color, float _a = 1.0f);
+    Color4F(const Color4F& color);
     explicit Color4F(const Color4B& color);
+    explicit Color4F(const Color3B& color, float _a = 1.0f);
 
     bool operator==(const Color4F& right) const;
     bool operator==(const Color3B& right) const;
@@ -222,6 +225,8 @@ struct CC_DLL Tex2F {
     Tex2F(float _u, float _v): u(_u), v(_v) {}
 
     Tex2F() {}
+    
+    Tex2F(const Tex2F&o) : u(o.u), v(o.v) {}
 
     float u = 0.f;
     float v = 0.f;

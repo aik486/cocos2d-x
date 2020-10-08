@@ -130,7 +130,7 @@ public:
      * @param usage Usage of returned texture
      * @return The texture of this usage, return the texture of first mesh if multiple meshes exist
      */
-    Texture2D* getTexture(NTextureData::Usage usage);
+    Texture2D* getTexture(NTextureData::Usage usage) const;
     
     /**visible getter and setter*/
     void setVisible(bool visible);
@@ -223,11 +223,15 @@ public:
     void setForce2DQueue(bool force2D) { _force2DQueue = force2D; }
 
     std::string getTextureFileName(){ return _texFile; }
+    inline const std::map<NTextureData::Usage, Texture2D*>& getTextureMap() const;
 
 CC_CONSTRUCTOR_ACCESS:
 
     Mesh();
     virtual ~Mesh();
+    
+    bool isForceDisableDepthTest();
+    void setForceDisableDepthTest(bool is);
 
 protected:
     void resetLightUniformValues();
@@ -247,6 +251,7 @@ protected:
     bool                _blendDirty;
     Material*           _material;
     AABB                _aabb;
+    bool                _forceDisableDepthTest;
     std::function<void()>       _visibleChanged;
     std::unordered_map<std::string, std::vector<MeshCommand> >    _meshCommands;
     
@@ -268,11 +273,23 @@ protected:
     std::string _texFile;
 };
 
+const std::map<NTextureData::Usage, Texture2D*>& Mesh::getTextureMap() const
+{
+    return _textures;
+}
+
+inline bool Mesh::isForceDisableDepthTest()
+{
+    return _forceDisableDepthTest;
+}
+
+inline void Mesh::setForceDisableDepthTest(bool is)
+{
+    _forceDisableDepthTest = is;
+}
+
+
 // end of 3d group
 /// @}
-
-/// @cond
-extern std::string CC_DLL s_uniformSamplerName[];//uniform sampler names array
-/// @endcond
 
 NS_CC_END

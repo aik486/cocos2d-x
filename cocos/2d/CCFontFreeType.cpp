@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "2d/CCFontFreeType.h"
 #include FT_BBOX_H
-#include "edtaa3func.h"
+#include "edtaa3func/edtaa3func.h"
 #include "2d/CCFontAtlas.h"
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
@@ -50,7 +50,7 @@ typedef struct _DataRef
 
 static std::unordered_map<std::string, DataRef> s_cacheFontData;
 
-FontFreeType * FontFreeType::create(const std::string &fontName, float fontSize, GlyphCollection glyphs, const char *customGlyphs,bool distanceFieldEnabled /* = false */,float outline /* = 0 */)
+FontFreeType * FontFreeType::create(const std::string &fontName, float fontSize, GlyphCollection glyphs, const std::string &customGlyphs, bool distanceFieldEnabled /* = false */, float outline /* = 0 */)
 {
     FontFreeType *tempFont =  new (std::nothrow) FontFreeType(distanceFieldEnabled,outline);
 
@@ -212,7 +212,7 @@ FontAtlas * FontFreeType::createFontAtlas()
 {
     if (_fontAtlas == nullptr)
     {
-        _fontAtlas = new (std::nothrow) FontAtlas(*this);
+        _fontAtlas = new (std::nothrow) FontAtlas(this);
         if (_fontAtlas && _usedGlyphs != GlyphCollection::DYNAMIC)
         {
             std::u32string utf32;
@@ -622,7 +622,7 @@ void FontFreeType::renderCharAt(unsigned char *dest,int posX, int posY, unsigned
     } 
 }
 
-void FontFreeType::setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs /* = nullptr */)
+void FontFreeType::setGlyphCollection(GlyphCollection glyphs, const std::string& customGlyphs)
 {
     _usedGlyphs = glyphs;
     if (glyphs == GlyphCollection::CUSTOM)
