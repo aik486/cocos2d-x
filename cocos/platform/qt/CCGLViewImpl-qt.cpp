@@ -54,6 +54,11 @@ static void releaseTouch(Touch *touch)
 }
 
 
+GLViewImpl *GLViewImpl::instance()
+{
+    return _instance;
+}
+
 GLViewImpl::GLViewImpl()
 {
     CC_ASSERT(!_instance);
