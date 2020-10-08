@@ -276,7 +276,7 @@ void ProgramGL::computeUniformInfos()
         uniform.location = glGetUniformLocation(_program, uniformName);
         uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
         auto bufferSizeAligned =  (_totalBufferSize + 3) & ~3;
-        uniform.bufferOffset = (uniform.size == 0) ? 0 : bufferSizeAligned;
+        uniform.bufferOffset = unsigned((uniform.size == 0) ? 0 : bufferSizeAligned);
         _activeUniformInfos[uniformName] = uniform;
         if (uniform.size > 0) {
             _totalBufferSize = bufferSizeAligned + uniform.size * uniform.count;
