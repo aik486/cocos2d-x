@@ -22,6 +22,7 @@ public:
 	explicit QtScriptCCCustomEffect(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_INVOKABLE void clearTexturesForShader();
 	Q_INVOKABLE void addTextureForShader(
 		cocos2d::Texture2D *texture, const QByteArray &uniformName);
 

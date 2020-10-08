@@ -60,6 +60,15 @@ void QtScriptCCCustomEffect::Register(const QScriptValue &targetNamespace)
 		QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
+void QtScriptCCCustomEffect::clearTexturesForShader()
+{
+	auto o = this->thiz<CCCustomEffect *>();
+	if (o)
+	{
+		o->clearTexturesForShader();
+	}
+}
+
 void QtScriptCCCustomEffect::addTextureForShader(
 	Texture2D *texture, const QByteArray &uniformName)
 {

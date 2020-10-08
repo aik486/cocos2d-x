@@ -98,6 +98,7 @@ public:
 
 	virtual CCCustomEffect *clone() const override;
 
+	void clearTexturesForShader();
 	void addTextureForShader(
 		Texture2D *texture, const std::string &uniformName);
 

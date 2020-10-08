@@ -349,6 +349,12 @@ CCCustomEffect *CCCustomEffect::clone() const
 	return result;
 }
 
+void CCCustomEffect::clearTexturesForShader()
+{
+	mShaderTextures.clear();
+	mUniformsDirty = true;
+}
+
 void CCCustomEffect::addTextureForShader(
 	Texture2D *texture, const std::string &uniformName)
 {
