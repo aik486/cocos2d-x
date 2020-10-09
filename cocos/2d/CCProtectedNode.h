@@ -177,10 +177,6 @@ public:
      */
     virtual void onExitTransitionDidStart() override;
 
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity) override;
-    virtual void updateDisplayedColor(const Color3B& parentColor) override;
-    virtual void disableCascadeColor() override;
-    virtual void disableCascadeOpacity()override;
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
     virtual void setGlobalZOrder(float globalZOrder) override;
 CC_CONSTRUCTOR_ACCESS:
@@ -188,6 +184,8 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~ProtectedNode();
     
 protected:
+    virtual void updateCascadeOpacityChildren(uint8_t parentOpacity, bool force) override;
+    virtual void updateCascadeColorChildren(const Color3B& parentColor, bool force) override;
     
     /// helper that reorder a child
     void insertProtectedChild(Node* child, int z);

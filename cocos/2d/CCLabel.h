@@ -650,8 +650,8 @@ public:
 
     virtual bool isOpacityModifyRGB() const override { return _isOpacityModifyRGB; }
     virtual void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
-    virtual void updateDisplayedColor(const Color3B& parentColor) override;
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity) override;
+    virtual void updateDisplayedColor(const Color3B& parentColor, bool force = true) override;
+    virtual void updateDisplayedOpacity(uint8_t parentOpacity, bool force = true) override;
 
     virtual std::string getDescription() const override;
 

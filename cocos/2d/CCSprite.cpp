@@ -1440,6 +1440,16 @@ bool Sprite::isStretchEnabled() const
     return _stretchEnabled;
 }
 
+void Sprite::setBlendFunc(const BlendFunc &blendFunc) 
+{ 
+    _blendFunc = blendFunc; 
+}
+
+const BlendFunc &Sprite::getBlendFunc() const 
+{ 
+    return _blendFunc; 
+}
+
 void Sprite::updateStretchFactor()
 {
     const Size size = getContentSize();

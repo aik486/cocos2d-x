@@ -2062,21 +2062,28 @@ uint8_t Node::getDisplayedOpacity() const
 
 void Node::setOpacity(uint8_t opacity)
 {
-    _displayedOpacity = _realOpacity = opacity;
+    if (_realOpacity == opacity) {
+        return;
+    }
     
+    _realOpacity = opacity;
     updateCascadeOpacity();
 }
 
-void Node::updateDisplayedOpacity(uint8_t parentOpacity)
+void Node::updateDisplayedOpacity(uint8_t parentOpacity, bool force)
 {
-    _displayedOpacity = _realOpacity * parentOpacity/255;
+    uint8_t displayedOpacity = _realOpacity * parentOpacity/255;
+    if (!force && displayedOpacity == _displayedOpacity) {
+        return;
+    }
+    _displayedOpacity = displayedOpacity;
     updateColor();
     
     if (_cascadeOpacityEnabled)
     {
         for(const auto& child : _children)
         {
-            child->updateDisplayedOpacity(_displayedOpacity);
+            child->updateDisplayedOpacity(_displayedOpacity, force);
         }
     }
 }
@@ -2097,11 +2104,11 @@ void Node::setCascadeOpacityEnabled(bool cascadeOpacityEnabled)
     
     if (cascadeOpacityEnabled)
     {
-        updateCascadeOpacity();
+        updateCascadeOpacityChildren(getDisplayedOpacity(), true);
     }
     else
     {
-        disableCascadeOpacity();
+        updateCascadeOpacityChildren(255, true);
     }
 }
 
@@ -2114,16 +2121,14 @@ void Node::updateCascadeOpacity()
         parentOpacity = _parent->getDisplayedOpacity();
     }
     
-    updateDisplayedOpacity(parentOpacity);
+    updateDisplayedOpacity(parentOpacity, false);
 }
 
-void Node::disableCascadeOpacity()
+void Node::updateCascadeOpacityChildren(uint8_t parentOpacity, bool force)
 {
-    _displayedOpacity = _realOpacity;
-    
     for(const auto& child : _children)
     {
-        child->updateDisplayedOpacity(255);
+        child->updateDisplayedOpacity(parentOpacity, force);
     }
 }
 
@@ -2147,24 +2152,30 @@ const Color3B& Node::getDisplayedColor() const
 
 void Node::setColor(const Color3B& color)
 {
-    _displayedColor = _realColor = color;
+    if (_realColor == color) {
+        return;
+    }
     
+    _realColor = color;
     updateCascadeColor();
 }
 
-void Node::updateDisplayedColor(const Color3B& parentColor)
+void Node::updateDisplayedColor(const Color3B& parentColor, bool force)
 {
-    _displayedColor.r = _realColor.r * parentColor.r/255;
-    _displayedColor.g = _realColor.g * parentColor.g/255;
-    _displayedColor.b = _realColor.b * parentColor.b/255;
+    Color3B displayedColor;
+    displayedColor.r = _realColor.r * parentColor.r / 255;
+    displayedColor.g = _realColor.g * parentColor.g / 255;
+    displayedColor.b = _realColor.b * parentColor.b / 255;
+    if (!force && displayedColor == _displayedColor) {
+        return;
+    }
+    
+    _displayedColor = displayedColor;
     updateColor();
     
     if (_cascadeColorEnabled)
     {
-        for(const auto &child : _children)
-        {
-            child->updateDisplayedColor(_displayedColor);
-        }
+        updateCascadeColorChildren(_displayedColor, force);
     }
 }
 
@@ -2181,14 +2192,13 @@ void Node::setCascadeColorEnabled(bool cascadeColorEnabled)
     }
     
     _cascadeColorEnabled = cascadeColorEnabled;
-    
     if (_cascadeColorEnabled)
     {
-        updateCascadeColor();
+        updateCascadeColorChildren(getDisplayedColor(), true);
     }
     else
     {
-        disableCascadeColor();
+        updateCascadeColorChildren(Color3B::WHITE, true);
     }
 }
 
@@ -2200,14 +2210,14 @@ void Node::updateCascadeColor()
         parentColor = _parent->getDisplayedColor();
     }
     
-    updateDisplayedColor(parentColor);
+    updateDisplayedColor(parentColor, false);
 }
 
-void Node::disableCascadeColor()
+void Node::updateCascadeColorChildren(const Color3B& parentColor, bool force)
 {
-    for(const auto& child : _children)
+    for(auto child : _children)
     {
-        child->updateDisplayedColor(Color3B::WHITE);
+        child->updateDisplayedColor(parentColor, force);
     }
 }
 

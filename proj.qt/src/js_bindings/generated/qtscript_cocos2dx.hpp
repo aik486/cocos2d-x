@@ -8393,8 +8393,6 @@ public:
 	Q_INVOKABLE void addProtectedChild(cocos2d::Node* child);
 	Q_INVOKABLE void addProtectedChild(cocos2d::Node* child, int localZOrder);
 	Q_INVOKABLE void addProtectedChild(cocos2d::Node* child, int localZOrder, int tag);
-	Q_INVOKABLE void disableCascadeColor();
-	Q_INVOKABLE void disableCascadeOpacity();
 	Q_INVOKABLE cocos2d::Node* getProtectedChildByTag(int tag);
 	Q_INVOKABLE void removeAllProtectedChildren();
 	Q_INVOKABLE void removeAllProtectedChildrenWithCleanup(bool cleanup);

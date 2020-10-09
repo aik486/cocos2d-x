@@ -103,7 +103,6 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     _itemWidth  = tileWidth;
     _itemHeight = tileHeight;
 
-    _colorUnmodified = Color3B::WHITE;
     _isOpacityModifyRGB = true;
 
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
@@ -119,7 +118,6 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     _textureAtlas->initWithTexture(texture, itemsToRender);
 
     this->updateBlendFunc();
-    this->updateOpacityModifyRGB();
 
     this->calculateMaxItems();
 
@@ -127,7 +125,6 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
 
     return true;
 }
-
 
 // AtlasNode - Atlas generation
 
@@ -167,53 +164,17 @@ void AtlasNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 // AtlasNode - RGBA protocol
 
-const Color3B& AtlasNode::getColor() const
-{
-    if(_isOpacityModifyRGB)
-    {
-        return _colorUnmodified;
-    }
-    return Node::getColor();
-}
-
-void AtlasNode::setColor(const Color3B& color3)
-{
-    Color3B tmp = color3;
-    _colorUnmodified = color3;
-
-    if( _isOpacityModifyRGB )
-    {
-        tmp.r = tmp.r * _displayedOpacity/255;
-        tmp.g = tmp.g * _displayedOpacity/255;
-        tmp.b = tmp.b * _displayedOpacity/255;
-    }
-    Node::setColor(tmp);
-}
-
-void AtlasNode::setOpacity(uint8_t opacity)
-{
-    Node::setOpacity(opacity);
-
-    // special opacity for premultiplied textures
-    if( _isOpacityModifyRGB )
-        this->setColor(_colorUnmodified);
-}
-
 void AtlasNode::setOpacityModifyRGB(bool value)
 {
-    Color3B oldColor = this->getColor();
-    _isOpacityModifyRGB = value;
-    this->setColor(oldColor);
+    if (_isOpacityModifyRGB == value) {
+        _isOpacityModifyRGB = value;
+        updateColor();
+    }
 }
 
 bool AtlasNode::isOpacityModifyRGB() const
 {
     return _isOpacityModifyRGB;
-}
-
-void AtlasNode::updateOpacityModifyRGB()
-{
-    _isOpacityModifyRGB = _textureAtlas->getTexture()->hasPremultipliedAlpha();
 }
 
 void AtlasNode::setIgnoreContentScaleFactor(bool ignoreContentScaleFactor)
@@ -251,7 +212,6 @@ void AtlasNode::setTexture(Texture2D *texture)
 {
     _textureAtlas->setTexture(texture);
     this->updateBlendFunc();
-    this->updateOpacityModifyRGB();
 }
 
 Texture2D * AtlasNode::getTexture() const

@@ -2227,9 +2227,13 @@ void Label::setOpacityModifyRGB(bool isOpacityModifyRGB)
     }
 }
 
-void Label::updateDisplayedColor(const Color3B& parentColor)
+void Label::updateDisplayedColor(const Color3B& parentColor, bool force)
 {
-    Node::updateDisplayedColor(parentColor);
+    auto oldColor = _displayedColor;
+    Node::updateDisplayedColor(parentColor, force);
+    if (!force && oldColor == _displayedColor) {
+        return;
+    }
 
     if (_textSprite)
     {
@@ -2257,22 +2261,26 @@ void Label::updateDisplayedColor(const Color3B& parentColor)
     }
 }
 
-void Label::updateDisplayedOpacity(uint8_t parentOpacity)
+void Label::updateDisplayedOpacity(uint8_t parentOpacity, bool force)
 {
-    Node::updateDisplayedOpacity(parentOpacity);
+    uint8_t oldOpacity = _displayedOpacity;
+    Node::updateDisplayedOpacity(parentOpacity, force);
+    if (!force && oldOpacity == _displayedOpacity) {
+        return;
+    }
 
     if (_textSprite)
     {
-        _textSprite->updateDisplayedOpacity(_displayedOpacity);
+        _textSprite->updateDisplayedOpacity(_displayedOpacity, force);
         if (_shadowNode)
         {
-            _shadowNode->updateDisplayedOpacity(_displayedOpacity);
+            _shadowNode->updateDisplayedOpacity(_displayedOpacity, force);
         }
     }
 
     for (auto&& it : _letters)
     {
-        it.second->updateDisplayedOpacity(_displayedOpacity);
+        it.second->updateDisplayedOpacity(_displayedOpacity, force);
     }
 }
 

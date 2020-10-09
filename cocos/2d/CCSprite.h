@@ -511,12 +511,12 @@ public:
     *In lua: local setBlendFunc(local src, local dst).
     *@endcode
     */
-    void setBlendFunc(const BlendFunc &blendFunc) override { _blendFunc = blendFunc; }
+    void setBlendFunc(const BlendFunc &blendFunc) override;
     /**
     * @js  NA
     * @lua NA
     */
-    const BlendFunc& getBlendFunc() const override { return _blendFunc; }
+    const BlendFunc& getBlendFunc() const override;
     /// @}
 
     int getResourceType() const { return _fileType; }

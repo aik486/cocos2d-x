@@ -745,9 +745,13 @@ bool DrawNode::isOpacityModifyRGB() const
     return _blendFunc == BlendFunc::ALPHA_PREMULTIPLIED;
 }
 
-void DrawNode::updateDisplayedOpacity(uint8_t parentOpacity)
+void DrawNode::updateDisplayedOpacity(uint8_t parentOpacity, bool force)
 {
-    Node::updateDisplayedOpacity(parentOpacity);
+    uint8_t oldOpacity = _displayedOpacity;
+    Node::updateDisplayedOpacity(parentOpacity, force);
+    if (!force && oldOpacity == _displayedOpacity) {
+        return;
+    }
     
     for (auto& state : _states) {        
         state.updateOpacity(_displayedOpacity);

@@ -36757,24 +36757,6 @@ void QtScriptProtectedNode::addProtectedChild(cocos2d::Node* child, int localZOr
 	}
 }
 
-void QtScriptProtectedNode::disableCascadeColor()
-{
-	auto __o = this->thiz<ProtectedNode *>();
-	if (__o)
-	{
-		__o->disableCascadeColor();
-	}
-}
-
-void QtScriptProtectedNode::disableCascadeOpacity()
-{
-	auto __o = this->thiz<ProtectedNode *>();
-	if (__o)
-	{
-		__o->disableCascadeOpacity();
-	}
-}
-
 cocos2d::Node* QtScriptProtectedNode::getProtectedChildByTag(int tag)
 {
 	auto __o = this->thiz<ProtectedNode *>();

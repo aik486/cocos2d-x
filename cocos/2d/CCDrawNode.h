@@ -302,7 +302,7 @@ public:
     virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
     
     virtual bool isOpacityModifyRGB() const override;
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity) override;
+    virtual void updateDisplayedOpacity(uint8_t parentOpacity, bool force = true) override;
     
     void setLineWidth(float lineWidth);
 

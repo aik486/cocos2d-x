@@ -448,6 +448,10 @@ void FastTMXLayer::updatePrimitives()
 
 void FastTMXLayer::setOpacity(uint8_t opacity) 
 {
+    if (opacity == _realOpacity) {
+        return;
+    }
+    
     Node::setOpacity(opacity);
     _quadsDirty = true;
 }

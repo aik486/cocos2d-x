@@ -272,6 +272,9 @@ Vec2 ProgressTimer::getMidpoint() const
 
 void ProgressTimer::setColor(const Color3B &color)
 {
+    if (getColor() == color) {
+        return;
+    }
     _sprite->setColor(color);
     updateColor();
 }
@@ -283,6 +286,9 @@ const Color3B& ProgressTimer::getColor() const
 
 void ProgressTimer::setOpacity(uint8_t opacity)
 {
+    if (getOpacity() == opacity) {
+        return;
+    }
     _sprite->setOpacity(opacity);
     updateColor();
 }

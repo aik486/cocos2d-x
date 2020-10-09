@@ -1667,11 +1667,6 @@ public:
      */
     virtual void setOpacity(uint8_t opacity);
     /**
-     * Update the displayed opacity of node with it's parent opacity;
-     * @param parentOpacity The opacity of parent node.
-     */
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity);
-    /**
      * Whether cascadeOpacity is enabled or not.
      * @return A boolean value.
      */
@@ -1697,11 +1692,7 @@ public:
      * @param color A Color3B color value.
      */
     virtual void setColor(const Color3B& color);
-    /**
-     * Update node's displayed color with its parent color.
-     * @param parentColor A Color3B color value.
-     */
-    virtual void updateDisplayedColor(const Color3B& parentColor);
+
     /**
      * Query whether cascadeColor is enabled or not.
      * @return Whether cascadeColor is enabled or not.
@@ -1794,6 +1785,9 @@ public:
     bool isUseInvertedAdditionalTransformOrder() const;
     void setUseInvertedAdditionalTransformOrder(bool value);
 
+    virtual void updateDisplayedOpacity(uint8_t parentOpacity, bool force = true);    
+    virtual void updateDisplayedColor(const Color3B& parentColor, bool force = true);
+    
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
     Node();
@@ -1818,9 +1812,9 @@ protected:
     uint32_t processParentFlags(const Mat4& parentTransform, uint32_t parentFlags);
 
     virtual void updateCascadeOpacity();
-    virtual void disableCascadeOpacity();
+    virtual void updateCascadeOpacityChildren(uint8_t parentOpacity, bool force);
     virtual void updateCascadeColor();
-    virtual void disableCascadeColor();
+    virtual void updateCascadeColorChildren(const Color3B& parentColor, bool force);
     virtual void updateColor() {}
     
     bool doEnumerate(std::string name, std::function<bool (Node *)> callback) const;

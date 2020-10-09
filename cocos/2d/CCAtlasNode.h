@@ -70,9 +70,6 @@ public:
     virtual void setTexture(Texture2D *texture) override;
     virtual bool isOpacityModifyRGB() const override;
     virtual void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
-    virtual const Color3B& getColor() const override;
-    virtual void setColor(const Color3B& color) override;
-    virtual void setOpacity(uint8_t opacity) override;
     
     /**
      * @code
@@ -114,7 +111,6 @@ protected:
     
     void calculateMaxItems();
     void updateBlendFunc();
-    void updateOpacityModifyRGB();
     void setIgnoreContentScaleFactor(bool bIgnoreContentScaleFactor);
 
     /** Chars per row. */
@@ -126,8 +122,6 @@ protected:
     int    _itemWidth = 0;
     /** Height of each char. */
     int    _itemHeight = 0;
-    
-    Color3B    _colorUnmodified;
     
     TextureAtlas* _textureAtlas = nullptr;
     /** Protocol variables. */
