@@ -29,6 +29,7 @@
 
 #include "base/CCEventListener.h"
 #include <vector>
+#include <set>
 
 /**
  * @addtogroup base
@@ -89,7 +90,7 @@ CC_CONSTRUCTOR_ACCESS:
     bool init();
     
 private:
-    std::vector<Touch*> _claimedTouches;
+    std::set<Touch*> _claimedTouches;
     bool _needSwallow;
     
     friend class EventDispatcher;

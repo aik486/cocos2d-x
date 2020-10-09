@@ -28881,6 +28881,222 @@ void QtScriptDrawNode::clear()
 	}
 }
 
+void QtScriptDrawNode::clear(int bufferType)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->clear(cocos2d::DrawNode::BufferType(bufferType));
+	}
+}
+
+void QtScriptDrawNode::drawCardinalSpline(const cocos2d::PointArray* config, float tension, unsigned int segments, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawCardinalSpline(config, tension, segments, color);
+	}
+}
+
+void QtScriptDrawNode::drawCatmullRom(const cocos2d::PointArray* points, unsigned int segments, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawCatmullRom(points, segments, color);
+	}
+}
+
+void QtScriptDrawNode::drawCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawCircle(center, radius, angle, segments, drawLineToCenter, color);
+	}
+}
+
+void QtScriptDrawNode::drawCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawCircle(center, radius, angle, segments, drawLineToCenter, scaleX, scaleY, color);
+	}
+}
+
+void QtScriptDrawNode::drawCubicBezier(const cocos2d::Vec2& origin, const cocos2d::Vec2& control1, const cocos2d::Vec2& control2, const cocos2d::Vec2& destination, unsigned int segments, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawCubicBezier(origin, control1, control2, destination, segments, color);
+	}
+}
+
+void QtScriptDrawNode::drawDot(const cocos2d::Vec2& pos, float radius, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawDot(pos, radius, color);
+	}
+}
+
+void QtScriptDrawNode::drawLine(const cocos2d::Vec2& origin, const cocos2d::Vec2& destination, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawLine(origin, destination, color);
+	}
+}
+
+void QtScriptDrawNode::drawPoint(const cocos2d::Vec2& position, const float pointSize, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawPoint(position, pointSize, color);
+	}
+}
+
+void QtScriptDrawNode::drawPoints(const cocos2d::PointArray* arg0, const cocos2d::Color4B& arg1)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawPoints(arg0 ? arg0->getControlPoints().data() : nullptr, arg0 ? int(arg0->count()) : 0, arg1);
+	}
+}
+
+void QtScriptDrawNode::drawPoints(const cocos2d::PointArray* arg0, const float arg1, const cocos2d::Color4B& arg2)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawPoints(arg0 ? arg0->getControlPoints().data() : nullptr, arg0 ? int(arg0->count()) : 0, arg1, arg2);
+	}
+}
+
+void QtScriptDrawNode::drawPoly(const cocos2d::PointArray* arg0, bool arg1, const cocos2d::Color4B& arg2)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawPoly(arg0 ? arg0->getControlPoints().data() : nullptr, arg0 ? int(arg0->count()) : 0, arg1, arg2);
+	}
+}
+
+void QtScriptDrawNode::drawPolygon(const cocos2d::PointArray* arg0, const cocos2d::Color4B& arg1, float arg2, const cocos2d::Color4B& arg3)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawPolygon(arg0 ? arg0->getControlPoints().data() : nullptr, arg0 ? int(arg0->count()) : 0, arg1, arg2, arg3);
+	}
+}
+
+void QtScriptDrawNode::drawPolygon(const cocos2d::PointArray* arg0, float arg1, float arg2, const cocos2d::Color4B& arg3, const cocos2d::Color4B& arg4)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawPolygon(arg0 ? arg0->getControlPoints().data() : nullptr, arg0 ? int(arg0->count()) : 0, arg1, arg2, arg3, arg4);
+	}
+}
+
+void QtScriptDrawNode::drawQuadBezier(const cocos2d::Vec2& origin, const cocos2d::Vec2& control, const cocos2d::Vec2& destination, unsigned int segments, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawQuadBezier(origin, control, destination, segments, color);
+	}
+}
+
+void QtScriptDrawNode::drawRect(const cocos2d::Vec2& origin, const cocos2d::Vec2& destination, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawRect(origin, destination, color);
+	}
+}
+
+void QtScriptDrawNode::drawRect(const cocos2d::Vec2& p1, const cocos2d::Vec2& p2, const cocos2d::Vec2& p3, const cocos2d::Vec2& p4, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawRect(p1, p2, p3, p4, color);
+	}
+}
+
+void QtScriptDrawNode::drawSegment(const cocos2d::Vec2& from, const cocos2d::Vec2& to, float radius, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawSegment(from, to, radius, color);
+	}
+}
+
+void QtScriptDrawNode::drawSegment(const cocos2d::Vec2& from, const cocos2d::Vec2& to, float width, float height, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawSegment(from, to, width, height, color);
+	}
+}
+
+void QtScriptDrawNode::drawSolidCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawSolidCircle(center, radius, angle, segments, color);
+	}
+}
+
+void QtScriptDrawNode::drawSolidCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawSolidCircle(center, radius, angle, segments, scaleX, scaleY, color);
+	}
+}
+
+void QtScriptDrawNode::drawSolidPoly(const cocos2d::PointArray* arg0, const cocos2d::Color4B& arg1)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawSolidPoly(arg0 ? arg0->getControlPoints().data() : nullptr, arg0 ? int(arg0->count()) : 0, arg1);
+	}
+}
+
+void QtScriptDrawNode::drawSolidRect(const cocos2d::Vec2& origin, const cocos2d::Vec2& destination, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawSolidRect(origin, destination, color);
+	}
+}
+
+void QtScriptDrawNode::drawTriangle(const cocos2d::Vec2& p1, const cocos2d::Vec2& p2, const cocos2d::Vec2& p3, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode *>();
+	if (__o)
+	{
+		__o->drawTriangle(p1, p2, p3, color);
+	}
+}
+
 cocos2d::BlendFunc QtScriptDrawNode::getBlendFunc()
 {
 	auto __o = this->thiz<DrawNode *>();

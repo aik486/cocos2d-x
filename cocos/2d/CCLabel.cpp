@@ -160,15 +160,15 @@ public:
         auto displayedOpacity = _displayedOpacity;
         if(!_letterVisible)
         {
-            displayedOpacity = 0.0f;
+            displayedOpacity = 0;
         }
         Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, displayedOpacity);
         // special opacity for premultiplied textures
         if (_opacityModifyRGB)
         {
-            color4.r *= displayedOpacity / 255.0f;
-            color4.g *= displayedOpacity / 255.0f;
-            color4.b *= displayedOpacity / 255.0f;
+            color4.r = color4.r * displayedOpacity / 255;
+            color4.g = color4.g * displayedOpacity / 255;
+            color4.b = color4.b * displayedOpacity / 255;
         }
         _quad.bl.colors = color4;
         _quad.br.colors = color4;
@@ -2307,9 +2307,9 @@ void Label::updateColor()
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
     {
-        color4.r *= _displayedOpacity/255.0f;
-        color4.g *= _displayedOpacity/255.0f;
-        color4.b *= _displayedOpacity/255.0f;
+        color4.r = color4.r * _displayedOpacity / 255;
+        color4.g = color4.g * _displayedOpacity / 255;
+        color4.b = color4.b * _displayedOpacity / 255;
     }
 
     cocos2d::TextureAtlas* textureAtlas;

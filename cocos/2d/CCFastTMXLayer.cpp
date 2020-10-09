@@ -470,10 +470,9 @@ void FastTMXLayer::updateTotalQuads()
 
         if (_texture->hasPremultipliedAlpha()) 
         {
-            auto alpha = color.a / 255.0f;
-            color.r = static_cast<uint8_t>(color.r * alpha);
-            color.g = static_cast<uint8_t>(color.g * alpha);
-            color.b = static_cast<uint8_t>(color.b * alpha);
+            color.r = uint8_t(color.r * color.a / 255);
+            color.g = uint8_t(color.g * color.a / 255);
+            color.b = uint8_t(color.b * color.a / 255);
         }
 
         int quadIndex = 0;

@@ -30,7 +30,7 @@ CC_BACKEND_BEGIN
 
 void VertexLayout::setAttribute(const std::string &name, std::size_t index, VertexFormat format, std::size_t offset, bool needToBeNormallized)
 {
-    if(index == -1)
+    if(index == size_t(-1))
         return;
     
     _attributes[name] = { name, index, format, offset, needToBeNormallized };

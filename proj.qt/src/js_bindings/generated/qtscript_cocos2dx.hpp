@@ -6873,6 +6873,30 @@ public:
 	Q_PROPERTY(bool isolated READ isIsolated WRITE setIsolated)
 	Q_PROPERTY(float lineWidth READ getLineWidth WRITE setLineWidth)
 	Q_INVOKABLE void clear();
+	Q_INVOKABLE void clear(int bufferType);
+	Q_INVOKABLE void drawCardinalSpline(const cocos2d::PointArray* config, float tension, unsigned int segments, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawCatmullRom(const cocos2d::PointArray* points, unsigned int segments, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawCubicBezier(const cocos2d::Vec2& origin, const cocos2d::Vec2& control1, const cocos2d::Vec2& control2, const cocos2d::Vec2& destination, unsigned int segments, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawDot(const cocos2d::Vec2& pos, float radius, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawLine(const cocos2d::Vec2& origin, const cocos2d::Vec2& destination, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawPoint(const cocos2d::Vec2& position, const float pointSize, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawPoints(const cocos2d::PointArray* arg0, const cocos2d::Color4B& arg1);
+	Q_INVOKABLE void drawPoints(const cocos2d::PointArray* arg0, const float arg1, const cocos2d::Color4B& arg2);
+	Q_INVOKABLE void drawPoly(const cocos2d::PointArray* arg0, bool arg1, const cocos2d::Color4B& arg2);
+	Q_INVOKABLE void drawPolygon(const cocos2d::PointArray* arg0, const cocos2d::Color4B& arg1, float arg2, const cocos2d::Color4B& arg3);
+	Q_INVOKABLE void drawPolygon(const cocos2d::PointArray* arg0, float arg1, float arg2, const cocos2d::Color4B& arg3, const cocos2d::Color4B& arg4);
+	Q_INVOKABLE void drawQuadBezier(const cocos2d::Vec2& origin, const cocos2d::Vec2& control, const cocos2d::Vec2& destination, unsigned int segments, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawRect(const cocos2d::Vec2& origin, const cocos2d::Vec2& destination, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawRect(const cocos2d::Vec2& p1, const cocos2d::Vec2& p2, const cocos2d::Vec2& p3, const cocos2d::Vec2& p4, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawSegment(const cocos2d::Vec2& from, const cocos2d::Vec2& to, float radius, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawSegment(const cocos2d::Vec2& from, const cocos2d::Vec2& to, float width, float height, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawSolidCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawSolidCircle(const cocos2d::Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawSolidPoly(const cocos2d::PointArray* arg0, const cocos2d::Color4B& arg1);
+	Q_INVOKABLE void drawSolidRect(const cocos2d::Vec2& origin, const cocos2d::Vec2& destination, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawTriangle(const cocos2d::Vec2& p1, const cocos2d::Vec2& p2, const cocos2d::Vec2& p3, const cocos2d::Color4B& color);
 	cocos2d::BlendFunc getBlendFunc();
 	Q_INVOKABLE int getCapacity(int bufferType);
 	float getLineWidth();

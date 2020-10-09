@@ -1554,9 +1554,9 @@ void Sprite::updateColor()
     // special opacity for premultiplied textures
     if (_opacityModifyRGB)
     {
-        color4.r *= _displayedOpacity / 255.0f;
-        color4.g *= _displayedOpacity / 255.0f;
-        color4.b *= _displayedOpacity / 255.0f;
+        color4.r = color4.r * _displayedOpacity / 255;
+        color4.g = color4.g * _displayedOpacity / 255;
+        color4.b = color4.b * _displayedOpacity / 255;
     }
 
     for (unsigned int i = 0; i < _polyInfo.triangles.vertCount; i++)

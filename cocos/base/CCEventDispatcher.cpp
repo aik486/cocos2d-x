@@ -965,9 +965,8 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
     
     bool isNeedsMutableSet = (oneByOneListeners && allAtOnceListeners);
     
-    const std::vector<Touch*>& originalTouches = event->getTouches();
-    std::vector<Touch*> mutableTouches(originalTouches.size());
-    std::copy(originalTouches.begin(), originalTouches.end(), mutableTouches.begin());
+    const auto& originalTouches = event->getTouches();
+    auto mutableTouches = originalTouches;
 
     //
     // process the target handlers 1st
@@ -976,7 +975,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
     {
         auto mutableTouchesIter = mutableTouches.begin();
         
-        for (auto& touches : originalTouches)
+        for (auto& touch : originalTouches)
         {
             bool isSwallowed = false;
 
@@ -990,23 +989,23 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                 event->setCurrentTarget(listener->_node);
                 
                 bool isClaimed = false;
-                std::vector<Touch*>::iterator removedIter;
+                std::set<Touch*>::iterator removedIter;
                 
                 EventTouch::EventCode eventCode = event->getEventCode();
                 
+                auto &claimedTouches = listener->_claimedTouches;
                 if (eventCode == EventTouch::EventCode::BEGAN)
                 {
                     if (listener->onTouchBegan)
                     {
-                        isClaimed = listener->onTouchBegan(touches, event);
+                        isClaimed = listener->onTouchBegan(touch, event);
                         if (isClaimed && listener->_isRegistered)
                         {
-                            listener->_claimedTouches.push_back(touches);
+                            claimedTouches.insert(touch);
                         }
                     }
                 }
-                else if (listener->_claimedTouches.size() > 0
-                         && ((removedIter = std::find(listener->_claimedTouches.begin(), listener->_claimedTouches.end(), touches)) != listener->_claimedTouches.end()))
+                else if ((removedIter = claimedTouches.find(touch)) != claimedTouches.end())
                 {
                     isClaimed = true;
                     
@@ -1015,27 +1014,27 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                         case EventTouch::EventCode::MOVED:
                             if (listener->onTouchMoved)
                             {
-                                listener->onTouchMoved(touches, event);
+                                listener->onTouchMoved(touch, event);
                             }
                             break;
                         case EventTouch::EventCode::ENDED:
                             if (listener->onTouchEnded)
                             {
-                                listener->onTouchEnded(touches, event);
+                                listener->onTouchEnded(touch, event);
                             }
                             if (listener->_isRegistered)
                             {
-                                listener->_claimedTouches.erase(removedIter);
+                                claimedTouches.erase(removedIter);
                             }
                             break;
                         case EventTouch::EventCode::CANCELLED:
                             if (listener->onTouchCancelled)
                             {
-                                listener->onTouchCancelled(touches, event);
+                                listener->onTouchCancelled(touch, event);
                             }
                             if (listener->_isRegistered)
                             {
-                                listener->_claimedTouches.erase(removedIter);
+                                claimedTouches.erase(removedIter);
                             }
                             break;
                         default:

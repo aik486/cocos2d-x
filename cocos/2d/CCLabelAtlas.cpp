@@ -234,9 +234,9 @@ void LabelAtlas::updateColor()
         Color4B color4( _displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity );
         if (_isOpacityModifyRGB)
         {
-            color4.r *= _displayedOpacity/255.0f;
-            color4.g *= _displayedOpacity/255.0f;
-            color4.b *= _displayedOpacity/255.0f;
+            color4.r = color4.r * _displayedOpacity / 255;
+            color4.g = color4.g * _displayedOpacity / 255;
+            color4.b = color4.b * _displayedOpacity / 255;
         }
         auto quads = _textureAtlas->getQuads();
         ssize_t length = _string.length();
