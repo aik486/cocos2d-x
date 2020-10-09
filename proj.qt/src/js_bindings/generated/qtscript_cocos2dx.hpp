@@ -2308,9 +2308,9 @@ public:
 	int32_t getLocalZOrder();
 	QByteArray getName();
 	Q_INVOKABLE cocos2d::AffineTransform getNodeToParentAffineTransform();
-	Q_INVOKABLE cocos2d::AffineTransform getNodeToParentAffineTransform(cocos2d::Node* ancestor);
+	Q_INVOKABLE cocos2d::AffineTransform getNodeToParentAffineTransform(const cocos2d::Node* ancestor);
 	cocos2d::Mat4 getNodeToParentTransform();
-	Q_INVOKABLE cocos2d::Mat4 getNodeToParentTransform(cocos2d::Node* ancestor);
+	Q_INVOKABLE cocos2d::Mat4 getNodeToParentTransform(const cocos2d::Node* ancestor);
 	Q_INVOKABLE cocos2d::AffineTransform getNodeToWorldAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getNodeToWorldTransform();
 	cocos2d::Vec2 getNormalizedPosition();
@@ -2341,7 +2341,7 @@ public:
 	float getSkewX();
 	float getSkewY();
 	int getTag();
-	Q_INVOKABLE cocos2d::Node* getTransformParent();
+	Q_INVOKABLE const cocos2d::Node* getTransformParent();
 	cocos2d::Ref* getUserObject();
 	Q_INVOKABLE cocos2d::AffineTransform getWorldToNodeAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getWorldToNodeTransform();

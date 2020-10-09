@@ -719,7 +719,7 @@ void Node::setParent(Node * parent)
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 
-Node *Node::getTransformParent()
+const Node *Node::getTransformParent() const
 {
     return getParent();
 }
@@ -1714,24 +1714,34 @@ AffineTransform Node::getNodeToParentAffineTransform() const
 }
 
 
-Mat4 Node::getNodeToParentTransform(Node* ancestor) const
+Mat4 Node::getNodeToParentTransform(const Node* ancestor) const
 {
     Mat4 t(this->getNodeToParentTransform());
 
-    for (Node *p = _parent;  p != nullptr && p != ancestor ; p = p->getTransformParent())
-    {
+    auto p = this;
+    do {
+        p = p->getTransformParent();
+        if (!p || p == ancestor) {
+            break;
+        }
         t = p->getNodeToParentTransform() * t;
-    }
+    } while (true);
 
     return t;
 }
 
-AffineTransform Node::getNodeToParentAffineTransform(Node* ancestor) const
+AffineTransform Node::getNodeToParentAffineTransform(const Node* ancestor) const
 {
     AffineTransform t(this->getNodeToParentAffineTransform());
 
-    for (Node *p = _parent; p != nullptr && p != ancestor; p = p->getTransformParent())
+    auto p = this;
+    do {
+        p = p->getTransformParent();
+        if (!p || p == ancestor) {
+            break;
+        }
         t = AffineTransformConcat(t, p->getNodeToParentAffineTransform());
+    } while (true);
 
     return t;
 }

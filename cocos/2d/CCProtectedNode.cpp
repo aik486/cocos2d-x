@@ -398,9 +398,8 @@ void ProtectedNode::onExit()
 
 void ProtectedNode::updateCascadeColorChildren(const Color3B& parentColor, bool force)
 {
-    for(auto child : _children){
-        child->updateDisplayedColor(parentColor, force);
-    }
+    Node::updateCascadeColorChildren(parentColor, force);
+    
     for(auto child : _protectedChildren){
         child->updateDisplayedColor(parentColor, force);
     }
@@ -408,9 +407,7 @@ void ProtectedNode::updateCascadeColorChildren(const Color3B& parentColor, bool 
 
 void ProtectedNode::updateCascadeOpacityChildren(uint8_t parentOpacity, bool force)
 {
-    for(auto child : _children){
-        child->updateDisplayedOpacity(parentOpacity, force);
-    }
+    Node::updateCascadeOpacityChildren(parentOpacity, force);
     
     for(auto child : _protectedChildren){
         child->updateDisplayedOpacity(parentOpacity, force);

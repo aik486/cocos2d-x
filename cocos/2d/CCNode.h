@@ -854,7 +854,7 @@ public:
      */
     virtual Node* getParent() { return _parent; }
     virtual const Node* getParent() const { return _parent; }
-    virtual Node* getTransformParent();
+    virtual const Node *getTransformParent() const;
 
 
     ////// REMOVES //////
@@ -1490,7 +1490,7 @@ public:
      * @since v3.7
      * @return The transformation matrix.
      */
-    virtual Mat4 getNodeToParentTransform(Node* ancestor) const;
+    virtual Mat4 getNodeToParentTransform(const Node *ancestor) const;
 
     /**
      * Returns the affine transform matrix that transform the node's (local) space coordinates into the parent's space coordinates.
@@ -1502,7 +1502,7 @@ public:
      * @since v3.7
      * @return The affine transformation matrix.
      */
-    virtual AffineTransform getNodeToParentAffineTransform(Node* ancestor) const;
+    virtual AffineTransform getNodeToParentAffineTransform(const Node* ancestor) const;
 
     /** 
      * Sets the transformation matrix manually.

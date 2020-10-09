@@ -10303,7 +10303,7 @@ cocos2d::AffineTransform QtScriptNode::getNodeToParentAffineTransform()
 	return cocos2d::AffineTransform();
 }
 
-cocos2d::AffineTransform QtScriptNode::getNodeToParentAffineTransform(cocos2d::Node* ancestor)
+cocos2d::AffineTransform QtScriptNode::getNodeToParentAffineTransform(const cocos2d::Node* ancestor)
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
@@ -10323,7 +10323,7 @@ cocos2d::Mat4 QtScriptNode::getNodeToParentTransform()
 	return cocos2d::Mat4();
 }
 
-cocos2d::Mat4 QtScriptNode::getNodeToParentTransform(cocos2d::Node* ancestor)
+cocos2d::Mat4 QtScriptNode::getNodeToParentTransform(const cocos2d::Node* ancestor)
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
@@ -10633,7 +10633,7 @@ int QtScriptNode::getTag()
 	return 0;
 }
 
-cocos2d::Node* QtScriptNode::getTransformParent()
+const cocos2d::Node* QtScriptNode::getTransformParent()
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
