@@ -59,7 +59,7 @@ THE SOFTWARE.
 #define CC_TARGET_PLATFORM             CC_PLATFORM_UNKNOWN
 
 // Apple: Mac and iOS
-#if defined(__APPLE__) && !defined(ANDROID) // exclude android for binding generator.
+#if defined(__APPLE__) && !defined(ANDROID) && !defined(EMSCRIPTEN) // exclude android for binding generator.
     #include <TargetConditionals.h>
     #if TARGET_OS_IPHONE // TARGET_OS_IPHONE includes TARGET_OS_IOS TARGET_OS_TV and TARGET_OS_WATCH. see TargetConditionals.h
         #undef  CC_TARGET_PLATFORM
