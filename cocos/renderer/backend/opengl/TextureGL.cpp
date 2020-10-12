@@ -302,6 +302,38 @@ void Texture2DGL::getBytes(
         std::size_t x, std::size_t y, std::size_t width, 
         std::size_t height, bool flipImage, PixelsCallback callback)
 {
+    int gl_format;
+    int component_type;
+    size_t pixelSize;
+    switch (_textureFormat) {
+        default:
+            gl_format = GL_RGBA;
+            component_type = GL_UNSIGNED_BYTE;
+            pixelSize = 4;
+            break;
+            
+        case PixelFormat::I8:
+            gl_format = GL_LUMINANCE;
+            component_type = GL_UNSIGNED_BYTE;
+            pixelSize = 1;
+            break;
+            
+        case PixelFormat::ETC:
+        case PixelFormat::PVRTC2:
+        case PixelFormat::PVRTC4:
+        case PixelFormat::RGB888:
+            gl_format = GL_RGB;
+            component_type = GL_UNSIGNED_BYTE;
+            pixelSize = 3;
+            break;
+            
+        case PixelFormat::RGB565:
+            gl_format = GL_RGB;
+            component_type = GL_UNSIGNED_SHORT_5_6_5;
+            pixelSize = 2;
+            break;
+    }
+    
     GLint defaultFBO = 0;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
 
@@ -311,22 +343,21 @@ void Texture2DGL::getBytes(
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureInfo.texture, 0);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    size_t pixelSize = _bitsPerElement / 8;
     size_t bytePerRow = width * pixelSize;
     size_t imageSize = bytePerRow * height;
     unsigned char* image = new unsigned char[imageSize];
+    
 
     if(flipImage)
     {
         auto imagePtr = &image[imageSize - bytePerRow];
         for (size_t yy = 0; yy < height; yy++, imagePtr -= bytePerRow)
         {
-            glReadPixels(GLint(x), GLint(y + yy), GLsizei(width), 1, GL_RGBA, GL_UNSIGNED_BYTE,
-                imagePtr);
+            glReadPixels(GLint(x), GLint(y + yy), GLsizei(width), 1, gl_format, component_type, imagePtr);
         }
     } else
     {
-        glReadPixels(GLint(x), GLint(y), GLsizei(width), GLsizei(height), GL_RGBA,GL_UNSIGNED_BYTE, image);
+        glReadPixels(GLint(x), GLint(y), GLsizei(width), GLsizei(height), gl_format, component_type, image);
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
@@ -422,6 +453,38 @@ void TextureCubeGL::updateFaceData(TextureCubeFace side, void *data)
 
 void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, PixelsCallback callback)
 {
+    int gl_format;
+    int component_type;
+    size_t pixelSize;
+    switch (_textureFormat) {
+        default:
+            gl_format = GL_RGBA;
+            component_type = GL_UNSIGNED_BYTE;
+            pixelSize = 4;
+            break;
+            
+        case PixelFormat::I8:
+            gl_format = GL_LUMINANCE;
+            component_type = GL_UNSIGNED_BYTE;
+            pixelSize = 1;
+            break;
+        
+        case PixelFormat::ETC:
+        case PixelFormat::PVRTC2:
+        case PixelFormat::PVRTC4:
+        case PixelFormat::RGB888:
+            gl_format = GL_RGB;
+            component_type = GL_UNSIGNED_BYTE;
+            pixelSize = 3;
+            break;
+            
+        case PixelFormat::RGB565:
+            gl_format = GL_RGB;
+            component_type = GL_UNSIGNED_SHORT_5_6_5;
+            pixelSize = 2;
+            break;
+    }
+    
     GLint defaultFBO = 0;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
     GLuint frameBuffer = 0;
@@ -430,7 +493,6 @@ void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, st
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP, _textureInfo.texture, 0);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    size_t pixelSize = _bitsPerElement / 8;
     size_t bytePerRow = width * pixelSize;
     size_t imageSize = bytePerRow * height;
     unsigned char* image = new unsigned char[imageSize];
@@ -439,11 +501,11 @@ void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, st
         auto imagePtr = &image[imageSize - bytePerRow];
         for (int yy = 0; yy < int(height); yy++, imagePtr -= bytePerRow)
         {
-            glReadPixels(GLint(x), GLint(y + yy), GLsizei(width), 1, GL_RGBA, GL_UNSIGNED_BYTE, imagePtr);
+            glReadPixels(GLint(x), GLint(y + yy), GLsizei(width), 1, gl_format, component_type, imagePtr);
         }
     } else
     {
-        glReadPixels(GLint(x), GLint(y), GLsizei(width), GLsizei(height), GL_RGBA,GL_UNSIGNED_BYTE, image);
+        glReadPixels(GLint(x), GLint(y), GLsizei(width), GLsizei(height), gl_format,component_type, image);
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
