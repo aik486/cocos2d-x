@@ -32,7 +32,8 @@ protected:
 	virtual int constructorArgumentCountMin() const override;
 	virtual int constructorArgumentCountMax() const override;
 	virtual bool constructObject(QScriptContext *context, Ref *&);
-	QScriptValue newInstance(Ref *obj);
+	QScriptValue newInstance(
+		Ref *obj, QScriptValue thisObject = QScriptValue());
 	static Ref *toRef(const QScriptValue &value);
 
 	template <typename CLS_T, typename CC_T>
@@ -106,7 +107,7 @@ protected:
 		ctor.setData(proto);
 		targetNamespace.setProperty(obj->mClassName, ctor,
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
+		obj->mConstructor = ctor;
 		return ctor;
 	}
 

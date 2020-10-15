@@ -24,10 +24,16 @@ void QtScriptRef::Register(const QScriptValue &targetNamespace)
 		QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-QScriptValue QtScriptRef::newInstance(Ref *obj)
+QScriptValue QtScriptRef::newInstance(Ref *obj, QScriptValue thisObject)
 {
 	Q_ASSERT(obj);
 	auto data = engine()->newVariant(QVariant::fromValue(obj));
+	if (thisObject.isObject())
+	{
+		thisObject.setScriptClass(this);
+		thisObject.setData(data);
+		return thisObject;
+	}
 	return engine()->newObject(this, data);
 }
 
@@ -49,7 +55,7 @@ QScriptValue QtScriptRef::newScriptObject(QScriptContext *context)
 		return engine()->uncaughtException();
 	}
 	newObject->autorelease();
-	return newInstance(newObject);
+	return newInstance(newObject, context->thisObject());
 }
 
 QString QtScriptRef::toString() const
