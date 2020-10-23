@@ -11184,15 +11184,6 @@ void QtScriptNode::setOpacityModifyRGB(bool value)
 	}
 }
 
-void QtScriptNode::setParent(cocos2d::Node* parent)
-{
-	auto __o = this->thiz<Node *>();
-	if (__o)
-	{
-		__o->setParent(parent);
-	}
-}
-
 void QtScriptNode::setPosition(const cocos2d::Vec2& position)
 {
 	auto __o = this->thiz<Node *>();

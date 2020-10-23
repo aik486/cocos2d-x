@@ -2247,7 +2247,6 @@ public:
 	Q_PROPERTY(cocos2d::Vec2 normalizedPosition READ getNormalizedPosition WRITE setNormalizedPosition)
 	Q_PROPERTY(uint8_t opacity READ getOpacity WRITE setOpacity)
 	Q_PROPERTY(bool opacityModifyRGB READ isOpacityModifyRGB WRITE setOpacityModifyRGB)
-	Q_PROPERTY(cocos2d::Node* parent READ getParent WRITE setParent)
 	Q_PROPERTY(cocos2d::Vec2 position READ getPosition WRITE setPosition)
 	Q_PROPERTY(cocos2d::Vec3 position3D READ getPosition3D WRITE setPosition3D)
 	Q_PROPERTY(cocos2d::Vec2 positionNormalized READ getPositionNormalized WRITE setPositionNormalized)
@@ -2317,7 +2316,7 @@ public:
 	Q_INVOKABLE ssize_t getNumberOfRunningActions();
 	Q_INVOKABLE ssize_t getNumberOfRunningActionsByTag(int tag);
 	uint8_t getOpacity();
-	cocos2d::Node* getParent();
+	Q_INVOKABLE cocos2d::Node* getParent();
 	Q_INVOKABLE cocos2d::AffineTransform getParentToNodeAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getParentToNodeTransform();
 	cocos2d::Vec2 getPosition();
@@ -2395,7 +2394,6 @@ public:
 	Q_INVOKABLE void setOnUpdateCallback(QScriptValue callback);
 	void setOpacity(uint8_t opacity);
 	void setOpacityModifyRGB(bool value);
-	void setParent(cocos2d::Node* parent);
 	void setPosition(const cocos2d::Vec2& position);
 	Q_INVOKABLE void setPosition(float x, float y);
 	void setPosition3D(const cocos2d::Vec3& position);
