@@ -4165,9 +4165,9 @@ public:
 	Q_INVOKABLE cocos2d::Data getFileData(const QByteArray& fileName);
 	Q_INVOKABLE QByteArray getFirstFilename();
 	Q_INVOKABLE QByteArray getNextFilename();
+	Q_INVOKABLE bool initWithBuffer(const QByteArray& arg0);
 	Q_INVOKABLE std::vector<std::string> listFiles(const QByteArray& pathname);
 	Q_INVOKABLE bool setFilter(const QByteArray& filter);
-	static QScriptValue createWithBuffer(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d

@@ -19326,15 +19326,9 @@ QtScriptZipFile::QtScriptZipFile(QScriptEngine *engine)
 
 void QtScriptZipFile::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<ZipFile, QtScriptZipFile>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
-	ctor.setProperty("createWithBuffer", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptZipFile::createWithBuffer)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 bool QtScriptZipFile::fileExists(const QByteArray& fileName)
@@ -19377,6 +19371,16 @@ QByteArray QtScriptZipFile::getNextFilename()
 	return QByteArray();
 }
 
+bool QtScriptZipFile::initWithBuffer(const QByteArray& arg0)
+{
+	auto __o = this->thiz<ZipFile *>();
+	if (__o)
+	{
+		return __o->initWithBuffer(arg0.data(), size_t(arg0.length()));
+	}
+	return false;
+}
+
 std::vector<std::string> QtScriptZipFile::listFiles(const QByteArray& pathname)
 {
 	auto __o = this->thiz<ZipFile *>();
@@ -19397,30 +19401,9 @@ bool QtScriptZipFile::setFilter(const QByteArray& filter)
 	return false;
 }
 
-QScriptValue QtScriptZipFile::createWithBuffer(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<QByteArray>(context->argument(0));
-			return __e->toScriptValue(ZipFile::createWithBuffer(arg0.data(), size_t(arg0.length())));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::ZipFile::createWithBuffer");
-	return __e->uncaughtException();
-}
-
 int QtScriptZipFile::constructorArgumentCountMin() const
 {
-	return 1;
+	return 0;
 }
 
 int QtScriptZipFile::constructorArgumentCountMax() const
@@ -19435,6 +19418,12 @@ bool QtScriptZipFile::constructObject(QScriptContext *context, NativeObjectType 
 	bool ok = false;
 	switch (context->argumentCount())
 	{
+		case 0:
+		{
+			out = new ZipFile();
+			ok = true;
+			break;
+		}
 		case 1:
 		{
 			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
