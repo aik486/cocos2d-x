@@ -1787,7 +1787,9 @@ public:
 
     virtual void updateDisplayedOpacity(uint8_t parentOpacity, bool force = true);    
     virtual void updateDisplayedColor(const Color3B& parentColor, bool force = true);
-    
+
+    inline const Mat4& getModelViewTransform() const;
+
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
     Node();
@@ -1975,6 +1977,11 @@ private:
 inline bool Node::isUseInvertedAdditionalTransformOrder() const
 {
     return _useInvertedAdditionalTransformOrder;
+}
+
+const Mat4 &Node::getModelViewTransform() const
+{
+    return _modelViewTransform;
 }
 
 /**
