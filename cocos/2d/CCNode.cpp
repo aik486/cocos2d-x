@@ -987,6 +987,7 @@ void Node::addChild(Node *child, int localZOrder, int tag)
 
 void Node::addChild(Node* child, int localZOrder, const std::string &name)
 {
+    CCASSERT(child != this, "Can't add itself as self child");
     CCASSERT(child != nullptr, "Argument must be non-nil");
     CCASSERT(child->_parent == nullptr, "child already added. It can't be added again");
     
@@ -995,21 +996,6 @@ void Node::addChild(Node* child, int localZOrder, const std::string &name)
 
 void Node::addChildHelper(Node* child, int localZOrder, int tag, const std::string &name, bool setTag)
 {
-    auto assertNotSelfChild
-        ( [ this, child ]() -> bool
-          {
-              for ( Node* parent( getParent() ); parent != nullptr;
-                    parent = parent->getParent() )
-                  if ( parent == child )
-                      return false;
-              
-              return true;
-          } );
-    (void)assertNotSelfChild;
-    
-    CCASSERT( assertNotSelfChild(),
-              "A node cannot be the child of his own children" );
-    
     if (_children.empty())
     {
         this->childrenAlloc();
