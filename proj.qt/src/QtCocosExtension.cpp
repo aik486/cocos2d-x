@@ -404,6 +404,19 @@ void CCCustomEffect::setProgramState(ProgramState *state)
 	mUniformsDirty = true;
 }
 
+bool CCCustomEffect::initWithTexture(
+	Texture2D *texture, const Rect &rect, bool rotated)
+{
+	auto savedAnchorPoint = _anchorPoint;
+	bool savedFlippedX = _flippedX;
+	bool savedFlippedY = _flippedY;
+	bool ok = Sprite::initWithTexture(texture, rect, rotated);
+	setAnchorPoint(savedAnchorPoint);
+	setFlippedX(savedFlippedX);
+	setFlippedY(savedFlippedY);
+	return ok;
+}
+
 void CCCustomEffect::updateUniforms()
 {
 	auto programState = _programState;

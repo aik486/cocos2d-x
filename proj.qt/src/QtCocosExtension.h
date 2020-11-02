@@ -109,6 +109,8 @@ public:
 		Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
 
 	virtual void setProgramState(backend::ProgramState *state) override;
+	virtual bool initWithTexture(
+		Texture2D *texture, const Rect &rect, bool rotated) override;
 
 protected:
 	void updateUniforms();
