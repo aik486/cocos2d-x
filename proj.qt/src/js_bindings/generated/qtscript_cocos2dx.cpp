@@ -3507,14 +3507,14 @@ bool QtScriptUniformLocation::equals(const cocos2d::backend::UniformLocation& ot
 	return false;
 }
 
-size_t QtScriptUniformLocation::id(const cocos2d::backend::UniformLocation& uniform)
+unsigned QtScriptUniformLocation::id(const cocos2d::backend::UniformLocation& uniform)
 {
 	auto __o = this->thiz<UniformLocation *>();
 	if (__o)
 	{
-		return __o->operator()(uniform);
+		return unsigned(__o->operator()(uniform));
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 void QtScriptUniformLocation::reset()
@@ -3986,9 +3986,9 @@ bool QtScriptColor3B::constructObject(QScriptContext *context, NativeObjectType 
 		}
 		case 3:
 		{
-			auto arg0 = qscriptvalue_cast<uint8_t>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<uint8_t>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<uint8_t>(context->argument(2));
+			auto arg0 = qscriptvalue_cast<quint8>(context->argument(0));
+			auto arg1 = qscriptvalue_cast<quint8>(context->argument(1));
+			auto arg2 = qscriptvalue_cast<quint8>(context->argument(2));
 			out = Color3B(arg0, arg1, arg2);
 			ok = true;
 			break;
@@ -4003,17 +4003,17 @@ bool QtScriptColor3B::constructObject(QScriptContext *context, NativeObjectType 
 	return ok;
 }
 
-uint8_t QtScriptColor3B::_public_field_get_b() const
+quint8 QtScriptColor3B::_public_field_get_b() const
 {
 	auto object = thiz<Color3B *>();
 	if (object)
 	{
 		return object->b;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptColor3B::_public_field_set_b(uint8_t value)
+void QtScriptColor3B::_public_field_set_b(quint8 value)
 {
 	auto object = thiz<Color3B *>();
 	if (object)
@@ -4022,17 +4022,17 @@ void QtScriptColor3B::_public_field_set_b(uint8_t value)
 	}
 }
 
-uint8_t QtScriptColor3B::_public_field_get_g() const
+quint8 QtScriptColor3B::_public_field_get_g() const
 {
 	auto object = thiz<Color3B *>();
 	if (object)
 	{
 		return object->g;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptColor3B::_public_field_set_g(uint8_t value)
+void QtScriptColor3B::_public_field_set_g(quint8 value)
 {
 	auto object = thiz<Color3B *>();
 	if (object)
@@ -4041,17 +4041,17 @@ void QtScriptColor3B::_public_field_set_g(uint8_t value)
 	}
 }
 
-uint8_t QtScriptColor3B::_public_field_get_r() const
+quint8 QtScriptColor3B::_public_field_get_r() const
 {
 	auto object = thiz<Color3B *>();
 	if (object)
 	{
 		return object->r;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptColor3B::_public_field_set_r(uint8_t value)
+void QtScriptColor3B::_public_field_set_r(quint8 value)
 {
 	auto object = thiz<Color3B *>();
 	if (object)
@@ -4100,7 +4100,7 @@ bool QtScriptColor4B::equals(const cocos2d::Color4B& right)
 	return false;
 }
 
-void QtScriptColor4B::set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
+void QtScriptColor4B::set(quint8 _r, quint8 _g, quint8 _b, quint8 _a)
 {
 	auto __o = this->thiz<Color4B *>();
 	if (__o)
@@ -4142,7 +4142,7 @@ bool QtScriptColor4B::constructObject(QScriptContext *context, NativeObjectType 
 		case 2:
 		{
 			auto arg0 = qscriptvalue_cast<cocos2d::Color3B>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<uint8_t>(context->argument(1));
+			auto arg1 = qscriptvalue_cast<quint8>(context->argument(1));
 			out = Color4B(arg0, arg1);
 			ok = true;
 			break;
@@ -4153,10 +4153,10 @@ bool QtScriptColor4B::constructObject(QScriptContext *context, NativeObjectType 
 		}
 		case 4:
 		{
-			auto arg0 = qscriptvalue_cast<uint8_t>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<uint8_t>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<uint8_t>(context->argument(2));
-			auto arg3 = qscriptvalue_cast<uint8_t>(context->argument(3));
+			auto arg0 = qscriptvalue_cast<quint8>(context->argument(0));
+			auto arg1 = qscriptvalue_cast<quint8>(context->argument(1));
+			auto arg2 = qscriptvalue_cast<quint8>(context->argument(2));
+			auto arg3 = qscriptvalue_cast<quint8>(context->argument(3));
 			out = Color4B(arg0, arg1, arg2, arg3);
 			ok = true;
 			break;
@@ -4171,17 +4171,17 @@ bool QtScriptColor4B::constructObject(QScriptContext *context, NativeObjectType 
 	return ok;
 }
 
-uint8_t QtScriptColor4B::_public_field_get_a() const
+quint8 QtScriptColor4B::_public_field_get_a() const
 {
 	auto object = thiz<Color4B *>();
 	if (object)
 	{
 		return object->a;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptColor4B::_public_field_set_a(uint8_t value)
+void QtScriptColor4B::_public_field_set_a(quint8 value)
 {
 	auto object = thiz<Color4B *>();
 	if (object)
@@ -4190,17 +4190,17 @@ void QtScriptColor4B::_public_field_set_a(uint8_t value)
 	}
 }
 
-uint8_t QtScriptColor4B::_public_field_get_b() const
+quint8 QtScriptColor4B::_public_field_get_b() const
 {
 	auto object = thiz<Color4B *>();
 	if (object)
 	{
 		return object->b;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptColor4B::_public_field_set_b(uint8_t value)
+void QtScriptColor4B::_public_field_set_b(quint8 value)
 {
 	auto object = thiz<Color4B *>();
 	if (object)
@@ -4209,17 +4209,17 @@ void QtScriptColor4B::_public_field_set_b(uint8_t value)
 	}
 }
 
-uint8_t QtScriptColor4B::_public_field_get_g() const
+quint8 QtScriptColor4B::_public_field_get_g() const
 {
 	auto object = thiz<Color4B *>();
 	if (object)
 	{
 		return object->g;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptColor4B::_public_field_set_g(uint8_t value)
+void QtScriptColor4B::_public_field_set_g(quint8 value)
 {
 	auto object = thiz<Color4B *>();
 	if (object)
@@ -4228,17 +4228,17 @@ void QtScriptColor4B::_public_field_set_g(uint8_t value)
 	}
 }
 
-uint8_t QtScriptColor4B::_public_field_get_r() const
+quint8 QtScriptColor4B::_public_field_get_r() const
 {
 	auto object = thiz<Color4B *>();
 	if (object)
 	{
 		return object->r;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptColor4B::_public_field_set_r(uint8_t value)
+void QtScriptColor4B::_public_field_set_r(quint8 value)
 {
 	auto object = thiz<Color4B *>();
 	if (object)
@@ -6399,17 +6399,17 @@ bool QtScriptFontStroke::constructObject(QScriptContext *context, NativeObjectTy
 	return false;
 }
 
-uint8_t QtScriptFontStroke::_public_field_get_strokeAlpha() const
+quint8 QtScriptFontStroke::_public_field_get_strokeAlpha() const
 {
 	auto object = thiz<FontStroke *>();
 	if (object)
 	{
 		return object->_strokeAlpha;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptFontStroke::_public_field_set_strokeAlpha(uint8_t value)
+void QtScriptFontStroke::_public_field_set_strokeAlpha(quint8 value)
 {
 	auto object = thiz<FontStroke *>();
 	if (object)
@@ -6575,17 +6575,17 @@ void QtScriptFontDefinition::_public_field_set_enableWrap(const bool& value)
 	}
 }
 
-uint8_t QtScriptFontDefinition::_public_field_get_fontAlpha() const
+quint8 QtScriptFontDefinition::_public_field_get_fontAlpha() const
 {
 	auto object = thiz<FontDefinition *>();
 	if (object)
 	{
 		return object->_fontAlpha;
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
-void QtScriptFontDefinition::_public_field_set_fontAlpha(uint8_t value)
+void QtScriptFontDefinition::_public_field_set_fontAlpha(quint8 value)
 {
 	auto object = thiz<FontDefinition *>();
 	if (object)
@@ -7382,17 +7382,17 @@ bool QtScriptTextureDescriptor::constructObject(QScriptContext *context, NativeO
 	return false;
 }
 
-uint32_t QtScriptTextureDescriptor::_public_field_get_depth() const
+quint32 QtScriptTextureDescriptor::_public_field_get_depth() const
 {
 	auto object = thiz<TextureDescriptor *>();
 	if (object)
 	{
 		return object->depth;
 	}
-	return static_cast<uint32_t>(0);
+	return static_cast<quint32>(0);
 }
 
-void QtScriptTextureDescriptor::_public_field_set_depth(uint32_t value)
+void QtScriptTextureDescriptor::_public_field_set_depth(quint32 value)
 {
 	auto object = thiz<TextureDescriptor *>();
 	if (object)
@@ -7401,17 +7401,17 @@ void QtScriptTextureDescriptor::_public_field_set_depth(uint32_t value)
 	}
 }
 
-uint32_t QtScriptTextureDescriptor::_public_field_get_height() const
+quint32 QtScriptTextureDescriptor::_public_field_get_height() const
 {
 	auto object = thiz<TextureDescriptor *>();
 	if (object)
 	{
 		return object->height;
 	}
-	return static_cast<uint32_t>(0);
+	return static_cast<quint32>(0);
 }
 
-void QtScriptTextureDescriptor::_public_field_set_height(uint32_t value)
+void QtScriptTextureDescriptor::_public_field_set_height(quint32 value)
 {
 	auto object = thiz<TextureDescriptor *>();
 	if (object)
@@ -7496,17 +7496,17 @@ void QtScriptTextureDescriptor::_public_field_set_textureUsage(int value)
 	}
 }
 
-uint32_t QtScriptTextureDescriptor::_public_field_get_width() const
+quint32 QtScriptTextureDescriptor::_public_field_get_width() const
 {
 	auto object = thiz<TextureDescriptor *>();
 	if (object)
 	{
 		return object->width;
 	}
-	return static_cast<uint32_t>(0);
+	return static_cast<quint32>(0);
 }
 
-void QtScriptTextureDescriptor::_public_field_set_width(uint32_t value)
+void QtScriptTextureDescriptor::_public_field_set_width(quint32 value)
 {
 	auto object = thiz<TextureDescriptor *>();
 	if (object)
@@ -7558,7 +7558,7 @@ bool QtScriptTextureBackend::constructObject(QScriptContext *context, NativeObje
 	return false;
 }
 
-void QtScriptTextureBackend::getBytes(size_t arg0, size_t arg1, size_t arg2, size_t arg3, bool arg4, const QScriptValue& arg5)
+void QtScriptTextureBackend::getBytes(unsigned arg0, unsigned arg1, unsigned arg2, unsigned arg3, bool arg4, const QScriptValue& arg5)
 {
 	auto __o = this->thiz<TextureBackend *>();
 	if (__o)
@@ -7650,24 +7650,24 @@ bool QtScriptTexture2DBackend::constructObject(QScriptContext *context, NativeOb
 	return false;
 }
 
-size_t QtScriptTexture2DBackend::getHeight()
+unsigned QtScriptTexture2DBackend::getHeight()
 {
 	auto __o = this->thiz<Texture2DBackend *>();
 	if (__o)
 	{
-		return __o->getHeight();
+		return unsigned(__o->getHeight());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
-size_t QtScriptTexture2DBackend::getWidth()
+unsigned QtScriptTexture2DBackend::getWidth()
 {
 	auto __o = this->thiz<Texture2DBackend *>();
 	if (__o)
 	{
-		return __o->getWidth();
+		return unsigned(__o->getWidth());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 } // end of backend
@@ -7756,14 +7756,14 @@ bool QtScriptShaderModule::constructObject(QScriptContext *context, NativeObject
 	return false;
 }
 
-size_t QtScriptShaderModule::getHashValue()
+unsigned QtScriptShaderModule::getHashValue()
 {
 	auto __o = this->thiz<ShaderModule *>();
 	if (__o)
 	{
-		return __o->getHashValue();
+		return unsigned(__o->getHashValue());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 int QtScriptShaderModule::getShaderStage()
@@ -8045,14 +8045,14 @@ int QtScriptProgram::getProgramType()
 	return 0;
 }
 
-size_t QtScriptProgram::getUniformBufferSize(int stage)
+unsigned QtScriptProgram::getUniformBufferSize(int stage)
 {
 	auto __o = this->thiz<Program *>();
 	if (__o)
 	{
-		return __o->getUniformBufferSize(cocos2d::backend::ShaderStage(stage));
+		return unsigned(__o->getUniformBufferSize(cocos2d::backend::ShaderStage(stage)));
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 cocos2d::backend::UniformLocation QtScriptProgram::getUniformLocation(const QByteArray& uniform)
@@ -8196,7 +8196,7 @@ void QtScriptProgramState::setParameterAutoBinding(const QByteArray& uniformName
 	}
 }
 
-void QtScriptProgramState::setTexture(const cocos2d::backend::UniformLocation& uniformLocation, uint32_t slot, cocos2d::backend::TextureBackend* texture)
+void QtScriptProgramState::setTexture(const cocos2d::backend::UniformLocation& uniformLocation, quint32 slot, cocos2d::backend::TextureBackend* texture)
 {
 	auto __o = this->thiz<ProgramState *>();
 	if (__o)
@@ -8598,7 +8598,7 @@ void QtScriptCustomCommand::Register(const QScriptValue &targetNamespace)
 	Q_ASSERT(ctor.isFunction());
 }
 
-void QtScriptCustomCommand::createIndexBuffer(int format, size_t capacity, int usage)
+void QtScriptCustomCommand::createIndexBuffer(int format, unsigned capacity, int usage)
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
@@ -8607,7 +8607,7 @@ void QtScriptCustomCommand::createIndexBuffer(int format, size_t capacity, int u
 	}
 }
 
-void QtScriptCustomCommand::createVertexBuffer(size_t vertexSize, size_t capacity, int usage)
+void QtScriptCustomCommand::createVertexBuffer(unsigned vertexSize, unsigned capacity, int usage)
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
@@ -8636,34 +8636,34 @@ cocos2d::backend::Buffer* QtScriptCustomCommand::getIndexBuffer()
 	return nullptr;
 }
 
-size_t QtScriptCustomCommand::getIndexCapacity()
+unsigned QtScriptCustomCommand::getIndexCapacity()
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		return __o->getIndexCapacity();
+		return unsigned(__o->getIndexCapacity());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
-size_t QtScriptCustomCommand::getIndexDrawCount()
+unsigned QtScriptCustomCommand::getIndexDrawCount()
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		return __o->getIndexDrawCount();
+		return unsigned(__o->getIndexDrawCount());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
-size_t QtScriptCustomCommand::getIndexDrawOffset()
+unsigned QtScriptCustomCommand::getIndexDrawOffset()
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		return __o->getIndexDrawOffset();
+		return unsigned(__o->getIndexDrawOffset());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 int QtScriptCustomCommand::getIndexFormat()
@@ -8706,34 +8706,34 @@ cocos2d::backend::Buffer* QtScriptCustomCommand::getVertexBuffer()
 	return nullptr;
 }
 
-size_t QtScriptCustomCommand::getVertexCapacity()
+unsigned QtScriptCustomCommand::getVertexCapacity()
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		return __o->getVertexCapacity();
+		return unsigned(__o->getVertexCapacity());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
-size_t QtScriptCustomCommand::getVertexDrawCount()
+unsigned QtScriptCustomCommand::getVertexDrawCount()
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		return __o->getVertexDrawCount();
+		return unsigned(__o->getVertexDrawCount());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
-size_t QtScriptCustomCommand::getVertexDrawStart()
+unsigned QtScriptCustomCommand::getVertexDrawStart()
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		return __o->getVertexDrawStart();
+		return unsigned(__o->getVertexDrawStart());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 void QtScriptCustomCommand::init(float globalZOrder)
@@ -8809,7 +8809,7 @@ void QtScriptCustomCommand::setIndexBuffer(cocos2d::backend::Buffer* indexBuffer
 	}
 }
 
-void QtScriptCustomCommand::setIndexDrawInfo(size_t start, size_t count)
+void QtScriptCustomCommand::setIndexDrawInfo(unsigned start, unsigned count)
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
@@ -8845,7 +8845,7 @@ void QtScriptCustomCommand::setVertexBuffer(cocos2d::backend::Buffer* vertexBuff
 	}
 }
 
-void QtScriptCustomCommand::setVertexDrawInfo(size_t start, size_t count)
+void QtScriptCustomCommand::setVertexDrawInfo(unsigned start, unsigned count)
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
@@ -8863,7 +8863,7 @@ void QtScriptCustomCommand::updateIndexBuffer(const QByteArray& arg0)
 	}
 }
 
-void QtScriptCustomCommand::updateIndexBuffer(const QByteArray& arg0, size_t arg1)
+void QtScriptCustomCommand::updateIndexBuffer(const QByteArray& arg0, unsigned arg1)
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
@@ -8881,7 +8881,7 @@ void QtScriptCustomCommand::updateVertexBuffer(const QByteArray& arg0)
 	}
 }
 
-void QtScriptCustomCommand::updateVertexBuffer(const QByteArray& arg0, size_t arg1)
+void QtScriptCustomCommand::updateVertexBuffer(const QByteArray& arg0, unsigned arg1)
 {
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
@@ -10193,14 +10193,14 @@ cocos2d::Vector<cocos2d::Node *> QtScriptNode::getChildren()
 	return cocos2d::Vector<cocos2d::Node *>();
 }
 
-ssize_t QtScriptNode::getChildrenCount()
+int QtScriptNode::getChildrenCount()
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		return __o->getChildrenCount();
+		return int(__o->getChildrenCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 cocos2d::Color3B QtScriptNode::getColor()
@@ -10253,14 +10253,14 @@ cocos2d::Color3B QtScriptNode::getDisplayedColor()
 	return cocos2d::Color3B();
 }
 
-uint8_t QtScriptNode::getDisplayedOpacity()
+quint8 QtScriptNode::getDisplayedOpacity()
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
 		return __o->getDisplayedOpacity();
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
 float QtScriptNode::getGlobalZOrder()
@@ -10273,14 +10273,24 @@ float QtScriptNode::getGlobalZOrder()
 	return static_cast<float>(0);
 }
 
-int32_t QtScriptNode::getLocalZOrder()
+qint32 QtScriptNode::getLocalZOrder()
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
 		return __o->getLocalZOrder();
 	}
-	return static_cast<int32_t>(0);
+	return static_cast<qint32>(0);
+}
+
+cocos2d::Mat4 QtScriptNode::getModelViewTransform()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getModelViewTransform();
+	}
+	return cocos2d::Mat4();
 }
 
 QByteArray QtScriptNode::getName()
@@ -10363,34 +10373,34 @@ cocos2d::Vec2 QtScriptNode::getNormalizedPosition()
 	return cocos2d::Vec2();
 }
 
-ssize_t QtScriptNode::getNumberOfRunningActions()
+int QtScriptNode::getNumberOfRunningActions()
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		return __o->getNumberOfRunningActions();
+		return int(__o->getNumberOfRunningActions());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-ssize_t QtScriptNode::getNumberOfRunningActionsByTag(int tag)
+int QtScriptNode::getNumberOfRunningActionsByTag(int tag)
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		return __o->getNumberOfRunningActionsByTag(tag);
+		return int(__o->getNumberOfRunningActionsByTag(tag));
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-uint8_t QtScriptNode::getOpacity()
+quint8 QtScriptNode::getOpacity()
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
 		return __o->getOpacity();
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
 cocos2d::Node* QtScriptNode::getParent()
@@ -11059,7 +11069,7 @@ void QtScriptNode::setIgnoreAnchorPointForPosition(bool ignore)
 	}
 }
 
-void QtScriptNode::setLocalZOrder(int32_t localZOrder)
+void QtScriptNode::setLocalZOrder(qint32 localZOrder)
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
@@ -11166,7 +11176,7 @@ void QtScriptNode::setOnUpdateCallback(QScriptValue callback)
 	}
 }
 
-void QtScriptNode::setOpacity(uint8_t opacity)
+void QtScriptNode::setOpacity(quint8 opacity)
 {
 	auto __o = this->thiz<Node *>();
 	if (__o)
@@ -12159,14 +12169,14 @@ float QtScriptDirector::getFrameRate()
 	return static_cast<float>(0);
 }
 
-int64_t QtScriptDirector::getFrameStartTimeMicros()
+qint64 QtScriptDirector::getFrameStartTimeMicros()
 {
 	auto __o = this->thiz<Director *>();
 	if (__o)
 	{
 		return __o->getFrameStartTimeMicros();
 	}
-	return static_cast<int64_t>(0);
+	return static_cast<qint64>(0);
 }
 
 cocos2d::Mat4 QtScriptDirector::getMatrix(int type)
@@ -13641,14 +13651,14 @@ QByteArray QtScriptImage::getData()
 	return QByteArray();
 }
 
-ssize_t QtScriptImage::getDataLen()
+int QtScriptImage::getDataLen()
 {
 	auto __o = this->thiz<Image *>();
 	if (__o)
 	{
-		return __o->getDataLen();
+		return int(__o->getDataLen());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 QByteArray QtScriptImage::getFilePath()
@@ -16964,7 +16974,7 @@ cocos2d::FadeTo* QtScriptFadeTo::clone()
 	return nullptr;
 }
 
-bool QtScriptFadeTo::initWithDuration(float duration, uint8_t opacity)
+bool QtScriptFadeTo::initWithDuration(float duration, quint8 opacity)
 {
 	auto __o = this->thiz<FadeTo *>();
 	if (__o)
@@ -16996,7 +17006,7 @@ QScriptValue QtScriptFadeTo::create(QScriptContext *context, QScriptEngine* __e)
 		case 2:
 		{
 			auto arg0 = qscriptvalue_cast<float>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<uint8_t>(context->argument(1));
+			auto arg1 = qscriptvalue_cast<quint8>(context->argument(1));
 			return __e->toScriptValue(FadeTo::create(arg0, arg1));
 		}
 	}
@@ -17228,7 +17238,7 @@ cocos2d::TintTo* QtScriptTintTo::clone()
 	return nullptr;
 }
 
-bool QtScriptTintTo::initWithDuration(float duration, uint8_t red, uint8_t green, uint8_t blue)
+bool QtScriptTintTo::initWithDuration(float duration, quint8 red, quint8 green, quint8 blue)
 {
 	auto __o = this->thiz<TintTo *>();
 	if (__o)
@@ -17270,9 +17280,9 @@ QScriptValue QtScriptTintTo::create(QScriptContext *context, QScriptEngine* __e)
 		case 4:
 		{
 			auto arg0 = qscriptvalue_cast<float>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<uint8_t>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<uint8_t>(context->argument(2));
-			auto arg3 = qscriptvalue_cast<uint8_t>(context->argument(3));
+			auto arg1 = qscriptvalue_cast<quint8>(context->argument(1));
+			auto arg2 = qscriptvalue_cast<quint8>(context->argument(2));
+			auto arg3 = qscriptvalue_cast<quint8>(context->argument(3));
 			return __e->toScriptValue(TintTo::create(arg0, arg1, arg2, arg3));
 		}
 	}
@@ -17336,7 +17346,7 @@ cocos2d::TintBy* QtScriptTintBy::clone()
 	return nullptr;
 }
 
-bool QtScriptTintBy::initWithDuration(float duration, int16_t deltaRed, int16_t deltaGreen, int16_t deltaBlue)
+bool QtScriptTintBy::initWithDuration(float duration, qint16 deltaRed, qint16 deltaGreen, qint16 deltaBlue)
 {
 	auto __o = this->thiz<TintBy *>();
 	if (__o)
@@ -17368,9 +17378,9 @@ QScriptValue QtScriptTintBy::create(QScriptContext *context, QScriptEngine* __e)
 		case 4:
 		{
 			auto arg0 = qscriptvalue_cast<float>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<int16_t>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<int16_t>(context->argument(2));
-			auto arg3 = qscriptvalue_cast<int16_t>(context->argument(3));
+			auto arg1 = qscriptvalue_cast<qint16>(context->argument(1));
+			auto arg2 = qscriptvalue_cast<qint16>(context->argument(2));
+			auto arg3 = qscriptvalue_cast<qint16>(context->argument(3));
 			return __e->toScriptValue(TintBy::create(arg0, arg1, arg2, arg3));
 		}
 	}
@@ -18590,14 +18600,14 @@ void QtScriptData::clear()
 	}
 }
 
-ssize_t QtScriptData::copy(const QByteArray& arg0)
+int QtScriptData::copy(const QByteArray& arg0)
 {
 	auto __o = this->thiz<Data *>();
 	if (__o)
 	{
-		return __o->copy(reinterpret_cast<const unsigned char*>(arg0.data()), arg0.size());
+		return int(__o->copy(reinterpret_cast<const unsigned char*>(arg0.data()), arg0.size()));
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 QByteArray QtScriptData::getBytes()
@@ -18610,14 +18620,14 @@ QByteArray QtScriptData::getBytes()
 	return QByteArray();
 }
 
-ssize_t QtScriptData::getSize()
+int QtScriptData::getSize()
 {
 	auto __o = this->thiz<Data *>();
 	if (__o)
 	{
-		return __o->getSize();
+		return int(__o->getSize());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 bool QtScriptData::isNull()
@@ -19941,7 +19951,7 @@ void QtScriptPointArray::append(const cocos2d::Vec2& controlPoint)
 	}
 }
 
-cocos2d::Vec2 QtScriptPointArray::at(ssize_t index)
+cocos2d::Vec2 QtScriptPointArray::at(int index)
 {
 	auto __o = this->thiz<PointArray *>();
 	if (__o)
@@ -19961,17 +19971,17 @@ cocos2d::PointArray* QtScriptPointArray::clone()
 	return nullptr;
 }
 
-ssize_t QtScriptPointArray::count()
+int QtScriptPointArray::count()
 {
 	auto __o = this->thiz<PointArray *>();
 	if (__o)
 	{
-		return __o->count();
+		return int(__o->count());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-bool QtScriptPointArray::initWithCapacity(ssize_t capacity)
+bool QtScriptPointArray::initWithCapacity(int capacity)
 {
 	auto __o = this->thiz<PointArray *>();
 	if (__o)
@@ -19981,7 +19991,7 @@ bool QtScriptPointArray::initWithCapacity(ssize_t capacity)
 	return false;
 }
 
-void QtScriptPointArray::insert(const cocos2d::Vec2& controlPoint, ssize_t index)
+void QtScriptPointArray::insert(const cocos2d::Vec2& controlPoint, int index)
 {
 	auto __o = this->thiz<PointArray *>();
 	if (__o)
@@ -19990,7 +20000,7 @@ void QtScriptPointArray::insert(const cocos2d::Vec2& controlPoint, ssize_t index
 	}
 }
 
-void QtScriptPointArray::remove(ssize_t index)
+void QtScriptPointArray::remove(int index)
 {
 	auto __o = this->thiz<PointArray *>();
 	if (__o)
@@ -19999,7 +20009,7 @@ void QtScriptPointArray::remove(ssize_t index)
 	}
 }
 
-void QtScriptPointArray::replace(const cocos2d::Vec2& controlPoint, ssize_t index)
+void QtScriptPointArray::replace(const cocos2d::Vec2& controlPoint, int index)
 {
 	auto __o = this->thiz<PointArray *>();
 	if (__o)
@@ -20038,7 +20048,7 @@ QScriptValue QtScriptPointArray::create(QScriptContext *context, QScriptEngine* 
 	{
 		case 1:
 		{
-			auto arg0 = qscriptvalue_cast<ssize_t>(context->argument(0));
+			auto arg0 = qscriptvalue_cast<int>(context->argument(0));
 			return __e->toScriptValue(PointArray::create(arg0));
 		}
 	}
@@ -26457,34 +26467,34 @@ cocos2d::Action* QtScriptActionManager::getActionByTag(int tag, const cocos2d::N
 	return nullptr;
 }
 
-ssize_t QtScriptActionManager::getNumberOfRunningActions()
+int QtScriptActionManager::getNumberOfRunningActions()
 {
 	auto __o = this->thiz<ActionManager *>();
 	if (__o)
 	{
-		return __o->getNumberOfRunningActions();
+		return int(__o->getNumberOfRunningActions());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-ssize_t QtScriptActionManager::getNumberOfRunningActionsInTarget(const cocos2d::Node* target)
+int QtScriptActionManager::getNumberOfRunningActionsInTarget(const cocos2d::Node* target)
 {
 	auto __o = this->thiz<ActionManager *>();
 	if (__o)
 	{
-		return __o->getNumberOfRunningActionsInTarget(target);
+		return int(__o->getNumberOfRunningActionsInTarget(target));
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-size_t QtScriptActionManager::getNumberOfRunningActionsInTargetByTag(const cocos2d::Node* target, int tag)
+unsigned QtScriptActionManager::getNumberOfRunningActionsInTargetByTag(const cocos2d::Node* target, int tag)
 {
 	auto __o = this->thiz<ActionManager *>();
 	if (__o)
 	{
-		return __o->getNumberOfRunningActionsInTargetByTag(target, tag);
+		return unsigned(__o->getNumberOfRunningActionsInTargetByTag(target, tag));
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 cocos2d::Vector<cocos2d::Node *> QtScriptActionManager::pauseAllRunningActions()
@@ -28191,14 +28201,14 @@ cocos2d::BlendFunc QtScriptAtlasNode::getBlendFunc()
 	return cocos2d::BlendFunc();
 }
 
-size_t QtScriptAtlasNode::getQuadsToDraw()
+unsigned QtScriptAtlasNode::getQuadsToDraw()
 {
 	auto __o = this->thiz<AtlasNode *>();
 	if (__o)
 	{
-		return __o->getQuadsToDraw();
+		return unsigned(__o->getQuadsToDraw());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 cocos2d::Texture2D* QtScriptAtlasNode::getTexture()
@@ -28250,7 +28260,7 @@ void QtScriptAtlasNode::setBlendFunc(const cocos2d::BlendFunc& blendFunc)
 	}
 }
 
-void QtScriptAtlasNode::setQuadsToDraw(ssize_t quadsToDraw)
+void QtScriptAtlasNode::setQuadsToDraw(int quadsToDraw)
 {
 	auto __o = this->thiz<AtlasNode *>();
 	if (__o)
@@ -31837,14 +31847,14 @@ cocos2d::Color3B QtScriptLayerGradient::getEndColor()
 	return cocos2d::Color3B();
 }
 
-uint8_t QtScriptLayerGradient::getEndOpacity()
+quint8 QtScriptLayerGradient::getEndOpacity()
 {
 	auto __o = this->thiz<LayerGradient *>();
 	if (__o)
 	{
 		return __o->getEndOpacity();
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
 cocos2d::Color3B QtScriptLayerGradient::getStartColor()
@@ -31857,14 +31867,14 @@ cocos2d::Color3B QtScriptLayerGradient::getStartColor()
 	return cocos2d::Color3B();
 }
 
-uint8_t QtScriptLayerGradient::getStartOpacity()
+quint8 QtScriptLayerGradient::getStartOpacity()
 {
 	auto __o = this->thiz<LayerGradient *>();
 	if (__o)
 	{
 		return __o->getStartOpacity();
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
 cocos2d::Vec2 QtScriptLayerGradient::getVector()
@@ -31925,7 +31935,7 @@ void QtScriptLayerGradient::setEndColor(const cocos2d::Color3B& endColor)
 	}
 }
 
-void QtScriptLayerGradient::setEndOpacity(uint8_t endOpacity)
+void QtScriptLayerGradient::setEndOpacity(quint8 endOpacity)
 {
 	auto __o = this->thiz<LayerGradient *>();
 	if (__o)
@@ -31943,7 +31953,7 @@ void QtScriptLayerGradient::setStartColor(const cocos2d::Color3B& startColor)
 	}
 }
 
-void QtScriptLayerGradient::setStartOpacity(uint8_t startOpacity)
+void QtScriptLayerGradient::setStartOpacity(quint8 startOpacity)
 {
 	auto __o = this->thiz<LayerGradient *>();
 	if (__o)
@@ -32082,14 +32092,14 @@ cocos2d::Color3B QtScriptLayerRadialGradient::getEndColor3B()
 	return cocos2d::Color3B();
 }
 
-uint8_t QtScriptLayerRadialGradient::getEndOpacity()
+quint8 QtScriptLayerRadialGradient::getEndOpacity()
 {
 	auto __o = this->thiz<LayerRadialGradient *>();
 	if (__o)
 	{
 		return __o->getEndOpacity();
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
 float QtScriptLayerRadialGradient::getExpand()
@@ -32132,14 +32142,14 @@ cocos2d::Color3B QtScriptLayerRadialGradient::getStartColor3B()
 	return cocos2d::Color3B();
 }
 
-uint8_t QtScriptLayerRadialGradient::getStartOpacity()
+quint8 QtScriptLayerRadialGradient::getStartOpacity()
 {
 	auto __o = this->thiz<LayerRadialGradient *>();
 	if (__o)
 	{
 		return __o->getStartOpacity();
 	}
-	return static_cast<uint8_t>(0);
+	return static_cast<quint8>(0);
 }
 
 bool QtScriptLayerRadialGradient::initWithColor(const cocos2d::Color4B& startColor, const cocos2d::Color4B& endColor, float radius, const cocos2d::Vec2& center, float expand)
@@ -32188,7 +32198,7 @@ void QtScriptLayerRadialGradient::setEndColor3B(const cocos2d::Color3B& color)
 	}
 }
 
-void QtScriptLayerRadialGradient::setEndOpacity(uint8_t opacity)
+void QtScriptLayerRadialGradient::setEndOpacity(quint8 opacity)
 {
 	auto __o = this->thiz<LayerRadialGradient *>();
 	if (__o)
@@ -32233,7 +32243,7 @@ void QtScriptLayerRadialGradient::setStartColor3B(const cocos2d::Color3B& color)
 	}
 }
 
-void QtScriptLayerRadialGradient::setStartOpacity(uint8_t opacity)
+void QtScriptLayerRadialGradient::setStartOpacity(quint8 opacity)
 {
 	auto __o = this->thiz<LayerRadialGradient *>();
 	if (__o)
@@ -36869,7 +36879,7 @@ void QtScriptTextureAtlas::Register(const QScriptValue &targetNamespace)
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-void QtScriptTextureAtlas::fillWithEmptyQuadsFromIndex(ssize_t index, ssize_t amount)
+void QtScriptTextureAtlas::fillWithEmptyQuadsFromIndex(int index, int amount)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -36878,14 +36888,14 @@ void QtScriptTextureAtlas::fillWithEmptyQuadsFromIndex(ssize_t index, ssize_t am
 	}
 }
 
-size_t QtScriptTextureAtlas::getCapacity()
+unsigned QtScriptTextureAtlas::getCapacity()
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
 	{
-		return __o->getCapacity();
+		return unsigned(__o->getCapacity());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 QByteArray QtScriptTextureAtlas::getDescription()
@@ -36908,17 +36918,17 @@ cocos2d::Texture2D* QtScriptTextureAtlas::getTexture()
 	return nullptr;
 }
 
-size_t QtScriptTextureAtlas::getTotalQuads()
+unsigned QtScriptTextureAtlas::getTotalQuads()
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
 	{
-		return __o->getTotalQuads();
+		return unsigned(__o->getTotalQuads());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
-void QtScriptTextureAtlas::increaseTotalQuadsWith(ssize_t amount)
+void QtScriptTextureAtlas::increaseTotalQuadsWith(int amount)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -36927,7 +36937,7 @@ void QtScriptTextureAtlas::increaseTotalQuadsWith(ssize_t amount)
 	}
 }
 
-bool QtScriptTextureAtlas::initWithFile(const QByteArray& file, ssize_t capacity)
+bool QtScriptTextureAtlas::initWithFile(const QByteArray& file, int capacity)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -36937,7 +36947,7 @@ bool QtScriptTextureAtlas::initWithFile(const QByteArray& file, ssize_t capacity
 	return false;
 }
 
-bool QtScriptTextureAtlas::initWithTexture(cocos2d::Texture2D* texture, ssize_t capacity)
+bool QtScriptTextureAtlas::initWithTexture(cocos2d::Texture2D* texture, int capacity)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -36947,7 +36957,7 @@ bool QtScriptTextureAtlas::initWithTexture(cocos2d::Texture2D* texture, ssize_t 
 	return false;
 }
 
-void QtScriptTextureAtlas::insertQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, ssize_t index)
+void QtScriptTextureAtlas::insertQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, int index)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -36956,7 +36966,7 @@ void QtScriptTextureAtlas::insertQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, ssi
 	}
 }
 
-void QtScriptTextureAtlas::insertQuadFromIndex(ssize_t fromIndex, ssize_t newIndex)
+void QtScriptTextureAtlas::insertQuadFromIndex(int fromIndex, int newIndex)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -36975,7 +36985,7 @@ bool QtScriptTextureAtlas::isDirty()
 	return false;
 }
 
-void QtScriptTextureAtlas::moveQuadsFromIndex(ssize_t index, ssize_t newIndex)
+void QtScriptTextureAtlas::moveQuadsFromIndex(int index, int newIndex)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -36984,7 +36994,7 @@ void QtScriptTextureAtlas::moveQuadsFromIndex(ssize_t index, ssize_t newIndex)
 	}
 }
 
-void QtScriptTextureAtlas::moveQuadsFromIndex(ssize_t oldIndex, ssize_t amount, ssize_t newIndex)
+void QtScriptTextureAtlas::moveQuadsFromIndex(int oldIndex, int amount, int newIndex)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -37002,7 +37012,7 @@ void QtScriptTextureAtlas::removeAllQuads()
 	}
 }
 
-void QtScriptTextureAtlas::removeQuadAtIndex(ssize_t index)
+void QtScriptTextureAtlas::removeQuadAtIndex(int index)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -37011,7 +37021,7 @@ void QtScriptTextureAtlas::removeQuadAtIndex(ssize_t index)
 	}
 }
 
-void QtScriptTextureAtlas::removeQuadsAtIndex(ssize_t index, ssize_t amount)
+void QtScriptTextureAtlas::removeQuadsAtIndex(int index, int amount)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -37020,7 +37030,7 @@ void QtScriptTextureAtlas::removeQuadsAtIndex(ssize_t index, ssize_t amount)
 	}
 }
 
-bool QtScriptTextureAtlas::resizeCapacity(ssize_t capacity)
+bool QtScriptTextureAtlas::resizeCapacity(int capacity)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -37048,7 +37058,7 @@ void QtScriptTextureAtlas::setTexture(cocos2d::Texture2D* texture)
 	}
 }
 
-void QtScriptTextureAtlas::updateQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, ssize_t index)
+void QtScriptTextureAtlas::updateQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, int index)
 {
 	auto __o = this->thiz<TextureAtlas *>();
 	if (__o)
@@ -37070,7 +37080,7 @@ QScriptValue QtScriptTextureAtlas::create(QScriptContext *context, QScriptEngine
 		{
 			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
 			auto arg0 = tmp_0.toStdString();
-			auto arg1 = qscriptvalue_cast<ssize_t>(context->argument(1));
+			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
 			return __e->toScriptValue(TextureAtlas::create(arg0, arg1));
 		}
 	}
@@ -37092,7 +37102,7 @@ QScriptValue QtScriptTextureAtlas::createWithTexture(QScriptContext *context, QS
 		case 2:
 		{
 			auto arg0 = qscriptvalue_cast<cocos2d::Texture2D*>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<ssize_t>(context->argument(1));
+			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
 			return __e->toScriptValue(TextureAtlas::createWithTexture(arg0, arg1));
 		}
 	}
@@ -38792,14 +38802,14 @@ int QtScriptCamera::getCameraFlag()
 	return 0;
 }
 
-int8_t QtScriptCamera::getDepth()
+qint8 QtScriptCamera::getDepth()
 {
 	auto __o = this->thiz<Camera *>();
 	if (__o)
 	{
 		return __o->getDepth();
 	}
-	return static_cast<int8_t>(0);
+	return static_cast<qint8>(0);
 }
 
 float QtScriptCamera::getDepthInView(const cocos2d::Mat4& transform)
@@ -39007,7 +39017,7 @@ void QtScriptCamera::setCameraFlag(int flag)
 	}
 }
 
-void QtScriptCamera::setDepth(int8_t depth)
+void QtScriptCamera::setDepth(qint8 depth)
 {
 	auto __o = this->thiz<Camera *>();
 	if (__o)
@@ -40745,14 +40755,14 @@ void QtScriptRenderStateBlock::bind(cocos2d::PipelineDescriptor* programState)
 	}
 }
 
-uint32_t QtScriptRenderStateBlock::getHash()
+quint32 QtScriptRenderStateBlock::getHash()
 {
 	auto __o = this->thiz<RenderState::StateBlock *>();
 	if (__o)
 	{
 		return __o->getHash();
 	}
-	return static_cast<uint32_t>(0);
+	return static_cast<quint32>(0);
 }
 
 bool QtScriptRenderStateBlock::isDirty()
@@ -41041,7 +41051,7 @@ QByteArray QtScriptTechnique::getName()
 	return QByteArray();
 }
 
-cocos2d::Pass* QtScriptTechnique::getPassByIndex(ssize_t index)
+cocos2d::Pass* QtScriptTechnique::getPassByIndex(int index)
 {
 	auto __o = this->thiz<Technique *>();
 	if (__o)
@@ -41051,14 +41061,14 @@ cocos2d::Pass* QtScriptTechnique::getPassByIndex(ssize_t index)
 	return nullptr;
 }
 
-ssize_t QtScriptTechnique::getPassCount()
+int QtScriptTechnique::getPassCount()
 {
 	auto __o = this->thiz<Technique *>();
 	if (__o)
 	{
-		return __o->getPassCount();
+		return int(__o->getPassCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 cocos2d::Vector<cocos2d::Pass *> QtScriptTechnique::getPasses()
@@ -41240,7 +41250,7 @@ cocos2d::Technique* QtScriptMaterial::getTechnique()
 	return nullptr;
 }
 
-cocos2d::Technique* QtScriptMaterial::getTechniqueByIndex(ssize_t index)
+cocos2d::Technique* QtScriptMaterial::getTechniqueByIndex(int index)
 {
 	auto __o = this->thiz<Material *>();
 	if (__o)
@@ -41260,14 +41270,14 @@ cocos2d::Technique* QtScriptMaterial::getTechniqueByName(const QByteArray& name)
 	return nullptr;
 }
 
-ssize_t QtScriptMaterial::getTechniqueCount()
+int QtScriptMaterial::getTechniqueCount()
 {
 	auto __o = this->thiz<Material *>();
 	if (__o)
 	{
-		return __o->getTechniqueCount();
+		return int(__o->getTechniqueCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 void QtScriptMaterial::setName(const QByteArray& name)
@@ -41546,7 +41556,7 @@ void QtScriptRenderer::addCommand(cocos2d::RenderCommand* command, int renderQue
 	}
 }
 
-void QtScriptRenderer::addDrawnBatches(ssize_t number)
+void QtScriptRenderer::addDrawnBatches(int number)
 {
 	auto __o = this->thiz<Renderer *>();
 	if (__o)
@@ -41555,7 +41565,7 @@ void QtScriptRenderer::addDrawnBatches(ssize_t number)
 	}
 }
 
-void QtScriptRenderer::addDrawnVertices(ssize_t number)
+void QtScriptRenderer::addDrawnVertices(int number)
 {
 	auto __o = this->thiz<Renderer *>();
 	if (__o)
@@ -41711,24 +41721,24 @@ bool QtScriptRenderer::getDepthWrite()
 	return false;
 }
 
-ssize_t QtScriptRenderer::getDrawnBatches()
+int QtScriptRenderer::getDrawnBatches()
 {
 	auto __o = this->thiz<Renderer *>();
 	if (__o)
 	{
-		return __o->getDrawnBatches();
+		return int(__o->getDrawnBatches());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-ssize_t QtScriptRenderer::getDrawnVertices()
+int QtScriptRenderer::getDrawnVertices()
 {
 	auto __o = this->thiz<Renderer *>();
 	if (__o)
 	{
-		return __o->getDrawnVertices();
+		return int(__o->getDrawnVertices());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 int QtScriptRenderer::getRenderTargetFlag()
@@ -43082,14 +43092,14 @@ void QtScriptSpriteBatchNode::appendChild(cocos2d::Sprite* sprite)
 	}
 }
 
-ssize_t QtScriptSpriteBatchNode::atlasIndexForChild(cocos2d::Sprite* sprite, int z)
+int QtScriptSpriteBatchNode::atlasIndexForChild(cocos2d::Sprite* sprite, int z)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
 	{
-		return __o->atlasIndexForChild(sprite, z);
+		return int(__o->atlasIndexForChild(sprite, z));
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 cocos2d::BlendFunc QtScriptSpriteBatchNode::getBlendFunc()
@@ -43122,14 +43132,14 @@ cocos2d::TextureAtlas* QtScriptSpriteBatchNode::getTextureAtlas()
 	return nullptr;
 }
 
-ssize_t QtScriptSpriteBatchNode::highestAtlasIndexInChild(cocos2d::Sprite* sprite)
+int QtScriptSpriteBatchNode::highestAtlasIndexInChild(cocos2d::Sprite* sprite)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
 	{
-		return __o->highestAtlasIndexInChild(sprite);
+		return int(__o->highestAtlasIndexInChild(sprite));
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 void QtScriptSpriteBatchNode::increaseAtlasCapacity()
@@ -43151,7 +43161,7 @@ bool QtScriptSpriteBatchNode::initWithFile(const QByteArray& fileImage)
 	return false;
 }
 
-bool QtScriptSpriteBatchNode::initWithFile(const QByteArray& fileImage, ssize_t capacity)
+bool QtScriptSpriteBatchNode::initWithFile(const QByteArray& fileImage, int capacity)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
@@ -43171,7 +43181,7 @@ bool QtScriptSpriteBatchNode::initWithTexture(cocos2d::Texture2D* tex)
 	return false;
 }
 
-bool QtScriptSpriteBatchNode::initWithTexture(cocos2d::Texture2D* tex, ssize_t capacity)
+bool QtScriptSpriteBatchNode::initWithTexture(cocos2d::Texture2D* tex, int capacity)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
@@ -43181,7 +43191,7 @@ bool QtScriptSpriteBatchNode::initWithTexture(cocos2d::Texture2D* tex, ssize_t c
 	return false;
 }
 
-void QtScriptSpriteBatchNode::insertQuadFromSprite(cocos2d::Sprite* sprite, ssize_t index)
+void QtScriptSpriteBatchNode::insertQuadFromSprite(cocos2d::Sprite* sprite, int index)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
@@ -43190,27 +43200,27 @@ void QtScriptSpriteBatchNode::insertQuadFromSprite(cocos2d::Sprite* sprite, ssiz
 	}
 }
 
-ssize_t QtScriptSpriteBatchNode::lowestAtlasIndexInChild(cocos2d::Sprite* sprite)
+int QtScriptSpriteBatchNode::lowestAtlasIndexInChild(cocos2d::Sprite* sprite)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
 	{
-		return __o->lowestAtlasIndexInChild(sprite);
+		return int(__o->lowestAtlasIndexInChild(sprite));
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-ssize_t QtScriptSpriteBatchNode::rebuildIndexInOrder(cocos2d::Sprite* parent, ssize_t index)
+int QtScriptSpriteBatchNode::rebuildIndexInOrder(cocos2d::Sprite* parent, int index)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
 	{
-		return __o->rebuildIndexInOrder(parent, index);
+		return int(__o->rebuildIndexInOrder(parent, index));
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-void QtScriptSpriteBatchNode::removeChildAtIndex(ssize_t index, bool doCleanup)
+void QtScriptSpriteBatchNode::removeChildAtIndex(int index, bool doCleanup)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
@@ -43237,7 +43247,7 @@ void QtScriptSpriteBatchNode::reorderBatch(bool reorder)
 	}
 }
 
-void QtScriptSpriteBatchNode::reserveCapacity(ssize_t newCapacity)
+void QtScriptSpriteBatchNode::reserveCapacity(int newCapacity)
 {
 	auto __o = this->thiz<SpriteBatchNode *>();
 	if (__o)
@@ -43292,7 +43302,7 @@ QScriptValue QtScriptSpriteBatchNode::create(QScriptContext *context, QScriptEng
 		{
 			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
 			auto arg0 = tmp_0.toStdString();
-			auto arg1 = qscriptvalue_cast<ssize_t>(context->argument(1));
+			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
 			return __e->toScriptValue(SpriteBatchNode::create(arg0, arg1));
 		}
 	}
@@ -43319,7 +43329,7 @@ QScriptValue QtScriptSpriteBatchNode::createWithTexture(QScriptContext *context,
 		case 2:
 		{
 			auto arg0 = qscriptvalue_cast<cocos2d::Texture2D*>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<ssize_t>(context->argument(1));
+			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
 			return __e->toScriptValue(SpriteBatchNode::createWithTexture(arg0, arg1));
 		}
 	}
@@ -44035,14 +44045,14 @@ cocos2d::backend::Buffer* QtScriptMesh::getIndexBuffer()
 	return nullptr;
 }
 
-ssize_t QtScriptMesh::getIndexCount()
+int QtScriptMesh::getIndexCount()
 {
 	auto __o = this->thiz<Mesh *>();
 	if (__o)
 	{
-		return __o->getIndexCount();
+		return int(__o->getIndexCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 int QtScriptMesh::getIndexFormat()
@@ -44075,14 +44085,14 @@ cocos2d::MeshIndexData* QtScriptMesh::getMeshIndexData()
 	return nullptr;
 }
 
-ssize_t QtScriptMesh::getMeshVertexAttribCount()
+int QtScriptMesh::getMeshVertexAttribCount()
 {
 	auto __o = this->thiz<Mesh *>();
 	if (__o)
 	{
-		return __o->getMeshVertexAttribCount();
+		return int(__o->getMeshVertexAttribCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 cocos2d::MeshVertexAttrib QtScriptMesh::getMeshVertexAttribute(int idx)
@@ -44438,14 +44448,14 @@ cocos2d::Bone3D* QtScriptMeshSkin::getBoneByName(const QByteArray& id)
 	return nullptr;
 }
 
-ssize_t QtScriptMeshSkin::getBoneCount()
+int QtScriptMeshSkin::getBoneCount()
 {
 	auto __o = this->thiz<MeshSkin *>();
 	if (__o)
 	{
-		return __o->getBoneCount();
+		return int(__o->getBoneCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 int QtScriptMeshSkin::getBoneIndex(cocos2d::Bone3D* bone)
@@ -44880,14 +44890,14 @@ bool QtScriptMeshVertexData::constructObject(QScriptContext *context, NativeObje
 	return false;
 }
 
-size_t QtScriptMeshVertexData::getAtrSetId()
+unsigned QtScriptMeshVertexData::getAtrSetId()
 {
 	auto __o = this->thiz<MeshVertexData *>();
 	if (__o)
 	{
-		return __o->getAtrSetId();
+		return unsigned(__o->getAtrSetId());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 cocos2d::MeshIndexData* QtScriptMeshVertexData::getMeshIndexDataById(const QByteArray& id)
@@ -44910,17 +44920,17 @@ cocos2d::MeshIndexData* QtScriptMeshVertexData::getMeshIndexDataByIndex(int inde
 	return nullptr;
 }
 
-ssize_t QtScriptMeshVertexData::getMeshIndexDataCount()
+int QtScriptMeshVertexData::getMeshIndexDataCount()
 {
 	auto __o = this->thiz<MeshVertexData *>();
 	if (__o)
 	{
-		return __o->getMeshIndexDataCount();
+		return int(__o->getMeshIndexDataCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-cocos2d::MeshVertexAttrib QtScriptMeshVertexData::getMeshVertexAttrib(ssize_t index)
+cocos2d::MeshVertexAttrib QtScriptMeshVertexData::getMeshVertexAttrib(int index)
 {
 	auto __o = this->thiz<MeshVertexData *>();
 	if (__o)
@@ -44930,24 +44940,24 @@ cocos2d::MeshVertexAttrib QtScriptMeshVertexData::getMeshVertexAttrib(ssize_t in
 	return cocos2d::MeshVertexAttrib();
 }
 
-ssize_t QtScriptMeshVertexData::getMeshVertexAttribCount()
+int QtScriptMeshVertexData::getMeshVertexAttribCount()
 {
 	auto __o = this->thiz<MeshVertexData *>();
 	if (__o)
 	{
-		return __o->getMeshVertexAttribCount();
+		return int(__o->getMeshVertexAttribCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
-ssize_t QtScriptMeshVertexData::getSizePerVertex()
+int QtScriptMeshVertexData::getSizePerVertex()
 {
 	auto __o = this->thiz<MeshVertexData *>();
 	if (__o)
 	{
-		return __o->getSizePerVertex();
+		return int(__o->getSizePerVertex());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 cocos2d::backend::Buffer* QtScriptMeshVertexData::getVertexBuffer()
@@ -45206,14 +45216,14 @@ cocos2d::Bone3D* QtScriptBone3D::getChildBoneByIndex(int index)
 	return nullptr;
 }
 
-ssize_t QtScriptBone3D::getChildBoneCount()
+int QtScriptBone3D::getChildBoneCount()
 {
 	auto __o = this->thiz<Bone3D *>();
 	if (__o)
 	{
-		return __o->getChildBoneCount();
+		return int(__o->getChildBoneCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 cocos2d::Mat4 QtScriptBone3D::getInverseBindPose()
@@ -45383,14 +45393,14 @@ cocos2d::Bone3D* QtScriptSkeleton3D::getBoneByName(const QByteArray& id)
 	return nullptr;
 }
 
-ssize_t QtScriptSkeleton3D::getBoneCount()
+int QtScriptSkeleton3D::getBoneCount()
 {
 	auto __o = this->thiz<Skeleton3D *>();
 	if (__o)
 	{
-		return __o->getBoneCount();
+		return int(__o->getBoneCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 int QtScriptSkeleton3D::getBoneIndex(cocos2d::Bone3D* bone)
@@ -45413,14 +45423,14 @@ cocos2d::Bone3D* QtScriptSkeleton3D::getRootBone(int index)
 	return nullptr;
 }
 
-ssize_t QtScriptSkeleton3D::getRootCount()
+int QtScriptSkeleton3D::getRootCount()
 {
 	auto __o = this->thiz<Skeleton3D *>();
 	if (__o)
 	{
-		return __o->getRootCount();
+		return int(__o->getRootCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 void QtScriptSkeleton3D::removeAllBones()
@@ -45896,14 +45906,14 @@ cocos2d::Mesh* QtScriptSprite3D::getMeshByName(const QByteArray& name)
 	return nullptr;
 }
 
-ssize_t QtScriptSprite3D::getMeshCount()
+int QtScriptSprite3D::getMeshCount()
 {
 	auto __o = this->thiz<Sprite3D *>();
 	if (__o)
 	{
-		return __o->getMeshCount();
+		return int(__o->getMeshCount());
 	}
-	return static_cast<ssize_t>(0);
+	return 0;
 }
 
 cocos2d::MeshIndexData* QtScriptSprite3D::getMeshIndexData(const QByteArray& indexId)
@@ -46389,7 +46399,7 @@ QScriptValue QtScriptSprite3DMaterial::createBuiltInMaterial(QScriptContext *con
 			auto tmp_0 = qscriptvalue_cast<int>(context->argument(0));
 			auto arg0 = cocos2d::Sprite3DMaterial::MaterialType(tmp_0);
 			auto arg1 = qscriptvalue_cast<bool>(context->argument(1));
-			auto arg2 = qscriptvalue_cast<size_t>(context->argument(2));
+			auto arg2 = qscriptvalue_cast<unsigned>(context->argument(2));
 			auto arg3 = qscriptvalue_cast<bool>(context->argument(3));
 			return __e->toScriptValue(Sprite3DMaterial::createBuiltInMaterial(arg0, arg1, arg2, arg3));
 		}
@@ -46667,14 +46677,14 @@ bool QtScriptVertexAttribBinding::constructObject(QScriptContext *context, Nativ
 	return false;
 }
 
-uint32_t QtScriptVertexAttribBinding::getVertexAttribsFlags()
+quint32 QtScriptVertexAttribBinding::getVertexAttribsFlags()
 {
 	auto __o = this->thiz<VertexAttribBinding *>();
 	if (__o)
 	{
 		return __o->getVertexAttribsFlags();
 	}
-	return static_cast<uint32_t>(0);
+	return static_cast<quint32>(0);
 }
 
 bool QtScriptVertexAttribBinding::hasAttribute(const int& key)
@@ -47041,7 +47051,7 @@ cocos2d::backend::DeviceInfo* QtScriptDevice::getDeviceInfo()
 	return nullptr;
 }
 
-cocos2d::backend::Buffer* QtScriptDevice::newBuffer(size_t size, int type, int usage)
+cocos2d::backend::Buffer* QtScriptDevice::newBuffer(unsigned size, int type, int usage)
 {
 	auto __o = this->thiz<Device *>();
 	if (__o)
@@ -47134,14 +47144,14 @@ bool QtScriptBuffer::constructObject(QScriptContext *context, NativeObjectType &
 	return false;
 }
 
-size_t QtScriptBuffer::getSize()
+unsigned QtScriptBuffer::getSize()
 {
 	auto __o = this->thiz<Buffer *>();
 	if (__o)
 	{
-		return __o->getSize();
+		return unsigned(__o->getSize());
 	}
-	return static_cast<size_t>(0);
+	return static_cast<unsigned>(0);
 }
 
 void QtScriptBuffer::updateData(const QByteArray& arg0)
@@ -47153,7 +47163,7 @@ void QtScriptBuffer::updateData(const QByteArray& arg0)
 	}
 }
 
-void QtScriptBuffer::updateSubData(const QByteArray& arg0, size_t arg1)
+void QtScriptBuffer::updateSubData(const QByteArray& arg0, unsigned arg1)
 {
 	auto __o = this->thiz<Buffer *>();
 	if (__o)

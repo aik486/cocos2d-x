@@ -529,7 +529,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool equals(const cocos2d::backend::UniformLocation& other);
-	Q_INVOKABLE size_t id(const cocos2d::backend::UniformLocation& uniform);
+	Q_INVOKABLE unsigned id(const cocos2d::backend::UniformLocation& uniform);
 	Q_INVOKABLE void reset();
 	Q_INVOKABLE bool toBool();
 	Q_PROPERTY(int shaderStage READ _public_field_get_shaderStage WRITE _public_field_set_shaderStage)
@@ -653,15 +653,15 @@ public:
 
 	Q_INVOKABLE bool differs(const cocos2d::Color3B& right);
 	Q_INVOKABLE bool equals(const cocos2d::Color3B& right);
-	Q_PROPERTY(uint8_t b READ _public_field_get_b WRITE _public_field_set_b)
-	uint8_t _public_field_get_b() const;
-	void _public_field_set_b(uint8_t value);
-	Q_PROPERTY(uint8_t g READ _public_field_get_g WRITE _public_field_set_g)
-	uint8_t _public_field_get_g() const;
-	void _public_field_set_g(uint8_t value);
-	Q_PROPERTY(uint8_t r READ _public_field_get_r WRITE _public_field_set_r)
-	uint8_t _public_field_get_r() const;
-	void _public_field_set_r(uint8_t value);
+	Q_PROPERTY(quint8 b READ _public_field_get_b WRITE _public_field_set_b)
+	quint8 _public_field_get_b() const;
+	void _public_field_set_b(quint8 value);
+	Q_PROPERTY(quint8 g READ _public_field_get_g WRITE _public_field_set_g)
+	quint8 _public_field_get_g() const;
+	void _public_field_set_g(quint8 value);
+	Q_PROPERTY(quint8 r READ _public_field_get_r WRITE _public_field_set_r)
+	quint8 _public_field_get_r() const;
+	void _public_field_set_r(quint8 value);
 };
 
 } // end of cocos2d
@@ -688,19 +688,19 @@ public:
 
 	Q_INVOKABLE bool differs(const cocos2d::Color4B& right);
 	Q_INVOKABLE bool equals(const cocos2d::Color4B& right);
-	Q_INVOKABLE void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
-	Q_PROPERTY(uint8_t a READ _public_field_get_a WRITE _public_field_set_a)
-	uint8_t _public_field_get_a() const;
-	void _public_field_set_a(uint8_t value);
-	Q_PROPERTY(uint8_t b READ _public_field_get_b WRITE _public_field_set_b)
-	uint8_t _public_field_get_b() const;
-	void _public_field_set_b(uint8_t value);
-	Q_PROPERTY(uint8_t g READ _public_field_get_g WRITE _public_field_set_g)
-	uint8_t _public_field_get_g() const;
-	void _public_field_set_g(uint8_t value);
-	Q_PROPERTY(uint8_t r READ _public_field_get_r WRITE _public_field_set_r)
-	uint8_t _public_field_get_r() const;
-	void _public_field_set_r(uint8_t value);
+	Q_INVOKABLE void set(quint8 _r, quint8 _g, quint8 _b, quint8 _a);
+	Q_PROPERTY(quint8 a READ _public_field_get_a WRITE _public_field_set_a)
+	quint8 _public_field_get_a() const;
+	void _public_field_set_a(quint8 value);
+	Q_PROPERTY(quint8 b READ _public_field_get_b WRITE _public_field_set_b)
+	quint8 _public_field_get_b() const;
+	void _public_field_set_b(quint8 value);
+	Q_PROPERTY(quint8 g READ _public_field_get_g WRITE _public_field_set_g)
+	quint8 _public_field_get_g() const;
+	void _public_field_set_g(quint8 value);
+	Q_PROPERTY(quint8 r READ _public_field_get_r WRITE _public_field_set_r)
+	quint8 _public_field_get_r() const;
+	void _public_field_set_r(quint8 value);
 };
 
 } // end of cocos2d
@@ -1372,9 +1372,9 @@ public:
 	explicit QtScriptFontStroke(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(uint8_t strokeAlpha READ _public_field_get_strokeAlpha WRITE _public_field_set_strokeAlpha)
-	uint8_t _public_field_get_strokeAlpha() const;
-	void _public_field_set_strokeAlpha(uint8_t value);
+	Q_PROPERTY(quint8 strokeAlpha READ _public_field_get_strokeAlpha WRITE _public_field_set_strokeAlpha)
+	quint8 _public_field_get_strokeAlpha() const;
+	void _public_field_set_strokeAlpha(quint8 value);
 	Q_PROPERTY(cocos2d::Color3B strokeColor READ _public_field_get_strokeColor WRITE _public_field_set_strokeColor)
 	cocos2d::Color3B _public_field_get_strokeColor() const;
 	void _public_field_set_strokeColor(const cocos2d::Color3B& value);
@@ -1417,9 +1417,9 @@ public:
 	Q_PROPERTY(bool enableWrap READ _public_field_get_enableWrap WRITE _public_field_set_enableWrap)
 	bool _public_field_get_enableWrap() const;
 	void _public_field_set_enableWrap(const bool& value);
-	Q_PROPERTY(uint8_t fontAlpha READ _public_field_get_fontAlpha WRITE _public_field_set_fontAlpha)
-	uint8_t _public_field_get_fontAlpha() const;
-	void _public_field_set_fontAlpha(uint8_t value);
+	Q_PROPERTY(quint8 fontAlpha READ _public_field_get_fontAlpha WRITE _public_field_set_fontAlpha)
+	quint8 _public_field_get_fontAlpha() const;
+	void _public_field_set_fontAlpha(quint8 value);
 	Q_PROPERTY(cocos2d::Color3B fontFillColor READ _public_field_get_fontFillColor WRITE _public_field_set_fontFillColor)
 	cocos2d::Color3B _public_field_get_fontFillColor() const;
 	void _public_field_set_fontFillColor(const cocos2d::Color3B& value);
@@ -1655,12 +1655,12 @@ public:
 	explicit QtScriptTextureDescriptor(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_PROPERTY(uint32_t depth READ _public_field_get_depth WRITE _public_field_set_depth)
-	uint32_t _public_field_get_depth() const;
-	void _public_field_set_depth(uint32_t value);
-	Q_PROPERTY(uint32_t height READ _public_field_get_height WRITE _public_field_set_height)
-	uint32_t _public_field_get_height() const;
-	void _public_field_set_height(uint32_t value);
+	Q_PROPERTY(quint32 depth READ _public_field_get_depth WRITE _public_field_set_depth)
+	quint32 _public_field_get_depth() const;
+	void _public_field_set_depth(quint32 value);
+	Q_PROPERTY(quint32 height READ _public_field_get_height WRITE _public_field_set_height)
+	quint32 _public_field_get_height() const;
+	void _public_field_set_height(quint32 value);
 	Q_PROPERTY(cocos2d::backend::SamplerDescriptor samplerDescriptor READ _public_field_get_samplerDescriptor WRITE _public_field_set_samplerDescriptor)
 	cocos2d::backend::SamplerDescriptor _public_field_get_samplerDescriptor() const;
 	void _public_field_set_samplerDescriptor(const cocos2d::backend::SamplerDescriptor& value);
@@ -1673,9 +1673,9 @@ public:
 	Q_PROPERTY(int textureUsage READ _public_field_get_textureUsage WRITE _public_field_set_textureUsage)
 	int _public_field_get_textureUsage() const;
 	void _public_field_set_textureUsage(int value);
-	Q_PROPERTY(uint32_t width READ _public_field_get_width WRITE _public_field_set_width)
-	uint32_t _public_field_get_width() const;
-	void _public_field_set_width(uint32_t value);
+	Q_PROPERTY(quint32 width READ _public_field_get_width WRITE _public_field_set_width)
+	quint32 _public_field_get_width() const;
+	void _public_field_set_width(quint32 value);
 };
 
 } // end of backend
@@ -1703,7 +1703,7 @@ public:
 	explicit QtScriptTextureBackend(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE void getBytes(size_t arg0, size_t arg1, size_t arg2, size_t arg3, bool arg4, const QScriptValue& arg5);
+	Q_INVOKABLE void getBytes(unsigned arg0, unsigned arg1, unsigned arg2, unsigned arg3, bool arg4, const QScriptValue& arg5);
 	Q_INVOKABLE int getTextureFormat();
 	Q_INVOKABLE int getTextureType();
 	Q_INVOKABLE int getTextureUsage();
@@ -1734,8 +1734,8 @@ public:
 	explicit QtScriptTexture2DBackend(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE size_t getHeight();
-	Q_INVOKABLE size_t getWidth();
+	Q_INVOKABLE unsigned getHeight();
+	Q_INVOKABLE unsigned getWidth();
 };
 
 } // end of backend
@@ -1788,7 +1788,7 @@ public:
 	explicit QtScriptShaderModule(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE size_t getHashValue();
+	Q_INVOKABLE unsigned getHashValue();
 	Q_INVOKABLE int getShaderStage();
 };
 
@@ -1854,7 +1854,7 @@ public:
 	Q_INVOKABLE int getMaxFragmentLocation();
 	Q_INVOKABLE int getMaxVertexLocation();
 	Q_INVOKABLE int getProgramType();
-	Q_INVOKABLE size_t getUniformBufferSize(int stage);
+	Q_INVOKABLE unsigned getUniformBufferSize(int stage);
 	Q_INVOKABLE cocos2d::backend::UniformLocation getUniformLocation(const QByteArray& uniform);
 	Q_INVOKABLE QByteArray getVertexShader();
 	static QScriptValue getBuiltinProgram(QScriptContext *context, QScriptEngine* engine);
@@ -1891,7 +1891,7 @@ public:
 	Q_INVOKABLE cocos2d::backend::UniformLocation getUniformLocation(const QByteArray& uniform);
 	Q_INVOKABLE void setCallbackUniform(const cocos2d::backend::UniformLocation& arg0, QScriptValue arg1);
 	Q_INVOKABLE void setParameterAutoBinding(const QByteArray& uniformName, const QByteArray& autoBinding);
-	Q_INVOKABLE void setTexture(const cocos2d::backend::UniformLocation& uniformLocation, uint32_t slot, cocos2d::backend::TextureBackend* texture);
+	Q_INVOKABLE void setTexture(const cocos2d::backend::UniformLocation& uniformLocation, quint32 slot, cocos2d::backend::TextureBackend* texture);
 	Q_INVOKABLE void setUniform(const cocos2d::backend::UniformLocation& arg0, const QByteArray& arg1);
 	Q_INVOKABLE void setUniformWith1f(const cocos2d::backend::UniformLocation& uniformLocation, float f1);
 	Q_INVOKABLE void setUniformWith1i(const cocos2d::backend::UniformLocation& uniformLocation, int i1);
@@ -2001,20 +2001,20 @@ public:
 	Q_PROPERTY(float lineWidth READ getLineWidth WRITE setLineWidth)
 	Q_PROPERTY(int primitiveType READ getPrimitiveType WRITE setPrimitiveType)
 	Q_PROPERTY(cocos2d::backend::Buffer* vertexBuffer READ getVertexBuffer WRITE setVertexBuffer)
-	Q_INVOKABLE void createIndexBuffer(int format, size_t capacity, int usage);
-	Q_INVOKABLE void createVertexBuffer(size_t vertexSize, size_t capacity, int usage);
+	Q_INVOKABLE void createIndexBuffer(int format, unsigned capacity, int usage);
+	Q_INVOKABLE void createVertexBuffer(unsigned vertexSize, unsigned capacity, int usage);
 	int getDrawType();
 	Q_INVOKABLE cocos2d::backend::Buffer* getIndexBuffer();
-	Q_INVOKABLE size_t getIndexCapacity();
-	Q_INVOKABLE size_t getIndexDrawCount();
-	Q_INVOKABLE size_t getIndexDrawOffset();
+	Q_INVOKABLE unsigned getIndexCapacity();
+	Q_INVOKABLE unsigned getIndexDrawCount();
+	Q_INVOKABLE unsigned getIndexDrawOffset();
 	Q_INVOKABLE int getIndexFormat();
 	float getLineWidth();
 	int getPrimitiveType();
 	cocos2d::backend::Buffer* getVertexBuffer();
-	Q_INVOKABLE size_t getVertexCapacity();
-	Q_INVOKABLE size_t getVertexDrawCount();
-	Q_INVOKABLE size_t getVertexDrawStart();
+	Q_INVOKABLE unsigned getVertexCapacity();
+	Q_INVOKABLE unsigned getVertexDrawCount();
+	Q_INVOKABLE unsigned getVertexDrawStart();
 	Q_INVOKABLE void init(float globalZOrder);
 	Q_INVOKABLE void init(float globalZOrder, const cocos2d::BlendFunc& blendFunc);
 	Q_INVOKABLE void init(float globalZOrder, const cocos2d::Mat4& modelViewTransform, unsigned int flags);
@@ -2022,15 +2022,15 @@ public:
 	Q_INVOKABLE void setBeforeCallback(QScriptValue before);
 	void setDrawType(int drawType);
 	Q_INVOKABLE void setIndexBuffer(cocos2d::backend::Buffer* indexBuffer, int indexFormat);
-	Q_INVOKABLE void setIndexDrawInfo(size_t start, size_t count);
+	Q_INVOKABLE void setIndexDrawInfo(unsigned start, unsigned count);
 	void setLineWidth(float lineWidth);
 	void setPrimitiveType(int primitiveType);
 	void setVertexBuffer(cocos2d::backend::Buffer* vertexBuffer);
-	Q_INVOKABLE void setVertexDrawInfo(size_t start, size_t count);
+	Q_INVOKABLE void setVertexDrawInfo(unsigned start, unsigned count);
 	Q_INVOKABLE void updateIndexBuffer(const QByteArray& arg0);
-	Q_INVOKABLE void updateIndexBuffer(const QByteArray& arg0, size_t arg1);
+	Q_INVOKABLE void updateIndexBuffer(const QByteArray& arg0, unsigned arg1);
 	Q_INVOKABLE void updateVertexBuffer(const QByteArray& arg0);
-	Q_INVOKABLE void updateVertexBuffer(const QByteArray& arg0, size_t arg1);
+	Q_INVOKABLE void updateVertexBuffer(const QByteArray& arg0, unsigned arg1);
 };
 
 } // end of cocos2d
@@ -2241,11 +2241,11 @@ public:
 	Q_PROPERTY(cocos2d::Size contentSize READ getContentSize WRITE setContentSize)
 	Q_PROPERTY(float globalZOrder READ getGlobalZOrder WRITE setGlobalZOrder)
 	Q_PROPERTY(bool ignoreAnchorPointForPosition READ isIgnoreAnchorPointForPosition WRITE setIgnoreAnchorPointForPosition)
-	Q_PROPERTY(int32_t localZOrder READ getLocalZOrder WRITE setLocalZOrder)
+	Q_PROPERTY(qint32 localZOrder READ getLocalZOrder WRITE setLocalZOrder)
 	Q_PROPERTY(QByteArray name READ getName WRITE setName)
 	Q_PROPERTY(cocos2d::Mat4 nodeToParentTransform READ getNodeToParentTransform WRITE setNodeToParentTransform)
 	Q_PROPERTY(cocos2d::Vec2 normalizedPosition READ getNormalizedPosition WRITE setNormalizedPosition)
-	Q_PROPERTY(uint8_t opacity READ getOpacity WRITE setOpacity)
+	Q_PROPERTY(quint8 opacity READ getOpacity WRITE setOpacity)
 	Q_PROPERTY(bool opacityModifyRGB READ isOpacityModifyRGB WRITE setOpacityModifyRGB)
 	Q_PROPERTY(cocos2d::Vec2 position READ getPosition WRITE setPosition)
 	Q_PROPERTY(cocos2d::Vec3 position3D READ getPosition3D WRITE setPosition3D)
@@ -2296,15 +2296,16 @@ public:
 	Q_INVOKABLE cocos2d::Node* getChildByName(const QByteArray& name);
 	Q_INVOKABLE cocos2d::Node* getChildByTag(int tag);
 	Q_INVOKABLE cocos2d::Vector<cocos2d::Node *> getChildren();
-	Q_INVOKABLE ssize_t getChildrenCount();
+	Q_INVOKABLE int getChildrenCount();
 	cocos2d::Color3B getColor();
 	Q_INVOKABLE cocos2d::Component* getComponent(const QByteArray& name);
 	cocos2d::Size getContentSize();
 	Q_INVOKABLE QByteArray getDescription();
 	Q_INVOKABLE cocos2d::Color3B getDisplayedColor();
-	Q_INVOKABLE uint8_t getDisplayedOpacity();
+	Q_INVOKABLE quint8 getDisplayedOpacity();
 	float getGlobalZOrder();
-	int32_t getLocalZOrder();
+	qint32 getLocalZOrder();
+	Q_INVOKABLE cocos2d::Mat4 getModelViewTransform();
 	QByteArray getName();
 	Q_INVOKABLE cocos2d::AffineTransform getNodeToParentAffineTransform();
 	Q_INVOKABLE cocos2d::AffineTransform getNodeToParentAffineTransform(const cocos2d::Node* ancestor);
@@ -2313,9 +2314,9 @@ public:
 	Q_INVOKABLE cocos2d::AffineTransform getNodeToWorldAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getNodeToWorldTransform();
 	cocos2d::Vec2 getNormalizedPosition();
-	Q_INVOKABLE ssize_t getNumberOfRunningActions();
-	Q_INVOKABLE ssize_t getNumberOfRunningActionsByTag(int tag);
-	uint8_t getOpacity();
+	Q_INVOKABLE int getNumberOfRunningActions();
+	Q_INVOKABLE int getNumberOfRunningActionsByTag(int tag);
+	quint8 getOpacity();
 	Q_INVOKABLE cocos2d::Node* getParent();
 	Q_INVOKABLE cocos2d::AffineTransform getParentToNodeAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getParentToNodeTransform();
@@ -2383,7 +2384,7 @@ public:
 	void setContentSize(const cocos2d::Size& contentSize);
 	void setGlobalZOrder(float globalZOrder);
 	void setIgnoreAnchorPointForPosition(bool ignore);
-	void setLocalZOrder(int32_t localZOrder);
+	void setLocalZOrder(qint32 localZOrder);
 	void setName(const QByteArray& name);
 	void setNodeToParentTransform(const cocos2d::Mat4& transform);
 	void setNormalizedPosition(const cocos2d::Vec2& position);
@@ -2392,7 +2393,7 @@ public:
 	Q_INVOKABLE void setOnExitCallback(QScriptValue callback);
 	Q_INVOKABLE void setOnExitTransitionDidStartCallback(QScriptValue callback);
 	Q_INVOKABLE void setOnUpdateCallback(QScriptValue callback);
-	void setOpacity(uint8_t opacity);
+	void setOpacity(quint8 opacity);
 	void setOpacityModifyRGB(bool value);
 	void setPosition(const cocos2d::Vec2& position);
 	Q_INVOKABLE void setPosition(float x, float y);
@@ -2576,7 +2577,7 @@ public:
 	Q_INVOKABLE float getContentScaleFactor();
 	Q_INVOKABLE float getDeltaTime();
 	Q_INVOKABLE float getFrameRate();
-	Q_INVOKABLE int64_t getFrameStartTimeMicros();
+	Q_INVOKABLE qint64 getFrameStartTimeMicros();
 	Q_INVOKABLE cocos2d::Mat4 getMatrix(int type);
 	Q_INVOKABLE cocos2d::Node* getNotificationNode();
 	Q_INVOKABLE cocos2d::GLView* getOpenGLView();
@@ -2908,7 +2909,7 @@ public:
 
 	Q_INVOKABLE int getBitPerPixel();
 	Q_INVOKABLE QByteArray getData();
-	Q_INVOKABLE ssize_t getDataLen();
+	Q_INVOKABLE int getDataLen();
 	Q_INVOKABLE QByteArray getFilePath();
 	Q_INVOKABLE int getFileType();
 	Q_INVOKABLE int getHeight();
@@ -3681,7 +3682,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE cocos2d::FadeTo* clone();
-	Q_INVOKABLE bool initWithDuration(float duration, uint8_t opacity);
+	Q_INVOKABLE bool initWithDuration(float duration, quint8 opacity);
 	Q_INVOKABLE cocos2d::FadeTo* reverse();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -3760,7 +3761,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE cocos2d::TintTo* clone();
-	Q_INVOKABLE bool initWithDuration(float duration, uint8_t red, uint8_t green, uint8_t blue);
+	Q_INVOKABLE bool initWithDuration(float duration, quint8 red, quint8 green, quint8 blue);
 	Q_INVOKABLE cocos2d::TintTo* reverse();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -3787,7 +3788,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE cocos2d::TintBy* clone();
-	Q_INVOKABLE bool initWithDuration(float duration, int16_t deltaRed, int16_t deltaGreen, int16_t deltaBlue);
+	Q_INVOKABLE bool initWithDuration(float duration, qint16 deltaRed, qint16 deltaGreen, qint16 deltaBlue);
 	Q_INVOKABLE cocos2d::TintBy* reverse();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -4052,9 +4053,9 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE void clear();
-	Q_INVOKABLE ssize_t copy(const QByteArray& arg0);
+	Q_INVOKABLE int copy(const QByteArray& arg0);
 	Q_INVOKABLE QByteArray getBytes();
-	Q_INVOKABLE ssize_t getSize();
+	Q_INVOKABLE int getSize();
 	Q_INVOKABLE bool isNull();
 	Q_INVOKABLE void set(const cocos2d::Data& other);
 };
@@ -4314,13 +4315,13 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE void append(const cocos2d::Vec2& controlPoint);
-	Q_INVOKABLE cocos2d::Vec2 at(ssize_t index);
+	Q_INVOKABLE cocos2d::Vec2 at(int index);
 	Q_INVOKABLE cocos2d::PointArray* clone();
-	Q_INVOKABLE ssize_t count();
-	Q_INVOKABLE bool initWithCapacity(ssize_t capacity);
-	Q_INVOKABLE void insert(const cocos2d::Vec2& controlPoint, ssize_t index);
-	Q_INVOKABLE void remove(ssize_t index);
-	Q_INVOKABLE void replace(const cocos2d::Vec2& controlPoint, ssize_t index);
+	Q_INVOKABLE int count();
+	Q_INVOKABLE bool initWithCapacity(int capacity);
+	Q_INVOKABLE void insert(const cocos2d::Vec2& controlPoint, int index);
+	Q_INVOKABLE void remove(int index);
+	Q_INVOKABLE void replace(const cocos2d::Vec2& controlPoint, int index);
 	Q_INVOKABLE cocos2d::PointArray* reverse();
 	Q_INVOKABLE void reverseInline();
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
@@ -6217,9 +6218,9 @@ public:
 
 	Q_INVOKABLE void addAction(cocos2d::Action* action, cocos2d::Node* target, bool paused);
 	Q_INVOKABLE cocos2d::Action* getActionByTag(int tag, const cocos2d::Node* target);
-	Q_INVOKABLE ssize_t getNumberOfRunningActions();
-	Q_INVOKABLE ssize_t getNumberOfRunningActionsInTarget(const cocos2d::Node* target);
-	Q_INVOKABLE size_t getNumberOfRunningActionsInTargetByTag(const cocos2d::Node* target, int tag);
+	Q_INVOKABLE int getNumberOfRunningActions();
+	Q_INVOKABLE int getNumberOfRunningActionsInTarget(const cocos2d::Node* target);
+	Q_INVOKABLE unsigned getNumberOfRunningActionsInTargetByTag(const cocos2d::Node* target, int tag);
 	Q_INVOKABLE cocos2d::Vector<cocos2d::Node *> pauseAllRunningActions();
 	Q_INVOKABLE void pauseTarget(cocos2d::Node* target);
 	Q_INVOKABLE void removeAction(cocos2d::Action* action);
@@ -6691,13 +6692,13 @@ public:
 	Q_PROPERTY(cocos2d::Texture2D* texture READ getTexture WRITE setTexture)
 	Q_PROPERTY(cocos2d::TextureAtlas* textureAtlas READ getTextureAtlas WRITE setTextureAtlas)
 	cocos2d::BlendFunc getBlendFunc();
-	Q_INVOKABLE size_t getQuadsToDraw();
+	Q_INVOKABLE unsigned getQuadsToDraw();
 	cocos2d::Texture2D* getTexture();
 	cocos2d::TextureAtlas* getTextureAtlas();
 	Q_INVOKABLE bool initWithTexture(cocos2d::Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
 	Q_INVOKABLE bool initWithTileFile(const QByteArray& tile, int tileWidth, int tileHeight, int itemsToRender);
 	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
-	Q_INVOKABLE void setQuadsToDraw(ssize_t quadsToDraw);
+	Q_INVOKABLE void setQuadsToDraw(int quadsToDraw);
 	void setTexture(cocos2d::Texture2D* texture);
 	void setTextureAtlas(cocos2d::TextureAtlas* textureAtlas);
 	Q_INVOKABLE void updateAtlasValues();
@@ -7371,23 +7372,23 @@ public:
 
 	Q_PROPERTY(bool compressedInterpolation READ isCompressedInterpolation WRITE setCompressedInterpolation)
 	Q_PROPERTY(cocos2d::Color3B endColor READ getEndColor WRITE setEndColor)
-	Q_PROPERTY(uint8_t endOpacity READ getEndOpacity WRITE setEndOpacity)
+	Q_PROPERTY(quint8 endOpacity READ getEndOpacity WRITE setEndOpacity)
 	Q_PROPERTY(cocos2d::Color3B startColor READ getStartColor WRITE setStartColor)
-	Q_PROPERTY(uint8_t startOpacity READ getStartOpacity WRITE setStartOpacity)
+	Q_PROPERTY(quint8 startOpacity READ getStartOpacity WRITE setStartOpacity)
 	Q_PROPERTY(cocos2d::Vec2 vector READ getVector WRITE setVector)
 	cocos2d::Color3B getEndColor();
-	uint8_t getEndOpacity();
+	quint8 getEndOpacity();
 	cocos2d::Color3B getStartColor();
-	uint8_t getStartOpacity();
+	quint8 getStartOpacity();
 	cocos2d::Vec2 getVector();
 	Q_INVOKABLE bool initWithColor(const cocos2d::Color4B& start, const cocos2d::Color4B& end);
 	Q_INVOKABLE bool initWithColor(const cocos2d::Color4B& start, const cocos2d::Color4B& end, const cocos2d::Vec2& v);
 	bool isCompressedInterpolation();
 	void setCompressedInterpolation(bool compressedInterpolation);
 	void setEndColor(const cocos2d::Color3B& endColor);
-	void setEndOpacity(uint8_t endOpacity);
+	void setEndOpacity(quint8 endOpacity);
 	void setStartColor(const cocos2d::Color3B& startColor);
-	void setStartOpacity(uint8_t startOpacity);
+	void setStartOpacity(quint8 startOpacity);
 	void setVector(const cocos2d::Vec2& alongVector);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
@@ -7417,33 +7418,33 @@ public:
 	Q_PROPERTY(cocos2d::Vec2 center READ getCenter WRITE setCenter)
 	Q_PROPERTY(cocos2d::Color4B endColor READ getEndColor WRITE setEndColor)
 	Q_PROPERTY(cocos2d::Color3B endColor3B READ getEndColor3B WRITE setEndColor3B)
-	Q_PROPERTY(uint8_t endOpacity READ getEndOpacity WRITE setEndOpacity)
+	Q_PROPERTY(quint8 endOpacity READ getEndOpacity WRITE setEndOpacity)
 	Q_PROPERTY(float expand READ getExpand WRITE setExpand)
 	Q_PROPERTY(float radius READ getRadius WRITE setRadius)
 	Q_PROPERTY(cocos2d::Color4B startColor READ getStartColor WRITE setStartColor)
 	Q_PROPERTY(cocos2d::Color3B startColor3B READ getStartColor3B WRITE setStartColor3B)
-	Q_PROPERTY(uint8_t startOpacity READ getStartOpacity WRITE setStartOpacity)
+	Q_PROPERTY(quint8 startOpacity READ getStartOpacity WRITE setStartOpacity)
 	cocos2d::BlendFunc getBlendFunc();
 	cocos2d::Vec2 getCenter();
 	cocos2d::Color4B getEndColor();
 	cocos2d::Color3B getEndColor3B();
-	uint8_t getEndOpacity();
+	quint8 getEndOpacity();
 	float getExpand();
 	float getRadius();
 	cocos2d::Color4B getStartColor();
 	cocos2d::Color3B getStartColor3B();
-	uint8_t getStartOpacity();
+	quint8 getStartOpacity();
 	Q_INVOKABLE bool initWithColor(const cocos2d::Color4B& startColor, const cocos2d::Color4B& endColor, float radius, const cocos2d::Vec2& center, float expand);
 	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
 	void setCenter(const cocos2d::Vec2& center);
 	void setEndColor(const cocos2d::Color4B& color);
 	void setEndColor3B(const cocos2d::Color3B& color);
-	void setEndOpacity(uint8_t opacity);
+	void setEndOpacity(quint8 opacity);
 	void setExpand(float expand);
 	void setRadius(float radius);
 	void setStartColor(const cocos2d::Color4B& color);
 	void setStartColor3B(const cocos2d::Color3B& color);
-	void setStartOpacity(uint8_t opacity);
+	void setStartOpacity(quint8 opacity);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 };
 
@@ -8426,26 +8427,26 @@ public:
 
 	Q_PROPERTY(bool dirty READ isDirty WRITE setDirty)
 	Q_PROPERTY(cocos2d::Texture2D* texture READ getTexture WRITE setTexture)
-	Q_INVOKABLE void fillWithEmptyQuadsFromIndex(ssize_t index, ssize_t amount);
-	Q_INVOKABLE size_t getCapacity();
+	Q_INVOKABLE void fillWithEmptyQuadsFromIndex(int index, int amount);
+	Q_INVOKABLE unsigned getCapacity();
 	Q_INVOKABLE QByteArray getDescription();
 	cocos2d::Texture2D* getTexture();
-	Q_INVOKABLE size_t getTotalQuads();
-	Q_INVOKABLE void increaseTotalQuadsWith(ssize_t amount);
-	Q_INVOKABLE bool initWithFile(const QByteArray& file, ssize_t capacity);
-	Q_INVOKABLE bool initWithTexture(cocos2d::Texture2D* texture, ssize_t capacity);
-	Q_INVOKABLE void insertQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, ssize_t index);
-	Q_INVOKABLE void insertQuadFromIndex(ssize_t fromIndex, ssize_t newIndex);
+	Q_INVOKABLE unsigned getTotalQuads();
+	Q_INVOKABLE void increaseTotalQuadsWith(int amount);
+	Q_INVOKABLE bool initWithFile(const QByteArray& file, int capacity);
+	Q_INVOKABLE bool initWithTexture(cocos2d::Texture2D* texture, int capacity);
+	Q_INVOKABLE void insertQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, int index);
+	Q_INVOKABLE void insertQuadFromIndex(int fromIndex, int newIndex);
 	bool isDirty();
-	Q_INVOKABLE void moveQuadsFromIndex(ssize_t index, ssize_t newIndex);
-	Q_INVOKABLE void moveQuadsFromIndex(ssize_t oldIndex, ssize_t amount, ssize_t newIndex);
+	Q_INVOKABLE void moveQuadsFromIndex(int index, int newIndex);
+	Q_INVOKABLE void moveQuadsFromIndex(int oldIndex, int amount, int newIndex);
 	Q_INVOKABLE void removeAllQuads();
-	Q_INVOKABLE void removeQuadAtIndex(ssize_t index);
-	Q_INVOKABLE void removeQuadsAtIndex(ssize_t index, ssize_t amount);
-	Q_INVOKABLE bool resizeCapacity(ssize_t capacity);
+	Q_INVOKABLE void removeQuadAtIndex(int index);
+	Q_INVOKABLE void removeQuadsAtIndex(int index, int amount);
+	Q_INVOKABLE bool resizeCapacity(int capacity);
 	void setDirty(bool bDirty);
 	void setTexture(cocos2d::Texture2D* texture);
-	Q_INVOKABLE void updateQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, ssize_t index);
+	Q_INVOKABLE void updateQuad(const cocos2d::V3F_C4B_T2F_Quad& quad, int index);
 	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithTexture(QScriptContext *context, QScriptEngine* engine);
 };
@@ -8737,13 +8738,13 @@ public:
 
 	Q_PROPERTY(cocos2d::CameraBackgroundBrush* backgroundBrush READ getBackgroundBrush WRITE setBackgroundBrush)
 	Q_PROPERTY(int cameraFlag READ getCameraFlag WRITE setCameraFlag)
-	Q_PROPERTY(int8_t depth READ getDepth WRITE setDepth)
+	Q_PROPERTY(qint8 depth READ getDepth WRITE setDepth)
 	Q_INVOKABLE void apply();
 	Q_INVOKABLE void applyViewport();
 	Q_INVOKABLE void clearBackground();
 	cocos2d::CameraBackgroundBrush* getBackgroundBrush();
 	int getCameraFlag();
-	int8_t getDepth();
+	qint8 getDepth();
 	Q_INVOKABLE float getDepthInView(const cocos2d::Mat4& transform);
 	Q_INVOKABLE float getFarPlane();
 	Q_INVOKABLE float getNearPlane();
@@ -8765,7 +8766,7 @@ public:
 	Q_INVOKABLE void setAdditionalProjection(const cocos2d::Mat4& mat);
 	void setBackgroundBrush(cocos2d::CameraBackgroundBrush* clearBrush);
 	void setCameraFlag(int flag);
-	void setDepth(int8_t depth);
+	void setDepth(qint8 depth);
 	Q_INVOKABLE void setScene(cocos2d::Scene* scene);
 	Q_INVOKABLE cocos2d::Vec3 unproject(const cocos2d::Vec3& src);
 	Q_INVOKABLE void unproject(const cocos2d::Size& size, const cocos2d::Vec3* src, cocos2d::Vec3* dst);
@@ -9164,7 +9165,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE void bind(cocos2d::PipelineDescriptor* programState);
-	Q_INVOKABLE uint32_t getHash();
+	Q_INVOKABLE quint32 getHash();
 	Q_INVOKABLE bool isDirty();
 	Q_INVOKABLE void setBlend(bool enabled);
 	Q_INVOKABLE void setBlendDst(int blend);
@@ -9229,8 +9230,8 @@ public:
 	Q_INVOKABLE void addPass(cocos2d::Pass* pass);
 	Q_INVOKABLE cocos2d::Technique* clone();
 	Q_INVOKABLE QByteArray getName();
-	Q_INVOKABLE cocos2d::Pass* getPassByIndex(ssize_t index);
-	Q_INVOKABLE ssize_t getPassCount();
+	Q_INVOKABLE cocos2d::Pass* getPassByIndex(int index);
+	Q_INVOKABLE int getPassCount();
 	Q_INVOKABLE cocos2d::Vector<cocos2d::Pass *> getPasses();
 	Q_INVOKABLE cocos2d::RenderState::StateBlock* getStateBlock();
 	Q_INVOKABLE void setMaterial(cocos2d::Material* material);
@@ -9267,9 +9268,9 @@ public:
 	Q_INVOKABLE cocos2d::RenderState* getRenderState();
 	cocos2d::RenderState::StateBlock getStateBlock();
 	Q_INVOKABLE cocos2d::Technique* getTechnique();
-	Q_INVOKABLE cocos2d::Technique* getTechniqueByIndex(ssize_t index);
+	Q_INVOKABLE cocos2d::Technique* getTechniqueByIndex(int index);
 	Q_INVOKABLE cocos2d::Technique* getTechniqueByName(const QByteArray& name);
-	Q_INVOKABLE ssize_t getTechniqueCount();
+	Q_INVOKABLE int getTechniqueCount();
 	void setName(const QByteArray& name);
 	void setStateBlock(const cocos2d::RenderState::StateBlock& state);
 	Q_INVOKABLE void setTechnique(const QByteArray& techniqueName);
@@ -9342,8 +9343,8 @@ public:
 	Q_PROPERTY(int winding READ getWinding WRITE setWinding)
 	Q_INVOKABLE void addCommand(cocos2d::RenderCommand* command);
 	Q_INVOKABLE void addCommand(cocos2d::RenderCommand* command, int renderQueueID);
-	Q_INVOKABLE void addDrawnBatches(ssize_t number);
-	Q_INVOKABLE void addDrawnVertices(ssize_t number);
+	Q_INVOKABLE void addDrawnBatches(int number);
+	Q_INVOKABLE void addDrawnVertices(int number);
 	Q_INVOKABLE bool checkVisibility(const cocos2d::Mat4& transform, const cocos2d::Size& size);
 	Q_INVOKABLE void clean();
 	Q_INVOKABLE void clear(int flags, const cocos2d::Color4F& color, float depth, unsigned int stencil, float globalOrder);
@@ -9359,8 +9360,8 @@ public:
 	int getDepthCompareFunction();
 	bool getDepthTest();
 	bool getDepthWrite();
-	Q_INVOKABLE ssize_t getDrawnBatches();
-	Q_INVOKABLE ssize_t getDrawnVertices();
+	Q_INVOKABLE int getDrawnBatches();
+	Q_INVOKABLE int getDrawnVertices();
 	Q_INVOKABLE int getRenderTargetFlag();
 	Q_INVOKABLE cocos2d::ScissorRect getScissorRect();
 	bool getScissorTest();
@@ -9636,23 +9637,23 @@ public:
 	Q_PROPERTY(cocos2d::TextureAtlas* textureAtlas READ getTextureAtlas WRITE setTextureAtlas)
 	Q_INVOKABLE cocos2d::SpriteBatchNode* addSpriteWithoutQuad(cocos2d::Sprite* child, int z, int aTag);
 	Q_INVOKABLE void appendChild(cocos2d::Sprite* sprite);
-	Q_INVOKABLE ssize_t atlasIndexForChild(cocos2d::Sprite* sprite, int z);
+	Q_INVOKABLE int atlasIndexForChild(cocos2d::Sprite* sprite, int z);
 	cocos2d::BlendFunc getBlendFunc();
 	cocos2d::Texture2D* getTexture();
 	cocos2d::TextureAtlas* getTextureAtlas();
-	Q_INVOKABLE ssize_t highestAtlasIndexInChild(cocos2d::Sprite* sprite);
+	Q_INVOKABLE int highestAtlasIndexInChild(cocos2d::Sprite* sprite);
 	Q_INVOKABLE void increaseAtlasCapacity();
 	Q_INVOKABLE bool initWithFile(const QByteArray& fileImage);
-	Q_INVOKABLE bool initWithFile(const QByteArray& fileImage, ssize_t capacity);
+	Q_INVOKABLE bool initWithFile(const QByteArray& fileImage, int capacity);
 	Q_INVOKABLE bool initWithTexture(cocos2d::Texture2D* tex);
-	Q_INVOKABLE bool initWithTexture(cocos2d::Texture2D* tex, ssize_t capacity);
-	Q_INVOKABLE void insertQuadFromSprite(cocos2d::Sprite* sprite, ssize_t index);
-	Q_INVOKABLE ssize_t lowestAtlasIndexInChild(cocos2d::Sprite* sprite);
-	Q_INVOKABLE ssize_t rebuildIndexInOrder(cocos2d::Sprite* parent, ssize_t index);
-	Q_INVOKABLE void removeChildAtIndex(ssize_t index, bool doCleanup);
+	Q_INVOKABLE bool initWithTexture(cocos2d::Texture2D* tex, int capacity);
+	Q_INVOKABLE void insertQuadFromSprite(cocos2d::Sprite* sprite, int index);
+	Q_INVOKABLE int lowestAtlasIndexInChild(cocos2d::Sprite* sprite);
+	Q_INVOKABLE int rebuildIndexInOrder(cocos2d::Sprite* parent, int index);
+	Q_INVOKABLE void removeChildAtIndex(int index, bool doCleanup);
 	Q_INVOKABLE void removeSpriteFromAtlas(cocos2d::Sprite* sprite);
 	Q_INVOKABLE void reorderBatch(bool reorder);
-	Q_INVOKABLE void reserveCapacity(ssize_t newCapacity);
+	Q_INVOKABLE void reserveCapacity(int newCapacity);
 	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
 	void setTexture(cocos2d::Texture2D* texture);
 	void setTextureAtlas(cocos2d::TextureAtlas* textureAtlas);
@@ -9844,11 +9845,11 @@ public:
 	Q_INVOKABLE cocos2d::AABB getAABB();
 	cocos2d::BlendFunc getBlendFunc();
 	Q_INVOKABLE cocos2d::backend::Buffer* getIndexBuffer();
-	Q_INVOKABLE ssize_t getIndexCount();
+	Q_INVOKABLE int getIndexCount();
 	Q_INVOKABLE int getIndexFormat();
 	cocos2d::Material* getMaterial();
 	cocos2d::MeshIndexData* getMeshIndexData();
-	Q_INVOKABLE ssize_t getMeshVertexAttribCount();
+	Q_INVOKABLE int getMeshVertexAttribCount();
 	Q_INVOKABLE cocos2d::MeshVertexAttrib getMeshVertexAttribute(int idx);
 	QByteArray getName();
 	Q_INVOKABLE int getPrimitiveType();
@@ -9901,7 +9902,7 @@ public:
 	Q_INVOKABLE void addSkinBone(cocos2d::Bone3D* bone);
 	Q_INVOKABLE cocos2d::Bone3D* getBoneByIndex(unsigned int index);
 	Q_INVOKABLE cocos2d::Bone3D* getBoneByName(const QByteArray& id);
-	Q_INVOKABLE ssize_t getBoneCount();
+	Q_INVOKABLE int getBoneCount();
 	Q_INVOKABLE int getBoneIndex(cocos2d::Bone3D* bone);
 	Q_INVOKABLE cocos2d::Mat4 getInvBindPose(const cocos2d::Bone3D* bone);
 	Q_INVOKABLE cocos2d::Bone3D* getRootBone();
@@ -10006,13 +10007,13 @@ public:
 	explicit QtScriptMeshVertexData(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE size_t getAtrSetId();
+	Q_INVOKABLE unsigned getAtrSetId();
 	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexDataById(const QByteArray& id);
 	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexDataByIndex(int index);
-	Q_INVOKABLE ssize_t getMeshIndexDataCount();
-	Q_INVOKABLE cocos2d::MeshVertexAttrib getMeshVertexAttrib(ssize_t index);
-	Q_INVOKABLE ssize_t getMeshVertexAttribCount();
-	Q_INVOKABLE ssize_t getSizePerVertex();
+	Q_INVOKABLE int getMeshIndexDataCount();
+	Q_INVOKABLE cocos2d::MeshVertexAttrib getMeshVertexAttrib(int index);
+	Q_INVOKABLE int getMeshVertexAttribCount();
+	Q_INVOKABLE int getSizePerVertex();
 	Q_INVOKABLE cocos2d::backend::Buffer* getVertexBuffer();
 	Q_INVOKABLE bool hasVertexAttrib(int attrib);
 };
@@ -10078,7 +10079,7 @@ public:
 	Q_INVOKABLE void addChildBone(cocos2d::Bone3D* bone);
 	Q_INVOKABLE void clearBoneBlendState();
 	Q_INVOKABLE cocos2d::Bone3D* getChildBoneByIndex(int index);
-	Q_INVOKABLE ssize_t getChildBoneCount();
+	Q_INVOKABLE int getChildBoneCount();
 	cocos2d::Mat4 getInverseBindPose();
 	Q_INVOKABLE QByteArray getName();
 	Q_INVOKABLE cocos2d::Bone3D* getParentBone();
@@ -10116,10 +10117,10 @@ public:
 	Q_INVOKABLE void addBone(cocos2d::Bone3D* bone);
 	Q_INVOKABLE cocos2d::Bone3D* getBoneByIndex(unsigned int index);
 	Q_INVOKABLE cocos2d::Bone3D* getBoneByName(const QByteArray& id);
-	Q_INVOKABLE ssize_t getBoneCount();
+	Q_INVOKABLE int getBoneCount();
 	Q_INVOKABLE int getBoneIndex(cocos2d::Bone3D* bone);
 	Q_INVOKABLE cocos2d::Bone3D* getRootBone(int index);
-	Q_INVOKABLE ssize_t getRootCount();
+	Q_INVOKABLE int getRootCount();
 	Q_INVOKABLE void removeAllBones();
 	Q_INVOKABLE void updateBoneMatrix();
 };
@@ -10215,7 +10216,7 @@ public:
 	Q_INVOKABLE cocos2d::Mesh* getMesh();
 	Q_INVOKABLE cocos2d::Mesh* getMeshByIndex(int index);
 	Q_INVOKABLE cocos2d::Mesh* getMeshByName(const QByteArray& name);
-	Q_INVOKABLE ssize_t getMeshCount();
+	Q_INVOKABLE int getMeshCount();
 	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexData(const QByteArray& indexId);
 	Q_INVOKABLE cocos2d::Skeleton3D* getSkeleton();
 	Q_INVOKABLE bool initWithFile(const QByteArray& path);
@@ -10326,7 +10327,7 @@ public:
 	explicit QtScriptVertexAttribBinding(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE uint32_t getVertexAttribsFlags();
+	Q_INVOKABLE quint32 getVertexAttribsFlags();
 	Q_INVOKABLE bool hasAttribute(const int& key);
 };
 
@@ -10425,7 +10426,7 @@ public:
 
 	Q_INVOKABLE cocos2d::backend::DepthStencilState* createDepthStencilState(const cocos2d::backend::DepthStencilDescriptor& descriptor);
 	Q_INVOKABLE cocos2d::backend::DeviceInfo* getDeviceInfo();
-	Q_INVOKABLE cocos2d::backend::Buffer* newBuffer(size_t size, int type, int usage);
+	Q_INVOKABLE cocos2d::backend::Buffer* newBuffer(unsigned size, int type, int usage);
 	Q_INVOKABLE cocos2d::backend::Program* newProgram(const QByteArray& vertexShader, const QByteArray& fragmentShader);
 	Q_INVOKABLE cocos2d::backend::TextureBackend* newTexture(const cocos2d::backend::TextureDescriptor& descriptor);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
@@ -10455,9 +10456,9 @@ public:
 	explicit QtScriptBuffer(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE size_t getSize();
+	Q_INVOKABLE unsigned getSize();
 	Q_INVOKABLE void updateData(const QByteArray& arg0);
-	Q_INVOKABLE void updateSubData(const QByteArray& arg0, size_t arg1);
+	Q_INVOKABLE void updateSubData(const QByteArray& arg0, unsigned arg1);
 	Q_INVOKABLE void usingDefaultStoredData(bool needDefaultStoredData);
 };
 
