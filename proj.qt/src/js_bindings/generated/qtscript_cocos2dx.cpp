@@ -10403,6 +10403,16 @@ quint8 QtScriptNode::getOpacity()
 	return static_cast<quint8>(0);
 }
 
+unsigned int QtScriptNode::getOrderOfArrival()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getOrderOfArrival();
+	}
+	return static_cast<unsigned int>(0);
+}
+
 cocos2d::Node* QtScriptNode::getParent()
 {
 	auto __o = this->thiz<Node *>();
@@ -11191,6 +11201,15 @@ void QtScriptNode::setOpacityModifyRGB(bool value)
 	if (__o)
 	{
 		__o->setOpacityModifyRGB(value);
+	}
+}
+
+void QtScriptNode::setOrderOfArrival(unsigned int value)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setOrderOfArrival(value);
 	}
 }
 

@@ -190,6 +190,8 @@ public:
     * @param orderOfArrival   The arrival order.
     */
     void updateOrderOfArrival();
+    inline unsigned getOrderOfArrival() const;
+    void setOrderOfArrival(unsigned value);
 
     /**
      * Gets the local Z order of this node.
@@ -1922,7 +1924,7 @@ protected:
 
     bool _reorderChildDirty;          ///< children order dirty flag
     bool _isTransitionFinished;       ///< flag to indicate whether the transition was finished
-
+    bool _autoOrderOfArrival;
 #if CC_ENABLE_SCRIPT_BINDING
     int64_t _updateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
     ccScriptType _scriptType;         ///< type of script binding, lua or javascript
@@ -1973,6 +1975,11 @@ public:
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Node);
 };
+
+inline unsigned Node::getOrderOfArrival() const
+{
+    return _orderOfArrival;
+}
 
 inline bool Node::isUseInvertedAdditionalTransformOrder() const
 {

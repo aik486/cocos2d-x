@@ -98,6 +98,7 @@ Node::Node()
 , _ignoreAnchorPointForPosition(false)
 , _reorderChildDirty(false)
 , _isTransitionFinished(false)
+, _autoOrderOfArrival(true)
 #if CC_ENABLE_SCRIPT_BINDING
 , _updateScriptHandler(0)
 #endif
@@ -346,7 +347,22 @@ void Node::_setLocalZOrder(std::int32_t z)
 
 void Node::updateOrderOfArrival()
 {
-    _orderOfArrival = (++s_globalOrderOfArrival);
+    if (_autoOrderOfArrival) {
+        _orderOfArrival = (++s_globalOrderOfArrival);
+    }
+}
+
+void Node::setOrderOfArrival(unsigned value)
+{
+    if (!_autoOrderOfArrival && _orderOfArrival == value) {
+        return;
+    }
+    _orderOfArrival = value;
+    _autoOrderOfArrival = false;
+    if (_parent)
+    {
+        _parent->_reorderChildDirty = true;
+    }
 }
 
 void Node::setGlobalZOrder(float globalZOrder)

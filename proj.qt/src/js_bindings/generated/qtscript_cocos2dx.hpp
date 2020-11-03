@@ -2247,6 +2247,7 @@ public:
 	Q_PROPERTY(cocos2d::Vec2 normalizedPosition READ getNormalizedPosition WRITE setNormalizedPosition)
 	Q_PROPERTY(quint8 opacity READ getOpacity WRITE setOpacity)
 	Q_PROPERTY(bool opacityModifyRGB READ isOpacityModifyRGB WRITE setOpacityModifyRGB)
+	Q_PROPERTY(unsigned int orderOfArrival READ getOrderOfArrival WRITE setOrderOfArrival)
 	Q_PROPERTY(cocos2d::Vec2 position READ getPosition WRITE setPosition)
 	Q_PROPERTY(cocos2d::Vec3 position3D READ getPosition3D WRITE setPosition3D)
 	Q_PROPERTY(cocos2d::Vec2 positionNormalized READ getPositionNormalized WRITE setPositionNormalized)
@@ -2317,6 +2318,7 @@ public:
 	Q_INVOKABLE int getNumberOfRunningActions();
 	Q_INVOKABLE int getNumberOfRunningActionsByTag(int tag);
 	quint8 getOpacity();
+	unsigned int getOrderOfArrival();
 	Q_INVOKABLE cocos2d::Node* getParent();
 	Q_INVOKABLE cocos2d::AffineTransform getParentToNodeAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getParentToNodeTransform();
@@ -2395,6 +2397,7 @@ public:
 	Q_INVOKABLE void setOnUpdateCallback(QScriptValue callback);
 	void setOpacity(quint8 opacity);
 	void setOpacityModifyRGB(bool value);
+	void setOrderOfArrival(unsigned int value);
 	void setPosition(const cocos2d::Vec2& position);
 	Q_INVOKABLE void setPosition(float x, float y);
 	void setPosition3D(const cocos2d::Vec3& position);
