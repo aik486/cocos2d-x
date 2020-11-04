@@ -45,48 +45,48 @@ THE SOFTWARE.
 #define BUNDLE_TYPE_MESHPART            35
 #define BUNDLE_TYPE_MESHSKIN            36
 
-static const char* VERSION = "version";
-static const char* ID = "id";
-static const char* DEFAULTPART = "body";
-static const char* VERTEXSIZE = "vertexsize";
-static const char* VERTEX = "vertex";
-static const char* VERTICES = "vertices";
-static const char* INDEXNUM = "indexnum";
-static const char* INDICES = "indices";
-static const char* SUBMESH = "submesh";
-static const char* ATTRIBUTES = "attributes";
-static const char* ATTRIBUTESIZE = "size";
-static const char* TYPE = "type";
-static const char* ATTRIBUTE = "attribute";
-static const char* SKIN = "skin";
-static const char* BINDSHAPE = "bindshape";
-static const char* MESH = "mesh";
-static const char* MESHES = "meshes";
-static const char* MESHPARTID = "meshpartid";
-static const char* MATERIALID = "materialid";
-static const char* NODE = "node";
-static const char* NODES = "nodes";
-static const char* CHILDREN = "children";
-static const char* PARTS = "parts";
-static const char* BONES = "bones";
-static const char* SKELETON = "skeleton";
-static const char* MATERIALS = "materials";
-static const char* ANIMATIONS = "animations";
-static const char* TRANSFORM = "transform";
-static const char* OLDTRANSFORM = "tansform";
-static const char* ANIMATION = "animation";
-static const char* MATERIAL = "material";
-static const char* BASE = "base";
-static const char* FILENAME = "filename";
-static const char* TEXTURES = "textures";
-static const char* LENGTH =   "length";
-static const char* BONEID  = "boneId";
-static const char* KEYFRAMES  = "keyframes";
-static const char* TRANSLATION =  "translation";
-static const char* ROTATION =  "rotation";
-static const char* SCALE =  "scale";
-static const char* KEYTIME =  "keytime";
-static const char* AABBS = "aabb";
+static const char VERSION[] = "version";
+static const char ID[] = "id";
+static const char DEFAULTPART[] = "body";
+static const char VERTEXSIZE[] = "vertexsize";
+static const char VERTEX[] = "vertex";
+static const char VERTICES[] = "vertices";
+static const char INDEXNUM[] = "indexnum";
+static const char INDICES[] = "indices";
+static const char SUBMESH[] = "submesh";
+static const char ATTRIBUTES[] = "attributes";
+static const char ATTRIBUTESIZE[] = "size";
+static const char TYPE[] = "type";
+static const char ATTRIBUTE[] = "attribute";
+static const char SKIN[] = "skin";
+static const char BINDSHAPE[] = "bindshape";
+static const char MESH[] = "mesh";
+static const char MESHES[] = "meshes";
+static const char MESHPARTID[] = "meshpartid";
+static const char MATERIALID[] = "materialid";
+static const char NODE[] = "node";
+static const char NODES[] = "nodes";
+static const char CHILDREN[] = "children";
+static const char PARTS[] = "parts";
+static const char BONES[] = "bones";
+static const char SKELETON[] = "skeleton";
+static const char MATERIALS[] = "materials";
+static const char ANIMATIONS[] = "animations";
+static const char TRANSFORM[] = "transform";
+static const char OLDTRANSFORM[] = "tansform";
+static const char ANIMATION[] = "animation";
+static const char MATERIAL[] = "material";
+static const char BASE[] = "base";
+static const char FILENAME[] = "filename";
+static const char TEXTURES[] = "textures";
+static const char LENGTH[] =   "length";
+static const char BONEID[] = "boneId";
+static const char KEYFRAMES [] = "keyframes";
+static const char TRANSLATION[] =  "translation";
+static const char ROTATION[] =  "rotation";
+static const char SCALE[] =  "scale";
+static const char KEYTIME[] =  "keytime";
+static const char AABBS[] = "aabb";
 
 NS_CC_BEGIN
 
@@ -159,14 +159,12 @@ void Bundle3D::destroyBundle(Bundle3D* bundle)
 
 void Bundle3D::clear()
 {
+    _jsonBuffer.clear();
+    _binaryBuffer.clear();
+    _jsonReader = rapidjson::Document();
     if (_isBinary)
     {
-        _binaryBuffer.clear();
         CC_SAFE_DELETE_ARRAY(_references);
-    }
-    else
-    {
-        _jsonBuffer.clear();
     }
 }
 
@@ -179,26 +177,28 @@ bool Bundle3D::load(const std::string& path)
         return true;
 
     getModelRelativePath(path);
+    _path = path;
 
     bool ret = false;
     std::string ext = FileUtils::getInstance()->getFileExtension(path);
     if (ext == ".c3t")
     {
         _isBinary = false;
-        ret = loadJson(path);
+        ret = loadJsonFrom(path);
     }
     else if (ext == ".c3b")
     {
         _isBinary = true;
-        ret = loadBinary(path);
+        ret = loadBinaryFrom(path);
     }
     else 
     {
         CCLOG("warning: %s is invalid file formate", path.c_str());
     }
 
-    ret?(_path = path):(_path = "");
-
+    if (!ret) {
+        _path.clear();
+    }
     return ret;
 }
 
@@ -208,7 +208,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeD
     materialdatas.resetData();
     nodedatas.resetData();
 
-    std::string mtlPath = "";
+    std::string mtlPath;
     if (mtl_basepath)
         mtlPath = mtl_basepath;
     else
@@ -223,7 +223,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeD
         //convert material
         int i = 0;
         char str[20];
-        std::string dir = "";
+        std::string dir;
         auto last = fullPath.rfind('/');
         if (last != std::string::npos)
             dir = fullPath.substr(0, last + 1);
@@ -312,7 +312,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeD
                 meshdata->subMeshIds.push_back(str);
                 
                 auto modelnode = new (std::nothrow) ModelData();
-                modelnode->materialId = submesh.first == -1 ? "" : materials[submesh.first].name;
+                modelnode->materialId = submesh.first == -1 ? std::string() : materials[submesh.first].name;
                 modelnode->subMeshId = str;
                 node->modelNodeDatas.push_back(modelnode);
             }
@@ -324,6 +324,11 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeD
     }
     CCLOG("warning: load %s file error: %s", fullPath.c_str(), ret.c_str());
     return false;
+}
+
+bool Bundle3D::loadObj(MeshDatas &meshdatas, MaterialDatas &materialdatas, NodeDatas &nodedatas, const Data &data, const std::string &fullPath, const char *mtl_basepath)
+{
+    
 }
 
 bool Bundle3D::loadSkinData(const std::string& /*id*/, SkinData* skindata)
@@ -386,7 +391,7 @@ bool  Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
 {
     if (!seekToFirstType(BUNDLE_TYPE_MESH))
         return false;
-    unsigned int meshSize = 0;
+    uint32_t meshSize = 0;
     if (_binaryReader.read(&meshSize, 4, 1) != 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
@@ -395,7 +400,7 @@ bool  Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
     MeshData*   meshData = nullptr;
     for(unsigned int i = 0; i < meshSize ; ++i)
     {
-         unsigned int attribSize=0;
+         uint32_t attribSize=0;
         // read mesh data
         if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
         {
@@ -407,8 +412,8 @@ bool  Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
         meshData->attribs.resize(meshData->attribCount);
         for (ssize_t j = 0; j < meshData->attribCount; ++j)
         {
-            std::string attribute="";
-            unsigned int vSize;
+            std::string attribute;
+            uint32_t vSize;
             if (_binaryReader.read(&vSize, 4, 1) != 1)
             {
                 CCLOG("warning: Failed to read meshdata: usage or size '%s'.", _path.c_str());
@@ -419,7 +424,7 @@ bool  Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
             meshData->attribs[j].type =  parseGLDataType(type, vSize);
             meshData->attribs[j].vertexAttrib = parseGLProgramAttribute(attribute);
         }
-        unsigned int vertexSizeInFloat = 0;
+        uint32_t vertexSizeInFloat = 0;
         // Read vertex data
         if (_binaryReader.read(&vertexSizeInFloat, 4, 1) != 1 || vertexSizeInFloat == 0)
         {
@@ -428,14 +433,14 @@ bool  Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
         }
 
         meshData->vertex.resize(vertexSizeInFloat);
-        if (_binaryReader.read(&meshData->vertex[0], 4, vertexSizeInFloat) != vertexSizeInFloat)
+        if (_binaryReader.read(&meshData->vertex[0], 4, vertexSizeInFloat) != ssize_t(vertexSizeInFloat))
         {
             CCLOG("warning: Failed to read meshdata: vertex element '%s'.", _path.c_str());
             goto FAILED;
         }
 
         // Read index data
-        unsigned int meshPartCount = 1;
+        uint32_t meshPartCount = 1;
         _binaryReader.read(&meshPartCount, 4, 1);
 
         for (unsigned int k = 0; k < meshPartCount; ++k)
@@ -443,14 +448,14 @@ bool  Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
             std::vector<unsigned short>      indexArray;
             std:: string meshPartid = _binaryReader.readString();
             meshData->subMeshIds.push_back(meshPartid);
-            unsigned int nIndexCount;
+            uint32_t nIndexCount;
             if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
             {
                 CCLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
                 goto FAILED;
             }
             indexArray.resize(nIndexCount);
-            if (_binaryReader.read(&indexArray[0], 2, nIndexCount) != nIndexCount)
+            if (_binaryReader.read(&indexArray[0], 2, nIndexCount) != ssize_t(nIndexCount))
             {
                 CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
                 goto FAILED;
@@ -498,7 +503,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     MeshData* meshdata = new (std::nothrow) MeshData();
 
     // read mesh data
-    unsigned int attribSize=0;
+    uint32_t attribSize=0;
     if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
@@ -521,7 +526,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     };
     for (unsigned int i = 0; i < attribSize; ++i)
     {
-        unsigned int vUsage, vSize;
+        uint32_t vUsage, vSize;
         shaderinfos::VertexKey usage;
         if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
         {
@@ -581,7 +586,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     unsigned int meshPartCount = 1;
     for (unsigned int i = 0; i < meshPartCount; ++i)
     {
-        unsigned int nIndexCount;
+        uint32_t nIndexCount;
         if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
         {
             CCLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
@@ -591,7 +596,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
 
         std::vector<unsigned short> indices;
         indices.resize(nIndexCount);
-        if (_binaryReader.read(&indices[0], 2, nIndexCount) != nIndexCount)
+        if (_binaryReader.read(&indices[0], 2, nIndexCount) != ssize_t(nIndexCount))
         {
             CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
             CC_SAFE_DELETE(meshdata);
@@ -616,7 +621,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     MeshData* meshdata = new (std::nothrow) MeshData();
 
     // read mesh data
-    unsigned int attribSize=0;
+    uint32_t attribSize=0;
     if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
@@ -639,7 +644,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     };
     for (unsigned int i = 0; i < attribSize; ++i)
     {
-        unsigned int vUsage, vSize;
+        uint32_t vUsage, vSize;
         shaderinfos::VertexKey usage = shaderinfos::VertexKey::VERTEX_ATTRIB_ERROR;
         if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
         {
@@ -692,7 +697,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     }
 
     // read submesh
-    unsigned int submeshCount;
+    uint32_t submeshCount;
     if (_binaryReader.read(&submeshCount, 4, 1) != 1)
     {
         CCLOG("warning: Failed to read meshdata: submeshCount '%s'.", _path.c_str());
@@ -702,7 +707,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
 
     for (unsigned int i = 0; i < submeshCount; ++i)
     {
-        unsigned int nIndexCount;
+        uint32_t nIndexCount;
         if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
         {
             CCLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
@@ -712,7 +717,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
 
         std::vector<unsigned short> indices;
         indices.resize(nIndexCount);
-        if (_binaryReader.read(&indices[0], 2, nIndexCount) != nIndexCount)
+        if (_binaryReader.read(&indices[0], 2, nIndexCount) != ssize_t(nIndexCount))
         {
             CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
             CC_SAFE_DELETE(meshdata);
@@ -807,12 +812,10 @@ bool Bundle3D::loadNodes(NodeDatas& nodedatas)
     if (_version == "0.1" || _version == "1.2" || _version == "0.2")
     {
         SkinData   skinData;
-        if (!loadSkinData("", &skinData))
+        if (!loadSkinData(std::string(), &skinData))
         {
             auto node= new (std::nothrow) NodeData();
             auto modelnode = new (std::nothrow) ModelData();
-            modelnode->materialId = "";
-            modelnode->subMeshId = "";
             node->modelNodeDatas.push_back(modelnode);
             nodedatas.nodes.push_back(node);
             return true;
@@ -849,8 +852,6 @@ bool Bundle3D::loadNodes(NodeDatas& nodedatas)
         nodedatas.skeleton.push_back(nodeDatas[skinData.rootBoneIndex]);
         auto node= new (std::nothrow) NodeData();
         auto modelnode = new (std::nothrow) ModelData();
-        modelnode->materialId = "";
-        modelnode->subMeshId = "";
         modelnode->bones = skinData.skinBoneNames;
         modelnode->invBindPose = skinData.inverseBindPoseMatrices;
         node->modelNodeDatas.push_back(modelnode);
@@ -909,7 +910,7 @@ bool Bundle3D::loadMaterialsBinary(MaterialDatas& materialdatas)
 {
     if (!seekToFirstType(BUNDLE_TYPE_MATERIAL))
         return false;
-    unsigned int materialnum = 1;
+    uint32_t materialnum = 1;
     _binaryReader.read(&materialnum, 4, 1);
     for (unsigned int i = 0; i < materialnum; ++i)
     {
@@ -920,7 +921,7 @@ bool Bundle3D::loadMaterialsBinary(MaterialDatas& materialdatas)
         float  data[14];
         _binaryReader.read(&data,sizeof(float), 14);
         
-        unsigned int textureNum = 1;
+        uint32_t textureNum = 1;
         _binaryReader.read(&textureNum, 4, 1);
         for (unsigned int j = 0; j < textureNum; ++j)
         {
@@ -967,7 +968,6 @@ bool Bundle3D::loadMaterialsBinary_0_1(MaterialDatas& materialdatas)
     NTextureData textureData;
     textureData.filename = texturePath.empty() ? texturePath : _modelPath + texturePath;
     textureData.type= NTextureData::Usage::Diffuse;
-    textureData.id="";
     materialData.textures.push_back(textureData);
     materialdatas.materials.push_back(materialData);
     return true;
@@ -978,7 +978,7 @@ bool Bundle3D::loadMaterialsBinary_0_2(MaterialDatas& materialdatas)
     if (!seekToFirstType(BUNDLE_TYPE_MATERIAL))
         return false;
 
-    unsigned int materialnum = 1;
+    uint32_t materialnum = 1;
     _binaryReader.read(&materialnum, 4, 1);
 
     for (unsigned int i = 0; i < materialnum; ++i)
@@ -995,7 +995,6 @@ bool Bundle3D::loadMaterialsBinary_0_2(MaterialDatas& materialdatas)
         NTextureData textureData;
         textureData.filename = texturePath.empty() ? texturePath : _modelPath + texturePath;
         textureData.type= NTextureData::Usage::Diffuse;
-        textureData.id="";
         materialData.textures.push_back(textureData);
         materialdatas.materials.push_back(materialData);
     }
@@ -1045,13 +1044,24 @@ bool  Bundle3D::loadMaterialsJson(MaterialDatas& materialdatas)
     }
     return true;
 }
-bool Bundle3D::loadJson(const std::string& path)
+bool Bundle3D::loadJsonFrom(const std::string& path)
+{
+    return loadJson(FileUtils::getInstance()->getStringFromFile(path));
+}
+
+bool Bundle3D::loadBinaryFrom(const std::string& path)
+{
+    // get file data
+    return loadBinary(FileUtils::getInstance()->getDataFromFile(path));
+}
+
+bool Bundle3D::loadJson(std::string text)
 {
     clear();
 
-    _jsonBuffer = FileUtils::getInstance()->getStringFromFile(path);
+    _jsonBuffer = std::move(text);
 
-    if (_jsonReader.ParseInsitu<0>((char*)_jsonBuffer.c_str()).HasParseError())
+    if (_jsonReader.ParseInsitu<0>(&_jsonBuffer[0]).HasParseError())
     {
         clear();
         CCLOG("Parse json failed in Bundle3D::loadJson function");
@@ -1064,73 +1074,79 @@ bool Bundle3D::loadJson(const std::string& path)
     else
         _version = mash_data_array.GetString();
     
-    return true;
+    return true;    
 }
 
-
-bool Bundle3D::loadBinary(const std::string& path)
-{
+bool Bundle3D::loadBinary(Data data)
+{    
     clear();
-    
-    // get file data
-    _binaryBuffer.clear();
-    _binaryBuffer = FileUtils::getInstance()->getDataFromFile(path);
-    if (_binaryBuffer.isNull())
-    {
-        clear();
-        CCLOG("warning: Failed to read file: %s", path.c_str());
-        return false;
-    }
-    
-    // Initialise bundle reader
-    _binaryReader.init( (char*)_binaryBuffer.getBytes(),  _binaryBuffer.getSize() );
-    
-    // Read identifier info
-    char identifier[] = { 'C', '3', 'B', '\0'};
-    char sig[4];
-    if (_binaryReader.read(sig, 1, 4) != 4 || memcmp(sig, identifier, 4) != 0)
-    {
-        clear();
-        CCLOG("warning: Invalid identifier: %s", path.c_str());
-        return false;
-    }
-    
-    // Read version
-    unsigned char ver[2];
-    if (_binaryReader.read(ver, 1, 2)!= 2){
-        CCLOG("warning: Failed to read version:");
-        return false;
-    }
-    
-    char version[20] = {0};
-    sprintf(version, "%d.%d", ver[0], ver[1]);
-    _version = version;
-    
-    // Read ref table size
-    if (_binaryReader.read(&_referenceCount, 4, 1) != 1)
-    {
-        clear();
-        CCLOG("warning: Failed to read ref table size '%s'.", path.c_str());
-        return false;
-    }
-    
-    // Read all refs
-    CC_SAFE_DELETE_ARRAY(_references);
-    _references = new (std::nothrow) Reference[_referenceCount];
-    for (unsigned int i = 0; i < _referenceCount; ++i)
-    {
-        if ((_references[i].id = _binaryReader.readString()).empty() ||
-            _binaryReader.read(&_references[i].type, 4, 1) != 1 ||
-            _binaryReader.read(&_references[i].offset, 4, 1) != 1)
-        {
-            clear();
-            CCLOG("warning: Failed to read ref number %u for bundle '%s'.", i, path.c_str());
-            CC_SAFE_DELETE_ARRAY(_references);
-            return false;
-        }
-    }
-    
-    return true;
+    _binaryBuffer = std::move(data);
+     if (_binaryBuffer.isNull())
+     {
+         return false;
+     }
+     
+     // Initialise bundle reader
+     _binaryReader.init((char*)_binaryBuffer.getBytes(),  _binaryBuffer.getSize());
+     
+     // Read identifier info
+     char identifier[] = { 'C', '3', 'B', '\0'};
+     char sig[4];
+     if (_binaryReader.read(sig, 1, 4) != 4 || memcmp(sig, identifier, 4) != 0)
+     {
+         clear();
+         CCLOG("warning: Invalid C3B identifier: %s", _path.c_str());
+         return false;
+     }
+     
+     // Read version
+     unsigned char ver[2];
+     if (_binaryReader.read(ver, 1, 2)!= 2){
+         CCLOG("warning: Failed to read C3B version:");
+         return false;
+     }
+     
+     char version[20] = {0};
+     sprintf(version, "%d.%d", ver[0], ver[1]);
+     _version = version;
+     
+     // Read ref table size
+     if (_binaryReader.read(&_referenceCount, 4, 1) != 1)
+     {
+         clear();
+         CCLOG("warning: Failed to read ref table size '%s'.", _path.c_str());
+         return false;
+     }
+     
+     // Read all refs
+     CC_SAFE_DELETE_ARRAY(_references);
+     _references = new (std::nothrow) Reference[_referenceCount];
+     for (unsigned int i = 0; i < _referenceCount; ++i)
+     {
+         if ((_references[i].id = _binaryReader.readString()).empty() ||
+             _binaryReader.read(&_references[i].type, 4, 1) != 1 ||
+             _binaryReader.read(&_references[i].offset, 4, 1) != 1)
+         {
+             clear();
+             CCLOG("warning: Failed to read ref number %u for bundle '%s'.", i, _path.c_str());
+             CC_SAFE_DELETE_ARRAY(_references);
+             return false;
+         }
+     }
+     
+     return true;
+}
+
+bool Bundle3D::loadJson(const char *data, size_t size)
+{
+    return loadJson(std::string(data, size));
+}
+
+bool Bundle3D::loadBinary(const unsigned char *data, size_t size)
+{
+    Data d;
+    d.copy(data, size);
+    return loadBinary(std::move(d));
 }
 
 bool Bundle3D::loadMeshDataJson_0_1(MeshDatas& meshdatas)
@@ -1290,7 +1306,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     }
     
     // bone count
-    unsigned int boneNum;
+    uint32_t boneNum;
     if (!_binaryReader.read(&boneNum))
     {
         CCLOG("warning: Failed to read SkinData: boneNum  '%s'.", _path.c_str());
@@ -1338,7 +1354,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     
     // read parent and child relationship map
     float transform[16];
-    unsigned int linkNum;
+    uint32_t linkNum;
     _binaryReader.read(&linkNum);
     for (unsigned int i = 0; i < linkNum; ++i)
     {
@@ -1398,7 +1414,6 @@ bool Bundle3D::loadMaterialDataJson_0_1(MaterialDatas& materialdatas)
             std::string filename = material_data_base_array_0[FILENAME].GetString();
             textureData.filename = filename.empty() ? filename : _modelPath + filename;
             textureData.type= NTextureData::Usage::Diffuse;
-            textureData.id="";
             materialData.textures.push_back(textureData);
             materialdatas.materials.push_back(materialData);
         }
@@ -1423,7 +1438,6 @@ bool Bundle3D::loadMaterialDataJson_0_2(MaterialDatas& materialdatas)
         std::string filename = material_val[TEXTURES].GetString();
         textureData.filename = filename.empty() ? filename : _modelPath + filename;
         textureData.type= NTextureData::Usage::Diffuse;
-        textureData.id="";
         materialData.textures.push_back(textureData);
     }
     materialdatas.materials.push_back(materialData);
@@ -1445,7 +1459,7 @@ bool loadMaterialDataJson_0_2(MaterialData* /*materialdata*/){
 
 bool Bundle3D::loadAnimationDataJson(const std::string& id, Animation3DData* animationdata)
 {
-    std::string anim = "";
+    std::string anim;
     if (_version == "1.2" || _version == "0.2")
         anim = ANIMATION;
     else
@@ -1535,13 +1549,13 @@ bool Bundle3D::loadAnimationDataBinary(const std::string& id, Animation3DData* a
     {
         // if id is not a null string, we need to add a suffix of "animation" for seeding.
         std::string id_ = id;
-        if(id != "") id_ = id + "animation";
+        if(!id.empty()) id_ = id + "animation";
         
         if (!seekToFirstType(BUNDLE_TYPE_ANIMATIONS, id_))
             return false;
     }
     
-    unsigned int animNum = 1;
+    uint32_t animNum = 1;
     if( _version == "0.3"|| _version == "0.4")
     {
         if (!_binaryReader.read(&animNum))
@@ -1563,7 +1577,7 @@ bool Bundle3D::loadAnimationDataBinary(const std::string& id, Animation3DData* a
             return false;
         }
 
-        unsigned int nodeAnimationNum;
+        uint32_t nodeAnimationNum;
         if (!_binaryReader.read(&nodeAnimationNum))
         {
             CCLOG("warning: Failed to read AnimationData: animNum '%s'.", _path.c_str());
@@ -1572,7 +1586,7 @@ bool Bundle3D::loadAnimationDataBinary(const std::string& id, Animation3DData* a
         for (unsigned int i = 0; i < nodeAnimationNum; ++i)
         {
             std::string boneName = _binaryReader.readString();
-            unsigned int keyframeNum;
+            uint32_t keyframeNum;
             if (!_binaryReader.read(&keyframeNum))
             {
                 CCLOG("warning: Failed to read AnimationData: keyframeNum '%s'.", _path.c_str());
@@ -1721,7 +1735,7 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
             modelnodedata->subMeshId = part[MESHPARTID].GetString();
             modelnodedata->materialId = part[MATERIALID].GetString();
 
-            if (modelnodedata->subMeshId == "" || modelnodedata->materialId == "")
+            if (modelnodedata->subMeshId.empty() || modelnodedata->materialId.empty())
             {
                 CCLOG("warning: Node %s part is missing meshPartId or materialId", nodedata->id.c_str());
                 CC_SAFE_DELETE(modelnodedata);
@@ -1803,7 +1817,7 @@ bool Bundle3D::loadNodesBinary(NodeDatas& nodedatas)
     if (!seekToFirstType(BUNDLE_TYPE_NODE))
         return false;
 
-    unsigned int nodeSize = 0;
+    uint32_t nodeSize = 0;
     if (_binaryReader.read(&nodeSize, 4, 1) != 1)
     {
         CCLOG("warning: Failed to read nodes");
@@ -1845,7 +1859,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
         return nullptr;
     }
     // parts
-    unsigned int partsSize = 0;
+    uint32_t partsSize = 0;
     if (_binaryReader.read(&partsSize, 4, 1) != 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
@@ -1865,7 +1879,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             modelnodedata->subMeshId = _binaryReader.readString();
             modelnodedata->materialId = _binaryReader.readString();
 
-            if (modelnodedata->subMeshId == "" || modelnodedata->materialId == "")
+            if (modelnodedata->subMeshId.empty() || modelnodedata->materialId.empty())
             {
                 std::string err = "Node " + nodedata->id + " part is missing meshPartId or materialId";
                 CCLOG("Node %s part is missing meshPartId or materialId", nodedata->id.c_str());
@@ -1875,7 +1889,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             }
 
             // read bone
-            unsigned int bonesSize = 0;
+            uint32_t bonesSize = 0;
             if (_binaryReader.read(&bonesSize, 4, 1) != 1)
             {
                 CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
@@ -1903,7 +1917,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                 }
                 isSkin = true;
             }
-            unsigned int uvMapping = 0;
+            uint32_t uvMapping = 0;
             if (_binaryReader.read(&uvMapping, 4, 1) != 1)
             {
                 CCLOG("warning: Failed to read nodedata: uvMapping '%s'.", _path.c_str());
@@ -1913,7 +1927,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             }
             for(unsigned int j = 0; j < uvMapping; ++j)
             {
-                unsigned int textureIndexSize=0;
+                uint32_t textureIndexSize=0;
                 if (_binaryReader.read(&textureIndexSize, 4, 1) != 1)
                 {
                     CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
@@ -1923,7 +1937,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                 }
                 for(unsigned int k = 0; k < textureIndexSize; ++k)
                 {
-                    unsigned int index=0;
+                    uint32_t index=0;
                     if (_binaryReader.read(&index, 4, 1) != 1)
                     {
                         CC_SAFE_DELETE(modelnodedata);
@@ -1953,7 +1967,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
        nodedata->transform = transform;
    }
     
-    unsigned int childrenSize = 0;
+    uint32_t childrenSize = 0;
     if (_binaryReader.read(&childrenSize, 4, 1) != 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
@@ -2222,7 +2236,7 @@ Reference* Bundle3D::seekToFirstType(unsigned int type, const std::string& id)
         if (ref->type == type)
         {
             // if id is not a null string, we also need to check the Reference's id.
-            if (id != "" && id != ref->id)
+            if (!id.empty() && id != ref->id)
             {
                 continue;
             }
@@ -2246,7 +2260,6 @@ std::vector<Vec3> Bundle3D::getTrianglesList(const std::string& path)
     if (path.length() <= 4)
         return trianglesList;
     
-    auto bundle = Bundle3D::createBundle();
     std::string ext = FileUtils::getInstance()->getFileExtension(path);
     MeshDatas meshs;
     if (ext == ".obj")
@@ -2255,23 +2268,20 @@ std::vector<Vec3> Bundle3D::getTrianglesList(const std::string& path)
         NodeDatas nodes;
         if (!Bundle3D::loadObj(meshs, materials, nodes, path))
         {
-            Bundle3D::destroyBundle(bundle);
             return trianglesList;
         }
     }
     else
     {
-        if (!bundle->load(path))
+        Bundle3D bundle;
+        if (!bundle.load(path))
         {
-            Bundle3D::destroyBundle(bundle);
             return trianglesList;
         }
         
-        bundle->loadMeshDatas(meshs);
-        
+        bundle.loadMeshDatas(meshs);        
     }
     
-    Bundle3D::destroyBundle(bundle);
     for (auto iter : meshs.meshDatas){
         int preVertexSize = iter->getPerVertexSize() / sizeof(float);
         for (const auto& indexArray : iter->subMeshIndices){
@@ -2285,10 +2295,7 @@ std::vector<Vec3> Bundle3D::getTrianglesList(const std::string& path)
 }
 
 Bundle3D::Bundle3D()
-: _modelPath(""),
-_path(""),
-_version(""),
-_referenceCount(0),
+:_referenceCount(0),
 _references(nullptr),
 _isBinary(false)
 {

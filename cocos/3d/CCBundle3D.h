@@ -51,14 +51,7 @@ class Animation3D;
 class CC_DLL Bundle3D
 {
 public:
-    /**
-     * create a new bundle, destroy it when finish using it
-     */
-    static Bundle3D* createBundle();
-    
-    static void destroyBundle(Bundle3D* bundle);
-    
-	virtual void clear();
+	void clear();
 
     /**
     * get define data type
@@ -77,26 +70,26 @@ public:
      * @param path File to be loaded
      * @return result of load
      */
-    virtual bool load(const std::string& path);
+    bool load(const std::string& path);
     
     /**
      * load skin data from bundle
      * @param id The ID of the skin, load the first Skin in the bundle if it is empty
      */
-    virtual bool loadSkinData(const std::string& id, SkinData* skindata);
+    bool loadSkinData(const std::string& id, SkinData* skindata);
     
     /**
      * load material data from bundle
      * @param id The ID of the animation, load the first animation in the bundle if it is empty
      */
-    virtual bool loadAnimationData(const std::string& id, Animation3DData* animationdata);
+    bool loadAnimationData(const std::string& id, Animation3DData* animationdata);
     
     //since 3.3, to support reskin
-    virtual bool loadMeshDatas(MeshDatas& meshdatas);
+    bool loadMeshDatas(MeshDatas& meshdatas);
     //since 3.3, to support reskin
-    virtual bool loadNodes(NodeDatas& nodedatas);
+    bool loadNodes(NodeDatas& nodedatas);
     //since 3.3, to support reskin
-    virtual bool loadMaterials(MaterialDatas& materialdatas);
+    bool loadMaterials(MaterialDatas& materialdatas);
     
     /**
      * load triangle list
@@ -106,14 +99,22 @@ public:
     
     //load .obj file
     static bool loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeDatas& nodedatas, const std::string& fullPath, const char* mtl_basepath = nullptr);
+    static bool loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeDatas& nodedatas, const Data& data, const std::string& fullPath = std::string(), const char* mtl_basepath = nullptr);
     
     //calculate aabb
     static AABB calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index);
   
+    bool loadJsonFrom(const std::string& path);
+    bool loadBinaryFrom(const std::string& path);
+    
+    bool loadJson(std::string text);
+    bool loadBinary(Data data);
+    
+    bool loadJson(const char* data, size_t size);
+    bool loadBinary(const unsigned char* data, size_t size);
+    
 protected:
 
-    bool loadJson(const std::string& path);
-    bool loadBinary(const std::string& path);
     bool loadMeshDatasJson(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_1(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_2(MeshDatas& meshdatas);
@@ -174,21 +175,18 @@ protected:
      */
     Reference* seekToFirstType(unsigned int type, const std::string& id = "");
 
-CC_CONSTRUCTOR_ACCESS:
+public:
     Bundle3D();
-    virtual ~Bundle3D();
+    ~Bundle3D();
     
 protected:
     std::string _modelPath;
     std::string _path;
     std::string _version;// the c3b or c3t version
     
-    // for json reading
     std::string _jsonBuffer;
-    rapidjson::Document _jsonReader;
-
-    // for binary reading
     Data _binaryBuffer;
+    rapidjson::Document _jsonReader;
     BundleReader _binaryReader;
     unsigned int _referenceCount;
     Reference* _references;
