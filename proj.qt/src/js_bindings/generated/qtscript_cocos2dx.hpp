@@ -2757,6 +2757,7 @@ public:
 	Q_INVOKABLE void addAnimation(const QByteArray& key, cocos2d::Animation3D* animation);
 	Q_INVOKABLE cocos2d::Animation3D* getAnimation(const QByteArray& key);
 	Q_INVOKABLE void removeAllAnimations();
+	Q_INVOKABLE void removeAnimation(const QByteArray& key);
 	Q_INVOKABLE void removeUnusedAnimation();
 	static QScriptValue destroyInstance(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);

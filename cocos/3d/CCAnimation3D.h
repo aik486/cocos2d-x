@@ -26,11 +26,10 @@
 #ifndef __CCANIMATION3D_H__
 #define __CCANIMATION3D_H__
 
-#include <unordered_map>
-
 #include "3d/CCAnimationCurve.h"
 
 #include "base/ccMacros.h"
+#include "base/CCMap.h"
 #include "base/CCRef.h"
 #include "3d/CCBundle3DData.h"
 
@@ -117,6 +116,7 @@ public:
     
     /**add animation to cache*/
     void addAnimation(const std::string& key, Animation3D* animation);
+    void removeAnimation(const std::string& key);
     
     /**remove all animation*/
     void removeAllAnimations();
@@ -129,7 +129,7 @@ protected:
     
     static Animation3DCache* _cacheInstance; //cache instance
     
-    std::unordered_map<std::string, Animation3D*> _animations; //cached animations
+    Map<std::string, Animation3D*> _animations; //cached animations
 };
 
 // end of 3d group

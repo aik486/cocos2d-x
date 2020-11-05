@@ -13076,6 +13076,15 @@ void QtScriptAnimation3DCache::removeAllAnimations()
 	}
 }
 
+void QtScriptAnimation3DCache::removeAnimation(const QByteArray& key)
+{
+	auto __o = this->thiz<Animation3DCache *>();
+	if (__o)
+	{
+		__o->removeAnimation(key.toStdString());
+	}
+}
+
 void QtScriptAnimation3DCache::removeUnusedAnimation()
 {
 	auto __o = this->thiz<Animation3DCache *>();

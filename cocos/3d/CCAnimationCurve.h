@@ -63,6 +63,8 @@ public:
     /**create animation curve*/
     static AnimationCurve* create(float* keytime, float* value, int count);
     
+    void init(float* keytime, float* value, int count);
+    
     /**
      * evaluate value of time
      * @param time Time to be estimated
@@ -74,15 +76,16 @@ public:
     /**set evaluate function, allow the user use own function*/
     void setEvaluateFun(std::function<void(float time, float* dst)> fun);
     
+    
     /**get start time*/
     float getStartTime() const;
     
     /**get end time*/
     float getEndTime() const;
     
-CC_CONSTRUCTOR_ACCESS:
-    
     AnimationCurve();
+    
+protected:
     virtual ~AnimationCurve();
     
     /**

@@ -119,6 +119,8 @@ bool Animation3D::init(const Animation3DData &data)
 {
     _duration = data._totalTime;
 
+    std::vector<float> keys;
+    std::vector<float> values;
     for(const auto& iter : data._translationKeys)
     {
         Curve* curve = _boneCurves[iter.first];
@@ -127,10 +129,13 @@ bool Animation3D::init(const Animation3DData &data)
             curve = new (std::nothrow) Curve();
             _boneCurves[iter.first] = curve;
         }
-        
-        if(iter.second.size() == 0) continue;
-        std::vector<float> keys;
-        std::vector<float> values;
+
+        auto count = iter.second.size();        
+        if(count == 0) continue;
+        keys.clear();
+        values.clear();
+        keys.reserve(count);
+        values.reserve(count * 3);
         for(const auto& keyIter : iter.second)
         {
             keys.push_back(keyIter._time);
@@ -139,8 +144,9 @@ bool Animation3D::init(const Animation3DData &data)
             values.push_back(keyIter._key.z);
         }
         
-        curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());
-        if(curve->translateCurve) curve->translateCurve->retain();
+        if (auto tc = curve->translateCurve = new (std::nothrow) Curve::AnimationCurveVec3) {
+            tc->init(&keys[0], &values[0], (int)keys.size());
+        }
     }
     
     for(const auto& iter : data._rotationKeys)
@@ -152,9 +158,12 @@ bool Animation3D::init(const Animation3DData &data)
             _boneCurves[iter.first] = curve;
         }
         
-        if(iter.second.size() == 0) continue;
-        std::vector<float> keys;
-        std::vector<float> values;
+        auto count = iter.second.size();        
+        if(count == 0) continue;
+        keys.clear();
+        values.clear();
+        keys.reserve(count);
+        values.reserve(count * 4);
         for(const auto& keyIter : iter.second)
         {
             keys.push_back(keyIter._time);
@@ -164,8 +173,9 @@ bool Animation3D::init(const Animation3DData &data)
             values.push_back(keyIter._key.w);
         }
         
-        curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0], (int)keys.size());
-        if(curve->rotCurve) curve->rotCurve->retain();
+        if (auto rotCurve = curve->rotCurve = new (std::nothrow) Curve::AnimationCurveQuat) {
+            rotCurve->init(&keys[0], &values[0], (int)keys.size());
+        }
     }
     
     for(const auto& iter : data._scaleKeys)
@@ -177,9 +187,12 @@ bool Animation3D::init(const Animation3DData &data)
             _boneCurves[iter.first] = curve;
         }
         
-        if(iter.second.size() == 0) continue;
-        std::vector<float> keys;
-        std::vector<float> values;
+        auto count = iter.second.size();        
+        if(count == 0) continue;
+        keys.clear();
+        values.clear();
+        keys.reserve(count);
+        values.reserve(count * 3);
         for(const auto& keyIter : iter.second)
         {
             keys.push_back(keyIter._time);
@@ -188,8 +201,9 @@ bool Animation3D::init(const Animation3DData &data)
             values.push_back(keyIter._key.z);
         }
         
-        curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());
-        if(curve->scaleCurve) curve->scaleCurve->retain();
+        if (auto scaleCurve = curve->scaleCurve = new (std::nothrow)  Curve::AnimationCurveVec3) {
+            curve->scaleCurve->init(&keys[0], &values[0], (int)keys.size());
+        }
     }
     
     return true;
@@ -235,23 +249,24 @@ void Animation3DCache::addAnimation(const std::string& key, Animation3D* animati
     {
         return; // already have this key
     }
-    _animations[key] = animation;
-    animation->retain();
+    _animations.insert(key, animation);
+}
+
+void Animation3DCache::removeAnimation(const std::string &key)
+{
+    _animations.erase(key);
 }
 
 void Animation3DCache::removeAllAnimations()
 {
-    for (auto itor : _animations) {
-        CC_SAFE_RELEASE(itor.second);
-    }
     _animations.clear();
 }
+
 void Animation3DCache::removeUnusedAnimation()
 {
     for (auto itor = _animations.begin(); itor != _animations.end(); ) {
         if (itor->second->getReferenceCount() == 1)
         {
-            itor->second->release();
             itor = _animations.erase(itor);
         }
         else
