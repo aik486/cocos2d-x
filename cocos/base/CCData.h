@@ -108,7 +108,7 @@ public:
      *        2. The pointer should not be used outside after it was passed to this method.
      *  @see Data::copy
      */
-    void fastSet(unsigned char* bytes, const ssize_t size);
+    void fastSet(unsigned char* bytes, const ssize_t size, bool own = true);
 
     /**
      * Clears data, free buffer and reset data size.
@@ -149,6 +149,7 @@ private:
 private:
     unsigned char* _bytes;
     ssize_t _size;
+    bool _own;
 };
 
 
