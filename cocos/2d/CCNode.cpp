@@ -246,6 +246,8 @@ Node *Node::clone() const
 void Node::copyPropertiesFrom(const Node *from)
 {
     setRotation3D(from->getRotation3D());
+    setRotationSkewX(from->getRotationSkewX());
+    setRotationSkewY(from->getRotationSkewY());
     setSkewX(from->getSkewX());
     setSkewY(from->getSkewY());
     setScaleX(from->getScaleX());
@@ -266,7 +268,7 @@ void Node::copyPropertiesFrom(const Node *from)
     setOpacity(from->getOpacity());
     setColor(from->getColor());
     setVisible(from->isVisible());
-    auto fromProgramState=from->getProgramState();
+    auto fromProgramState = from->getProgramState();
     setProgramState(fromProgramState ? fromProgramState->clone(): nullptr);
     setContentSize(from->getContentSize());
 }
