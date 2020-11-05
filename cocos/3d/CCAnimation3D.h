@@ -43,6 +43,7 @@ NS_CC_BEGIN
 /**
  * @brief static animation data, shared
  */
+class Bundle3D;
 class CC_DLL Animation3D: public Ref
 {
     friend class Bundle3D;
@@ -68,7 +69,8 @@ public:
     };
     
     /**read all animation or only the animation with given animationName? animationName == "" read the first.*/
-    static Animation3D* create(const std::string& filename, const std::string& animationName = "");
+    static Animation3D* create(const std::string& filename, const std::string& animationName = std::string());
+    static Animation3D* createWithBundle(Bundle3D* bundle, const std::string &animationName = std::string());
        
     /**get duration*/
     float getDuration() const { return _duration; }
@@ -89,6 +91,7 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Animation3D();  
     /**init Animation3D from bundle data*/
     bool init(const Animation3DData& data);
+    bool initWithBundle(Bundle3D* bundle, const std::string &animationName);
     
     /**init Animation3D with file name and animation name*/
     bool initWithFile(const std::string& filename, const std::string& animationName);

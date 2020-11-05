@@ -12873,6 +12873,10 @@ void QtScriptAnimation3D::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptAnimation3D::create)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("createWithBundle", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptAnimation3D::createWithBundle)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 float QtScriptAnimation3D::getDuration()
@@ -12883,6 +12887,16 @@ float QtScriptAnimation3D::getDuration()
 		return __o->getDuration();
 	}
 	return static_cast<float>(0);
+}
+
+bool QtScriptAnimation3D::initWithBundle(cocos2d::Bundle3D* bundle, const QByteArray& animationName)
+{
+	auto __o = this->thiz<Animation3D *>();
+	if (__o)
+	{
+		return __o->initWithBundle(bundle, animationName.toStdString());
+	}
+	return false;
 }
 
 bool QtScriptAnimation3D::initWithFile(const QByteArray& filename, const QByteArray& animationName)
@@ -12922,6 +12936,34 @@ QScriptValue QtScriptAnimation3D::create(QScriptContext *context, QScriptEngine*
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Animation3D::create");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptAnimation3D::createWithBundle(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 2))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 1:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::Bundle3D*>(context->argument(0));
+			return __e->toScriptValue(Animation3D::createWithBundle(arg0));
+		}
+		case 2:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::Bundle3D*>(context->argument(0));
+			auto tmp_1 = qscriptvalue_cast<QByteArray>(context->argument(1));
+			auto arg1 = tmp_1.toStdString();
+			return __e->toScriptValue(Animation3D::createWithBundle(arg0, arg1));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Animation3D::createWithBundle");
 	return __e->uncaughtException();
 }
 
@@ -42277,6 +42319,16 @@ void QtScriptTextureCache::addImageAsync(const QByteArray& path, QScriptValue ca
 	}
 }
 
+cocos2d::Texture2D* QtScriptTextureCache::getCachedTexture(const QByteArray& filepath)
+{
+	auto __o = this->thiz<TextureCache *>();
+	if (__o)
+	{
+		return __o->getCachedTexture(filepath.toStdString());
+	}
+	return nullptr;
+}
+
 QByteArray QtScriptTextureCache::getCachedTextureInfo()
 {
 	auto __o = this->thiz<TextureCache *>();
@@ -45634,6 +45686,81 @@ QScriptValue QtScriptSkybox::create(QScriptContext *context, QScriptEngine* __e)
 } // end of cocos2d
 
 namespace cocos2d {
+QtScriptSprite3DData::QtScriptSprite3DData(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptRef(engine, className)
+{
+}
+
+QtScriptSprite3DData::QtScriptSprite3DData(QScriptEngine *engine)
+	: QtScriptSprite3DData(engine, "Sprite3DData")
+{
+}
+
+void QtScriptSprite3DData::Register(const QScriptValue &targetNamespace)
+{
+	auto engine = targetNamespace.engine();
+	Q_ASSERT(engine);
+	auto inherit = engine->defaultPrototype(qMetaTypeId<Ref *>());
+	auto ctor = RegisterT<Sprite3DData, QtScriptSprite3DData>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+}
+
+int QtScriptSprite3DData::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptSprite3DData::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptSprite3DData::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	if (context->argumentCount() == 0)
+	{
+		out = new Sprite3DData;
+		return true;
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+		"cocos2d::Sprite3DData constructor");
+	return false;
+}
+
+bool QtScriptSprite3DData::loadFromBundle(cocos2d::Bundle3D* bundle)
+{
+	auto __o = this->thiz<Sprite3DData *>();
+	if (__o)
+	{
+		return __o->loadFromBundle(bundle);
+	}
+	return false;
+}
+
+bool QtScriptSprite3DData::loadFromFile(const QByteArray& filePath)
+{
+	auto __o = this->thiz<Sprite3DData *>();
+	if (__o)
+	{
+		return __o->loadFromFile(filePath.toStdString());
+	}
+	return false;
+}
+
+bool QtScriptSprite3DData::loadFromObj(const QByteArray& filePath)
+{
+	auto __o = this->thiz<Sprite3DData *>();
+	if (__o)
+	{
+		return __o->loadFromObj(filePath.toStdString());
+	}
+	return false;
+}
+
+} // end of cocos2d
+
+namespace cocos2d {
 QtScriptSprite3DCache::QtScriptSprite3DCache(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptBaseClassPrototype<Sprite3DCache, false>(engine, className)
 {
@@ -45659,6 +45786,36 @@ void QtScriptSprite3DCache::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3DCache::getInstance)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+}
+
+bool QtScriptSprite3DCache::addSprite3DData(const QByteArray& key, cocos2d::Sprite3DData* spritedata)
+{
+	auto __o = this->thiz<Sprite3DCache *>();
+	if (__o)
+	{
+		return __o->addSprite3DData(key.toStdString(), spritedata);
+	}
+	return false;
+}
+
+cocos2d::Sprite3DData* QtScriptSprite3DCache::getDataFromFileCached(const QByteArray& filePath)
+{
+	auto __o = this->thiz<Sprite3DCache *>();
+	if (__o)
+	{
+		return __o->getDataFromFileCached(filePath.toStdString());
+	}
+	return nullptr;
+}
+
+cocos2d::Sprite3DData* QtScriptSprite3DCache::getSpriteData(const QByteArray& key)
+{
+	auto __o = this->thiz<Sprite3DCache *>();
+	if (__o)
+	{
+		return __o->getSpriteData(key.toStdString());
+	}
+	return nullptr;
 }
 
 void QtScriptSprite3DCache::removeAllSprite3DData()
@@ -45784,6 +45941,10 @@ void QtScriptSprite3D::Register(const QScriptValue &targetNamespace)
 	ctor.setProperty("createAsyncWithSkeleton", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3D::createAsyncWithSkeleton)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("createWithSkeleton", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptSprite3D::createWithSkeleton)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	ctor.setProperty("getAABBRecursivelyImp", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
@@ -45975,6 +46136,16 @@ bool QtScriptSprite3D::initWithFile(const QByteArray& path, cocos2d::Skeleton3D*
 	return false;
 }
 
+bool QtScriptSprite3D::initWithSkeleton(const QByteArray& modelPath, const QByteArray& skeletonPath)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->initWithSkeleton(modelPath.toStdString(), skeletonPath.toStdString());
+	}
+	return false;
+}
+
 bool QtScriptSprite3D::isForce2Dqueue()
 {
 	auto __o = this->thiz<Sprite3D *>();
@@ -46015,12 +46186,12 @@ bool QtScriptSprite3D::loadFromCache(const QByteArray& path)
 	return false;
 }
 
-bool QtScriptSprite3D::loadFromCache(const QByteArray& path, cocos2d::Skeleton3D* skele)
+bool QtScriptSprite3D::loadFromCache(const QByteArray& path, const QByteArray& skeletonPath)
 {
 	auto __o = this->thiz<Sprite3D *>();
 	if (__o)
 	{
-		return __o->loadFromCache(path.toStdString(), skele);
+		return __o->loadFromCache(path.toStdString(), skeletonPath.toStdString());
 	}
 	return false;
 }
@@ -46040,6 +46211,15 @@ void QtScriptSprite3D::removeAttachNode(const QByteArray& boneName)
 	if (__o)
 	{
 		__o->removeAttachNode(boneName.toStdString());
+	}
+}
+
+void QtScriptSprite3D::reset()
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		__o->reset();
 	}
 }
 
@@ -46236,6 +46416,40 @@ QScriptValue QtScriptSprite3D::createAsyncWithSkeleton(QScriptContext *context, 
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Sprite3D::createAsyncWithSkeleton");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptSprite3D::createWithSkeleton(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 2, 3))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 2:
+		{
+			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
+			auto arg0 = tmp_0.toStdString();
+			auto tmp_1 = qscriptvalue_cast<QByteArray>(context->argument(1));
+			auto arg1 = tmp_1.toStdString();
+			return __e->toScriptValue(Sprite3D::createWithSkeleton(arg0, arg1));
+		}
+		case 3:
+		{
+			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
+			auto arg0 = tmp_0.toStdString();
+			auto tmp_1 = qscriptvalue_cast<QByteArray>(context->argument(1));
+			auto arg1 = tmp_1.toStdString();
+			auto tmp_2 = qscriptvalue_cast<QByteArray>(context->argument(2));
+			auto arg2 = tmp_2.toStdString();
+			return __e->toScriptValue(Sprite3D::createWithSkeleton(arg0, arg1, arg2));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Sprite3D::createWithSkeleton");
 	return __e->uncaughtException();
 }
 
@@ -47204,6 +47418,183 @@ void QtScriptBuffer::usingDefaultStoredData(bool needDefaultStoredData)
 
 } // end of cocos2d
 
+namespace cocos2d {
+QtScriptBundle3D::QtScriptBundle3D(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptBaseClassPrototype<Bundle3D *, false>(engine, className)
+{
+}
+
+QtScriptBundle3D::QtScriptBundle3D(QScriptEngine *engine)
+	: QtScriptBundle3D(engine, "Bundle3D")
+{
+}
+
+void QtScriptBundle3D::Register(const QScriptValue &targetNamespace)
+{
+	auto engine = targetNamespace.engine();
+	Q_ASSERT(engine);
+	QScriptValue inherit;
+	auto ctor = RegisterT<Bundle3D, QtScriptBundle3D>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+	ctor.setProperty("parseGLDataType", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptBundle3D::parseGLDataType)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("parseSamplerAddressMode", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptBundle3D::parseSamplerAddressMode)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+}
+
+void QtScriptBundle3D::clear()
+{
+	auto __o = this->thiz<Bundle3D *>();
+	if (__o)
+	{
+		__o->clear();
+	}
+}
+
+bool QtScriptBundle3D::isLoaded()
+{
+	auto __o = this->thiz<Bundle3D *>();
+	if (__o)
+	{
+		return __o->isLoaded();
+	}
+	return false;
+}
+
+bool QtScriptBundle3D::load(const QByteArray& path)
+{
+	auto __o = this->thiz<Bundle3D *>();
+	if (__o)
+	{
+		return __o->load(path.toStdString());
+	}
+	return false;
+}
+
+bool QtScriptBundle3D::loadBinary(cocos2d::Data data)
+{
+	auto __o = this->thiz<Bundle3D *>();
+	if (__o)
+	{
+		return __o->loadBinary(data);
+	}
+	return false;
+}
+
+bool QtScriptBundle3D::loadBinaryFrom(const QByteArray& path)
+{
+	auto __o = this->thiz<Bundle3D *>();
+	if (__o)
+	{
+		return __o->loadBinaryFrom(path.toStdString());
+	}
+	return false;
+}
+
+bool QtScriptBundle3D::loadJson(QByteArray text)
+{
+	auto __o = this->thiz<Bundle3D *>();
+	if (__o)
+	{
+		return __o->loadJson(text.toStdString());
+	}
+	return false;
+}
+
+bool QtScriptBundle3D::loadJsonFrom(const QByteArray& path)
+{
+	auto __o = this->thiz<Bundle3D *>();
+	if (__o)
+	{
+		return __o->loadJsonFrom(path.toStdString());
+	}
+	return false;
+}
+
+QScriptValue QtScriptBundle3D::parseGLDataType(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 2, 2))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 2:
+		{
+			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
+			auto arg0 = tmp_0.toStdString();
+			auto arg1 = qscriptvalue_cast<int>(context->argument(1));
+			return __e->toScriptValue(int(Bundle3D::parseGLDataType(arg0, arg1)));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Bundle3D::parseGLDataType");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptBundle3D::parseSamplerAddressMode(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 1:
+		{
+			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
+			auto arg0 = tmp_0.toStdString();
+			return __e->toScriptValue(int(Bundle3D::parseSamplerAddressMode(arg0)));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Bundle3D::parseSamplerAddressMode");
+	return __e->uncaughtException();
+}
+
+int QtScriptBundle3D::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptBundle3D::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptBundle3D::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	auto __e = context->engine();
+	Q_UNUSED(__e);
+	bool ok = false;
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			out = new Bundle3D();
+			ok = true;
+			break;
+		}
+	}
+
+	if (!ok)
+	{
+		QtScriptUtils::badArgumentsException(context,
+			"cocos2d::Bundle3D constructor");
+	}
+	return ok;
+}
+
+} // end of cocos2d
+
 void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 {
 	QScriptValue targetNamespace;
@@ -47240,6 +47631,7 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptBlendFunc::Register(targetNamespace);
 	cocos2d::QtScriptBlink::Register(targetNamespace);
 	cocos2d::QtScriptBone3D::Register(targetNamespace);
+	cocos2d::QtScriptBundle3D::Register(targetNamespace);
 	cocos2d::QtScriptCallFunc::Register(targetNamespace);
 	cocos2d::QtScriptCallFuncN::Register(targetNamespace);
 	cocos2d::QtScriptCallbackCommand::Register(targetNamespace);
@@ -47444,6 +47836,7 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptSprite::Register(targetNamespace);
 	cocos2d::QtScriptSprite3D::Register(targetNamespace);
 	cocos2d::QtScriptSprite3DCache::Register(targetNamespace);
+	cocos2d::QtScriptSprite3DData::Register(targetNamespace);
 	cocos2d::QtScriptSprite3DMaterial::Register(targetNamespace);
 	cocos2d::QtScriptSprite3DMaterialCache::Register(targetNamespace);
 	cocos2d::QtScriptSpriteBatchNode::Register(targetNamespace);

@@ -38,7 +38,7 @@ Animation3D* Animation3D::create(const std::string& fileName, const std::string&
         return animation;
     
     animation = new (std::nothrow) Animation3D();
-    if(animation->initWithFile(fileName, animationName))
+    if(animation && animation->initWithFile(fileName, animationName))
     {
         animation->autorelease();
     }
@@ -50,22 +50,30 @@ Animation3D* Animation3D::create(const std::string& fileName, const std::string&
     return animation;
 }
 
+Animation3D *Animation3D::createWithBundle(Bundle3D* bundle, const std::string &animationName)
+{
+    auto animation = new (std::nothrow) Animation3D();   
+    if (animation && animation->initWithBundle(bundle, animationName)) {
+        animation->autorelease();
+    } else {
+        CC_SAFE_DELETE(animation);
+    }
+    
+    return animation;
+}
+
 bool Animation3D::initWithFile(const std::string& filename, const std::string& animationName)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
     
     //load animation here
-    auto bundle = Bundle3D::createBundle();
-    Animation3DData animationdata;
-    if (bundle->load(fullPath) && bundle->loadAnimationData(animationName, &animationdata) && init(animationdata))
+    Bundle3D bundle;
+    if (bundle.load(fullPath) && initWithBundle(&bundle, animationName))
     {
         std::string key = fullPath + "#" + animationName;
         Animation3DCache::getInstance()->addAnimation(key, this);
-        Bundle3D::destroyBundle(bundle);
         return true;
     }
-    
-    Bundle3D::destroyBundle(bundle);
     
     return false;
 }
@@ -185,6 +193,16 @@ bool Animation3D::init(const Animation3DData &data)
     }
     
     return true;
+}
+
+bool Animation3D::initWithBundle(Bundle3D *bundle, const std::string& animationName)
+{
+    if (!bundle || !bundle->isLoaded()) {
+        return false;
+    }   
+    
+    Animation3DData animationdata;
+    return bundle->loadAnimationData(animationName, &animationdata) && init(animationdata);
 }
 
 ////////////////////////////////////////////////////////////////

@@ -146,19 +146,11 @@ void getChildMap(std::map<int, std::vector<int> >& map, SkinData* skinData, cons
     }
 }
 
-Bundle3D* Bundle3D::createBundle()
-{
-    auto bundle = new (std::nothrow) Bundle3D();
-    return bundle;
-}
-
-void Bundle3D::destroyBundle(Bundle3D* bundle)
-{
-    delete bundle;
-}
-
 void Bundle3D::clear()
 {
+    _isLoaded = false;
+    _modelPath.clear();
+    _path.clear();
     _jsonBuffer.clear();
     _binaryBuffer.clear();
     _jsonReader = rapidjson::Document();
@@ -326,13 +318,12 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeD
     return false;
 }
 
-bool Bundle3D::loadObj(MeshDatas &meshdatas, MaterialDatas &materialdatas, NodeDatas &nodedatas, const Data &data, const std::string &fullPath, const char *mtl_basepath)
-{
-    
-}
-
 bool Bundle3D::loadSkinData(const std::string& /*id*/, SkinData* skindata)
 {
+    if (!_isLoaded) {
+        return false;
+    }
+    
     skindata->resetData();
 
     if (_isBinary)
@@ -347,6 +338,10 @@ bool Bundle3D::loadSkinData(const std::string& /*id*/, SkinData* skindata)
 
 bool Bundle3D::loadAnimationData(const std::string& id, Animation3DData* animationdata)
 {
+    if (!_isLoaded) {
+        return false;
+    }
+    
     animationdata->resetData();
 
     if (_isBinary)
@@ -362,6 +357,10 @@ bool Bundle3D::loadAnimationData(const std::string& id, Animation3DData* animati
 //since 3.3, to support reskin
 bool Bundle3D::loadMeshDatas(MeshDatas& meshdatas)
 {
+    if (!_isLoaded) {
+        return false;
+    }
+    
     meshdatas.resetData();
     if (_isBinary)
     {
@@ -809,6 +808,10 @@ bool  Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
 }
 bool Bundle3D::loadNodes(NodeDatas& nodedatas)
 {
+    if (!_isLoaded) {
+        return false;
+    }
+    
     if (_version == "0.1" || _version == "1.2" || _version == "0.2")
     {
         SkinData   skinData;
@@ -873,6 +876,10 @@ bool Bundle3D::loadNodes(NodeDatas& nodedatas)
 }
 bool Bundle3D::loadMaterials(MaterialDatas& materialdatas)
 {
+    if (!_isLoaded) {
+        return false;
+    }
+    
     materialdatas.resetData();
     if (_isBinary)
     {
@@ -1074,6 +1081,7 @@ bool Bundle3D::loadJson(std::string text)
     else
         _version = mash_data_array.GetString();
     
+    _isLoaded = true;
     return true;    
 }
 
@@ -1134,6 +1142,7 @@ bool Bundle3D::loadBinary(Data data)
          }
      }
      
+     _isLoaded = true;
      return true;
 }
 
@@ -2295,9 +2304,10 @@ std::vector<Vec3> Bundle3D::getTrianglesList(const std::string& path)
 }
 
 Bundle3D::Bundle3D()
-:_referenceCount(0),
-_references(nullptr),
-_isBinary(false)
+:_referenceCount(0)
+,_references(nullptr)
+,_isBinary(false)
+,_isLoaded(false)  
 {
 
 }

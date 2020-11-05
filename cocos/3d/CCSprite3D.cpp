@@ -87,8 +87,6 @@ Sprite3D* Sprite3D::create()
 
 Sprite3D* Sprite3D::create(const std::string& modelPath)
 {
-    CCASSERT(modelPath.length() >= 4, "invalid filename for Sprite3D");
-    
     auto sprite = new (std::nothrow) Sprite3D();
     if (sprite && sprite->initWithFile(modelPath))
     {
@@ -98,9 +96,33 @@ Sprite3D* Sprite3D::create(const std::string& modelPath)
     CC_SAFE_DELETE(sprite);
     return nullptr;
 }
+
 Sprite3D* Sprite3D::create(const std::string& modelPath, const std::string& texturePath)
 {
     auto sprite = create(modelPath);
+    if (sprite)
+    {
+        sprite->setTexture(texturePath);
+    }
+    
+    return sprite;
+}
+
+Sprite3D *Sprite3D::createWithSkeleton(const std::string &modelPath, const std::string &skeletonPath)
+{
+    auto sprite = new (std::nothrow) Sprite3D;
+    if (sprite && sprite->initWithSkeleton(modelPath, skeletonPath))
+    {
+        sprite->autorelease();
+        return sprite;
+    }
+    CC_SAFE_DELETE(sprite);
+    return nullptr;
+}
+
+Sprite3D *Sprite3D::createWithSkeleton(const std::string &modelPath, const std::string &skeletonPath, const std::string &texturePath)
+{
+    auto sprite = createWithSkeleton(modelPath, skeletonPath);
     if (sprite)
     {
         sprite->setTexture(texturePath);
@@ -141,20 +163,28 @@ void Sprite3D::createAsync(const std::string& modelPath, const std::string &skel
     auto &param = sprite->_asyncLoadParam;
     param.afterLoadCallback = callback;
     param.texPath = texturePath;
-    param.skeletonPath = skeletonPath;
     param.modelPath = modelPath;
     param.callbackParam = callbackparam;
-    param.modelData.reset(new (std::nothrow) Sprite3DCache::Sprite3DData);
     
-    if (!skeletonPath.empty() && skeletonPath != modelPath && !Sprite3DCache::getInstance()->getSpriteData(skeletonPath))
+    auto cache = Sprite3DCache::getInstance();
+    
+    if (!cache->getSpriteData(modelPath)) {
+        param.modelData.reset(new (std::nothrow) Sprite3DData);
+    }
+    
+    if (!skeletonPath.empty() && skeletonPath != modelPath && !cache->getSpriteData(skeletonPath))
     {
-        param.skeletonData.reset(new (std::nothrow) Sprite3DCache::Sprite3DData);
+        param.skeletonPath = skeletonPath;
+        param.skeletonData.reset(new (std::nothrow) Sprite3DData);
     } 
     
-    AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(Sprite3D::afterAsyncLoad, sprite), (void*)(&sprite->_asyncLoadParam), [sprite]()
+    AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(Sprite3D::afterAsyncLoad, sprite), nullptr, [sprite]()
     {
         auto &param = sprite->_asyncLoadParam;
-        bool ok = param.modelData->loadFromFile(param.modelPath);
+        bool ok = true;
+        if (param.modelData) {
+            ok = param.modelData->loadFromFile(param.modelPath);
+        }
         if (ok && param.skeletonData)
         {
             ok = param.skeletonData->loadFromFile(param.skeletonPath);
@@ -164,63 +194,54 @@ void Sprite3D::createAsync(const std::string& modelPath, const std::string &skel
     
 }
 
-void Sprite3D::afterAsyncLoad(void* param)
+void Sprite3D::afterAsyncLoad(void*)
 {
-    Sprite3D::AsyncLoadParam* asyncParam = (Sprite3D::AsyncLoadParam*)param;
     autorelease();
-    if (asyncParam)
+    if (_asyncLoadParam.result)
     {
-        if (asyncParam->result)
-        {
-            _meshes.clear();
-            _meshesSorted.clear();
-            _meshVertexDatas.clear();
-            CC_SAFE_RELEASE_NULL(_skeleton);
-            removeAllAttachNode();
-            
-            auto& skeletonDataPtr = asyncParam->skeletonData;
-            
-            Sprite3DCache::Sprite3DData* skeletonData = nullptr;
-            if (skeletonDataPtr)
+        auto cache = Sprite3DCache::getInstance();
+        
+        Sprite3DData* skeletonData = nullptr;
+        if (!_asyncLoadParam.skeletonPath.empty()) {
+            auto& skeletonDataPtr = _asyncLoadParam.skeletonData;
+            skeletonData = cache->getSpriteData(_asyncLoadParam.skeletonPath);
+            if (skeletonDataPtr && !skeletonData)
             {
-                skeletonData = Sprite3DCache::getInstance()->getSpriteData(asyncParam->skeletonPath);
-                if (!skeletonData)
-                {
-                    skeletonData = skeletonDataPtr.release();
-                    Sprite3DCache::getInstance()->addSprite3DData(asyncParam->skeletonPath, skeletonData);
-                    CC_SAFE_RELEASE(skeletonData);
-                }
-            }
-
-            
-            //create in the main thread
-            auto& modelDataPtr = asyncParam->modelData;
-            auto modelData = Sprite3DCache::getInstance()->getSpriteData(asyncParam->modelPath);
-            if (modelDataPtr && !modelData)
-            {
-                modelData = modelDataPtr.release();
-                Sprite3DCache::getInstance()->addSprite3DData(asyncParam->modelPath, modelData);
-                CC_SAFE_RELEASE(modelData);
-            }
-            
-            if (modelData) {
-                applySpriteData(modelData, skeletonData ? Skeleton3D::create(skeletonData->nodedatas.skeleton) : nullptr);
-                genMaterial();
-            }
-            
-            if (!asyncParam->texPath.empty())
-            {
-                setTexture(asyncParam->texPath);
+                skeletonData = skeletonDataPtr.release();
+                cache->addSprite3DData(_asyncLoadParam.skeletonPath, skeletonData);
+                CC_SAFE_RELEASE(skeletonData);
             }
         }
-        else
+        
+        //create in the main thread
+        auto& modelDataPtr = _asyncLoadParam.modelData;
+        auto modelData = cache->getSpriteData(_asyncLoadParam.modelPath);
+        if (modelDataPtr && !modelData)
         {
-            CCLOG("file load failed: %s ", asyncParam->modelPath.c_str());
-            if (!asyncParam->skeletonPath.empty() && asyncParam->skeletonPath != asyncParam->modelPath)
-                CCLOG("file load failed: %s ", asyncParam->skeletonPath.c_str());
+            modelData = modelDataPtr.release();
+            cache->addSprite3DData(_asyncLoadParam.modelPath, modelData);
+            CC_SAFE_RELEASE(modelData);
         }
-        asyncParam->afterLoadCallback(this, asyncParam->callbackParam);
+        
+        if (modelData) {
+            applySpriteData(modelData, skeletonData ? Skeleton3D::create(skeletonData->nodedatas.skeleton) : nullptr);
+        }
+        
+        if (!_asyncLoadParam.texPath.empty())
+        {
+            setTexture(_asyncLoadParam.texPath);
+        }
     }
+    else
+    {
+        CCLOG("file load failed: %s ", _asyncLoadParam.modelPath.c_str());
+        if (!_asyncLoadParam.skeletonPath.empty() && _asyncLoadParam.skeletonPath != _asyncLoadParam.modelPath)
+            CCLOG("file load failed: %s ", _asyncLoadParam.skeletonPath.c_str());
+    }
+    _asyncLoadParam.afterLoadCallback(this, _asyncLoadParam.callbackParam);
+    
+    AsyncLoadParam dummy;
+    std::swap(dummy, _asyncLoadParam);
 }
 
 AABB Sprite3D::getAABBRecursivelyImp(Node *node)
@@ -246,6 +267,7 @@ bool Sprite3D::loadFromCache(const std::string& path, const std::string& skeleto
         {
             return loadFromCache(path, spritedata->nodedatas.skeleton);
         }
+        return false;
     }
     
     return loadFromCache(path);
@@ -273,11 +295,11 @@ void Sprite3D::setSkeleton(Skeleton3D *skeleton)
     CC_SAFE_RETAIN(_skeleton);
 }
 
-void Sprite3D::applySpriteData(Sprite3DCache::Sprite3DData *spritedata, Skeleton3D* skele)
+void Sprite3D::applySpriteData(Sprite3DData *spritedata, Skeleton3D* skele)
 {
     spritedata->prepareMeshVertexData();
+    reset();
     _meshVertexDatas.reserve(spritedata->meshVertexDatas.size());
-    _meshVertexDatas.clear();
     for (auto it : spritedata->meshVertexDatas) {
         _meshVertexDatas.pushBack(it);
     }
@@ -317,6 +339,8 @@ void Sprite3D::applySpriteData(Sprite3DCache::Sprite3DData *spritedata, Skeleton
             _meshes.at(i)->setProgramState(glstate->clone());
         }
     }
+    
+    genMaterial();
 }
 
 bool Sprite3D::loadFromCache(const std::string& path, Skeleton3D* skele /*= nullptr*/)
@@ -361,27 +385,25 @@ Sprite3D::Sprite3D()
 , _usingAutogeneratedGLProgram(true)
 , _forceDisableDepthTest(false)
 {
+    setTextureCacheProtocol(nullptr);
 }
 
 Sprite3D::~Sprite3D()
 {
-    _meshes.clear();
-    _meshesSorted.clear();
-    _meshVertexDatas.clear();
-    CC_SAFE_RELEASE_NULL(_skeleton);
-    removeAllAttachNode();
+    reset();
 }
 
 bool Sprite3D::init()
 {
     if(Node::init())
     {
+        reset();
         return true;
     }
     return false;
 }
 
-bool Sprite3D::initWithFile(const std::string& path, Skeleton3D* skele /*= nullptr*/)
+void Sprite3D::reset()
 {
     _aabbDirty = true;
     _meshes.clear();
@@ -389,23 +411,43 @@ bool Sprite3D::initWithFile(const std::string& path, Skeleton3D* skele /*= nullp
     _meshVertexDatas.clear();
     CC_SAFE_RELEASE_NULL(_skeleton);
     removeAllAttachNode();
+}
+
+bool Sprite3D::initWithSkeleton(const std::string &modelPath, const std::string &skeletonPath)
+{
+    if (skeletonPath.empty() || skeletonPath == modelPath) {
+        return initWithFile(modelPath);
+    }
     
-    if (loadFromCache(path, skele))
-        return true;
-    
-    auto modelData = new (std::nothrow) Sprite3DCache::Sprite3DData;
-    if (modelData && modelData->loadFromFile(path))
-    {
-        applySpriteData(modelData, skele);
-        genMaterial();
-        
-        Sprite3DCache::getInstance()->addSprite3DData(path, modelData);
-        CC_SAFE_RELEASE(modelData);
+    if (loadFromCache(modelPath, skeletonPath)) {
         return true;
     }
-    CC_SAFE_DELETE(modelData);
     
-    return false;
+    auto cache = Sprite3DCache::getInstance();
+    auto skeletonData = cache->getDataFromFileCached(skeletonPath);
+    if (!skeletonData) {
+        return false;
+    }
+    auto modelData = cache->getDataFromFileCached(modelPath);
+    if (!modelData) {
+        return false;
+    }
+    
+    applySpriteData(modelData, Skeleton3D::create(skeletonData->nodedatas.skeleton));
+    return true;
+}
+
+bool Sprite3D::initWithFile(const std::string& path, Skeleton3D* skele /*= nullptr*/)
+{
+    if (loadFromCache(path, skele))
+        return true;
+ 
+    auto modelData = Sprite3DCache::getInstance()->getDataFromFileCached(path);
+    if (!modelData) {
+        return false;
+    }
+    applySpriteData(modelData, skele);
+    return true;
 }
 
 Mesh *Sprite3D::createMesh(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas) const
@@ -450,7 +492,7 @@ Mesh *Sprite3D::createMesh(NodeData* nodedata, ModelData* modeldata, const Mater
             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
             if (textureData)
             {
-                auto tex = Director::getInstance()->getTextureCache()->addImage(adjustTextureExtension(textureData->filename));
+                auto tex = _textureCacheProtocol->getCachedTexture(adjustTextureExtension(textureData->filename));
                 if(tex)
                 {
                     Texture2D::TexParams texParams;
@@ -686,7 +728,7 @@ void  Sprite3D::addMesh(Mesh* mesh)
 
 void Sprite3D::setTexture(const std::string& texFile)
 {
-    auto tex = Director::getInstance()->getTextureCache()->addImage(adjustTextureExtension(texFile));
+    auto tex = _textureCacheProtocol->getCachedTexture(adjustTextureExtension(texFile));
     setTexture(tex);
 }
 
@@ -746,7 +788,7 @@ void Sprite3D::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTra
     if (_meshesSorted.empty())
     {
         _meshesSorted = _meshes;
-        std::stable_sort(_meshesSorted.begin(), _meshesSorted.end(), [](Mesh* a, Mesh* b) -> bool {
+        std::stable_sort(_meshesSorted.begin(), _meshesSorted.end(), [](Mesh* a, Mesh*) -> bool {
             return !a->_isTransparent;
         });
     }
@@ -970,6 +1012,11 @@ void Sprite3D::setForce2DQueue(bool force2D)
     _force2Dqueue = force2D;
 }
 
+void Sprite3D::setTextureCacheProtocol(TextureCacheProtocol *cache)
+{
+    _textureCacheProtocol = cache ? cache : _director->getTextureCache();
+}
+
 ///////////////////////////////////////////////////////////////////////////////////
 Sprite3DCache* Sprite3DCache::_cacheInstance = nullptr;
 Sprite3DCache* Sprite3DCache::getInstance()
@@ -987,12 +1034,27 @@ void Sprite3DCache::destroyInstance()
     }
 }
 
-Sprite3DCache::Sprite3DData* Sprite3DCache::getSpriteData(const std::string& key) const
+Sprite3DData* Sprite3DCache::getSpriteData(const std::string& key) const
 {
     auto it = _spriteDatas.find(key);
     if (it != _spriteDatas.end())
         return it->second;
     return nullptr;
+}
+
+Sprite3DData *Sprite3DCache::getDataFromFileCached(const std::string &filePath) 
+{
+    auto data = getSpriteData(filePath);
+    if (!data) {
+        data = new (std::nothrow) Sprite3DData;   
+        if (data && data->loadFromFile(filePath)) {
+            addSprite3DData(filePath, data);   
+            CC_SAFE_RELEASE(data);
+        } else {
+            CC_SAFE_DELETE(data);
+        }
+    }
+    return data;
 }
 
 bool Sprite3DCache::addSprite3DData(const std::string& key, Sprite3DData* spritedata)
@@ -1061,13 +1123,13 @@ static Sprite3DMaterial* getSprite3DMaterialForAttribs(const MeshVertexData* mes
     return ret;
 }
 
-Sprite3DCache::Sprite3DData::~Sprite3DData()
+Sprite3DData::~Sprite3DData()
 {
     meshVertexDatas.clear();
     programStates.clear();
 }
 
-bool Sprite3DCache::Sprite3DData::loadFromFile(const std::string &filePath)
+bool Sprite3DData::loadFromFile(const std::string &filePath)
 {
     std::string ext = FileUtils::getInstance()->getFileExtension(filePath);
     if (ext == ".obj")
@@ -1084,7 +1146,7 @@ bool Sprite3DCache::Sprite3DData::loadFromFile(const std::string &filePath)
     return false;
 }
 
-bool Sprite3DCache::Sprite3DData::loadFromObj(const std::string &filePath)
+bool Sprite3DData::loadFromObj(const std::string &filePath)
 {
     NodeDatas nodedatas;
     MeshDatas meshdatas;
@@ -1097,7 +1159,7 @@ bool Sprite3DCache::Sprite3DData::loadFromObj(const std::string &filePath)
     return ok;
 }
 
-bool Sprite3DCache::Sprite3DData::loadFromBundle(Bundle3D *bundle)
+bool Sprite3DData::loadFromBundle(Bundle3D *bundle)
 {
     NodeDatas nodedatas;
     MeshDatas meshdatas;
@@ -1112,7 +1174,7 @@ bool Sprite3DCache::Sprite3DData::loadFromBundle(Bundle3D *bundle)
     return ok;
 }
 
-void Sprite3DCache::Sprite3DData::prepareMeshVertexData()
+void Sprite3DData::prepareMeshVertexData()
 {
     if (meshdatas.meshDatas.empty()) {
         return;
@@ -1130,7 +1192,7 @@ void Sprite3DCache::Sprite3DData::prepareMeshVertexData()
     meshdatas.resetData();
 }
 
-void Sprite3DCache::Sprite3DData::apply(NodeDatas &nodedatas, MeshDatas &meshdatas, MaterialDatas &materialdatas)
+void Sprite3DData::apply(NodeDatas &nodedatas, MeshDatas &meshdatas, MaterialDatas &materialdatas)
 {
     programStates.clear();
     meshVertexDatas.clear();

@@ -99,7 +99,6 @@ public:
     
     //load .obj file
     static bool loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeDatas& nodedatas, const std::string& fullPath, const char* mtl_basepath = nullptr);
-    static bool loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeDatas& nodedatas, const Data& data, const std::string& fullPath = std::string(), const char* mtl_basepath = nullptr);
     
     //calculate aabb
     static AABB calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index);
@@ -112,6 +111,8 @@ public:
     
     bool loadJson(const char* data, size_t size);
     bool loadBinary(const unsigned char* data, size_t size);
+    
+    inline bool isLoaded() const;
     
 protected:
 
@@ -179,6 +180,10 @@ public:
     Bundle3D();
     ~Bundle3D();
     
+private:
+    Bundle3D(const Bundle3D&) = delete;
+    Bundle3D& operator=(const Bundle3D&) = delete;
+    
 protected:
     std::string _modelPath;
     std::string _path;
@@ -190,8 +195,14 @@ protected:
     BundleReader _binaryReader;
     unsigned int _referenceCount;
     Reference* _references;
-    bool  _isBinary;
+    bool _isBinary;
+    bool _isLoaded;
 };
+
+bool Bundle3D::isLoaded() const
+{
+    return _isLoaded;
+}
 
 // end of 3d group
 /// @}
