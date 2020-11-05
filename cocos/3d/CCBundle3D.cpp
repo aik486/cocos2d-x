@@ -149,47 +149,34 @@ void getChildMap(std::map<int, std::vector<int> >& map, SkinData* skinData, cons
 void Bundle3D::clear()
 {
     _isLoaded = false;
+    _referenceCount = 0;
     _modelPath.clear();
     _path.clear();
+    _version.clear();
     _jsonBuffer.clear();
     _binaryBuffer.clear();
     _jsonReader = rapidjson::Document();
-    if (_isBinary)
-    {
-        CC_SAFE_DELETE_ARRAY(_references);
-    }
+    CC_SAFE_DELETE_ARRAY(_references);
 }
 
 bool Bundle3D::load(const std::string& path)
 {
     if (path.empty())
         return false;
-    
-    if (_path == path)
-        return true;
-
-    getModelRelativePath(path);
-    _path = path;
-
+   
     bool ret = false;
     std::string ext = FileUtils::getInstance()->getFileExtension(path);
     if (ext == ".c3t")
     {
-        _isBinary = false;
         ret = loadJsonFrom(path);
     }
     else if (ext == ".c3b")
     {
-        _isBinary = true;
         ret = loadBinaryFrom(path);
     }
     else 
     {
-        CCLOG("warning: %s is invalid file formate", path.c_str());
-    }
-
-    if (!ret) {
-        _path.clear();
+        CCLOG("warning: %s unknown Bundle3D format", path.c_str());
     }
     return ret;
 }
@@ -1053,24 +1040,62 @@ bool  Bundle3D::loadMaterialsJson(MaterialDatas& materialdatas)
 }
 bool Bundle3D::loadJsonFrom(const std::string& path)
 {
-    return loadJson(FileUtils::getInstance()->getStringFromFile(path));
+    if (path.empty())
+        return false;
+    
+    if (_path == path)
+        return true;
+    
+    clear();
+    getModelRelativePath(path);
+    _path = path;
+    
+    bool ok = loadJsonInternal(FileUtils::getInstance()->getStringFromFile(path));
+    
+    if (!ok) {
+        clear();
+    }
+    
+    return ok;
 }
 
 bool Bundle3D::loadBinaryFrom(const std::string& path)
 {
-    // get file data
-    return loadBinary(FileUtils::getInstance()->getDataFromFile(path));
+    if (path.empty())
+        return false;
+    
+    if (_path == path)
+        return true;
+    
+    clear();
+    getModelRelativePath(path);
+    _path = path;
+    
+    bool ok = loadBinaryInternal(FileUtils::getInstance()->getDataFromFile(path));
+    if (!ok) {
+        clear();
+    }
+    
+    return ok;
 }
 
 bool Bundle3D::loadJson(std::string text)
 {
     clear();
+    bool ok = loadJsonInternal(std::move(text));
+    if (!ok) {
+        clear();
+    }
+    
+    return ok;
+}
 
+bool Bundle3D::loadJsonInternal(std::string text)
+{
     _jsonBuffer = std::move(text);
 
     if (_jsonReader.ParseInsitu<0>(&_jsonBuffer[0]).HasParseError())
     {
-        clear();
         CCLOG("Parse json failed in Bundle3D::loadJson function");
         return false;
     }
@@ -1081,13 +1106,24 @@ bool Bundle3D::loadJson(std::string text)
     else
         _version = mash_data_array.GetString();
     
+    _isBinary = false;
     _isLoaded = true;
     return true;    
 }
 
 bool Bundle3D::loadBinary(Data data)
-{    
+{
     clear();
+    bool ok = loadBinaryInternal(std::move(data));
+    if (!ok) {
+        clear();
+    }
+    
+    return ok;
+}
+
+bool Bundle3D::loadBinaryInternal(Data data)
+{    
     _binaryBuffer = std::move(data);
      if (_binaryBuffer.isNull())
      {
@@ -1102,7 +1138,6 @@ bool Bundle3D::loadBinary(Data data)
      char sig[4];
      if (_binaryReader.read(sig, 1, 4) != 4 || memcmp(sig, identifier, 4) != 0)
      {
-         clear();
          CCLOG("warning: Invalid C3B identifier: %s", _path.c_str());
          return false;
      }
@@ -1121,13 +1156,11 @@ bool Bundle3D::loadBinary(Data data)
      // Read ref table size
      if (_binaryReader.read(&_referenceCount, 4, 1) != 1)
      {
-         clear();
          CCLOG("warning: Failed to read ref table size '%s'.", _path.c_str());
          return false;
      }
      
      // Read all refs
-     CC_SAFE_DELETE_ARRAY(_references);
      _references = new (std::nothrow) Reference[_referenceCount];
      for (unsigned int i = 0; i < _referenceCount; ++i)
      {
@@ -1135,13 +1168,12 @@ bool Bundle3D::loadBinary(Data data)
              _binaryReader.read(&_references[i].type, 4, 1) != 1 ||
              _binaryReader.read(&_references[i].offset, 4, 1) != 1)
          {
-             clear();
              CCLOG("warning: Failed to read ref number %u for bundle '%s'.", i, _path.c_str());
-             CC_SAFE_DELETE_ARRAY(_references);
              return false;
          }
      }
      
+     _isBinary = true;
      _isLoaded = true;
      return true;
 }

@@ -114,8 +114,10 @@ public:
     
     inline bool isLoaded() const;
     
-protected:
-
+private:
+    bool loadJsonInternal(std::string text);
+    bool loadBinaryInternal(Data data);
+    
     bool loadMeshDatasJson(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_1(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_2(MeshDatas& meshdatas);
@@ -184,7 +186,7 @@ private:
     Bundle3D(const Bundle3D&) = delete;
     Bundle3D& operator=(const Bundle3D&) = delete;
     
-protected:
+private:
     std::string _modelPath;
     std::string _path;
     std::string _version;// the c3b or c3t version
