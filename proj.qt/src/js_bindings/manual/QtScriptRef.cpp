@@ -60,7 +60,10 @@ QScriptValue QtScriptRef::newScriptObject(QScriptContext *context)
 
 QString QtScriptRef::toString() const
 {
-	return QStringLiteral("[cc.%1]").arg(mClassName);
+	auto sc = dynamic_cast<QtScriptRef *>(thisObject().scriptClass());
+	auto className = sc ? sc->mClassName : mClassName;
+
+	return QStringLiteral("[cc.%1]").arg(className);
 }
 
 QScriptValue QtScriptRef::cast(QScriptContext *context, QScriptEngine *)
