@@ -45987,6 +45987,24 @@ bool QtScriptSprite3D::constructObject(QScriptContext *context, NativeObjectType
 	return false;
 }
 
+void QtScriptSprite3D::applySpriteData(cocos2d::Sprite3DData* data)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		__o->applySpriteData(data);
+	}
+}
+
+void QtScriptSprite3D::applySpriteData(cocos2d::Sprite3DData* data, cocos2d::Sprite3DData* skele)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		__o->applySpriteData(data, skele);
+	}
+}
+
 void QtScriptSprite3D::genMaterial()
 {
 	auto __o = this->thiz<Sprite3D *>();

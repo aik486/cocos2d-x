@@ -10242,6 +10242,8 @@ public:
 	Q_PROPERTY(bool forceDepthWrite READ isForceDepthWrite WRITE setForceDepthWrite)
 	Q_PROPERTY(bool forceDisableDepthTest READ isForceDisableDepthTest WRITE setForceDisableDepthTest)
 	Q_PROPERTY(unsigned int lightMask READ getLightMask WRITE setLightMask)
+	Q_INVOKABLE void applySpriteData(cocos2d::Sprite3DData* data);
+	Q_INVOKABLE void applySpriteData(cocos2d::Sprite3DData* data, cocos2d::Sprite3DData* skele);
 	Q_INVOKABLE void genMaterial();
 	Q_INVOKABLE void genMaterial(bool useLight);
 	Q_INVOKABLE cocos2d::AABB getAABB();

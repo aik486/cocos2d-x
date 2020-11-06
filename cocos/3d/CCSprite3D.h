@@ -292,6 +292,7 @@ CC_CONSTRUCTOR_ACCESS:
     
     bool loadFromCache(const std::string& path, Sprite3DData* skele = nullptr);
     
+    void applySpriteData(Sprite3DData *data, Sprite3DData *skele = nullptr);
 
     /**
      * Visits this Sprite3D's children and draw them recursively.
@@ -324,7 +325,6 @@ CC_CONSTRUCTOR_ACCESS:
 private:
     void afterAsyncLoad(void *);
     void setSkeleton(Skeleton3D* skeleton);
-    void applySpriteData(Sprite3DData *data, Sprite3DData *skele);
     Mesh *createMesh(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas) const;
     static std::string adjustTextureExtension(const std::string &fileName);
 

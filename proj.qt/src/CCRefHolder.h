@@ -11,6 +11,8 @@ class RefHolder
 	T mObject;
 
 public:
+	using RefType = T;
+
 	inline T object() const
 	{
 		return mObject;
