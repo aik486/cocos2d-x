@@ -10257,13 +10257,14 @@ public:
 	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexData(const QByteArray& indexId);
 	Q_INVOKABLE cocos2d::Skeleton3D* getSkeleton();
 	Q_INVOKABLE bool initWithFile(const QByteArray& path);
-	Q_INVOKABLE bool initWithFile(const QByteArray& path, cocos2d::Skeleton3D* skele);
-	Q_INVOKABLE bool initWithSkeleton(const QByteArray& modelPath, const QByteArray& skeletonPath);
+	Q_INVOKABLE bool initWithFile(const QByteArray& path, cocos2d::Sprite3DData* skele);
+	Q_INVOKABLE bool initWithSkeletonFile(const QByteArray& modelPath, const QByteArray& skeletonPath);
 	Q_INVOKABLE bool isForce2Dqueue();
 	bool isForceDepthWrite();
 	bool isForceDisableDepthTest();
 	Q_INVOKABLE bool loadFromCache(const QByteArray& path);
-	Q_INVOKABLE bool loadFromCache(const QByteArray& path, const QByteArray& skeletonPath);
+	Q_INVOKABLE bool loadFromCache(const QByteArray& path, cocos2d::Sprite3DData* skele);
+	Q_INVOKABLE bool loadFromCacheWithSkeleton(const QByteArray& path, const QByteArray& skeletonPath);
 	Q_INVOKABLE void removeAllAttachNode();
 	Q_INVOKABLE void removeAttachNode(const QByteArray& boneName);
 	Q_INVOKABLE void reset();

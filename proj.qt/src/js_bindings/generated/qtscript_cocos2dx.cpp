@@ -46135,7 +46135,7 @@ bool QtScriptSprite3D::initWithFile(const QByteArray& path)
 	return false;
 }
 
-bool QtScriptSprite3D::initWithFile(const QByteArray& path, cocos2d::Skeleton3D* skele)
+bool QtScriptSprite3D::initWithFile(const QByteArray& path, cocos2d::Sprite3DData* skele)
 {
 	auto __o = this->thiz<Sprite3D *>();
 	if (__o)
@@ -46145,12 +46145,12 @@ bool QtScriptSprite3D::initWithFile(const QByteArray& path, cocos2d::Skeleton3D*
 	return false;
 }
 
-bool QtScriptSprite3D::initWithSkeleton(const QByteArray& modelPath, const QByteArray& skeletonPath)
+bool QtScriptSprite3D::initWithSkeletonFile(const QByteArray& modelPath, const QByteArray& skeletonPath)
 {
 	auto __o = this->thiz<Sprite3D *>();
 	if (__o)
 	{
-		return __o->initWithSkeleton(modelPath.toStdString(), skeletonPath.toStdString());
+		return __o->initWithSkeletonFile(modelPath.toStdString(), skeletonPath.toStdString());
 	}
 	return false;
 }
@@ -46195,12 +46195,22 @@ bool QtScriptSprite3D::loadFromCache(const QByteArray& path)
 	return false;
 }
 
-bool QtScriptSprite3D::loadFromCache(const QByteArray& path, const QByteArray& skeletonPath)
+bool QtScriptSprite3D::loadFromCache(const QByteArray& path, cocos2d::Sprite3DData* skele)
 {
 	auto __o = this->thiz<Sprite3D *>();
 	if (__o)
 	{
-		return __o->loadFromCache(path.toStdString(), skeletonPath.toStdString());
+		return __o->loadFromCache(path.toStdString(), skele);
+	}
+	return false;
+}
+
+bool QtScriptSprite3D::loadFromCacheWithSkeleton(const QByteArray& path, const QByteArray& skeletonPath)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->loadFromCacheWithSkeleton(path.toStdString(), skeletonPath.toStdString());
 	}
 	return false;
 }

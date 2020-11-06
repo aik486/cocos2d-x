@@ -111,7 +111,7 @@ Sprite3D* Sprite3D::create(const std::string& modelPath, const std::string& text
 Sprite3D *Sprite3D::createWithSkeleton(const std::string &modelPath, const std::string &skeletonPath)
 {
     auto sprite = new (std::nothrow) Sprite3D;
-    if (sprite && sprite->initWithSkeleton(modelPath, skeletonPath))
+    if (sprite && sprite->initWithSkeletonFile(modelPath, skeletonPath))
     {
         sprite->autorelease();
         return sprite;
@@ -151,7 +151,7 @@ void Sprite3D::createAsync(const std::string& modelPath, const std::string &skel
 {
     Sprite3D *sprite = new (std::nothrow) Sprite3D();
         
-    if (sprite->loadFromCache(modelPath, skeletonPath))
+    if (sprite->loadFromCacheWithSkeleton(modelPath, skeletonPath))
     {
         sprite->autorelease();
         if (!texturePath.empty())
@@ -224,7 +224,7 @@ void Sprite3D::afterAsyncLoad(void*)
         }
         
         if (modelData) {
-            applySpriteData(modelData, skeletonData ? Skeleton3D::create(skeletonData->nodedatas.skeleton) : nullptr);
+            applySpriteData(modelData, skeletonData);
         }
         
         if (!_asyncLoadParam.texPath.empty())
@@ -258,31 +258,19 @@ AABB Sprite3D::getAABBRecursivelyImp(Node *node)
     return aabb;
 }
 
-bool Sprite3D::loadFromCache(const std::string& path, const std::string& skeletonPath)
+bool Sprite3D::loadFromCacheWithSkeleton(const std::string& path, const std::string& skeletonPath)
 {
     if (!skeletonPath.empty() && skeletonPath != path)
     {
-        auto spritedata = Sprite3DCache::getInstance()->getSpriteData(skeletonPath);
-        if (spritedata)
+        auto skele = Sprite3DCache::getInstance()->getSpriteData(skeletonPath);
+        if (skele)
         {
-            return loadFromCache(path, spritedata->nodedatas.skeleton);
+            return loadFromCache(path, skele);
         }
         return false;
     }
     
     return loadFromCache(path);
-}
-
-bool Sprite3D::loadFromCache(const std::string& path, const std::vector<NodeData*>& skeletonData)
-{
-    auto spritedata = Sprite3DCache::getInstance()->getSpriteData(path);
-    if (spritedata)
-    {
-        applySpriteData(spritedata, Skeleton3D::create(skeletonData));
-        return true;
-    }
-    
-    return false;
 }
 
 void Sprite3D::setSkeleton(Skeleton3D *skeleton)
@@ -295,8 +283,9 @@ void Sprite3D::setSkeleton(Skeleton3D *skeleton)
     CC_SAFE_RETAIN(_skeleton);
 }
 
-void Sprite3D::applySpriteData(Sprite3DData *spritedata, Skeleton3D* skele)
+void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
 {
+    CC_ASSERT(spritedata);
     spritedata->prepareMeshVertexData();
     reset();
     _meshVertexDatas.reserve(spritedata->meshVertexDatas.size());
@@ -304,7 +293,10 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Skeleton3D* skele)
         _meshVertexDatas.pushBack(it);
     }
 
-    setSkeleton(skele ? skele : Skeleton3D::create(spritedata->nodedatas.skeleton));
+    if (!skele) {
+        skele = spritedata;
+    }
+    setSkeleton(Skeleton3D::create(skele->nodedatas.skeleton));
 
     const bool singleSprite = (spritedata->nodedatas.nodes.size() == 1);
     for(const auto& it : spritedata->nodedatas.nodes)
@@ -315,13 +307,11 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Skeleton3D* skele)
         }
     }
     
-    if(!skele){
-        for(const auto& it : spritedata->nodedatas.skeleton)
+    for(const auto& it : skele->nodedatas.skeleton)
+    {
+        if(it)
         {
-            if(it)
-            {
-                createAttachSprite3DNode(it, spritedata->materialdatas);
-            }
+            createAttachSprite3DNode(it, spritedata->materialdatas);
         }
     }
 
@@ -343,7 +333,7 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Skeleton3D* skele)
     genMaterial();
 }
 
-bool Sprite3D::loadFromCache(const std::string& path, Skeleton3D* skele /*= nullptr*/)
+bool Sprite3D::loadFromCache(const std::string& path, Sprite3DData *skele /*= nullptr*/)
 {
     auto spritedata = Sprite3DCache::getInstance()->getSpriteData(path);
     if (spritedata)
@@ -413,13 +403,13 @@ void Sprite3D::reset()
     removeAllAttachNode();
 }
 
-bool Sprite3D::initWithSkeleton(const std::string &modelPath, const std::string &skeletonPath)
+bool Sprite3D::initWithSkeletonFile(const std::string &modelPath, const std::string &skeletonPath)
 {
     if (skeletonPath.empty() || skeletonPath == modelPath) {
         return initWithFile(modelPath);
     }
     
-    if (loadFromCache(modelPath, skeletonPath)) {
+    if (loadFromCacheWithSkeleton(modelPath, skeletonPath)) {
         return true;
     }
     
@@ -433,11 +423,11 @@ bool Sprite3D::initWithSkeleton(const std::string &modelPath, const std::string 
         return false;
     }
     
-    applySpriteData(modelData, Skeleton3D::create(skeletonData->nodedatas.skeleton));
+    applySpriteData(modelData, skeletonData);
     return true;
 }
 
-bool Sprite3D::initWithFile(const std::string& path, Skeleton3D* skele /*= nullptr*/)
+bool Sprite3D::initWithFile(const std::string& path, Sprite3DData *skele /*= nullptr*/)
 {
     if (loadFromCache(path, skele))
         return true;

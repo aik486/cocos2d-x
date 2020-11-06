@@ -285,13 +285,12 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
     void reset();
     
-    bool initWithSkeleton(const std::string &modelPath, const std::string& skeletonPath);
-    bool initWithFile(const std::string &path, Skeleton3D* skele = nullptr);
+    bool initWithSkeletonFile(const std::string &modelPath, const std::string& skeletonPath);
+    bool initWithFile(const std::string &path, Sprite3DData* skele = nullptr);
     
-    bool loadFromCache(const std::string& path, const std::string& skeletonPath);
-    /**load sprite3d from cache, return true if succeed, false otherwise*/
-    bool loadFromCache(const std::string& path, Skeleton3D* skele = nullptr);
-    bool loadFromCache(const std::string& path, const std::vector<NodeData*>& skeletonData);
+    bool loadFromCacheWithSkeleton(const std::string& path, const std::string& skeletonPath);
+    
+    bool loadFromCache(const std::string& path, Sprite3DData* skele = nullptr);
     
 
     /**
@@ -325,7 +324,7 @@ CC_CONSTRUCTOR_ACCESS:
 private:
     void afterAsyncLoad(void *);
     void setSkeleton(Skeleton3D* skeleton);
-    void applySpriteData(Sprite3DData *data, Skeleton3D* skele);
+    void applySpriteData(Sprite3DData *data, Sprite3DData *skele);
     Mesh *createMesh(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas) const;
     static std::string adjustTextureExtension(const std::string &fileName);
 
