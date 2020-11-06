@@ -334,7 +334,7 @@ Sprite3DMaterialCache::Sprite3DMaterialCache()
 
 Sprite3DMaterialCache::~Sprite3DMaterialCache()
 {
-    removeAllSprite3DMaterial();
+    removeAllTextures();
 }
 
 Sprite3DMaterialCache* Sprite3DMaterialCache::getInstance()
@@ -355,43 +355,43 @@ void Sprite3DMaterialCache::destroyInstance()
     }
 }
 
-bool Sprite3DMaterialCache::addSprite3DMaterial(const std::string& key, Texture2D* texture)
+bool Sprite3DMaterialCache::addTexture(const std::string& key, Texture2D* texture)
 {
     auto itr = _materials.find(key);
     if (itr == _materials.end())
     {
-        CC_SAFE_RETAIN(texture);
-        _materials[key] = texture;
+        _materials.insert(key, texture);
         return true;
     }
     return false;
 }
 
-Texture2D* Sprite3DMaterialCache::getSprite3DMaterial(const std::string& key)
+Texture2D *Sprite3DMaterialCache::getCachedTexture(const std::string &key)
 {
-    auto itr = _materials.find(key);
-    if (itr != _materials.end())
-    {
-        return itr->second;
+    auto it = _materials.find(key);
+    if (it == _materials.end()) {
+        return nullptr;
     }
-    return nullptr;
+    
+    return it->second;
 }
 
-void Sprite3DMaterialCache::removeAllSprite3DMaterial()
+void Sprite3DMaterialCache::removeTexture(const std::string &key)
 {
-    for (auto& itr : _materials) {
-        CC_SAFE_RELEASE_NULL(itr.second);
-    }
+    _materials.erase(key);
+}
+
+void Sprite3DMaterialCache::removeAllTextures()
+{
     _materials.clear();
 }
-void Sprite3DMaterialCache::removeUnusedSprite3DMaterial()
+
+void Sprite3DMaterialCache::removeUnusedTextures()
 {
     for(auto it=_materials.cbegin(), itCend = _materials.cend(); it != itCend; /* nothing */) {
         auto value = it->second;
         if( value->getReferenceCount() == 1 ) {
             CCLOG("cocos2d: Sprite3DMaterialCache: removing unused Sprite3DMaterial");
-            
-            value->release();
             it = _materials.erase(it);
         } else {
             ++it;

@@ -285,6 +285,13 @@ void Sprite3D::setSkeleton(Skeleton3D *skeleton)
 
 void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
 {
+    if (skele == spritedata) {
+        skele = nullptr;
+    }
+    
+    setSpriteData(spritedata);
+    setSkeletonData(skele);
+    
     CC_ASSERT(spritedata);
     spritedata->prepareMeshVertexData();
     reset();
@@ -367,6 +374,8 @@ static bool loadFromBundle(Bundle3D* bundle, NodeDatas* nodedatas, MeshDatas* me
 
 Sprite3D::Sprite3D()
 : _skeleton(nullptr)
+, _spriteData(nullptr)
+, _skeletonData(nullptr)
 , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
 , _aabbDirty(true)
 , _lightMask(-1)
@@ -399,8 +408,10 @@ void Sprite3D::reset()
     _meshes.clear();
     _meshesSorted.clear();
     _meshVertexDatas.clear();
-    CC_SAFE_RELEASE_NULL(_skeleton);
     removeAllAttachNode();
+    CC_SAFE_RELEASE_NULL(_spriteData);
+    CC_SAFE_RELEASE_NULL(_skeletonData);
+    CC_SAFE_RELEASE_NULL(_skeleton);
 }
 
 bool Sprite3D::initWithSkeletonFile(const std::string &modelPath, const std::string &skeletonPath)
@@ -528,6 +539,29 @@ Sprite3D* Sprite3D::createSprite3DNode(NodeData* nodedata,ModelData* modeldata,c
     }
     return   sprite;
 }
+
+void Sprite3D::setSpriteData(Sprite3DData *data)
+{
+    if (data == _spriteData) {
+        return;
+    }
+    
+    CC_SAFE_RELEASE(_spriteData);
+    _spriteData = data;
+    CC_SAFE_RETAIN(_spriteData);
+}
+
+void Sprite3D::setSkeletonData(Sprite3DData *data)
+{
+    if (_skeletonData == data) {
+        return;
+    }
+    
+    CC_SAFE_RELEASE(_skeletonData);
+    _skeletonData = data;
+    CC_SAFE_RETAIN(_skeletonData);
+}
+
 void Sprite3D::createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas)
 {
     for(const auto& it : nodedata->modelNodeDatas)
@@ -1065,16 +1099,24 @@ bool Sprite3DCache::addSprite3DData(const std::string& key, Sprite3DData* sprite
 
 void Sprite3DCache::removeSprite3DData(const std::string& key)
 {
-    auto it = _spriteDatas.find(key);
-    if (it != _spriteDatas.end())
-    {
-        _spriteDatas.erase(it);
-    }
+    _spriteDatas.erase(key);
 }
 
 void Sprite3DCache::removeAllSprite3DData()
 {
     _spriteDatas.clear();
+}
+
+void Sprite3DCache::removeUnusedSprite3DData()
+{
+    for (auto itor = _spriteDatas.begin(); itor != _spriteDatas.end(); ) {
+        if (itor->second->getReferenceCount() == 1)
+        {
+            itor = _spriteDatas.erase(itor);
+        }
+        else
+            ++itor;
+    }
 }
 
 Sprite3DCache::Sprite3DCache()

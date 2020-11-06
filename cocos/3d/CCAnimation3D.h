@@ -121,7 +121,7 @@ public:
     /**remove all animation*/
     void removeAllAnimations();
     /**remove unused animation*/
-    void removeUnusedAnimation();
+    void removeUnusedAnimations();
 
 protected:
     Animation3DCache();

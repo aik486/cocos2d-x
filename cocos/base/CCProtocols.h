@@ -282,9 +282,10 @@ public:
 };
 
 struct CC_DLL TextureCacheProtocol {
-    virtual ~TextureCacheProtocol() = default;
-    
     virtual Texture2D* getCachedTexture(const std::string& key) = 0;
+    
+protected:
+    virtual ~TextureCacheProtocol() = default;
 };
 
 NS_CC_END

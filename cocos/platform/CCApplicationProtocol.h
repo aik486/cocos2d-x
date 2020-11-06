@@ -62,6 +62,7 @@ public:
         // OS_WP8          /**< Windows Phone 8 Applications */
     };
 
+protected:
     /**
      * @js NA
      * @lua NA
@@ -70,6 +71,7 @@ public:
         /** clean auto release pool. */
         PoolManager::destroyInstance();
     }
+public:
 
     /**
     * @brief    Implement Director and Scene init code here.
@@ -150,6 +152,7 @@ public:
      * @lua NA
      */
     virtual bool openURL(const std::string &url) = 0;
+    
 };
 
 // end of platform group

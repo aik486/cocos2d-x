@@ -262,7 +262,7 @@ void Animation3DCache::removeAllAnimations()
     _animations.clear();
 }
 
-void Animation3DCache::removeUnusedAnimation()
+void Animation3DCache::removeUnusedAnimations()
 {
     for (auto itor = _animations.begin(); itor != _animations.end(); ) {
         if (itor->second->getReferenceCount() == 1)

@@ -103,8 +103,10 @@ public:
     
     /**remove all the SpriteData from Sprite3D*/
     void removeAllSprite3DData();
+    /**remove unused */
+    void removeUnusedSprite3DData();
     
-    CC_CONSTRUCTOR_ACCESS:
+protected:
     Sprite3DCache();
     ~Sprite3DCache();
     
@@ -277,8 +279,7 @@ public:
     inline TextureCacheProtocol* getTextureCacheProtocol() const;
     void setTextureCacheProtocol(TextureCacheProtocol* cache);
 
-CC_CONSTRUCTOR_ACCESS:
-    
+public:
     Sprite3D();
     virtual ~Sprite3D() override;
     
@@ -303,10 +304,6 @@ CC_CONSTRUCTOR_ACCESS:
     /**generate default material*/
     void genMaterial(bool useLight = false);
 
-    void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite);
-    void createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas);
-    Sprite3D* createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
-
     /**get MeshIndexData by Id*/
     MeshIndexData* getMeshIndexData(const std::string& indexId) const;
     
@@ -321,8 +318,14 @@ CC_CONSTRUCTOR_ACCESS:
     
     bool isForceDisableDepthTest();
     void setForceDisableDepthTest(bool is);
+
+protected:    
+    void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite);
+    void createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas);
+    Sprite3D* createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
     
-private:
+    void setSpriteData(Sprite3DData* data);    
+    void setSkeletonData(Sprite3DData* data);
     void afterAsyncLoad(void *);
     void setSkeleton(Skeleton3D* skeleton);
     Mesh *createMesh(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas) const;
@@ -332,6 +335,8 @@ protected:
 
     TextureCacheProtocol*        _textureCacheProtocol;
     Skeleton3D*                  _skeleton; //skeleton
+    Sprite3DData*                _spriteData;
+    Sprite3DData*                _skeletonData;
     
     Vector<MeshVertexData*>      _meshVertexDatas;
     

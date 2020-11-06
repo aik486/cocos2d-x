@@ -9414,6 +9414,54 @@ bool QtScriptTexture2D::constructObject(QScriptContext *context, NativeObjectTyp
 } // end of cocos2d
 
 namespace cocos2d {
+QtScriptTextureCacheProtocol::QtScriptTextureCacheProtocol(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptBaseClassPrototype<TextureCacheProtocol *, true>(engine, className)
+{
+}
+
+QtScriptTextureCacheProtocol::QtScriptTextureCacheProtocol(QScriptEngine *engine)
+	: QtScriptTextureCacheProtocol(engine, "TextureCacheProtocol")
+{
+}
+
+void QtScriptTextureCacheProtocol::Register(const QScriptValue &targetNamespace)
+{
+	QScriptValue inherit;
+	auto ctor = RegisterT<TextureCacheProtocol, QtScriptTextureCacheProtocol>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+}
+
+int QtScriptTextureCacheProtocol::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptTextureCacheProtocol::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptTextureCacheProtocol::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	Q_UNUSED(out);
+	QtScriptUtils::noPublicConstructorException(context,
+		"cocos2d::TextureCacheProtocol");
+	return false;
+}
+
+cocos2d::Texture2D* QtScriptTextureCacheProtocol::getCachedTexture(const QByteArray& key)
+{
+	auto __o = this->thiz<TextureCacheProtocol *>();
+	if (__o)
+	{
+		return __o->getCachedTexture(key.toStdString());
+	}
+	return nullptr;
+}
+
+} // end of cocos2d
+
+namespace cocos2d {
 QtScriptTouch::QtScriptTouch(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptRef(engine, className)
 {
@@ -13085,12 +13133,12 @@ void QtScriptAnimation3DCache::removeAnimation(const QByteArray& key)
 	}
 }
 
-void QtScriptAnimation3DCache::removeUnusedAnimation()
+void QtScriptAnimation3DCache::removeUnusedAnimations()
 {
 	auto __o = this->thiz<Animation3DCache *>();
 	if (__o)
 	{
-		__o->removeUnusedAnimation();
+		__o->removeUnusedAnimations();
 	}
 }
 
@@ -42797,7 +42845,7 @@ QScriptValue QtScriptDeviceUtils::vibrate(QScriptContext *context, QScriptEngine
 
 namespace cocos2d {
 QtScriptApplicationProtocol::QtScriptApplicationProtocol(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<ApplicationProtocol *, false>(engine, className)
+	: QtScriptBaseClassPrototype<ApplicationProtocol *, true>(engine, className)
 {
 }
 
@@ -45771,7 +45819,7 @@ bool QtScriptSprite3DData::loadFromObj(const QByteArray& filePath)
 
 namespace cocos2d {
 QtScriptSprite3DCache::QtScriptSprite3DCache(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<Sprite3DCache, false>(engine, className)
+	: QtScriptBaseClassPrototype<Sprite3DCache *, true>(engine, className)
 {
 }
 
@@ -45795,6 +45843,24 @@ void QtScriptSprite3DCache::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3DCache::getInstance)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+}
+
+int QtScriptSprite3DCache::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptSprite3DCache::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptSprite3DCache::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	Q_UNUSED(out);
+	QtScriptUtils::noPublicConstructorException(context,
+		"cocos2d::Sprite3DCache");
+	return false;
 }
 
 bool QtScriptSprite3DCache::addSprite3DData(const QByteArray& key, cocos2d::Sprite3DData* spritedata)
@@ -45845,6 +45911,15 @@ void QtScriptSprite3DCache::removeSprite3DData(const QByteArray& key)
 	}
 }
 
+void QtScriptSprite3DCache::removeUnusedSprite3DData()
+{
+	auto __o = this->thiz<Sprite3DCache *>();
+	if (__o)
+	{
+		__o->removeUnusedSprite3DData();
+	}
+}
+
 QScriptValue QtScriptSprite3DCache::destroyInstance(QScriptContext *context, QScriptEngine* __e)
 {
 	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
@@ -45884,39 +45959,6 @@ QScriptValue QtScriptSprite3DCache::getInstance(QScriptContext *context, QScript
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Sprite3DCache::getInstance");
 	return __e->uncaughtException();
-}
-
-int QtScriptSprite3DCache::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptSprite3DCache::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptSprite3DCache::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			Q_UNUSED(out);
-			ok = true;
-			break;
-		}
-	}
-
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3DCache constructor");
-	}
-	return ok;
 }
 
 } // end of cocos2d
@@ -46769,7 +46811,7 @@ QScriptValue QtScriptSprite3DMaterial::releaseCachedMaterial(QScriptContext *con
 
 namespace cocos2d {
 QtScriptSprite3DMaterialCache::QtScriptSprite3DMaterialCache(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<Sprite3DMaterialCache, false>(engine, className)
+	: QtScriptTextureCacheProtocol(engine, className)
 {
 }
 
@@ -46782,7 +46824,7 @@ void QtScriptSprite3DMaterialCache::Register(const QScriptValue &targetNamespace
 {
 	auto engine = targetNamespace.engine();
 	Q_ASSERT(engine);
-	QScriptValue inherit;
+	auto inherit = engine->defaultPrototype(qMetaTypeId<TextureCacheProtocol *>());
 	auto ctor = RegisterT<Sprite3DMaterialCache, QtScriptSprite3DMaterialCache>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
 	ctor.setProperty("destroyInstance", engine->newFunction(
@@ -46795,41 +46837,58 @@ void QtScriptSprite3DMaterialCache::Register(const QScriptValue &targetNamespace
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-bool QtScriptSprite3DMaterialCache::addSprite3DMaterial(const QByteArray& key, cocos2d::Texture2D* tex)
+int QtScriptSprite3DMaterialCache::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptSprite3DMaterialCache::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptSprite3DMaterialCache::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	Q_UNUSED(out);
+	QtScriptUtils::noPublicConstructorException(context,
+		"cocos2d::Sprite3DMaterialCache");
+	return false;
+}
+
+bool QtScriptSprite3DMaterialCache::addTexture(const QByteArray& key, cocos2d::Texture2D* tex)
 {
 	auto __o = this->thiz<Sprite3DMaterialCache *>();
 	if (__o)
 	{
-		return __o->addSprite3DMaterial(key.toStdString(), tex);
+		return __o->addTexture(key.toStdString(), tex);
 	}
 	return false;
 }
 
-cocos2d::Texture2D* QtScriptSprite3DMaterialCache::getSprite3DMaterial(const QByteArray& key)
+void QtScriptSprite3DMaterialCache::removeAllTextures()
 {
 	auto __o = this->thiz<Sprite3DMaterialCache *>();
 	if (__o)
 	{
-		return __o->getSprite3DMaterial(key.toStdString());
-	}
-	return nullptr;
-}
-
-void QtScriptSprite3DMaterialCache::removeAllSprite3DMaterial()
-{
-	auto __o = this->thiz<Sprite3DMaterialCache *>();
-	if (__o)
-	{
-		__o->removeAllSprite3DMaterial();
+		__o->removeAllTextures();
 	}
 }
 
-void QtScriptSprite3DMaterialCache::removeUnusedSprite3DMaterial()
+void QtScriptSprite3DMaterialCache::removeTexture(const QByteArray& key)
 {
 	auto __o = this->thiz<Sprite3DMaterialCache *>();
 	if (__o)
 	{
-		__o->removeUnusedSprite3DMaterial();
+		__o->removeTexture(key.toStdString());
+	}
+}
+
+void QtScriptSprite3DMaterialCache::removeUnusedTextures()
+{
+	auto __o = this->thiz<Sprite3DMaterialCache *>();
+	if (__o)
+	{
+		__o->removeUnusedTextures();
 	}
 }
 
@@ -46872,39 +46931,6 @@ QScriptValue QtScriptSprite3DMaterialCache::getInstance(QScriptContext *context,
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Sprite3DMaterialCache::getInstance");
 	return __e->uncaughtException();
-}
-
-int QtScriptSprite3DMaterialCache::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptSprite3DMaterialCache::constructorArgumentCountMax() const
-{
-	return 0;
-}
-
-bool QtScriptSprite3DMaterialCache::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			Q_UNUSED(out);
-			ok = true;
-			break;
-		}
-	}
-
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3DMaterialCache constructor");
-	}
-	return ok;
 }
 
 } // end of cocos2d
@@ -47888,6 +47914,7 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptTexture2D::Register(targetNamespace);
 	cocos2d::QtScriptTextureAtlas::Register(targetNamespace);
 	cocos2d::QtScriptTextureCache::Register(targetNamespace);
+	cocos2d::QtScriptTextureCacheProtocol::Register(targetNamespace);
 	cocos2d::QtScriptTextureCube::Register(targetNamespace);
 	cocos2d::QtScriptTileMapAtlas::Register(targetNamespace);
 	cocos2d::QtScriptTiledGrid3D::Register(targetNamespace);

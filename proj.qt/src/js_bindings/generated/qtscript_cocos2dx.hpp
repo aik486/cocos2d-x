@@ -2108,6 +2108,30 @@ Q_DECLARE_METATYPE(cocos2d::Texture2D *)
 Q_DECLARE_METATYPE(const cocos2d::Texture2D *)
 
 namespace cocos2d {
+class QtScriptTextureCacheProtocol : public QtScriptBaseClassPrototype<TextureCacheProtocol *, true>
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptTextureCacheProtocol(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptTextureCacheProtocol(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_INVOKABLE cocos2d::Texture2D* getCachedTexture(const QByteArray& key);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::TextureCacheProtocol *)
+Q_DECLARE_METATYPE(const cocos2d::TextureCacheProtocol *)
+
+namespace cocos2d {
 class QtScriptTouch : public QtScriptRef
 {
 	Q_OBJECT
@@ -2758,7 +2782,7 @@ public:
 	Q_INVOKABLE cocos2d::Animation3D* getAnimation(const QByteArray& key);
 	Q_INVOKABLE void removeAllAnimations();
 	Q_INVOKABLE void removeAnimation(const QByteArray& key);
-	Q_INVOKABLE void removeUnusedAnimation();
+	Q_INVOKABLE void removeUnusedAnimations();
 	static QScriptValue destroyInstance(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
 };
@@ -9541,7 +9565,7 @@ Q_DECLARE_METATYPE(cocos2d::Device *)
 Q_DECLARE_METATYPE(const cocos2d::Device *)
 
 namespace cocos2d {
-class QtScriptApplicationProtocol : public QtScriptBaseClassPrototype<ApplicationProtocol *, false>
+class QtScriptApplicationProtocol : public QtScriptBaseClassPrototype<ApplicationProtocol *, true>
 {
 	Q_OBJECT
 
@@ -9565,7 +9589,6 @@ public:
 
 } // end of cocos2d
 
-Q_DECLARE_METATYPE(cocos2d::QtScriptApplicationProtocol::StorageType)
 Q_DECLARE_METATYPE(cocos2d::ApplicationProtocol *)
 Q_DECLARE_METATYPE(const cocos2d::ApplicationProtocol *)
 
@@ -10192,7 +10215,7 @@ Q_DECLARE_METATYPE(cocos2d::Sprite3DData *)
 Q_DECLARE_METATYPE(const cocos2d::Sprite3DData *)
 
 namespace cocos2d {
-class QtScriptSprite3DCache final : public QtScriptBaseClassPrototype<Sprite3DCache, false>
+class QtScriptSprite3DCache : public QtScriptBaseClassPrototype<Sprite3DCache *, true>
 {
 	Q_OBJECT
 
@@ -10212,13 +10235,13 @@ public:
 	Q_INVOKABLE cocos2d::Sprite3DData* getSpriteData(const QByteArray& key);
 	Q_INVOKABLE void removeAllSprite3DData();
 	Q_INVOKABLE void removeSprite3DData(const QByteArray& key);
+	Q_INVOKABLE void removeUnusedSprite3DData();
 	static QScriptValue destroyInstance(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
-Q_DECLARE_METATYPE(cocos2d::Sprite3DCache)
 Q_DECLARE_METATYPE(cocos2d::Sprite3DCache *)
 Q_DECLARE_METATYPE(const cocos2d::Sprite3DCache *)
 
@@ -10325,7 +10348,7 @@ Q_DECLARE_METATYPE(cocos2d::Sprite3DMaterial *)
 Q_DECLARE_METATYPE(const cocos2d::Sprite3DMaterial *)
 
 namespace cocos2d {
-class QtScriptSprite3DMaterialCache final : public QtScriptBaseClassPrototype<Sprite3DMaterialCache, false>
+class QtScriptSprite3DMaterialCache : public QtScriptTextureCacheProtocol
 {
 	Q_OBJECT
 
@@ -10340,17 +10363,16 @@ public:
 	explicit QtScriptSprite3DMaterialCache(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
-	Q_INVOKABLE bool addSprite3DMaterial(const QByteArray& key, cocos2d::Texture2D* tex);
-	Q_INVOKABLE cocos2d::Texture2D* getSprite3DMaterial(const QByteArray& key);
-	Q_INVOKABLE void removeAllSprite3DMaterial();
-	Q_INVOKABLE void removeUnusedSprite3DMaterial();
+	Q_INVOKABLE bool addTexture(const QByteArray& key, cocos2d::Texture2D* tex);
+	Q_INVOKABLE void removeAllTextures();
+	Q_INVOKABLE void removeTexture(const QByteArray& key);
+	Q_INVOKABLE void removeUnusedTextures();
 	static QScriptValue destroyInstance(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d
 
-Q_DECLARE_METATYPE(cocos2d::Sprite3DMaterialCache)
 Q_DECLARE_METATYPE(cocos2d::Sprite3DMaterialCache *)
 Q_DECLARE_METATYPE(const cocos2d::Sprite3DMaterialCache *)
 
