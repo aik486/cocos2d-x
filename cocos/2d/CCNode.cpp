@@ -245,14 +245,18 @@ Node *Node::clone() const
 
 void Node::copyPropertiesFrom(const Node *from)
 {
-    setRotation3D(from->getRotation3D());
-    setRotationSkewX(from->getRotationSkewX());
-    setRotationSkewY(from->getRotationSkewY());
+    _rotationX = from->_rotationX;
+    _rotationY = from->_rotationY;
+    _rotationZ_X = from->_rotationZ_X;
+    _rotationZ_Y = from->_rotationZ_Y;
+    updateRotationQuat();
+    _transformUpdated = _transformDirty = _inverseDirty = true;
+    
     setSkewX(from->getSkewX());
     setSkewY(from->getSkewY());
     setScaleX(from->getScaleX());
     setScaleY(from->getScaleY());
-    setScaleZ(from->getScaleY());
+    setScaleZ(from->getScaleZ());
     setAdditionalTransform(
         from->_additionalTransform ? &from->_additionalTransform[0] : nullptr);
     setUseInvertedAdditionalTransformOrder(
