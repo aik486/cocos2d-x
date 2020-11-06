@@ -293,13 +293,10 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
         _meshVertexDatas.pushBack(it);
     }
 
-    if (!skele) {
-        skele = spritedata;
-    }
-    setSkeleton(Skeleton3D::create(skele->nodedatas.skeleton));
+    setSkeleton(Skeleton3D::create((skele ? skele : spritedata)->nodedatas.skeleton));
 
     const bool singleSprite = (spritedata->nodedatas.nodes.size() == 1);
-    for(const auto& it : spritedata->nodedatas.nodes)
+    for (auto it : spritedata->nodedatas.nodes)
     {
         if(it)
         {
@@ -307,11 +304,13 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
         }
     }
     
-    for(const auto& it : skele->nodedatas.skeleton)
-    {
-        if(it)
+    if (!skele) {
+        for (auto it : spritedata->nodedatas.skeleton)
         {
-            createAttachSprite3DNode(it, spritedata->materialdatas);
+            if(it)
+            {
+                createAttachSprite3DNode(it, spritedata->materialdatas);
+            }
         }
     }
 
@@ -323,6 +322,7 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
             programStates.pushBack(mesh->getProgramState());
         }
     } else {
+        CC_ASSERT(programStates.size() == meshCount);
         for (ssize_t i = 0; i < meshCount; ++i) {
             // cloning is needed in order to have one state per sprite
             auto glstate = spritedata->programStates.at(i);
@@ -532,13 +532,18 @@ void Sprite3D::createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas&
 {
     for(const auto& it : nodedata->modelNodeDatas)
     {
-        if(it && getAttachNode(nodedata->id))
+        if (!it) {
+            continue;
+        }
+        
+        auto attachNode = getAttachNode(nodedata->id);
+        if (!attachNode) {
+            continue;
+        }
+        auto sprite = createSprite3DNode(nodedata,it,materialdatas);
+        if (sprite)
         {
-            auto sprite = createSprite3DNode(nodedata,it,materialdatas);
-            if (sprite)
-            {
-                getAttachNode(nodedata->id)->addChild(sprite);
-            }
+            attachNode->addChild(sprite);
         }
     }
     for(const auto& it : nodedata->children)
