@@ -62,16 +62,6 @@ static void stringVecFromScriptValue(
 	}
 }
 
-static QScriptValue qColorToScriptValue(QScriptEngine *eng, const QColor &color)
-{
-	return eng->toScriptValue(cocos2d::qColorToCcColor4B(color));
-}
-
-static void qColorFromScriptValue(const QScriptValue &value, QColor &color)
-{
-	color = ccColor4BToQColor(qscriptvalue_cast<cocos2d::Color4B>(value));
-}
-
 static Color4B ccColor3Bto4B(const Color3B &from)
 {
 	return Color4B(from);
@@ -150,10 +140,6 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	QtScriptRefHolder::Register(mRootObject);
 	qtscript_register_all_cocos2dx(engine);
 	QtScriptCCCustomEffect::Register(mRootObject);
-
-	qScriptRegisterMetaType<QColor>(mEngine, qColorToScriptValue,
-		qColorFromScriptValue,
-		engine->defaultPrototype(qMetaTypeId<Color4B>()));
 
 	mRootObject.setProperty(QSTRKEY(spriteFrameByName),
 		mEngine->newFunction(spriteFrameByName), STATIC_PROPERTY);
