@@ -449,6 +449,11 @@ Texture2D * TextureCache::addImage(const std::string &path)
     return texture;
 }
 
+Texture2D *TextureCache::getCachedTexture(const string &filepath)
+{
+    return addImage(filepath);
+}
+
 void TextureCache::parseNinePatchImage(cocos2d::Image *image, cocos2d::Texture2D *texture, const std::string& path)
 {
     if (NinePatchImageParser::isNinePatchImage(path))

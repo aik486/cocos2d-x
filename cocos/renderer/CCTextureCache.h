@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include <functional>
 
 #include "base/CCRef.h"
+#include "base/CCProtocols.h"
 #include "renderer/CCTexture2D.h"
 #include "platform/CCImage.h"
 
@@ -60,7 +61,7 @@ NS_CC_BEGIN
 * Once the texture is loaded, the next time it will return.
 * A reference of the previously loaded texture reducing GPU & CPU memory.
 */
-class CC_DLL TextureCache : public Ref
+class CC_DLL TextureCache : public Ref, public TextureCacheProtocol
 {
 public:
     // ETC1 ALPHA supports.
@@ -93,6 +94,7 @@ public:
      @param filepath The file path.
     */
     Texture2D* addImage(const std::string &filepath);
+    virtual Texture2D* getCachedTexture(const std::string &filepath) override;
 
     /** Returns a Texture2D object given a file image.
     * If the file image was not previously loaded, it will create a new Texture2D object and it will return it.

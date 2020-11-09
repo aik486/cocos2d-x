@@ -27,6 +27,7 @@
 #include "renderer/backend/Buffer.h"
 NS_CC_BEGIN
 
+#define INITIAL_VERTEX_BUFFER_LENGTH 12 * 2
 
 DrawNode3D::DrawNode3D()
 {
@@ -62,11 +63,6 @@ void DrawNode3D::ensureCapacity(int count)
 
     _bufferLines.reserve(EXTENDED_SIZE);
 
-    if (!_customCommand.getVertexBuffer() || _customCommand.getVertexBuffer()->getSize() < (EXTENDED_SIZE * sizeof(_bufferLines[0])))
-    {
-        _customCommand.createVertexBuffer(sizeof(V3F_C4B), EXTENDED_SIZE + (EXTENDED_SIZE >> 1), CustomCommand::BufferUsage::DYNAMIC);
-    }
-
 }
 
 bool DrawNode3D::init()
@@ -83,7 +79,6 @@ bool DrawNode3D::init()
     _customCommand.setAfterCallback(CC_CALLBACK_0(DrawNode3D::onAfterDraw, this));
 
     auto layout = _programStateLine->getVertexLayout();
-#define INITIAL_VERTEX_BUFFER_LENGTH 512
 
     ensureCapacity(INITIAL_VERTEX_BUFFER_LENGTH);
 
@@ -123,11 +118,20 @@ void DrawNode3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, transform, flags);
 
-    updateCommand(renderer, transform, flags);
+    updateCommand(transform);
 
     if (_isDirty && !_bufferLines.empty())
     {
-        _customCommand.updateVertexBuffer(_bufferLines.data(), (unsigned int)(_bufferLines.size() * sizeof(_bufferLines[0])));
+        auto vertexBuffer = _customCommand.getVertexBuffer();
+        auto bufferSize = _bufferLines.capacity() * sizeof(V3F_C4B);
+        if (!vertexBuffer || vertexBuffer->getSize() < bufferSize)
+        {
+            _customCommand.createVertexBuffer(sizeof(V3F_C4B), _bufferLines.capacity(), CustomCommand::BufferUsage::DYNAMIC);
+        } else {
+            _customCommand.setVertexBuffer(nullptr);
+        }
+        
+        _customCommand.updateVertexBuffer(_bufferLines.data(), _bufferLines.size() * sizeof(V3F_C4B));
         _customCommand.setVertexDrawInfo(0, _bufferLines.size());
         _isDirty = false;
     }
@@ -138,7 +142,7 @@ void DrawNode3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     }
 }
 
-void DrawNode3D::updateCommand(cocos2d::Renderer* renderer,const Mat4 &transform, uint32_t flags)
+void DrawNode3D::updateCommand(const Mat4 &transform)
 {
     auto &matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto mvp = matrixP * transform;
@@ -154,14 +158,13 @@ void DrawNode3D::updateCommand(cocos2d::Renderer* renderer,const Mat4 &transform
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _bufferLines.size());
 }
 
-void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4F &color)
+void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4B &color)
 {
     unsigned int vertex_count = 2;
     ensureCapacity(vertex_count);
     
-    Color4B col = Color4B(color);
-    V3F_C4B a = {Vec3(from.x, from.y, from.z), col};
-    V3F_C4B b = {Vec3(to.x, to.y, to.z), col, };
+    V3F_C4B a = {Vec3(from.x, from.y, from.z), color};
+    V3F_C4B b = {Vec3(to.x, to.y, to.z), color, };
 
     _bufferLines.push_back(a);
     _bufferLines.push_back(b);
@@ -169,7 +172,7 @@ void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4F &color
     _isDirty = true;
 }
 
-void DrawNode3D::drawCube(Vec3* vertices, const Color4F &color)
+void DrawNode3D::drawCube(Vec3* vertices, const Color4B &color)
 {
     // front face
     drawLine(vertices[0], vertices[1], color);

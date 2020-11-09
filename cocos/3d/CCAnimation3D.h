@@ -26,11 +26,10 @@
 #ifndef __CCANIMATION3D_H__
 #define __CCANIMATION3D_H__
 
-#include <unordered_map>
-
 #include "3d/CCAnimationCurve.h"
 
 #include "base/ccMacros.h"
+#include "base/CCMap.h"
 #include "base/CCRef.h"
 #include "3d/CCBundle3DData.h"
 
@@ -43,6 +42,7 @@ NS_CC_BEGIN
 /**
  * @brief static animation data, shared
  */
+class Bundle3D;
 class CC_DLL Animation3D: public Ref
 {
     friend class Bundle3D;
@@ -68,7 +68,8 @@ public:
     };
     
     /**read all animation or only the animation with given animationName? animationName == "" read the first.*/
-    static Animation3D* create(const std::string& filename, const std::string& animationName = "");
+    static Animation3D* create(const std::string& filename, const std::string& animationName = std::string());
+    static Animation3D* createWithBundle(Bundle3D* bundle, const std::string &animationName = std::string());
        
     /**get duration*/
     float getDuration() const { return _duration; }
@@ -89,6 +90,7 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Animation3D();  
     /**init Animation3D from bundle data*/
     bool init(const Animation3DData& data);
+    bool initWithBundle(Bundle3D* bundle, const std::string &animationName);
     
     /**init Animation3D with file name and animation name*/
     bool initWithFile(const std::string& filename, const std::string& animationName);
@@ -114,11 +116,12 @@ public:
     
     /**add animation to cache*/
     void addAnimation(const std::string& key, Animation3D* animation);
+    void removeAnimation(const std::string& key);
     
     /**remove all animation*/
     void removeAllAnimations();
     /**remove unused animation*/
-    void removeUnusedAnimation();
+    void removeUnusedAnimations();
 
 protected:
     Animation3DCache();
@@ -126,7 +129,7 @@ protected:
     
     static Animation3DCache* _cacheInstance; //cache instance
     
-    std::unordered_map<std::string, Animation3D*> _animations; //cached animations
+    Map<std::string, Animation3D*> _animations; //cached animations
 };
 
 // end of 3d group

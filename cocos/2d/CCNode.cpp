@@ -245,12 +245,18 @@ Node *Node::clone() const
 
 void Node::copyPropertiesFrom(const Node *from)
 {
-    setRotation3D(from->getRotation3D());
+    _rotationX = from->_rotationX;
+    _rotationY = from->_rotationY;
+    _rotationZ_X = from->_rotationZ_X;
+    _rotationZ_Y = from->_rotationZ_Y;
+    updateRotationQuat();
+    _transformUpdated = _transformDirty = _inverseDirty = true;
+    
     setSkewX(from->getSkewX());
     setSkewY(from->getSkewY());
     setScaleX(from->getScaleX());
     setScaleY(from->getScaleY());
-    setScaleZ(from->getScaleY());
+    setScaleZ(from->getScaleZ());
     setAdditionalTransform(
         from->_additionalTransform ? &from->_additionalTransform[0] : nullptr);
     setUseInvertedAdditionalTransformOrder(
@@ -266,7 +272,7 @@ void Node::copyPropertiesFrom(const Node *from)
     setOpacity(from->getOpacity());
     setColor(from->getColor());
     setVisible(from->isVisible());
-    auto fromProgramState=from->getProgramState();
+    auto fromProgramState = from->getProgramState();
     setProgramState(fromProgramState ? fromProgramState->clone(): nullptr);
     setContentSize(from->getContentSize());
 }
@@ -384,7 +390,7 @@ float Node::getRotation() const
 /// rotation setter
 void Node::setRotation(float rotation)
 {
-    if (_rotationZ_X == rotation)
+    if (_rotationZ_X == rotation && _rotationZ_Y == rotation)
         return;
     
     _rotationZ_X = _rotationZ_Y = rotation;
@@ -402,7 +408,8 @@ void Node::setRotation3D(const Vec3& rotation)
 {
     if (_rotationX == rotation.x &&
         _rotationY == rotation.y &&
-        _rotationZ_X == rotation.z)
+        _rotationZ_X == rotation.z &&
+        _rotationZ_Y == rotation.z)
         return;
     
     _transformUpdated = _transformDirty = _inverseDirty = true;

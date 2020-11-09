@@ -280,6 +280,14 @@ public:
     
     virtual void stop() = 0;
 };
+
+struct CC_DLL TextureCacheProtocol {
+    virtual Texture2D* getCachedTexture(const std::string& key) = 0;
+    
+protected:
+    virtual ~TextureCacheProtocol() = default;
+};
+
 NS_CC_END
 
 /// @endcond

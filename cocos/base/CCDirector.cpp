@@ -60,6 +60,9 @@ THE SOFTWARE.
 #include "base/ObjectFactory.h"
 #include "platform/CCApplication.h"
 #include "renderer/backend/ProgramCache.h"
+#include "3d/CCSprite3D.h"
+#include "3d/CCAnimation3D.h"
+#include "3d/CCSprite3DMaterial.h"
 
 #if CC_ENABLE_SCRIPT_BINDING || defined(QT_COCOS_SCRIPT_BINDING)
 #include "base/CCScriptSupport.h"
@@ -663,6 +666,10 @@ void Director::purgeCachedData()
         // Note: some tests such as ActionsTest are leaking refcounted textures
         // There should be no test textures left in the cache
         log("%s\n", _textureCache->getCachedTextureInfo().c_str());
+        
+        Sprite3DMaterialCache::getInstance()->removeUnusedTextures();
+        Sprite3DCache::getInstance()->removeUnusedSprite3DData();
+        Animation3DCache::getInstance()->removeUnusedAnimations();
     }
     FileUtils::getInstance()->purgeCachedEntries();
 }
@@ -1029,6 +1036,9 @@ void Director::reset()
     AsyncTaskPool::destroyInstance();
     backend::ProgramCache::destroyInstance();
     backend::ShaderCache::destroyInstance();
+    Sprite3DMaterialCache::destroyInstance();
+    Sprite3DCache::destroyInstance();
+    Animation3DCache::destroyInstance();
     
     // cocos2d-x specific data structures
 #ifndef QT_COCOS

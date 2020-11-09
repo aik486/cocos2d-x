@@ -33,28 +33,22 @@ const Data Data::Null;
 
 Data::Data() :
 _bytes(nullptr),
-_size(0)
+_size(0),
+_own(true)
 {
     CCLOGINFO("In the empty constructor of Data.");
 }
 
-Data::Data(Data&& other) :
-_bytes(nullptr),
-_size(0)
+Data::Data(Data&& other) : Data()
 {
     CCLOGINFO("In the move constructor of Data.");
     move(other);
 }
 
-Data::Data(const Data& other) :
-_bytes(nullptr),
-_size(0)
+Data::Data(const Data& other) : Data()
 {
     CCLOGINFO("In the copy constructor of Data.");
-    if (other._bytes && other._size)
-    {
-        copy(other._bytes, other._size);
-    }
+    copy(other._bytes, other._size);
 }
 
 Data::~Data()
@@ -89,6 +83,7 @@ void Data::move(Data& other)
     
     _bytes = other._bytes;
     _size = other._size;
+    _own = other._own;
 
     other._bytes = nullptr;
     other._size = 0;
@@ -111,35 +106,43 @@ ssize_t Data::getSize() const
 
 ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
 {
-    CCASSERT(size >= 0, "copy size should be non-negative");
-    CCASSERT(bytes, "bytes should not be nullptr");
-
-    if (size <= 0) return 0;
-
+    if (!bytes || size <= 0)
+    {
+        return 0;
+    }
+    
     if (bytes != _bytes)
     {
         clear();
-        _bytes = (unsigned char*)malloc(sizeof(unsigned char) * size);
-        memcpy(_bytes, bytes, size);
+        if (size > 0) {
+            _bytes = (unsigned char*)malloc(sizeof(unsigned char) * size);
+             memcpy(_bytes, bytes, size);
+        }
     }
 
     _size = size;
     return _size;
 }
 
-void Data::fastSet(unsigned char* bytes, const ssize_t size)
+void Data::fastSet(unsigned char* bytes, const ssize_t size, bool own)
 {
+    if (bytes != _bytes) {
+        clear();
+    }
+    
     CCASSERT(size >= 0, "fastSet size should be non-negative");
-    //CCASSERT(bytes, "bytes should not be nullptr");
+    CCASSERT(!bytes || size > 0, "fastSet bytes should not be nullptr if size > 0");
     _bytes = bytes;
     _size = size;
+    _own = own;
 }
 
 void Data::clear()
 {
-    if(_bytes) free(_bytes);
+    if(_bytes && _own) free(_bytes);
     _bytes = nullptr;
     _size = 0;
+    _own = true;
 }
 
 unsigned char* Data::takeBuffer(ssize_t* size)

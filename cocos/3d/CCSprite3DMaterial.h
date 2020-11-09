@@ -25,8 +25,9 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
+#include "base/CCMap.h"
 #include "base/ccTypes.h"
+#include "base/CCProtocols.h"
 #include "renderer/CCMaterial.h"
 #include "3d/CCBundle3DData.h"
 #include "renderer/backend/Types.h"
@@ -157,7 +158,7 @@ protected:
  * @js NA
  * @lua NA
  */
-class Sprite3DMaterialCache
+class Sprite3DMaterialCache : public TextureCacheProtocol
 {
 public:
     /**get & destroy cache*/
@@ -167,24 +168,26 @@ public:
     static void destroyInstance();
     
     /**add to cache*/
-    bool addSprite3DMaterial(const std::string& key, Texture2D* tex);
+    bool addTexture(const std::string& key, Texture2D* tex);
     
-    /**get material from cache*/
-    Texture2D* getSprite3DMaterial(const std::string& key);
+    /**get material texture from cache*/
+    virtual Texture2D* getCachedTexture(const std::string& key) override;
+    
+    void removeTexture(const std::string& key);
     
     /**remove all spritematerial*/
-    void removeAllSprite3DMaterial();
+    void removeAllTextures();
     /**remove unused spritematerial*/
-    void removeUnusedSprite3DMaterial();
+    void removeUnusedTextures();
     
-CC_CONSTRUCTOR_ACCESS:
-    
+protected:
     Sprite3DMaterialCache();
-    ~Sprite3DMaterialCache();
+    virtual ~Sprite3DMaterialCache() override;
     
 protected:
     static Sprite3DMaterialCache* _cacheInstance;//instance
-    std::unordered_map<std::string, Texture2D*> _materials; //cached material
+    Map<std::string, Texture2D*> _materials; //cached material
+   
     
 };
 

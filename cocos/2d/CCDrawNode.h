@@ -341,6 +341,7 @@ protected:
     struct State {
         int bufferCapacity = 0;
         int bufferCount = 0;
+        int oldBufferCount = 0;
         V2F_C4B_T2F *buffer = nullptr;
         backend::ProgramState* programState = nullptr;
         backend::UniformLocation mvpMatrixLocation;
@@ -348,11 +349,11 @@ protected:
         CustomCommand customCommand;
         
         void setProgramState(backend::ProgramState* state);
-        void updateTransform(const Mat4 &transform);
+        void updateCommand(const Mat4& transform, int globalZOrder);
+        void updateTransform(const Mat4& transform);
         void updateOpacity(uint8_t opacity);
         void updateBlendState(const BlendFunc& blendFunc);
-        void appendVertices(void *ptr, int vertexCount);
-        void refreshVertexBuffer();
+        void appendVertices(int vertexCount);
         void refreshVertexBuffer(int start, int end);
         
         ~State();

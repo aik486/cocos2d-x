@@ -74,21 +74,29 @@ void AnimationCurve<componentSize>::setEvaluateFun(std::function<void(float time
 template <int componentSize>
 AnimationCurve<componentSize>* AnimationCurve<componentSize>::create(float* keytime, float* value, int count)
 {
-    int floatSize = sizeof(float);
     AnimationCurve* curve = new (std::nothrow) AnimationCurve();
-    curve->_keytime = new float[count];
-    memcpy(curve->_keytime, keytime, count * floatSize);
+    curve->init(keytime, value, count); 
+    curve->autorelease();
+    return curve;
+}
+
+template <int componentSize>
+void AnimationCurve<componentSize>::init(float* keytime, float* value, int count)
+{
+    CC_SAFE_DELETE_ARRAY(_keytime);
+    CC_SAFE_DELETE_ARRAY(_value);
+    
+    const int floatSize = sizeof(float);
+    _keytime = new float[count];
+    memcpy(_keytime, keytime, count * floatSize);
     
     int compoentSizeByte = componentSize * floatSize;
     int totalByte = count * compoentSizeByte;
-    curve->_value = new float[totalByte / floatSize];
-    memcpy(curve->_value, value, totalByte);
+    _value = new float[totalByte / floatSize];
+    memcpy(_value, value, totalByte);
     
-    curve->_count = count;
-    curve->_componentSizeByte = compoentSizeByte;
-    
-    curve->autorelease();
-    return curve;
+    _count = count;
+    _componentSizeByte = compoentSizeByte;
 }
 
 template <int componentSize>

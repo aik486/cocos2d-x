@@ -42,7 +42,7 @@ public:
     /**
      * Draw 3D Line
      */
-    void drawLine(const cocos2d::Vec3 &from, const cocos2d::Vec3 &to, const Color4F &color);
+    void drawLine(const cocos2d::Vec3 &from, const cocos2d::Vec3 &to, const Color4B &color);
     
     /**
     * Draw 3D cube
@@ -57,7 +57,7 @@ public:
     *        vertices[7]:Left-top-back.
     * @param color
     */
-    void drawCube(cocos2d::Vec3* vertices, const Color4F &color);
+    void drawCube(cocos2d::Vec3* vertices, const Color4B &color);
     
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -77,7 +77,7 @@ public:
     */
     void setBlendFunc(const BlendFunc &blendFunc);
 
-    void updateCommand(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags);
+    void updateCommand(const cocos2d::Mat4& transform);
     
     // Overrides
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;

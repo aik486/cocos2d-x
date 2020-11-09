@@ -26,11 +26,11 @@
 #ifndef __CCSPRITE3D_H__
 #define __CCSPRITE3D_H__
 
-#include <unordered_map>
-
+#include "base/CCMap.h"
 #include "base/CCVector.h"
 #include "base/ccTypes.h"
 #include "base/CCProtocols.h"
+#include "base/CCData.h"
 #include "2d/CCNode.h"
 #include "renderer/CCMeshCommand.h"
 #include "3d/CCSkeleton3D.h" // need to include for lua-binding
@@ -50,8 +50,26 @@ class Mesh;
 class Texture2D;
 class MeshSkin;
 class AttachNode;
+class Bundle3D;
 struct NodeData;
 
+struct Sprite3DData : public Ref
+{
+    Vector<MeshVertexData*>   meshVertexDatas;
+    Vector<backend::ProgramState*>   programStates;
+    NodeDatas      nodedatas;
+    MeshDatas      meshdatas;
+    MaterialDatas  materialdatas;
+    virtual ~Sprite3DData() override;
+            
+    bool loadFromFile(const std::string& filePath);
+    bool loadFromObj(const std::string& filePath);
+    bool loadFromBundle(Bundle3D* bundle);
+    void prepareMeshVertexData();
+    
+private:
+    void apply(NodeDatas& nodedatas, MeshDatas& meshdatas, MaterialDatas& materialdatas);
+};
 ///////////////////////////////////////////////////////
 /**
  * Sprite3DCache
@@ -60,14 +78,6 @@ struct NodeData;
 class CC_DLL Sprite3DCache
 {
 public:
-    struct Sprite3DData
-    {
-        Vector<MeshVertexData*>   meshVertexDatas;
-        Vector<backend::ProgramState*>   programStates;
-        NodeDatas*      nodedatas;
-        MaterialDatas*  materialdatas;
-        ~Sprite3DData();
-    };
     
     /**get & destroy*/
     static Sprite3DCache* getInstance();
@@ -79,6 +89,7 @@ public:
      * @lua NA
      */
     Sprite3DData* getSpriteData(const std::string& key) const;
+    Sprite3DData* getDataFromFileCached(const std::string& filePath);
     
     /**
      * add the SpriteData into Sprite3D by given the specified key
@@ -92,16 +103,16 @@ public:
     
     /**remove all the SpriteData from Sprite3D*/
     void removeAllSprite3DData();
+    /**remove unused */
+    void removeUnusedSprite3DData();
     
-    CC_CONSTRUCTOR_ACCESS:
+protected:
     Sprite3DCache();
     ~Sprite3DCache();
     
 protected:
-    
-    
     static Sprite3DCache*                        _cacheInstance;
-    std::unordered_map<std::string, Sprite3DData*> _spriteDatas; //cached sprite data
+    Map<std::string, Sprite3DData*> _spriteDatas; //cached sprite data
 };
 
 /** @brief Sprite3D: A sprite can be loaded from 3D model files, .obj, .c3t, .c3b, then can be drawn as sprite */
@@ -121,6 +132,9 @@ public:
     // creates a Sprite3D. It only supports one texture, and overrides the internal texture with 'texturePath'
     static Sprite3D* create(const std::string &modelPath, const std::string &texturePath);
     
+    static Sprite3D* createWithSkeleton(const std::string &modelPath, const std::string &skeletonPath);
+    static Sprite3D* createWithSkeleton(const std::string &modelPath, const std::string &skeletonPath, const std::string &texturePath);
+    
     /** create 3d sprite asynchronously
      * If the 3d model was previously loaded, it will create a new 3d sprite and the callback will be called at once.
      * Otherwise it will load the model file in a new thread, and when the 3d sprite is loaded, the callback will be called with the created Sprite3D and a user-defined parameter.
@@ -129,14 +143,17 @@ public:
      * @param callback callback after loading
      * @param callbackparam user defined parameter for the callback
      */
-    static void createAsync(const std::string &modelPath, const std::function<void(Sprite3D*, void*)>& callback, void* callbackparam);
+    
+    using AsyncLoadCallback = std::function<void(Sprite3D*, void*)>;
+    
+    static void createAsync(const std::string &modelPath, const AsyncLoadCallback& callback, void* callbackparam);
     static void createAsyncWithSkeleton(const std::string &modelPath,
                                         const std::string &skeletonPath,
-                                        const std::function<void(Sprite3D*, void*)>& callback, void* callbackparam);
+                                        const AsyncLoadCallback& callback, void* callbackparam);
     
-    static void createAsync(const std::string &modelPath, const std::string &texturePath, const std::function<void(Sprite3D*, void*)>& callback, void* callbackparam);
+    static void createAsync(const std::string &modelPath, const std::string &texturePath, const AsyncLoadCallback& callback, void* callbackparam);
     static void createAsync(const std::string &modelPath, const std::string &skeletonPath,
-                            const std::string &texturePath, const std::function<void(Sprite3D*, void*)>& callback, void* callbackparam);
+                            const std::string &texturePath, const AsyncLoadCallback& callback, void* callbackparam);
     
     /**set diffuse texture, set the first if multiple textures exist*/
     void setTexture(const std::string& texFile);
@@ -258,25 +275,25 @@ public:
     * Get meshes used in sprite 3d
     */
     const Vector<Mesh*>& getMeshes() const { return _meshes; }
-
-CC_CONSTRUCTOR_ACCESS:
     
+    inline TextureCacheProtocol* getTextureCacheProtocol() const;
+    void setTextureCacheProtocol(TextureCacheProtocol* cache);
+
+public:
     Sprite3D();
-    virtual ~Sprite3D();
+    virtual ~Sprite3D() override;
     
     virtual bool init() override;
+    void reset();
     
-    bool initWithFile(const std::string &path, Skeleton3D* skele = nullptr);
+    bool initWithSkeletonFile(const std::string &modelPath, const std::string& skeletonPath);
+    bool initWithFile(const std::string &path, Sprite3DData* skele = nullptr);
     
-    bool initFrom(const NodeDatas& nodedatas, const MeshDatas& meshdatas, const MaterialDatas& materialdatas, Skeleton3D* skele = nullptr);
+    bool loadFromCacheWithSkeleton(const std::string& path, const std::string& skeletonPath);
     
-    /**load sprite3d from cache, return true if succeed, false otherwise*/
-    bool loadFromCache(const std::string& path, Skeleton3D* skele = nullptr);
-    bool loadFromCache(const std::string& path, const std::vector<NodeData*>& skeletonData);
-    bool loadFromCache(const std::string& path, const std::string& skeletonPath);
+    bool loadFromCache(const std::string& path, Sprite3DData* skele = nullptr);
     
-    /** load file and set it to meshedatas, nodedatas and materialdatas, obj file .mtl file should be at the same directory if exist */
-    static bool loadFromFile(const std::string& path, NodeDatas* nodedatas, MeshDatas* meshdatas,  MaterialDatas* materialdatas);
+    void applySpriteData(Sprite3DData *data, Sprite3DData *skele = nullptr);
 
     /**
      * Visits this Sprite3D's children and draw them recursively.
@@ -287,18 +304,12 @@ CC_CONSTRUCTOR_ACCESS:
     /**generate default material*/
     void genMaterial(bool useLight = false);
 
-    void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite);
-    void createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas);
-    Sprite3D* createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
-
     /**get MeshIndexData by Id*/
     MeshIndexData* getMeshIndexData(const std::string& indexId) const;
     
     void addMesh(Mesh* mesh);
     
     void onAABBDirty() { _aabbDirty = true; }
-    
-    void afterAsyncLoad(void* param);
 
     static AABB getAABBRecursivelyImp(Node *node);
     
@@ -307,16 +318,25 @@ CC_CONSTRUCTOR_ACCESS:
     
     bool isForceDisableDepthTest();
     void setForceDisableDepthTest(bool is);
+
+protected:    
+    void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite);
+    void createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas);
+    Sprite3D* createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
     
-private:
+    void setSpriteData(Sprite3DData* data);    
+    void setSkeletonData(Sprite3DData* data);
+    void afterAsyncLoad(void *);
     void setSkeleton(Skeleton3D* skeleton);
-    void applySpriteData(Sprite3DCache::Sprite3DData *data, Skeleton3D* skele);
     Mesh *createMesh(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas) const;
     static std::string adjustTextureExtension(const std::string &fileName);
 
 protected:
 
+    TextureCacheProtocol*        _textureCacheProtocol;
     Skeleton3D*                  _skeleton; //skeleton
+    Sprite3DData*                _spriteData;
+    Sprite3DData*                _skeletonData;
     
     Vector<MeshVertexData*>      _meshVertexDatas;
     
@@ -344,12 +364,8 @@ protected:
         std::string                     modelPath;
         std::string                     skeletonPath;
         std::string                     texPath; //
-        MeshDatas* meshdatas;
-        MaterialDatas* materialdatas;
-        NodeDatas*   nodeDatas;
-        MeshDatas* skeleMeshdatas;
-        MaterialDatas* skeleMaterialdatas= nullptr;
-        NodeDatas*   skeleNodeDatas = nullptr;
+        std::unique_ptr<Sprite3DData> modelData;
+        std::unique_ptr<Sprite3DData> skeletonData;
     };
     AsyncLoadParam             _asyncLoadParam;
     
@@ -361,6 +377,13 @@ bool Sprite3D::isForce2Dqueue() const
 {
     return _force2Dqueue;
 }
+
+TextureCacheProtocol *Sprite3D::getTextureCacheProtocol() const
+{
+    return _textureCacheProtocol;
+}
+
+
 
 // end of 3d group
 /// @}
