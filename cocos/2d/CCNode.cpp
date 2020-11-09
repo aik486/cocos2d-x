@@ -390,7 +390,7 @@ float Node::getRotation() const
 /// rotation setter
 void Node::setRotation(float rotation)
 {
-    if (_rotationZ_X == rotation)
+    if (_rotationZ_X == rotation && _rotationZ_Y == rotation)
         return;
     
     _rotationZ_X = _rotationZ_Y = rotation;
@@ -408,7 +408,8 @@ void Node::setRotation3D(const Vec3& rotation)
 {
     if (_rotationX == rotation.x &&
         _rotationY == rotation.y &&
-        _rotationZ_X == rotation.z)
+        _rotationZ_X == rotation.z &&
+        _rotationZ_Y == rotation.z)
         return;
     
     _transformUpdated = _transformDirty = _inverseDirty = true;
