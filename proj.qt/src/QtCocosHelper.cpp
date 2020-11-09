@@ -281,4 +281,34 @@ QPolygonF shapeFromNode(Node *node)
 	auto &size = node->getContentSize();
 	return QPolygonF(QRectF(0.0, 0.0, size.width, size.height));
 }
+
+QVector3D ccVec3ToQVector3D(const Vec3 &vec)
+{
+	return QVector3D(vec.x, vec.y, vec.z);
+}
+
+QVector2D ccVec2ToQVector2D(const Vec2 &vec)
+{
+	return QVector2D(vec.x, vec.y);
+}
+
+QVector4D ccVec4ToQVector4D(const Vec4 &vec)
+{
+	return QVector4D(vec.x, vec.y, vec.z, vec.w);
+}
+
+Vec2 qVector2DToCCVec2(const QVector2D &vec)
+{
+	return Vec2(vec.x(), vec.y());
+}
+
+Vec3 qVector3DToCCVec3(const QVector3D &vec)
+{
+	return Vec3(vec.x(), vec.y(), vec.z());
+}
+
+Vec4 qVector4DToCCVec4(const QVector4D &vec)
+{
+	return Vec4(vec.x(), vec.y(), vec.z(), vec.w());
+}
 }

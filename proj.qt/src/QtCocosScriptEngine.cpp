@@ -244,6 +244,27 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	static const bool cvtQRectFToRect =
 		QMetaType::registerConverter<QRectF, Rect>(qRectFToCCRect);
 	Q_UNUSED(cvtQRectFToRect);
+
+	static const bool cvtQVector2DToVec2 =
+		QMetaType::registerConverter<QVector2D, Vec2>(qVector2DToCCVec2);
+	Q_UNUSED(cvtQVector2DToVec2);
+	static const bool cvtVec2ToQVector2D =
+		QMetaType::registerConverter<Vec2, QVector2D>(ccVec2ToQVector2D);
+	Q_UNUSED(cvtVec2ToQVector2D);
+
+	static const bool cvtQVector3DToVec3 =
+		QMetaType::registerConverter<QVector3D, Vec3>(qVector3DToCCVec3);
+	Q_UNUSED(cvtQVector3DToVec3);
+	static const bool cvtVec3ToQVector3D =
+		QMetaType::registerConverter<Vec3, QVector3D>(ccVec3ToQVector3D);
+	Q_UNUSED(cvtVec3ToQVector3D);
+
+	static const bool cvtQVector4DToVec4 =
+		QMetaType::registerConverter<QVector4D, Vec4>(qVector4DToCCVec4);
+	Q_UNUSED(cvtQVector4DToVec4);
+	static const bool cvtVec4ToQVector4D =
+		QMetaType::registerConverter<Vec4, QVector4D>(ccVec4ToQVector4D);
+	Q_UNUSED(cvtVec4ToQVector4D);
 }
 
 QtCocosScriptEngine::~QtCocosScriptEngine()
