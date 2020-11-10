@@ -6,6 +6,7 @@
 #include "2d/CCNode.h"
 #include "2d/CCClippingNode.h"
 #include "2d/CCScene.h"
+#include "2d/CCCamera.h"
 #include "base/CCDirector.h"
 #include "platform/qt/CCGLViewImpl-qt.h"
 
@@ -255,6 +256,7 @@ void QtCocosWindow::resizeGL(int w, int h)
 	mEGLView->setDesignResolutionSize(w, h, ResolutionPolicy::NO_BORDER);
 
 	mScene->setContentSize(Size(w, h));
+	mScene->getDefaultCamera()->initDefault();
 	mMainNode->setPosition(Point(w * 0.5f, h * 0.5f));
 
 	emit VisibleFrameAdjusted();

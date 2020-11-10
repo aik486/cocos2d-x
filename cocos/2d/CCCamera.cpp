@@ -237,7 +237,9 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _zoom[1] = zoomY;
     _nearPlane = nearPlane;
     _farPlane = farPlane;
-    Mat4::createOrthographicOffCenter(0, _zoom[0], 0, _zoom[1], _nearPlane, _farPlane, &_projection);
+    if (zoomX != 0.f && zoomY != 0.f) {
+        Mat4::createOrthographicOffCenter(0, _zoom[0], 0, _zoom[1], _nearPlane, _farPlane, &_projection);
+    }
     _viewProjectionDirty = true;
     _frustumDirty = true;
     _type = Type::ORTHOGRAPHIC;
