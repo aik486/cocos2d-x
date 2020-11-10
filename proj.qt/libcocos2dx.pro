@@ -124,7 +124,7 @@ SOURCES +=\
     $$COCOS2DX_PATH/cocos/3d/CCSprite3DMaterial.cpp \
     $$COCOS2DX_PATH/cocos/3d/CCTerrain.cpp \
     $$COCOS2DX_PATH/cocos/3d/CCVertexAttribBinding.cpp \
-    $$COCOS2DX_PATH/cocos/3d/DrawNode3D.cpp \
+    $$COCOS2DX_PATH/cocos/3d/CCDrawNode3D.cpp \
     $$COCOS2DX_PATH/cocos/base/atitc.cpp \
     $$COCOS2DX_PATH/cocos/base/base64.cpp \
     $$COCOS2DX_PATH/cocos/base/CCAsyncTaskPool.cpp \
@@ -401,7 +401,7 @@ HEADERS += \
     $$COCOS2DX_PATH/cocos/3d/CCTerrain.h \
     $$COCOS2DX_PATH/cocos/3d/CCVertexAttribBinding.h \
     $$COCOS2DX_PATH/cocos/3d/cocos3d.h \
-    $$COCOS2DX_PATH/cocos/3d/DrawNode3D.h \
+    $$COCOS2DX_PATH/cocos/3d/CCDrawNode3D.h \
     $$COCOS2DX_PATH/cocos/base/atitc.h \
     $$COCOS2DX_PATH/cocos/base/base64.h \
     $$COCOS2DX_PATH/cocos/base/CCAsyncTaskPool.h \
