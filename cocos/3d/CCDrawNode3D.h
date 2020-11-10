@@ -26,7 +26,9 @@
 #ifndef __DRAW_NODE_3D_H__
 #define __DRAW_NODE_3D_H__
 
-#include "cocos2d.h"
+#include "2d/CCNode.h"
+#include "3d/CCAABB.h"
+#include "3d/CCOBB.h"
 
 NS_CC_BEGIN
 
@@ -57,6 +59,9 @@ public:
     *        vertices[7]:Left-top-back.
     * @param color
     */
+    void drawCube(const cocos2d::Vec3 &from, const cocos2d::Vec3 &to, const Color4B &color);
+    void drawCube(const cocos2d::AABB &aabb, const Color4B &color);
+    void drawCube(const cocos2d::OBB &obb, const Color4B &color);
     void drawCube(cocos2d::Vec3* vertices, const Color4B &color);
     
     /** Clear the geometry in the node's buffer. */

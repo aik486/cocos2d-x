@@ -25,6 +25,9 @@
 
 #include "CCDrawNode3D.h"
 #include "renderer/backend/Buffer.h"
+#include "renderer/CCRenderer.h"
+#include "base/CCDirector.h"
+
 NS_CC_BEGIN
 
 #define INITIAL_VERTEX_BUFFER_LENGTH 12 * 2
@@ -178,6 +181,28 @@ void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4B &color
     _bufferLines.push_back(b);
 }
 
+void DrawNode3D::drawCube(const AABB &aabb, const Color4B &color)
+{
+    Vec3 corners[8];
+    aabb.getCorners(corners);
+    drawCube(corners, color);
+}
+
+void DrawNode3D::drawCube(const OBB &obb, const Color4B &color)
+{
+    Vec3 corners[8];
+    obb.getCorners(corners);
+    drawCube(corners, color);
+}
+
+void DrawNode3D::drawCube(const Vec3 &from, const Vec3 &to, const Color4B &color)
+{   
+    AABB aabb;
+    aabb.updateMinMax(&from, 1);
+    aabb.updateMinMax(&to, 1);
+    drawCube(aabb, color);
+}
+
 void DrawNode3D::drawCube(Vec3* vertices, const Color4B &color)
 {
     // front face
@@ -218,14 +243,14 @@ void DrawNode3D::setBlendFunc(const BlendFunc &blendFunc)
 
 void DrawNode3D::onBeforeDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto *renderer = _director->getRenderer();
     _rendererDepthTestEnabled = renderer->getDepthTest();
     renderer->setDepthTest(true);
 }
 
 void DrawNode3D::onAfterDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto *renderer = _director->getRenderer();
     renderer->setDepthTest(_rendererDepthTestEnabled);
 }
 

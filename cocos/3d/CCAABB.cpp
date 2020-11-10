@@ -159,25 +159,7 @@ void AABB::updateMinMax(const Vec3* point, ssize_t num)
 void AABB::transform(const Mat4& mat)
 {
     Vec3 corners[8];
-	 // Near face, specified counter-clockwise
-    // Left-top-front.
-    corners[0].set(_min.x, _max.y, _max.z);
-    // Left-bottom-front.
-    corners[1].set(_min.x, _min.y, _max.z);
-    // Right-bottom-front.
-    corners[2].set(_max.x, _min.y, _max.z);
-    // Right-top-front.
-    corners[3].set(_max.x, _max.y, _max.z);
-
-    // Far face, specified clockwise
-    // Right-top-back.
-    corners[4].set(_max.x, _max.y, _min.z);
-    // Right-bottom-back.
-    corners[5].set(_max.x, _min.y, _min.z);
-    // Left-bottom-back.
-    corners[6].set(_min.x, _min.y, _min.z);
-    // Left-top-back.
-    corners[7].set(_min.x, _max.y, _min.z);
+    getCorners(corners);
 
     // Transform the corners, recalculate the min and max points along the way.
     for (int i = 0; i < 8; i++)
