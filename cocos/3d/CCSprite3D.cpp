@@ -951,6 +951,14 @@ Action* Sprite3D::runAction(Action *action)
 Rect Sprite3D::getBoundingBox() const
 {
     AABB aabb = const_cast<Sprite3D*>(this)->getAABB();
+    if (aabb.isEmpty()) {
+        Rect result;
+        result.origin = getPosition();
+        result.size.width = 1.f;
+        result.size.height = 1.f;
+        return result;
+    }
+    
     aabb.transform(getNodeToParentTransform());
   
     return Rect(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
