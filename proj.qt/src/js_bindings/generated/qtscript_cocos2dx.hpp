@@ -8665,6 +8665,7 @@ public:
 	Q_INVOKABLE void reset();
 	Q_INVOKABLE void set(const cocos2d::Vec3& center, const cocos2d::Vec3& _xAxis, const cocos2d::Vec3& _yAxis, const cocos2d::Vec3& _zAxis, const cocos2d::Vec3& _extents);
 	Q_INVOKABLE void setAABB(const cocos2d::AABB& aabb);
+	Q_INVOKABLE cocos2d::AABB toAABB();
 	Q_INVOKABLE void transform(const cocos2d::Mat4& mat);
 	Q_INVOKABLE cocos2d::OBB transformed(const cocos2d::Mat4& mat);
 	Q_PROPERTY(cocos2d::Vec3 center READ _public_field_get_center WRITE _public_field_set_center)

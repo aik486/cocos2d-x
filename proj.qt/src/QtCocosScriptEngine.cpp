@@ -62,6 +62,16 @@ static void stringVecFromScriptValue(
 	}
 }
 
+static OBB ccAABBtoOBB(const AABB &from)
+{
+	return OBB(from);
+}
+
+static AABB ccOBBtoAABB(const OBB &from)
+{
+	return from.toAABB();
+}
+
 static Color4B ccColor3Bto4B(const Color3B &from)
 {
 	return Color4B(from);
@@ -157,6 +167,14 @@ QtCocosScriptEngine::QtCocosScriptEngine(QScriptEngine *engine)
 	mRootObject.setProperty(QSTRKEY(VERSION_STRING),
 		mEngine->newFunction(cocos2dVersionString),
 		STATIC_PROPERTY | QScriptValue::PropertyGetter);
+
+	static const bool cvtAABBtoOBB =
+		QMetaType::registerConverter<AABB, OBB>(ccAABBtoOBB);
+	Q_UNUSED(cvtAABBtoOBB);
+
+	static const bool cvtOBBtoAABB =
+		QMetaType::registerConverter<OBB, AABB>(ccOBBtoAABB);
+	Q_UNUSED(cvtOBBtoAABB);
 
 	static const bool cvtColor3Bto4B =
 		QMetaType::registerConverter<Color3B, Color4B>(ccColor3Bto4B);

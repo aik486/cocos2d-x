@@ -38428,6 +38428,16 @@ void QtScriptOBB::setAABB(const cocos2d::AABB& aabb)
 	}
 }
 
+cocos2d::AABB QtScriptOBB::toAABB()
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->toAABB();
+	}
+	return cocos2d::AABB();
+}
+
 void QtScriptOBB::transform(const cocos2d::Mat4& mat)
 {
 	auto __o = this->thiz<OBB *>();

@@ -304,6 +304,15 @@ void OBB::setAABB(const AABB &aabb)
     computeExtAxis();
 }
 
+AABB OBB::toAABB() const
+{
+    Vec3 corners[8];
+    getCorners(corners);
+    AABB result;
+    result.updateMinMax(corners, 8);
+    return result;
+}
+
 void OBB::reset()
 {
     memset(this, 0, sizeof(OBB));

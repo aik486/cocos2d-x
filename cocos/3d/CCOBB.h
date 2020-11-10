@@ -72,6 +72,8 @@ public:
     
     void setAABB(const AABB& aabb);
     
+    AABB toAABB() const;
+    
     /*
      * Clear obb
      */ 
@@ -105,7 +107,7 @@ public:
     bool isEmpty() const;
     
     bool operator==(const OBB& other) const;
-    bool operator!=(const OBB& other) const;
+    inline bool operator!=(const OBB& other) const;
     
 protected:
     /*
