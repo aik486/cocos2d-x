@@ -38361,12 +38361,42 @@ bool QtScriptOBB::containPoint(const cocos2d::Vec3& point)
 	return false;
 }
 
+bool QtScriptOBB::differs(const cocos2d::OBB& other)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->operator!=(other);
+	}
+	return false;
+}
+
+bool QtScriptOBB::equals(const cocos2d::OBB& other)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->operator==(other);
+	}
+	return false;
+}
+
 bool QtScriptOBB::intersects(const cocos2d::OBB& box)
 {
 	auto __o = this->thiz<OBB *>();
 	if (__o)
 	{
 		return __o->intersects(box);
+	}
+	return false;
+}
+
+bool QtScriptOBB::isEmpty()
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->isEmpty();
 	}
 	return false;
 }

@@ -8658,7 +8658,10 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_INVOKABLE bool containPoint(const cocos2d::Vec3& point);
+	Q_INVOKABLE bool differs(const cocos2d::OBB& other);
+	Q_INVOKABLE bool equals(const cocos2d::OBB& other);
 	Q_INVOKABLE bool intersects(const cocos2d::OBB& box);
+	Q_INVOKABLE bool isEmpty();
 	Q_INVOKABLE void reset();
 	Q_INVOKABLE void set(const cocos2d::Vec3& center, const cocos2d::Vec3& _xAxis, const cocos2d::Vec3& _yAxis, const cocos2d::Vec3& _zAxis, const cocos2d::Vec3& _extents);
 	Q_INVOKABLE void setAABB(const cocos2d::AABB& aabb);

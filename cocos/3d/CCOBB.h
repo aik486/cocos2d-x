@@ -102,6 +102,11 @@ public:
     void transform(const Mat4& mat);
     OBB transformed(const Mat4& mat) const;
     
+    bool isEmpty() const;
+    
+    bool operator==(const OBB& other) const;
+    bool operator!=(const OBB& other) const;
+    
 protected:
     /*
     * compute extX, extY, extZ
@@ -143,6 +148,11 @@ public:
     Vec3 _extentZ;  // _zAxis * _extents.z
     Vec3 _extents;  // obb length along each axis
 };
+
+bool OBB::operator!=(const OBB &other) const
+{
+    return !operator==(other);
+}
 
 // end of 3d group
 /// @}

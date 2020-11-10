@@ -183,6 +183,10 @@ void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4B &color
 
 void DrawNode3D::drawCube(const AABB &aabb, const Color4B &color)
 {
+    if (aabb.isEmpty()) {
+        return;
+    }
+    
     Vec3 corners[8];
     aabb.getCorners(corners);
     drawCube(corners, color);

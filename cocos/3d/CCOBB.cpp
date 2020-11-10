@@ -469,4 +469,21 @@ OBB OBB::transformed(const Mat4 &mat) const
     return result;
 }
 
+bool OBB::isEmpty() const
+{
+    return *this == OBB();
+}
+
+bool OBB::operator==(const OBB &other) const
+{
+    return _center == other._center &&
+        _xAxis == other._xAxis &&
+        _yAxis == other._yAxis &&
+        _zAxis == other._zAxis &&
+        _extentX ==other._extentX &&
+        _extentY ==other._extentY &&
+        _extentZ ==other._extentZ &&
+        _extents ==other._extents;
+}
+
 NS_CC_END
