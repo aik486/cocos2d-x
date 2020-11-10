@@ -286,6 +286,8 @@ void OBB::set(const Vec3& center, const Vec3& xAxis, const Vec3& yAxis, const Ve
     _yAxis = yAxis;
     _zAxis = zAxis;
     _extents = extents;
+    
+    computeExtAxis();
 }
 
 void OBB::setAABB(const AABB &aabb)
@@ -489,10 +491,10 @@ bool OBB::operator==(const OBB &other) const
         _xAxis == other._xAxis &&
         _yAxis == other._yAxis &&
         _zAxis == other._zAxis &&
-        _extentX ==other._extentX &&
-        _extentY ==other._extentY &&
-        _extentZ ==other._extentZ &&
-        _extents ==other._extents;
+        _extentX == other._extentX &&
+        _extentY == other._extentY &&
+        _extentZ == other._extentZ &&
+        _extents == other._extents;
 }
 
 NS_CC_END
