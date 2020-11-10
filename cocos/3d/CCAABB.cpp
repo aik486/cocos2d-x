@@ -170,4 +170,11 @@ void AABB::transform(const Mat4& mat)
     updateMinMax(corners, 8);
 }
 
+AABB AABB::transformed(const Mat4 &mat) const
+{
+    auto result = *this;
+    result.transform(mat);
+    return result;
+}
+
 NS_CC_END

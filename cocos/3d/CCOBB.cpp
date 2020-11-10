@@ -462,4 +462,11 @@ void OBB::transform(const Mat4& mat)
     computeExtAxis();
 }
 
+OBB OBB::transformed(const Mat4 &mat) const
+{
+    auto result = *this;
+    result.transform(mat);
+    return result;
+}
+
 NS_CC_END

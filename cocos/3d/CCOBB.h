@@ -100,6 +100,7 @@ public:
      * Transforms the obb by the given transformation matrix.
      */
     void transform(const Mat4& mat);
+    OBB transformed(const Mat4& mat) const;
     
 protected:
     /*

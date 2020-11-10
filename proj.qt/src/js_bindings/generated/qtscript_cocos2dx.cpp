@@ -7090,6 +7090,16 @@ void QtScriptAABB::transform(const cocos2d::Mat4& mat)
 	}
 }
 
+cocos2d::AABB QtScriptAABB::transformed(const cocos2d::Mat4& mat)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		return __o->transformed(mat);
+	}
+	return cocos2d::AABB();
+}
+
 int QtScriptAABB::constructorArgumentCountMin() const
 {
 	return 0;
@@ -38395,6 +38405,16 @@ void QtScriptOBB::transform(const cocos2d::Mat4& mat)
 	{
 		__o->transform(mat);
 	}
+}
+
+cocos2d::OBB QtScriptOBB::transformed(const cocos2d::Mat4& mat)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->transformed(mat);
+	}
+	return cocos2d::OBB();
 }
 
 int QtScriptOBB::constructorArgumentCountMin() const

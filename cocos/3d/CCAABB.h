@@ -116,6 +116,8 @@ public:
      */
     void transform(const Mat4& mat);
     
+    AABB transformed(const Mat4& mat) const;
+    
     inline bool operator==(const AABB& other) const;
     inline bool operator!=(const AABB& other) const;
 
