@@ -6995,6 +6995,26 @@ bool QtScriptAABB::containPoint(const cocos2d::Vec3& point)
 	return false;
 }
 
+bool QtScriptAABB::differs(const cocos2d::AABB& other)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		return __o->operator!=(other);
+	}
+	return false;
+}
+
+bool QtScriptAABB::equals(const cocos2d::AABB& other)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		return __o->operator==(other);
+	}
+	return false;
+}
+
 cocos2d::Vec3 QtScriptAABB::getCenter()
 {
 	auto __o = this->thiz<AABB *>();
@@ -46061,6 +46081,16 @@ void QtScriptSprite3D::genMaterial(bool useLight)
 	}
 }
 
+cocos2d::AABB QtScriptSprite3D::getAABB()
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->getAABB();
+	}
+	return cocos2d::AABB();
+}
+
 cocos2d::AttachNode* QtScriptSprite3D::getAttachNode(const QByteArray& boneName)
 {
 	auto __o = this->thiz<Sprite3D *>();
@@ -46089,16 +46119,6 @@ unsigned int QtScriptSprite3D::getLightMask()
 		return __o->getLightMask();
 	}
 	return static_cast<unsigned int>(0);
-}
-
-cocos2d::AABB QtScriptSprite3D::getLocalAABB()
-{
-	auto __o = this->thiz<Sprite3D *>();
-	if (__o)
-	{
-		return __o->getLocalAABB();
-	}
-	return cocos2d::AABB();
 }
 
 cocos2d::Material* QtScriptSprite3D::getMaterial(int meshIndex)
@@ -46169,16 +46189,6 @@ cocos2d::Skeleton3D* QtScriptSprite3D::getSkeleton()
 		return __o->getSkeleton();
 	}
 	return nullptr;
-}
-
-cocos2d::AABB QtScriptSprite3D::getWorldAABB()
-{
-	auto __o = this->thiz<Sprite3D *>();
-	if (__o)
-	{
-		return __o->getWorldAABB();
-	}
-	return cocos2d::AABB();
 }
 
 bool QtScriptSprite3D::initWithFile(const QByteArray& path)
@@ -47684,7 +47694,16 @@ void QtScriptDrawNode3D::clear()
 	}
 }
 
-void QtScriptDrawNode3D::drawCube(const cocos2d::AABB& aabb, const cocos2d::Color4B& color)
+void QtScriptDrawNode3D::drawCube(const cocos2d::Vec3& from, const cocos2d::Vec3& to, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode3D *>();
+	if (__o)
+	{
+		__o->drawCube(from, to, color);
+	}
+}
+
+void QtScriptDrawNode3D::drawCubeAABB(const cocos2d::AABB& aabb, const cocos2d::Color4B& color)
 {
 	auto __o = this->thiz<DrawNode3D *>();
 	if (__o)
@@ -47693,12 +47712,12 @@ void QtScriptDrawNode3D::drawCube(const cocos2d::AABB& aabb, const cocos2d::Colo
 	}
 }
 
-void QtScriptDrawNode3D::drawCube(const cocos2d::Vec3& from, const cocos2d::Vec3& to, const cocos2d::Color4B& color)
+void QtScriptDrawNode3D::drawCubeOBB(const cocos2d::OBB& obb, const cocos2d::Color4B& color)
 {
 	auto __o = this->thiz<DrawNode3D *>();
 	if (__o)
 	{
-		__o->drawCube(from, to, color);
+		__o->drawCube(obb, color);
 	}
 }
 

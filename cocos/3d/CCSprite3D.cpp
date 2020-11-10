@@ -923,37 +923,24 @@ const BlendFunc& Sprite3D::getBlendFunc() const
     return _blend;
 }
 
-AABB Sprite3D::getWorldAABB() 
+AABB Sprite3D::getAABB() 
 {
-    Mat4 nodeToWorldTransform(getNodeToWorldTransform());
-    
-    // If nodeToWorldTransform matrix isn't changed, we don't need to transform aabb.
-    if (_aabbDirty || memcmp(_nodeToWorldTransform.m, nodeToWorldTransform.m, sizeof(Mat4)) != 0)
+    if (_aabbDirty)
     {
         _aabb.reset();
         if (_meshes.size())
         {
-            Mat4 transform(nodeToWorldTransform);
             for (const auto& it : _meshes) {
                 if (it->isVisible())
                     _aabb.merge(it->getAABB());
             }
             
-            _aabb.transform(transform);
         }
-        _nodeToWorldTransform = nodeToWorldTransform;
         _aabbDirty = false;
     }
-    
     return _aabb;
 }
 
-AABB Sprite3D::getLocalAABB()
-{
-    auto aabb = getWorldAABB();
-    aabb.transform(getWorldToNodeTransform());
-    return aabb;
-}
 
 Action* Sprite3D::runAction(Action *action)
 {
@@ -963,11 +950,9 @@ Action* Sprite3D::runAction(Action *action)
 
 Rect Sprite3D::getBoundingBox() const
 {
-    AABB aabb = const_cast<Sprite3D*>(this)->getWorldAABB();
-    auto worldToNode = _parent ? _parent->getWorldToNodeTransform()
-                               : getWorldToNodeTransform();
-    aabb.transform(worldToNode);
-    
+    AABB aabb = const_cast<Sprite3D*>(this)->getAABB();
+    aabb.transform(getNodeToParentTransform());
+  
     return Rect(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
 }
 

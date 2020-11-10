@@ -115,11 +115,24 @@ public:
      * Transforms the bounding box by the given transformation matrix.
      */
     void transform(const Mat4& mat);
+    
+    inline bool operator==(const AABB& other) const;
+    inline bool operator!=(const AABB& other) const;
 
 public:
     Vec3 _min;
     Vec3 _max;
 };
+
+bool AABB::operator==(const AABB &other) const
+{
+    return _min == other._min && _max == other._max;
+}
+
+bool AABB::operator!=(const AABB &other) const
+{
+    return !operator==(other);
+}
 
 // end of 3d group
 /// @}

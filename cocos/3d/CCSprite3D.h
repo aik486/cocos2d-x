@@ -203,8 +203,7 @@ public:
      * because bone can drive the vertices, we just use the origin vertices
      * to calculate the AABB.
      */
-    virtual AABB getWorldAABB() override;
-    virtual AABB getLocalAABB() override;
+    virtual AABB getAABB() override;
     
     /**
      * Executes an action, and returns the action that is executed. For Sprite3D special logic are needed to take care of Fading.
@@ -308,7 +307,7 @@ public:
     bool isForceDisableDepthTest();
     void setForceDisableDepthTest(bool is);
 
-protected:    
+protected:
     void onAABBDirty() { _aabbDirty = true; }
     
     void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite);
@@ -339,7 +338,6 @@ protected:
     Vector<Mesh*>              _meshesSorted;
 
     mutable AABB                 _aabb;                 // cache current aabb
-    mutable Mat4                 _nodeToWorldTransform; // cache the matrix
     mutable bool                 _aabbDirty;
     unsigned int                 _lightMask;
     bool                         _shaderUsingLight; // is current shader using light ?
