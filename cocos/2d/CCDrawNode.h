@@ -354,7 +354,6 @@ protected:
         void updateOpacity(uint8_t opacity);
         void updateBlendState(const BlendFunc& blendFunc);
         void appendVertices(int vertexCount);
-        void refreshVertexBuffer(int start, int end);
         
         ~State();
     };

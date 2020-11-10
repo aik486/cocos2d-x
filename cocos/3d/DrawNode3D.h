@@ -106,12 +106,12 @@ protected:
     backend::DepthStencilDescriptor *_depthstencilDescriptor    = nullptr;
     backend::UniformLocation _locMVPMatrix;
     std::vector<V3F_C4B> _bufferLines;
+    size_t oldLineCount = 0;
     
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
 
-    bool _isDirty                   = true;
     bool _rendererDepthTestEnabled  = true;
 };
 

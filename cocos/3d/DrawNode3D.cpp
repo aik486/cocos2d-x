@@ -70,6 +70,7 @@ bool DrawNode3D::init()
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     auto &pd = _customCommand.getPipelineDescriptor();
     auto program = backend::Program::getBuiltinProgram(backend::ProgramType::LINE_COLOR_3D);
+    CC_SAFE_RELEASE(_programStateLine);
     _programStateLine = new backend::ProgramState(program);
     pd.programState = _programStateLine;
     
@@ -82,6 +83,8 @@ bool DrawNode3D::init()
 
     ensureCapacity(INITIAL_VERTEX_BUFFER_LENGTH);
 
+    clear();
+    
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
 
@@ -98,9 +101,6 @@ bool DrawNode3D::init()
     }
     layout->setLayout(sizeof(V3F_C4B));
     
-    _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH, CustomCommand::BufferUsage::DYNAMIC);
-    _isDirty = true;
-
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Need to listen the event only when not use batchnode, because it will use VBO
     auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event){
@@ -120,22 +120,30 @@ void DrawNode3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
     updateCommand(transform);
 
-    if (_isDirty && !_bufferLines.empty())
+    auto vertexBuffer = _customCommand.getVertexBuffer();
+    size_t oldCapacity = vertexBuffer ? vertexBuffer->getSize() : 0;
+    auto newCapacity = _bufferLines.capacity() * sizeof(V3F_C4B);
+    if (oldCapacity != newCapacity)
     {
-        auto vertexBuffer = _customCommand.getVertexBuffer();
-        auto bufferSize = _bufferLines.capacity() * sizeof(V3F_C4B);
-        if (!vertexBuffer || vertexBuffer->getSize() < bufferSize)
-        {
+        if (newCapacity > 0) {
             _customCommand.createVertexBuffer(sizeof(V3F_C4B), _bufferLines.capacity(), CustomCommand::BufferUsage::DYNAMIC);
+            _customCommand.updateVertexBuffer(_bufferLines.data(), newCapacity);
         } else {
             _customCommand.setVertexBuffer(nullptr);
         }
         
-        _customCommand.updateVertexBuffer(_bufferLines.data(), _bufferLines.size() * sizeof(V3F_C4B));
-        _customCommand.setVertexDrawInfo(0, _bufferLines.size());
-        _isDirty = false;
+        oldLineCount = _bufferLines.size();
+    }
+        
+    if (oldLineCount < _bufferLines.size()) {
+        size_t count = _bufferLines.size() - oldLineCount;
+        size_t bufferSize = count * sizeof(V3F_C4B);
+        size_t offset = oldLineCount * sizeof(V3F_C4B);
+        _customCommand.updateVertexBuffer(_bufferLines.data() + oldLineCount, offset, bufferSize);
+        oldLineCount = _bufferLines.size();
     }
 
+    _customCommand.setVertexDrawInfo(0, _bufferLines.size());
     if (!_bufferLines.empty())
     {
         renderer->addCommand(&_customCommand);
@@ -168,8 +176,6 @@ void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4B &color
 
     _bufferLines.push_back(a);
     _bufferLines.push_back(b);
-    
-    _isDirty = true;
 }
 
 void DrawNode3D::drawCube(Vec3* vertices, const Color4B &color)
@@ -196,7 +202,7 @@ void DrawNode3D::drawCube(Vec3* vertices, const Color4B &color)
 void DrawNode3D::clear()
 {
     _bufferLines.clear();
-    _isDirty = true;
+    oldLineCount = 0;
 }
 
 const BlendFunc& DrawNode3D::getBlendFunc() const

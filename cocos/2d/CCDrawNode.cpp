@@ -85,6 +85,7 @@ bool DrawNode::init()
     reserve(18, TRIANGLES);
     reserve(1, POINTS);
     reserve(1, LINES);
+    clear();
     return true;
 }
 
@@ -121,10 +122,10 @@ void DrawNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t)
 {
     for (auto& state : _states) 
     {
+        state.updateCommand(transform, _globalZOrder);
         if (state.bufferCount <= 0) {
             continue;
         }
-        state.updateCommand(transform, _globalZOrder);
         renderer->addCommand(&state.customCommand);
     }
 }
@@ -647,13 +648,16 @@ void DrawNode::clear()
 {
     for (auto& state : _states) {
         state.bufferCount = 0;
+        state.oldBufferCount = 0;
     }
     _lineWidth = _defaultLineWidth;
 }
 
 void DrawNode::clear(BufferType bufferType)
 {
-    _states[bufferType].bufferCount = 0;
+    auto &state = _states[bufferType];
+    state.bufferCount = 0;
+    state.oldBufferCount = 0;
 }
 
 const BlendFunc& DrawNode::getBlendFunc() const
@@ -800,16 +804,18 @@ void DrawNode::State::updateCommand(const Mat4 &transform, int globalZOrder)
             customCommand.setVertexBuffer(nullptr);
         }
         
-        oldBufferCount = 0;
-        customCommand.setVertexDrawInfo(0, bufferCount);
-    }
-    
-    if (oldBufferCount != bufferCount) {
-        customCommand.setVertexDrawInfo(0, size_t(bufferCount));
-        refreshVertexBuffer(oldBufferCount, bufferCount);
         oldBufferCount = bufferCount;
     }
     
+    if (oldBufferCount < bufferCount) {
+        int count = bufferCount - oldBufferCount;
+        size_t bufferSize = size_t(count) * sizeof(V2F_C4B_T2F);
+        size_t offset = size_t(oldBufferCount) *  sizeof(V2F_C4B_T2F);
+        customCommand.updateVertexBuffer(buffer + oldBufferCount, offset, bufferSize);
+        oldBufferCount = bufferCount;
+    }
+    
+    customCommand.setVertexDrawInfo(0, size_t(bufferCount));
     updateTransform(transform);
     customCommand.init(globalZOrder);
 }
@@ -850,20 +856,6 @@ void DrawNode::State::updateBlendState(const BlendFunc &blendFunc)
 void DrawNode::State::appendVertices(int vertexCount)
 {
     bufferCount += vertexCount;
-}
-
-void DrawNode::State::refreshVertexBuffer(int start, int end)
-{
-    CC_ASSERT(start >= 0);
-    CC_ASSERT(start < bufferCount);
-    CC_ASSERT(end >= start);
-    CC_ASSERT(end <= bufferCount);
-    int count = end - start;
-    if (count > 0) {
-        size_t bufferSize = size_t(count) * sizeof(V2F_C4B_T2F);
-        size_t offset = size_t(start) *  sizeof(V2F_C4B_T2F);
-        customCommand.updateVertexBuffer(buffer + start, offset, bufferSize);
-    }
 }
 
 DrawNode::State::~State()
