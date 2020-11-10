@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include <string>
 
 #include "base/ccTypes.h"
+#include "3d/CCAABB.h"
 #include "renderer/CCTexture2D.h"
 
 NS_CC_BEGIN
@@ -286,6 +287,14 @@ struct CC_DLL TextureCacheProtocol {
     
 protected:
     virtual ~TextureCacheProtocol() = default;
+};
+
+struct CC_DLL Node3DProtocol {
+    virtual AABB getWorldAABB() = 0;
+    virtual AABB getLocalAABB() = 0;
+    
+protected:
+    virtual ~Node3DProtocol() = default;
 };
 
 NS_CC_END

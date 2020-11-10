@@ -6968,6 +6968,197 @@ void QtScriptScissorRect::_public_field_set_y(float value)
 } // end of cocos2d
 
 namespace cocos2d {
+QtScriptAABB::QtScriptAABB(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptBaseClassPrototype<AABB, false>(engine, className)
+{
+}
+
+QtScriptAABB::QtScriptAABB(QScriptEngine *engine)
+	: QtScriptAABB(engine, "AABB")
+{
+}
+
+void QtScriptAABB::Register(const QScriptValue &targetNamespace)
+{
+	QScriptValue inherit;
+	auto ctor = RegisterT<AABB, QtScriptAABB>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+}
+
+bool QtScriptAABB::containPoint(const cocos2d::Vec3& point)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		return __o->containPoint(point);
+	}
+	return false;
+}
+
+cocos2d::Vec3 QtScriptAABB::getCenter()
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		return __o->getCenter();
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptAABB::getCorners(cocos2d::Vec3* dst)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		__o->getCorners(dst);
+	}
+}
+
+bool QtScriptAABB::intersects(const cocos2d::AABB& aabb)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		return __o->intersects(aabb);
+	}
+	return false;
+}
+
+bool QtScriptAABB::isEmpty()
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		return __o->isEmpty();
+	}
+	return false;
+}
+
+void QtScriptAABB::merge(const cocos2d::AABB& box)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		__o->merge(box);
+	}
+}
+
+void QtScriptAABB::reset()
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		__o->reset();
+	}
+}
+
+void QtScriptAABB::set(const cocos2d::Vec3& min, const cocos2d::Vec3& max)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		__o->set(min, max);
+	}
+}
+
+void QtScriptAABB::transform(const cocos2d::Mat4& mat)
+{
+	auto __o = this->thiz<AABB *>();
+	if (__o)
+	{
+		__o->transform(mat);
+	}
+}
+
+int QtScriptAABB::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptAABB::constructorArgumentCountMax() const
+{
+	return 2;
+}
+
+bool QtScriptAABB::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	auto __e = context->engine();
+	Q_UNUSED(__e);
+	bool ok = false;
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			Q_UNUSED(out);
+			ok = true;
+			break;
+		}
+		case 1:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::AABB>(context->argument(0));
+			out = AABB(arg0);
+			ok = true;
+			break;
+		}
+		case 2:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::Vec3>(context->argument(0));
+			auto arg1 = qscriptvalue_cast<cocos2d::Vec3>(context->argument(1));
+			out = AABB(arg0, arg1);
+			ok = true;
+			break;
+		}
+	}
+
+	if (!ok)
+	{
+		QtScriptUtils::badArgumentsException(context,
+			"cocos2d::AABB constructor");
+	}
+	return ok;
+}
+
+cocos2d::Vec3 QtScriptAABB::_public_field_get_max() const
+{
+	auto object = thiz<AABB *>();
+	if (object)
+	{
+		return object->_max;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptAABB::_public_field_set_max(const cocos2d::Vec3& value)
+{
+	auto object = thiz<AABB *>();
+	if (object)
+	{
+		object->_max = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptAABB::_public_field_get_min() const
+{
+	auto object = thiz<AABB *>();
+	if (object)
+	{
+		return object->_min;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptAABB::_public_field_set_min(const cocos2d::Vec3& value)
+{
+	auto object = thiz<AABB *>();
+	if (object)
+	{
+		object->_min = value;
+	}
+}
+
+} // end of cocos2d
+
+namespace cocos2d {
 namespace backend {
 QtScriptStencilDescriptor::QtScriptStencilDescriptor(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptBaseClassPrototype<StencilDescriptor, false>(engine, className)
@@ -12613,197 +12804,6 @@ bool QtScriptScheduler::constructObject(QScriptContext *context, NativeObjectTyp
 			"cocos2d::Scheduler constructor");
 	}
 	return ok;
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
-QtScriptAABB::QtScriptAABB(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<AABB, false>(engine, className)
-{
-}
-
-QtScriptAABB::QtScriptAABB(QScriptEngine *engine)
-	: QtScriptAABB(engine, "AABB")
-{
-}
-
-void QtScriptAABB::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<AABB, QtScriptAABB>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-bool QtScriptAABB::containPoint(const cocos2d::Vec3& point)
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		return __o->containPoint(point);
-	}
-	return false;
-}
-
-cocos2d::Vec3 QtScriptAABB::getCenter()
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		return __o->getCenter();
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptAABB::getCorners(cocos2d::Vec3* dst)
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		__o->getCorners(dst);
-	}
-}
-
-bool QtScriptAABB::intersects(const cocos2d::AABB& aabb)
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		return __o->intersects(aabb);
-	}
-	return false;
-}
-
-bool QtScriptAABB::isEmpty()
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		return __o->isEmpty();
-	}
-	return false;
-}
-
-void QtScriptAABB::merge(const cocos2d::AABB& box)
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		__o->merge(box);
-	}
-}
-
-void QtScriptAABB::reset()
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		__o->reset();
-	}
-}
-
-void QtScriptAABB::set(const cocos2d::Vec3& min, const cocos2d::Vec3& max)
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		__o->set(min, max);
-	}
-}
-
-void QtScriptAABB::transform(const cocos2d::Mat4& mat)
-{
-	auto __o = this->thiz<AABB *>();
-	if (__o)
-	{
-		__o->transform(mat);
-	}
-}
-
-int QtScriptAABB::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptAABB::constructorArgumentCountMax() const
-{
-	return 2;
-}
-
-bool QtScriptAABB::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			Q_UNUSED(out);
-			ok = true;
-			break;
-		}
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::AABB>(context->argument(0));
-			out = AABB(arg0);
-			ok = true;
-			break;
-		}
-		case 2:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::Vec3>(context->argument(0));
-			auto arg1 = qscriptvalue_cast<cocos2d::Vec3>(context->argument(1));
-			out = AABB(arg0, arg1);
-			ok = true;
-			break;
-		}
-	}
-
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::AABB constructor");
-	}
-	return ok;
-}
-
-cocos2d::Vec3 QtScriptAABB::_public_field_get_max() const
-{
-	auto object = thiz<AABB *>();
-	if (object)
-	{
-		return object->_max;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptAABB::_public_field_set_max(const cocos2d::Vec3& value)
-{
-	auto object = thiz<AABB *>();
-	if (object)
-	{
-		object->_max = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptAABB::_public_field_get_min() const
-{
-	auto object = thiz<AABB *>();
-	if (object)
-	{
-		return object->_min;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptAABB::_public_field_set_min(const cocos2d::Vec3& value)
-{
-	auto object = thiz<AABB *>();
-	if (object)
-	{
-		object->_min = value;
-	}
 }
 
 } // end of cocos2d
@@ -45997,10 +45997,6 @@ void QtScriptSprite3D::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3D::createWithSkeleton)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("getAABBRecursivelyImp", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptSprite3D::getAABBRecursivelyImp)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	ctor.setProperty("getOverrideTextureExtension", engine->newFunction(
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3D::getOverrideTextureExtension)),
@@ -46065,26 +46061,6 @@ void QtScriptSprite3D::genMaterial(bool useLight)
 	}
 }
 
-cocos2d::AABB QtScriptSprite3D::getAABB()
-{
-	auto __o = this->thiz<Sprite3D *>();
-	if (__o)
-	{
-		return __o->getAABB();
-	}
-	return cocos2d::AABB();
-}
-
-cocos2d::AABB QtScriptSprite3D::getAABBRecursively()
-{
-	auto __o = this->thiz<Sprite3D *>();
-	if (__o)
-	{
-		return __o->getAABBRecursively();
-	}
-	return cocos2d::AABB();
-}
-
 cocos2d::AttachNode* QtScriptSprite3D::getAttachNode(const QByteArray& boneName)
 {
 	auto __o = this->thiz<Sprite3D *>();
@@ -46113,6 +46089,16 @@ unsigned int QtScriptSprite3D::getLightMask()
 		return __o->getLightMask();
 	}
 	return static_cast<unsigned int>(0);
+}
+
+cocos2d::AABB QtScriptSprite3D::getLocalAABB()
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->getLocalAABB();
+	}
+	return cocos2d::AABB();
 }
 
 cocos2d::Material* QtScriptSprite3D::getMaterial(int meshIndex)
@@ -46183,6 +46169,16 @@ cocos2d::Skeleton3D* QtScriptSprite3D::getSkeleton()
 		return __o->getSkeleton();
 	}
 	return nullptr;
+}
+
+cocos2d::AABB QtScriptSprite3D::getWorldAABB()
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->getWorldAABB();
+	}
+	return cocos2d::AABB();
 }
 
 bool QtScriptSprite3D::initWithFile(const QByteArray& path)
@@ -46529,27 +46525,6 @@ QScriptValue QtScriptSprite3D::createWithSkeleton(QScriptContext *context, QScri
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Sprite3D::createWithSkeleton");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptSprite3D::getAABBRecursivelyImp(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::Node*>(context->argument(0));
-			return __e->toScriptValue(Sprite3D::getAABBRecursivelyImp(arg0));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3D::getAABBRecursivelyImp");
 	return __e->uncaughtException();
 }
 
@@ -47658,6 +47633,125 @@ bool QtScriptBundle3D::constructObject(QScriptContext *context, NativeObjectType
 
 } // end of cocos2d
 
+namespace cocos2d {
+QtScriptDrawNode3D::QtScriptDrawNode3D(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptNode(engine, className)
+{
+}
+
+QtScriptDrawNode3D::QtScriptDrawNode3D(QScriptEngine *engine)
+	: QtScriptDrawNode3D(engine, "DrawNode3D")
+{
+}
+
+void QtScriptDrawNode3D::Register(const QScriptValue &targetNamespace)
+{
+	auto engine = targetNamespace.engine();
+	Q_ASSERT(engine);
+	auto inherit = engine->defaultPrototype(qMetaTypeId<Node *>());
+	auto ctor = RegisterT<DrawNode3D, QtScriptDrawNode3D>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+	ctor.setProperty("create", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptDrawNode3D::create)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+}
+
+int QtScriptDrawNode3D::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptDrawNode3D::constructorArgumentCountMax() const
+{
+	return 0;
+}
+
+bool QtScriptDrawNode3D::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	Q_UNUSED(out);
+	QtScriptUtils::noPublicConstructorException(context,
+		"cocos2d::DrawNode3D");
+	return false;
+}
+
+void QtScriptDrawNode3D::clear()
+{
+	auto __o = this->thiz<DrawNode3D *>();
+	if (__o)
+	{
+		__o->clear();
+	}
+}
+
+void QtScriptDrawNode3D::drawCube(const cocos2d::AABB& aabb, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode3D *>();
+	if (__o)
+	{
+		__o->drawCube(aabb, color);
+	}
+}
+
+void QtScriptDrawNode3D::drawCube(const cocos2d::Vec3& from, const cocos2d::Vec3& to, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode3D *>();
+	if (__o)
+	{
+		__o->drawCube(from, to, color);
+	}
+}
+
+void QtScriptDrawNode3D::drawLine(const cocos2d::Vec3& from, const cocos2d::Vec3& to, const cocos2d::Color4B& color)
+{
+	auto __o = this->thiz<DrawNode3D *>();
+	if (__o)
+	{
+		__o->drawLine(from, to, color);
+	}
+}
+
+cocos2d::BlendFunc QtScriptDrawNode3D::getBlendFunc()
+{
+	auto __o = this->thiz<DrawNode3D *>();
+	if (__o)
+	{
+		return __o->getBlendFunc();
+	}
+	return cocos2d::BlendFunc();
+}
+
+void QtScriptDrawNode3D::setBlendFunc(const cocos2d::BlendFunc& blendFunc)
+{
+	auto __o = this->thiz<DrawNode3D *>();
+	if (__o)
+	{
+		__o->setBlendFunc(blendFunc);
+	}
+}
+
+QScriptValue QtScriptDrawNode3D::create(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			return __e->toScriptValue(DrawNode3D::create());
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::DrawNode3D::create");
+	return __e->uncaughtException();
+}
+
+} // end of cocos2d
+
 void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 {
 	QScriptValue targetNamespace;
@@ -47723,6 +47817,7 @@ void qtscript_register_all_cocos2dx(QScriptEngine* engine)
 	cocos2d::QtScriptDirectionLight::Register(targetNamespace);
 	cocos2d::QtScriptDirector::Register(targetNamespace);
 	cocos2d::QtScriptDrawNode::Register(targetNamespace);
+	cocos2d::QtScriptDrawNode3D::Register(targetNamespace);
 	cocos2d::QtScriptEaseBackIn::Register(targetNamespace);
 	cocos2d::QtScriptEaseBackInOut::Register(targetNamespace);
 	cocos2d::QtScriptEaseBackOut::Register(targetNamespace);

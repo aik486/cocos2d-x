@@ -35,16 +35,16 @@ NS_CC_BEGIN
 /**
  * Copy DrawNode for 3D geometry drawing.
  */
-class DrawNode3D: public cocos2d::Node
+class DrawNode3D: public Node
 {
 public:
     /** creates and initialize a DrawNode3D node */
-    static cocos2d::DrawNode3D* create();
+    static DrawNode3D* create();
     
     /**
      * Draw 3D Line
      */
-    void drawLine(const cocos2d::Vec3 &from, const cocos2d::Vec3 &to, const Color4B &color);
+    void drawLine(const Vec3 &from, const Vec3 &to, const Color4B &color);
     
     /**
     * Draw 3D cube
@@ -59,10 +59,10 @@ public:
     *        vertices[7]:Left-top-back.
     * @param color
     */
-    void drawCube(const cocos2d::Vec3 &from, const cocos2d::Vec3 &to, const Color4B &color);
-    void drawCube(const cocos2d::AABB &aabb, const Color4B &color);
-    void drawCube(const cocos2d::OBB &obb, const Color4B &color);
-    void drawCube(cocos2d::Vec3* vertices, const Color4B &color);
+    void drawCube(const Vec3 &from, const Vec3 &to, const Color4B &color);
+    void drawCube(const AABB &aabb, const Color4B &color);
+    void drawCube(const OBB &obb, const Color4B &color);
+    void drawCube(Vec3* vertices, const Color4B &color);
     
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -82,10 +82,9 @@ public:
     */
     void setBlendFunc(const BlendFunc &blendFunc);
 
-    void updateCommand(const cocos2d::Mat4& transform);
     
     // Overrides
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     
 CC_CONSTRUCTOR_ACCESS:
     DrawNode3D();
@@ -93,20 +92,21 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
 
 protected:
+    void updateCommand(const Mat4& transform);
 
     void onBeforeDraw();
     void onAfterDraw();
 
     struct V3F_C4B
     {
-        cocos2d::Vec3     vertices;
+        Vec3     vertices;
         Color4B  colors;
     };
     void ensureCapacity(int count);
 
 
     BlendFunc   _blendFunc;
-    cocos2d::CustomCommand _customCommand;
+    CustomCommand _customCommand;
     backend::ProgramState* _programStateLine                    = nullptr;
     backend::DepthStencilDescriptor *_depthstencilDescriptor    = nullptr;
     backend::UniformLocation _locMVPMatrix;

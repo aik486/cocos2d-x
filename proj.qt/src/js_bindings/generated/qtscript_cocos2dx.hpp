@@ -6,6 +6,7 @@
 #include "cocos/renderer/backend/Device.h"
 #include "cocos/renderer/backend/Buffer.h"
 #include "cocos/3d/CCBundle3D.h"
+#include "cocos/3d/CCDrawNode3D.h"
 
 void qtscript_register_all_cocos2dx(QScriptEngine *engine);
 
@@ -1523,6 +1524,45 @@ Q_DECLARE_METATYPE(cocos2d::ScissorRect *)
 Q_DECLARE_METATYPE(const cocos2d::ScissorRect *)
 
 namespace cocos2d {
+class QtScriptAABB final : public QtScriptBaseClassPrototype<AABB, false>
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptAABB(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptAABB(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_INVOKABLE bool containPoint(const cocos2d::Vec3& point);
+	Q_INVOKABLE cocos2d::Vec3 getCenter();
+	Q_INVOKABLE void getCorners(cocos2d::Vec3* dst);
+	Q_INVOKABLE bool intersects(const cocos2d::AABB& aabb);
+	Q_INVOKABLE bool isEmpty();
+	Q_INVOKABLE void merge(const cocos2d::AABB& box);
+	Q_INVOKABLE void reset();
+	Q_INVOKABLE void set(const cocos2d::Vec3& min, const cocos2d::Vec3& max);
+	Q_INVOKABLE void transform(const cocos2d::Mat4& mat);
+	Q_PROPERTY(cocos2d::Vec3 max READ _public_field_get_max WRITE _public_field_set_max)
+	cocos2d::Vec3 _public_field_get_max() const;
+	void _public_field_set_max(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 min READ _public_field_get_min WRITE _public_field_set_min)
+	cocos2d::Vec3 _public_field_get_min() const;
+	void _public_field_set_min(const cocos2d::Vec3& value);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::AABB)
+Q_DECLARE_METATYPE(cocos2d::AABB *)
+Q_DECLARE_METATYPE(const cocos2d::AABB *)
+
+namespace cocos2d {
 namespace backend {
 class QtScriptStencilDescriptor final : public QtScriptBaseClassPrototype<StencilDescriptor, false>
 {
@@ -2663,45 +2703,6 @@ public:
 
 Q_DECLARE_METATYPE(cocos2d::Scheduler *)
 Q_DECLARE_METATYPE(const cocos2d::Scheduler *)
-
-namespace cocos2d {
-class QtScriptAABB final : public QtScriptBaseClassPrototype<AABB, false>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptAABB(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptAABB(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_INVOKABLE bool containPoint(const cocos2d::Vec3& point);
-	Q_INVOKABLE cocos2d::Vec3 getCenter();
-	Q_INVOKABLE void getCorners(cocos2d::Vec3* dst);
-	Q_INVOKABLE bool intersects(const cocos2d::AABB& aabb);
-	Q_INVOKABLE bool isEmpty();
-	Q_INVOKABLE void merge(const cocos2d::AABB& box);
-	Q_INVOKABLE void reset();
-	Q_INVOKABLE void set(const cocos2d::Vec3& min, const cocos2d::Vec3& max);
-	Q_INVOKABLE void transform(const cocos2d::Mat4& mat);
-	Q_PROPERTY(cocos2d::Vec3 max READ _public_field_get_max WRITE _public_field_set_max)
-	cocos2d::Vec3 _public_field_get_max() const;
-	void _public_field_set_max(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 min READ _public_field_get_min WRITE _public_field_set_min)
-	cocos2d::Vec3 _public_field_get_min() const;
-	void _public_field_set_min(const cocos2d::Vec3& value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::AABB)
-Q_DECLARE_METATYPE(cocos2d::AABB *)
-Q_DECLARE_METATYPE(const cocos2d::AABB *)
 
 namespace cocos2d {
 class QtScriptMeshVertexAttrib final : public QtScriptBaseClassPrototype<MeshVertexAttrib, false>
@@ -10269,11 +10270,10 @@ public:
 	Q_INVOKABLE void applySpriteData(cocos2d::Sprite3DData* data, cocos2d::Sprite3DData* skele);
 	Q_INVOKABLE void genMaterial();
 	Q_INVOKABLE void genMaterial(bool useLight);
-	Q_INVOKABLE cocos2d::AABB getAABB();
-	Q_INVOKABLE cocos2d::AABB getAABBRecursively();
 	Q_INVOKABLE cocos2d::AttachNode* getAttachNode(const QByteArray& boneName);
 	cocos2d::BlendFunc getBlendFunc();
 	unsigned int getLightMask();
+	Q_INVOKABLE cocos2d::AABB getLocalAABB();
 	Q_INVOKABLE cocos2d::Material* getMaterial(int meshIndex);
 	Q_INVOKABLE cocos2d::Mesh* getMesh();
 	Q_INVOKABLE cocos2d::Mesh* getMeshByIndex(int index);
@@ -10281,6 +10281,7 @@ public:
 	Q_INVOKABLE int getMeshCount();
 	Q_INVOKABLE cocos2d::MeshIndexData* getMeshIndexData(const QByteArray& indexId);
 	Q_INVOKABLE cocos2d::Skeleton3D* getSkeleton();
+	Q_INVOKABLE cocos2d::AABB getWorldAABB();
 	Q_INVOKABLE bool initWithFile(const QByteArray& path);
 	Q_INVOKABLE bool initWithFile(const QByteArray& path, cocos2d::Sprite3DData* skele);
 	Q_INVOKABLE bool initWithSkeletonFile(const QByteArray& modelPath, const QByteArray& skeletonPath);
@@ -10307,7 +10308,6 @@ public:
 	static QScriptValue createAsync(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createAsyncWithSkeleton(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithSkeleton(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue getAABBRecursivelyImp(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getOverrideTextureExtension(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue setOverrideTextureExtension(QScriptContext *context, QScriptEngine* engine);
 };
@@ -10566,4 +10566,35 @@ public:
 Q_DECLARE_METATYPE(cocos2d::QtScriptBundle3D::StorageType)
 Q_DECLARE_METATYPE(cocos2d::Bundle3D *)
 Q_DECLARE_METATYPE(const cocos2d::Bundle3D *)
+
+namespace cocos2d {
+class QtScriptDrawNode3D : public QtScriptNode
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptDrawNode3D(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptDrawNode3D(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_PROPERTY(cocos2d::BlendFunc blendFunc READ getBlendFunc WRITE setBlendFunc)
+	Q_INVOKABLE void clear();
+	Q_INVOKABLE void drawCube(const cocos2d::AABB& aabb, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawCube(const cocos2d::Vec3& from, const cocos2d::Vec3& to, const cocos2d::Color4B& color);
+	Q_INVOKABLE void drawLine(const cocos2d::Vec3& from, const cocos2d::Vec3& to, const cocos2d::Color4B& color);
+	cocos2d::BlendFunc getBlendFunc();
+	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
+	static QScriptValue create(QScriptContext *context, QScriptEngine* engine);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::DrawNode3D *)
+Q_DECLARE_METATYPE(const cocos2d::DrawNode3D *)
 

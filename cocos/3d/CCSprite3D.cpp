@@ -244,20 +244,6 @@ void Sprite3D::afterAsyncLoad(void*)
     std::swap(dummy, _asyncLoadParam);
 }
 
-AABB Sprite3D::getAABBRecursivelyImp(Node *node)
-{
-    AABB aabb;
-    for (auto iter : node->getChildren()){
-        aabb.merge(getAABBRecursivelyImp(iter));
-    }
-    
-    Sprite3D *sprite3d = dynamic_cast<Sprite3D*>(node);
-    if (sprite3d)
-        aabb.merge(sprite3d->getAABB());
-
-    return aabb;
-}
-
 bool Sprite3D::loadFromCacheWithSkeleton(const std::string& path, const std::string& skeletonPath)
 {
     if (!skeletonPath.empty() && skeletonPath != path)
@@ -937,22 +923,12 @@ const BlendFunc& Sprite3D::getBlendFunc() const
     return _blend;
 }
 
-AABB Sprite3D::getAABBRecursively()
-{
-    return getAABBRecursivelyImp(this);
-}
-
-const AABB& Sprite3D::getAABB() const
+AABB Sprite3D::getWorldAABB() 
 {
     Mat4 nodeToWorldTransform(getNodeToWorldTransform());
     
     // If nodeToWorldTransform matrix isn't changed, we don't need to transform aabb.
-    //    if (memcmp(_nodeToWorldTransform.m, nodeToWorldTransform.m, sizeof(Mat4)) == 0 && !_aabbDirty)
-    if (!_aabbDirty && memcmp(_nodeToWorldTransform.m, nodeToWorldTransform.m, sizeof(Mat4)) == 0)
-    {
-        return _aabb;
-    }
-    else
+    if (_aabbDirty || memcmp(_nodeToWorldTransform.m, nodeToWorldTransform.m, sizeof(Mat4)) != 0)
     {
         _aabb.reset();
         if (_meshes.size())
@@ -964,12 +940,19 @@ const AABB& Sprite3D::getAABB() const
             }
             
             _aabb.transform(transform);
-            _nodeToWorldTransform = nodeToWorldTransform;
-            _aabbDirty = false;
         }
+        _nodeToWorldTransform = nodeToWorldTransform;
+        _aabbDirty = false;
     }
     
     return _aabb;
+}
+
+AABB Sprite3D::getLocalAABB()
+{
+    auto aabb = getWorldAABB();
+    aabb.transform(getWorldToNodeTransform());
+    return aabb;
 }
 
 Action* Sprite3D::runAction(Action *action)
@@ -980,9 +963,12 @@ Action* Sprite3D::runAction(Action *action)
 
 Rect Sprite3D::getBoundingBox() const
 {
-    AABB aabb = getAABB();
-    Rect ret(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
-    return ret;
+    AABB aabb = const_cast<Sprite3D*>(this)->getWorldAABB();
+    auto worldToNode = _parent ? _parent->getWorldToNodeTransform()
+                               : getWorldToNodeTransform();
+    aabb.transform(worldToNode);
+    
+    return Rect(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
 }
 
 void Sprite3D::setCullFace(CullFaceSide side)

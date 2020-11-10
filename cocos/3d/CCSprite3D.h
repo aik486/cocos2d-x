@@ -116,7 +116,7 @@ protected:
 };
 
 /** @brief Sprite3D: A sprite can be loaded from 3D model files, .obj, .c3t, .c3b, then can be drawn as sprite */
-class CC_DLL Sprite3D : public Node, public BlendProtocol
+class CC_DLL Sprite3D : public Node, public BlendProtocol, public Node3DProtocol
 {
 public:
     /**
@@ -203,15 +203,8 @@ public:
      * because bone can drive the vertices, we just use the origin vertices
      * to calculate the AABB.
      */
-    const AABB& getAABB() const;
-    
-    /*
-     * Get AABB Recursively
-     * Because some times we may have an empty Sprite3D Node as parent, but
-     * the Sprite3D don't contain any meshes, so getAABB()
-     * will return a wrong value at that time.
-     */
-    AABB getAABBRecursively();
+    virtual AABB getWorldAABB() override;
+    virtual AABB getLocalAABB() override;
     
     /**
      * Executes an action, and returns the action that is executed. For Sprite3D special logic are needed to take care of Fading.
@@ -308,11 +301,7 @@ public:
     MeshIndexData* getMeshIndexData(const std::string& indexId) const;
     
     void addMesh(Mesh* mesh);
-    
-    void onAABBDirty() { _aabbDirty = true; }
-
-    static AABB getAABBRecursivelyImp(Node *node);
-    
+     
     inline static const std::string &getOverrideTextureExtension();
     inline static void setOverrideTextureExtension(const std::string &ext);
     
@@ -320,6 +309,8 @@ public:
     void setForceDisableDepthTest(bool is);
 
 protected:    
+    void onAABBDirty() { _aabbDirty = true; }
+    
     void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite);
     void createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas);
     Sprite3D* createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
