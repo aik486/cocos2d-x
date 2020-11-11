@@ -964,6 +964,17 @@ Rect Sprite3D::getBoundingBox() const
     return Rect(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
 }
 
+bool Sprite3D::containsWorldPoint(const Vec2 &point) const
+{
+    auto aabb = const_cast<Sprite3D*>(this)->getAABB();
+    if (aabb.isEmpty()) {
+        return false;
+    }
+    OBB worldOBB(AABB(Vec3(point.x, point.y, -99999.f), Vec3(point.x, point.y, 99999.f)));
+    
+    return OBB(aabb).transformed(getNodeToWorldTransform()).intersects(worldOBB);
+}
+
 void Sprite3D::setCullFace(CullFaceSide side)
 {
     for (auto& it : _meshes) {

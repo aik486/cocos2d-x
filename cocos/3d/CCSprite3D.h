@@ -226,6 +226,7 @@ public:
      * Note: the bounding-box is just get from the AABB which as Z=0, so that is not very accurate.
      */
     virtual Rect getBoundingBox() const override;
+    virtual bool containsWorldPoint(const Vec2& point) const override;
 
     // set which face is going to cull, CullFaceSide::BACK, CullFaceSide::FRONT and CullFaceSide::NONE.
     void setCullFace(CullFaceSide side);

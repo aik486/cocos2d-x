@@ -826,8 +826,15 @@ Scene* Node::getScene() const
 
 Rect Node::getBoundingBox() const
 {
-    Rect rect(0, 0, _contentSize.width, _contentSize.height);
+    Rect rect(0.f, 0.f, _contentSize.width, _contentSize.height);
     return RectApplyAffineTransform(rect, getNodeToParentAffineTransform());
+}
+
+bool Node::containsWorldPoint(const Vec2 &point) const
+{
+    auto localPoint = convertToNodeSpace(point);
+    Rect rect(0.f, 0.f, _contentSize.width, _contentSize.height);
+    return rect.containsPoint(localPoint);
 }
 
 // MARK: Children logic

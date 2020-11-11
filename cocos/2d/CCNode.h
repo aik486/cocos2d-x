@@ -1149,6 +1149,7 @@ public:
      * @return An AABB (axis-aligned bounding-box) in its parent's coordinate system
      */
     virtual Rect getBoundingBox() const;
+    virtual bool containsWorldPoint(const Vec2& point) const;
 
     /** Set event dispatcher for scene.
      *
