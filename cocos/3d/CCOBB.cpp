@@ -293,7 +293,9 @@ void OBB::set(const Vec3& center, const Vec3& xAxis, const Vec3& yAxis, const Ve
 void OBB::setAABB(const AABB &aabb)
 {
     reset();
-    
+    if (!aabb.isEmpty()) {
+        return;
+    }
     _center = (aabb._min + aabb._max);
     _center.scale(0.5f);
     _xAxis.set(1.0f, 0.0f, 0.0f);
