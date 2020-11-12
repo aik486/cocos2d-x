@@ -285,9 +285,11 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
         }
     }
 
+    
     auto& programStates = spritedata->programStates;
     ssize_t meshCount = _meshes.size();
     if (programStates.empty()) {
+        genMaterial();
         programStates.reserve(meshCount);
         for (const auto mesh : _meshes) {
             programStates.pushBack(mesh->getProgramState());
@@ -300,8 +302,6 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
             _meshes.at(i)->setProgramState(glstate->clone());
         }
     }
-    
-    genMaterial();
 }
 
 bool Sprite3D::loadFromCache(const std::string& path, Sprite3DData *skele /*= nullptr*/)
@@ -567,12 +567,15 @@ void Sprite3D::setMaterial(Material *material, int meshIndex)
     {
         for (ssize_t i = 0, size = _meshes.size(); i < size; ++i)
         {
-            _meshes.at(i)->setMaterial(i == 0 ? material : material->clone());
+            auto mesh = _meshes.at(i);
+            mesh->setTextureCacheProtocol(_textureCacheProtocol);
+            mesh->setMaterial(i == 0 ? material : material->clone());
         }
     }
     else
     {
         auto mesh = _meshes.at(meshIndex);
+        mesh->setTextureCacheProtocol(_textureCacheProtocol);
         mesh->setMaterial(material);
     }
 
@@ -596,6 +599,7 @@ void Sprite3D::genMaterial(bool useLight)
     
     for (auto& mesh: _meshes)
     {
+        mesh->setTextureCacheProtocol(_textureCacheProtocol);
         auto meshVertexData = mesh->getMeshIndexData()->getMeshVertexData();
         Sprite3DMaterial** m;
         bool isTransparent = mesh->_isTransparent;

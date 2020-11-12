@@ -4036,9 +4036,10 @@ public:
 	explicit QtScriptConfiguration(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_PROPERTY(int animate3DQuality READ getAnimate3DQuality WRITE setAnimate3DQuality)
 	Q_INVOKABLE bool checkForGLExtension(const QByteArray& searchName);
 	Q_INVOKABLE void gatherGPUInfo();
-	Q_INVOKABLE int getAnimate3DQuality();
+	int getAnimate3DQuality();
 	Q_INVOKABLE QByteArray getInfo();
 	Q_INVOKABLE int getMaxAttributes();
 	Q_INVOKABLE int getMaxModelviewStackDepth();
@@ -4051,6 +4052,7 @@ public:
 	Q_INVOKABLE cocos2d::Value getValue(const QByteArray& key, const cocos2d::Value& defaultValue);
 	Q_INVOKABLE bool init();
 	Q_INVOKABLE void loadConfigFile(const QByteArray& filename);
+	void setAnimate3DQuality(int q);
 	Q_INVOKABLE void setValue(const QByteArray& key, const cocos2d::Value& value);
 	Q_INVOKABLE bool supportsATITC();
 	Q_INVOKABLE bool supportsBGRA8888();

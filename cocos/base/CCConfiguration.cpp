@@ -290,6 +290,11 @@ Animate3DQuality Configuration::getAnimate3DQuality() const
     return _animate3DQuality;
 }
 
+void Configuration::setAnimate3DQuality(Animate3DQuality q)
+{
+    _animate3DQuality = q;
+}
+
 //
 // generic getters for properties
 //

@@ -78,13 +78,9 @@ static Texture2D * getDummyTexture()
     auto texture = Director::getInstance()->getTextureCache()->getTextureForKey("/dummyTexture");
     if(!texture)
     {
-#ifdef NDEBUG
-        unsigned char data[] ={0,0,0,0};//1*1 transparent picture
-#else
         unsigned char data[] ={255,0,0,255};//1*1 red picture
-#endif
         Image * image =new (std::nothrow) Image();
-        image->initWithRawData(data,sizeof(data),1,1,sizeof(unsigned char));
+        image->initWithRawData(data,sizeof(data), 1, 1, 8);
         texture=Director::getInstance()->getTextureCache()->addImage(image,"/dummyTexture");
         image->release();
     }
@@ -101,7 +97,6 @@ Mesh::Mesh()
 , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
 , _blendDirty(true)
 , _material(nullptr)
-, _texFile("")
 , _forceDisableDepthTest(false)
 {
     
@@ -238,13 +233,12 @@ bool Mesh::isVisible() const
 void Mesh::setTexture(const std::string& texPath)
 {
     _texFile = texPath;
-    auto tex = Director::getInstance()->getTextureCache()->addImage(texPath);
-    setTexture(tex, NTextureData::Usage::Diffuse);
+    setTexture(texPath, NTextureData::Usage::Diffuse);
 }
 
 void Mesh::setTexture(Texture2D* tex)
 {
-    setTexture(tex, NTextureData::Usage::Diffuse);
+    setTexture(tex, NTextureData::Usage::Diffuse, true);
 }
 
 void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileName)
@@ -281,8 +275,9 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
         }
     }
     
-    if (cacheFileName)
+    if (cacheFileName) {
         _texFile = tex->getPath();
+    }
 }
 
 void Mesh::setTexture(const std::string& texPath, NTextureData::Usage usage)

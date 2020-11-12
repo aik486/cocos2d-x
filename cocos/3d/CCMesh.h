@@ -114,7 +114,7 @@ public:
      * @param usage Usage of this texture
      * @param whether refresh the cache file name
      */
-    void setTexture(Texture2D* tex, NTextureData::Usage usage,bool cacheFileName = true);
+    void setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileName = false);
     /**
      * set texture
      * @param texPath texture path
@@ -226,7 +226,7 @@ public:
      */
     void setForce2DQueue(bool force2D) { _force2DQueue = force2D; }
 
-    std::string getTextureFileName(){ return _texFile; }
+    inline const std::string &getTextureFileName() const;
     inline const std::map<NTextureData::Usage, Texture2D*>& getTextureMap() const;
 
 CC_CONSTRUCTOR_ACCESS:
@@ -286,6 +286,11 @@ TextureCacheProtocol *Mesh::getTextureCacheProtocol() const
 void Mesh::setTextureCacheProtocol(TextureCacheProtocol *cache)
 {
     _textureCacheProtocol = cache;
+}
+
+const std::string &Mesh::getTextureFileName() const
+{
+    return _texFile; 
 }
 
 const std::map<NTextureData::Usage, Texture2D*>& Mesh::getTextureMap() const

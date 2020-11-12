@@ -188,6 +188,7 @@ public:
 
     /** get 3d animate quality*/
     Animate3DQuality getAnimate3DQuality() const;
+    void setAnimate3DQuality(Animate3DQuality q);
     
     /** Returns whether or not an OpenGL is supported. 
      *

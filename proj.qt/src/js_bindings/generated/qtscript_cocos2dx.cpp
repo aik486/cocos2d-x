@@ -18569,6 +18569,15 @@ void QtScriptConfiguration::loadConfigFile(const QByteArray& filename)
 	}
 }
 
+void QtScriptConfiguration::setAnimate3DQuality(int q)
+{
+	auto __o = this->thiz<Configuration *>();
+	if (__o)
+	{
+		__o->setAnimate3DQuality(cocos2d::Animate3DQuality(q));
+	}
+}
+
 void QtScriptConfiguration::setValue(const QByteArray& key, const cocos2d::Value& value)
 {
 	auto __o = this->thiz<Configuration *>();
