@@ -603,6 +603,13 @@ public:
      * @return The rotation of the node in degrees.
      */
     virtual float getRotation() const;
+    inline float getRotationX() const;
+    inline float getRotationY() const;
+    inline float getRotationZ() const;
+    
+    void setRotationX(float value);
+    void setRotationY(float value);
+    void setRotationZ(float value);
 
     /**
      * Sets the rotation (X,Y,Z) in degrees.
@@ -1980,6 +1987,21 @@ private:
 inline unsigned Node::getOrderOfArrival() const
 {
     return _orderOfArrival;
+}
+
+float Node::getRotationX() const
+{
+    return _rotationX;
+}
+
+float Node::getRotationY() const
+{
+    return _rotationY;
+}
+
+float Node::getRotationZ() const
+{
+    return _rotationZ_X;
 }
 
 inline bool Node::isUseInvertedAdditionalTransformOrder() const

@@ -2328,6 +2328,9 @@ public:
 	Q_PROPERTY(cocos2d::Quaternion rotationQuat READ getRotationQuat WRITE setRotationQuat)
 	Q_PROPERTY(float rotationSkewX READ getRotationSkewX WRITE setRotationSkewX)
 	Q_PROPERTY(float rotationSkewY READ getRotationSkewY WRITE setRotationSkewY)
+	Q_PROPERTY(float rotationX READ getRotationX WRITE setRotationX)
+	Q_PROPERTY(float rotationY READ getRotationY WRITE setRotationY)
+	Q_PROPERTY(float rotationZ READ getRotationZ WRITE setRotationZ)
 	Q_PROPERTY(float scale READ getScale WRITE setScale)
 	Q_PROPERTY(float scaleX READ getScaleX WRITE setScaleX)
 	Q_PROPERTY(float scaleY READ getScaleY WRITE setScaleY)
@@ -2403,6 +2406,9 @@ public:
 	cocos2d::Quaternion getRotationQuat();
 	float getRotationSkewX();
 	float getRotationSkewY();
+	float getRotationX();
+	float getRotationY();
+	float getRotationZ();
 	float getScale();
 	float getScaleX();
 	float getScaleY();
@@ -2480,6 +2486,9 @@ public:
 	void setRotationQuat(const cocos2d::Quaternion& quat);
 	void setRotationSkewX(float rotationX);
 	void setRotationSkewY(float rotationY);
+	void setRotationX(float value);
+	void setRotationY(float value);
+	void setRotationZ(float value);
 	void setScale(float scale);
 	Q_INVOKABLE void setScale(float scaleX, float scaleY);
 	void setScaleX(float scaleX);

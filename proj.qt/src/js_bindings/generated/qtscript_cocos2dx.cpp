@@ -10842,6 +10842,36 @@ float QtScriptNode::getRotationSkewY()
 	return static_cast<float>(0);
 }
 
+float QtScriptNode::getRotationX()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getRotationX();
+	}
+	return static_cast<float>(0);
+}
+
+float QtScriptNode::getRotationY()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getRotationY();
+	}
+	return static_cast<float>(0);
+}
+
+float QtScriptNode::getRotationZ()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getRotationZ();
+	}
+	return static_cast<float>(0);
+}
+
 float QtScriptNode::getScale()
 {
 	auto __o = this->thiz<Node *>();
@@ -11606,6 +11636,33 @@ void QtScriptNode::setRotationSkewY(float rotationY)
 	if (__o)
 	{
 		__o->setRotationSkewY(rotationY);
+	}
+}
+
+void QtScriptNode::setRotationX(float value)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setRotationX(value);
+	}
+}
+
+void QtScriptNode::setRotationY(float value)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setRotationY(value);
+	}
+}
+
+void QtScriptNode::setRotationZ(float value)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setRotationZ(value);
 	}
 }
 

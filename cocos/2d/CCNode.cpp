@@ -387,6 +387,21 @@ float Node::getRotation() const
     return _rotationZ_X;
 }
 
+void Node::setRotationX(float value)
+{
+    setRotation3D(Vec3(value, _rotationY, _rotationZ_X));
+}
+
+void Node::setRotationY(float value)
+{
+    setRotation3D(Vec3(_rotationX, value, _rotationZ_X));
+}
+
+void Node::setRotationZ(float value)
+{
+    setRotation3D(Vec3(_rotationX, _rotationY, value));
+}
+
 /// rotation setter
 void Node::setRotation(float rotation)
 {
