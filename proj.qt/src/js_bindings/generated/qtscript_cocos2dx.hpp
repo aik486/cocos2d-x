@@ -2345,6 +2345,7 @@ public:
 	Q_INVOKABLE bool addComponent(cocos2d::Component* component);
 	Q_INVOKABLE void cleanup();
 	Q_INVOKABLE cocos2d::Node* clone();
+	Q_INVOKABLE bool containsWorldPoint(const cocos2d::Vec2& point);
 	Q_INVOKABLE cocos2d::Vec2 convertToNodeSpace(const cocos2d::Vec2& worldPoint);
 	Q_INVOKABLE cocos2d::Vec2 convertToNodeSpaceAR(const cocos2d::Vec2& worldPoint);
 	Q_INVOKABLE cocos2d::Vec2 convertToWorldSpace(const cocos2d::Vec2& nodePoint);
@@ -10315,8 +10316,6 @@ public:
 	static QScriptValue createAsync(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createAsyncWithSkeleton(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue createWithSkeleton(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue getOverrideTextureExtension(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue setOverrideTextureExtension(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of cocos2d

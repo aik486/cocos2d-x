@@ -64,9 +64,7 @@ struct ModelData
     std::vector<std::string> bones;
     std::vector<Mat4>        invBindPose;
     
-    virtual ~ModelData() {}
-
-    virtual void resetData()
+    void resetData()
     {
         bones.clear();
         invBindPose.clear();
@@ -84,11 +82,20 @@ struct NodeData
     std::vector<ModelData*> modelNodeDatas;
     std::vector<NodeData*>  children;
 
-    virtual ~NodeData()
+    NodeData& operator=(NodeData&& other) {
+        id = std::move(other.id);
+        transform = other.transform;
+        other.transform = Mat4();
+        modelNodeDatas = std::move(other.modelNodeDatas);
+        children = std::move(other.children);
+        return *this;
+    }
+    
+    ~NodeData()
     {
         resetData();
     }
-    virtual void resetData()
+    void resetData()
     {
         id.clear();
         transform.setIdentity();
@@ -116,7 +123,15 @@ struct NodeDatas
     std::vector<NodeData*> skeleton; //skeleton
     std::vector<NodeData*> nodes; // nodes, Node, Sprite3D or part of Sprite3D
     
-    virtual ~NodeDatas()
+    NodeDatas& operator=(NodeDatas&& other)
+    {
+        skeleton = std::move(other.skeleton);
+        nodes = std::move(other.nodes);
+        return *this;
+    }
+    
+    
+    ~NodeDatas()
     {
         resetData();
     }
@@ -195,6 +210,12 @@ public:
 struct MeshDatas
 {
     std::vector<MeshData*> meshDatas;
+    
+    MeshDatas& operator=(MeshDatas&& other)
+    {
+        meshDatas = std::move(other.meshDatas);
+        return *this;
+    }
     
     void resetData()
     {
@@ -342,6 +363,19 @@ struct NMaterialData
 struct MaterialDatas
 {
     std::vector<NMaterialData> materials;
+    
+    MaterialDatas& operator=(const MaterialDatas& other)
+    {
+        materials = other.materials;
+        return *this;
+    }
+    
+    MaterialDatas& operator=(MaterialDatas&& other)
+    {
+        materials = std::move(other.materials);
+        return *this;
+    }
+    
     void resetData()
     {
         materials.clear();

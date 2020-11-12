@@ -31,6 +31,7 @@
 #include "3d/CCAABB.h"
 #include "3d/CC3DProgramInfo.h"
 
+#include "base/CCProtocols.h"
 #include "base/CCRef.h"
 #include "math/CCMath.h"
 #include "renderer/CCMeshCommand.h"
@@ -136,6 +137,9 @@ public:
     void setVisible(bool visible);
     bool isVisible() const;
     
+    inline TextureCacheProtocol* getTextureCacheProtocol() const;
+    inline void setTextureCacheProtocol(TextureCacheProtocol* cache);
+    
     /**
      * skin getter
      *
@@ -240,6 +244,7 @@ protected:
 
     std::map<NTextureData::Usage, Texture2D*> _textures; //textures that submesh is using
     MeshSkin*           _skin;     //skin
+    TextureCacheProtocol* _textureCacheProtocol = nullptr;
     bool                _visible; // is the submesh visible
     bool                _isTransparent; // is this mesh transparent, it is a property of material in fact
     bool                _force2DQueue; // add this mesh to 2D render queue
@@ -272,6 +277,16 @@ protected:
 
     std::string _texFile;
 };
+
+TextureCacheProtocol *Mesh::getTextureCacheProtocol() const
+{
+    return _textureCacheProtocol;
+}
+
+void Mesh::setTextureCacheProtocol(TextureCacheProtocol *cache)
+{
+    _textureCacheProtocol = cache;
+}
 
 const std::map<NTextureData::Usage, Texture2D*>& Mesh::getTextureMap() const
 {

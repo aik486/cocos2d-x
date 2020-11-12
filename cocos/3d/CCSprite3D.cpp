@@ -48,28 +48,6 @@
 
 NS_CC_BEGIN
 
-std::string Sprite3D::g_ReplaceTextureExtension;
-
-std::string Sprite3D::adjustTextureExtension(const std::string &fileName)
-{
-    if (fileName.empty() || g_ReplaceTextureExtension.empty())
-        return fileName;
-    
-    if (fileName.rfind(g_ReplaceTextureExtension) == fileName.length() - g_ReplaceTextureExtension.length()) {
-        return fileName;
-    }
-    
-    std::string newFileName = fileName;
-    size_t extPos = fileName.rfind(".");
-    if (extPos != std::string::npos)
-    {
-        newFileName.resize(extPos);
-    }
-        
-    newFileName += g_ReplaceTextureExtension;
-    return newFileName;
-}
-
 static Sprite3DMaterial* getSprite3DMaterialForAttribs(const MeshVertexData* meshVertexData, bool usesLight, bool alphaTest);
 
 Sprite3D* Sprite3D::create()
@@ -275,12 +253,12 @@ void Sprite3D::applySpriteData(Sprite3DData *spritedata, Sprite3DData* skele)
         skele = nullptr;
     }
     
+    reset();
     setSpriteData(spritedata);
     setSkeletonData(skele);
     
     CC_ASSERT(spritedata);
     spritedata->prepareMeshVertexData();
-    reset();
     _meshVertexDatas.reserve(spritedata->meshVertexDatas.size());
     for (auto it : spritedata->meshVertexDatas) {
         _meshVertexDatas.pushBack(it);
@@ -443,6 +421,8 @@ Mesh *Sprite3D::createMesh(NodeData* nodedata, ModelData* modeldata, const Mater
     if (!mesh)
         return mesh;
     
+    mesh->setTextureCacheProtocol(_textureCacheProtocol);
+    
     if (_skeleton && modeldata->bones.size())
     {
         auto skin = MeshSkin::create(_skeleton, modeldata->bones, modeldata->invBindPose);
@@ -454,7 +434,7 @@ Mesh *Sprite3D::createMesh(NodeData* nodedata, ModelData* modeldata, const Mater
     {
         materialData = &materialdatas.materials[0];
         const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
-        mesh->setTexture(adjustTextureExtension(textureData->filename));
+        mesh->setTexture(textureData->filename);
     }
     else
     {
@@ -464,7 +444,7 @@ Mesh *Sprite3D::createMesh(NodeData* nodedata, ModelData* modeldata, const Mater
             const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
             if(textureData)
             {
-                mesh->setTexture(adjustTextureExtension(textureData->filename));
+                mesh->setTexture(textureData->filename);
                 auto tex = mesh->getTexture();
                 if(tex)
                 {
@@ -479,7 +459,7 @@ Mesh *Sprite3D::createMesh(NodeData* nodedata, ModelData* modeldata, const Mater
             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
             if (textureData)
             {
-                auto tex = _textureCacheProtocol->getCachedTexture(adjustTextureExtension(textureData->filename));
+                auto tex = _textureCacheProtocol->getCachedTexture(textureData->filename);
                 if(tex)
                 {
                     Texture2D::TexParams texParams;
@@ -743,13 +723,14 @@ void  Sprite3D::addMesh(Mesh* mesh)
 
 void Sprite3D::setTexture(const std::string& texFile)
 {
-    auto tex = _textureCacheProtocol->getCachedTexture(adjustTextureExtension(texFile));
+    auto tex = _textureCacheProtocol->getCachedTexture(texFile);
     setTexture(tex);
 }
 
 void Sprite3D::setTexture(Texture2D* texture)
 {
     for (auto mesh: _meshes) {
+        mesh->setTextureCacheProtocol(_textureCacheProtocol);
         mesh->setTexture(texture);
     }
 }

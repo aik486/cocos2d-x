@@ -287,7 +287,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
 
 void Mesh::setTexture(const std::string& texPath, NTextureData::Usage usage)
 {
-    auto tex = Director::getInstance()->getTextureCache()->addImage(texPath);
+    auto tex = _textureCacheProtocol ? _textureCacheProtocol->getCachedTexture(texPath) : Director::getInstance()->getTextureCache()->addImage(texPath);
     setTexture(tex, usage);
 }
 

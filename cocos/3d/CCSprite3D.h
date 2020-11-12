@@ -302,9 +302,6 @@ public:
     
     void addMesh(Mesh* mesh);
      
-    inline static const std::string &getOverrideTextureExtension();
-    inline static void setOverrideTextureExtension(const std::string &ext);
-    
     bool isForceDisableDepthTest();
     void setForceDisableDepthTest(bool is);
 
@@ -320,7 +317,6 @@ protected:
     void afterAsyncLoad(void *);
     void setSkeleton(Skeleton3D* skeleton);
     Mesh *createMesh(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas) const;
-    static std::string adjustTextureExtension(const std::string &fileName);
 
 protected:
 
@@ -360,7 +356,6 @@ protected:
     AsyncLoadParam             _asyncLoadParam;
     
     bool _force2Dqueue = false;
-    static std::string g_ReplaceTextureExtension;
 };
 
 bool Sprite3D::isForce2Dqueue() const
@@ -378,14 +373,6 @@ TextureCacheProtocol *Sprite3D::getTextureCacheProtocol() const
 // end of 3d group
 /// @}
 
-inline const std::string &Sprite3D::getOverrideTextureExtension()
-{
-    return g_ReplaceTextureExtension;
-}
-inline void Sprite3D::setOverrideTextureExtension(const std::string &ext)
-{
-    g_ReplaceTextureExtension = ext;
-}
 inline bool Sprite3D::isForceDisableDepthTest()
 {
     return _forceDisableDepthTest;

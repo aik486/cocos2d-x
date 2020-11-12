@@ -10260,6 +10260,16 @@ cocos2d::Node* QtScriptNode::clone()
 	return nullptr;
 }
 
+bool QtScriptNode::containsWorldPoint(const cocos2d::Vec2& point)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->containsWorldPoint(point);
+	}
+	return false;
+}
+
 cocos2d::Vec2 QtScriptNode::convertToNodeSpace(const cocos2d::Vec2& worldPoint)
 {
 	auto __o = this->thiz<Node *>();
@@ -46077,14 +46087,6 @@ void QtScriptSprite3D::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptSprite3D::createWithSkeleton)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("getOverrideTextureExtension", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptSprite3D::getOverrideTextureExtension)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("setOverrideTextureExtension", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptSprite3D::setOverrideTextureExtension)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 int QtScriptSprite3D::constructorArgumentCountMin() const
@@ -46595,49 +46597,6 @@ QScriptValue QtScriptSprite3D::createWithSkeleton(QScriptContext *context, QScri
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::Sprite3D::createWithSkeleton");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptSprite3D::getOverrideTextureExtension(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 0, 0))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			return __e->toScriptValue(QByteArray::fromStdString(Sprite3D::getOverrideTextureExtension()));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3D::getOverrideTextureExtension");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptSprite3D::setOverrideTextureExtension(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
-			auto arg0 = tmp_0.toStdString();
-			Sprite3D::setOverrideTextureExtension(arg0);
-			return __e->undefinedValue();
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::Sprite3D::setOverrideTextureExtension");
 	return __e->uncaughtException();
 }
 
