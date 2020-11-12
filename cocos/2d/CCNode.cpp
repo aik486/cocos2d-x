@@ -399,7 +399,7 @@ void Node::setRotationY(float value)
 
 void Node::setRotationZ(float value)
 {
-    setRotation3D(Vec3(_rotationX, _rotationY, value));
+    setRotation(value);
 }
 
 /// rotation setter
@@ -847,9 +847,16 @@ Rect Node::getBoundingBox() const
 
 bool Node::containsWorldPoint(const Vec2 &point) const
 {
-    auto localPoint = convertToNodeSpace(point);
-    Rect rect(0.f, 0.f, _contentSize.width, _contentSize.height);
-    return rect.containsPoint(localPoint);
+	if (_contentSize.equals(Size::ZERO)) {
+		return false;
+	}
+
+	AABB aabb(Vec3(), Vec3(_contentSize.width, _contentSize.height, 0.f));
+	
+	AABB worldAABB(
+		Vec3(point.x, point.y, -99999.f), Vec3(point.x, point.y, 99999.f));
+
+	return aabb.transformed(getNodeToWorldTransform()).intersects(worldAABB);
 }
 
 // MARK: Children logic
@@ -1304,6 +1311,7 @@ uint32_t Node::processParentFlags(const Mat4& parentTransform, uint32_t parentFl
     
     _transformUpdated = false;
     _contentSizeDirty = false;
+    _lastTransformFlags = flags;
 
     return flags;
 }

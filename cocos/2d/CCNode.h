@@ -1799,6 +1799,7 @@ public:
     virtual void updateDisplayedColor(const Color3B& parentColor, bool force = true);
 
     inline const Mat4& getModelViewTransform() const;
+    inline uint32_t getLastTransformFlags() const;
 
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
@@ -1903,6 +1904,7 @@ protected:
 #endif
 
     float _globalZOrder;            ///< Global order used to sort the node
+    uint32_t _lastTransformFlags = 0;
 
     static std::uint32_t s_globalOrderOfArrival;
 
@@ -2012,6 +2014,11 @@ inline bool Node::isUseInvertedAdditionalTransformOrder() const
 const Mat4 &Node::getModelViewTransform() const
 {
     return _modelViewTransform;
+}
+
+uint32_t Node::getLastTransformFlags() const
+{
+    return _lastTransformFlags;
 }
 
 /**

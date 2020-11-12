@@ -2377,6 +2377,7 @@ public:
 	Q_INVOKABLE cocos2d::Color3B getDisplayedColor();
 	Q_INVOKABLE quint8 getDisplayedOpacity();
 	float getGlobalZOrder();
+	Q_INVOKABLE quint32 getLastTransformFlags();
 	qint32 getLocalZOrder();
 	Q_INVOKABLE cocos2d::Mat4 getModelViewTransform();
 	QByteArray getName();
@@ -10283,6 +10284,7 @@ public:
 	static void Register(const QScriptValue &targetNamespace);
 
 	Q_PROPERTY(cocos2d::BlendFunc blendFunc READ getBlendFunc WRITE setBlendFunc)
+	Q_PROPERTY(bool force2DQueue READ isForce2DQueue WRITE setForce2DQueue)
 	Q_PROPERTY(bool forceDepthWrite READ isForceDepthWrite WRITE setForceDepthWrite)
 	Q_PROPERTY(bool forceDisableDepthTest READ isForceDisableDepthTest WRITE setForceDisableDepthTest)
 	Q_PROPERTY(unsigned int lightMask READ getLightMask WRITE setLightMask)
@@ -10304,7 +10306,7 @@ public:
 	Q_INVOKABLE bool initWithFile(const QByteArray& path);
 	Q_INVOKABLE bool initWithFile(const QByteArray& path, cocos2d::Sprite3DData* skele);
 	Q_INVOKABLE bool initWithSkeletonFile(const QByteArray& modelPath, const QByteArray& skeletonPath);
-	Q_INVOKABLE bool isForce2Dqueue();
+	bool isForce2DQueue();
 	bool isForceDepthWrite();
 	bool isForceDisableDepthTest();
 	Q_INVOKABLE bool loadFromCache(const QByteArray& path);
@@ -10316,7 +10318,7 @@ public:
 	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
 	Q_INVOKABLE void setCullFace(int side);
 	Q_INVOKABLE void setCullFaceEnabled(bool enable);
-	Q_INVOKABLE void setForce2DQueue(bool force2D);
+	void setForce2DQueue(bool force2D);
 	void setForceDepthWrite(bool value);
 	void setForceDisableDepthTest(bool is);
 	void setLightMask(unsigned int mask);

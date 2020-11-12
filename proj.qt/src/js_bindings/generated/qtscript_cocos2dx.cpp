@@ -10552,6 +10552,16 @@ float QtScriptNode::getGlobalZOrder()
 	return static_cast<float>(0);
 }
 
+quint32 QtScriptNode::getLastTransformFlags()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getLastTransformFlags();
+	}
+	return static_cast<quint32>(0);
+}
+
 qint32 QtScriptNode::getLocalZOrder()
 {
 	auto __o = this->thiz<Node *>();
@@ -46349,12 +46359,12 @@ bool QtScriptSprite3D::initWithSkeletonFile(const QByteArray& modelPath, const Q
 	return false;
 }
 
-bool QtScriptSprite3D::isForce2Dqueue()
+bool QtScriptSprite3D::isForce2DQueue()
 {
 	auto __o = this->thiz<Sprite3D *>();
 	if (__o)
 	{
-		return __o->isForce2Dqueue();
+		return __o->isForce2DQueue();
 	}
 	return false;
 }

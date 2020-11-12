@@ -261,7 +261,7 @@ public:
     /**
     * force set this Sprite3D to 2D render queue
     */
-    inline bool isForce2Dqueue() const;
+    inline bool isForce2DQueue() const;
     void setForce2DQueue(bool force2D);
 
     /**
@@ -358,7 +358,7 @@ protected:
     bool _force2Dqueue = false;
 };
 
-bool Sprite3D::isForce2Dqueue() const
+bool Sprite3D::isForce2DQueue() const
 {
     return _force2Dqueue;
 }
