@@ -117,13 +117,13 @@ void AABB::set(const Vec3& min, const Vec3& max)
 
 void AABB::reset()
 {
-	_min.set(99999.0f, 99999.0f, 99999.0f);
-	_max.set(-99999.0f, -99999.0f, -99999.0f);
+	_min = Vec3();
+	_max = Vec3();
 }
 
 bool AABB::isEmpty() const
 {
-    return _min.x > _max.x || _min.y > _max.y || _min.z > _max.z;
+    return _min == _max || _min.x > _max.x || _min.y > _max.y || _min.z > _max.z;
 }
 
 void AABB::updateMinMax(const Vec3* point, ssize_t num)
@@ -158,6 +158,10 @@ void AABB::updateMinMax(const Vec3* point, ssize_t num)
 
 void AABB::transform(const Mat4& mat)
 {
+    if (isEmpty()) {
+        return;
+    }
+    
     Vec3 corners[8];
     getCorners(corners);
 

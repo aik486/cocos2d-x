@@ -29,6 +29,8 @@ NS_CC_BEGIN
 
 #define ROTATE(a,i,j,k,l) g=a.m[i + 4 * j]; h=a.m[k + 4 * l]; a.m[i + 4 * j]=(float)(g-s*(h+g*tau)); a.m[k + 4 * l]=(float)(h+s*(g-h*tau));
 
+const OBB OBB::ZERO;
+
 static Mat4 _getConvarianceMatrix(const Vec3* vertPos, int vertCount)
 {
     int i;
@@ -451,6 +453,10 @@ bool OBB::intersects(const OBB& box) const
 
 void OBB::transform(const Mat4& mat)
 {
+    if (isEmpty()) {
+        return;
+    }
+    
     Vec4 newcenter = mat * Vec4(_center.x, _center.y, _center.z, 1.0f);// center;
     _center.x = newcenter.x;
     _center.y = newcenter.y;
@@ -484,7 +490,7 @@ OBB OBB::transformed(const Mat4 &mat) const
 
 bool OBB::isEmpty() const
 {
-    return *this == OBB();
+    return *this == ZERO;
 }
 
 bool OBB::operator==(const OBB &other) const

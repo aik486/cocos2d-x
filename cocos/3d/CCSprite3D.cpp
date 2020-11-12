@@ -908,7 +908,7 @@ const BlendFunc& Sprite3D::getBlendFunc() const
     return _blend;
 }
 
-AABB Sprite3D::getAABB() 
+AABB Sprite3D::getAABB() const
 {
     if (_aabbDirty)
     {
@@ -927,15 +927,9 @@ AABB Sprite3D::getAABB()
 }
 
 
-Action* Sprite3D::runAction(Action *action)
-{
-    // setForceDepthWrite(true);
-    return Node::runAction(action);
-}
-
 Rect Sprite3D::getBoundingBox() const
 {
-    AABB aabb = const_cast<Sprite3D*>(this)->getAABB();
+    AABB aabb = getAABB();
     if (aabb.isEmpty()) {
         Rect result;
         result.origin = getPosition();
@@ -947,17 +941,6 @@ Rect Sprite3D::getBoundingBox() const
     aabb.transform(getNodeToParentTransform());
   
     return Rect(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
-}
-
-bool Sprite3D::containsWorldPoint(const Vec2 &point) const
-{
-    auto aabb = const_cast<Sprite3D*>(this)->getAABB();
-    if (aabb.isEmpty()) {
-        return false;
-    }
-    OBB worldOBB(AABB(Vec3(point.x, point.y, -99999.f), Vec3(point.x, point.y, 99999.f)));
-    
-    return OBB(aabb).transformed(getNodeToWorldTransform()).intersects(worldOBB);
 }
 
 void Sprite3D::setCullFace(CullFaceSide side)

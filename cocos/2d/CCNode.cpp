@@ -839,6 +839,16 @@ Scene* Node::getScene() const
     return dynamic_cast<Scene*>(sceneNode);
 }
 
+AABB Node::getAABB() const
+{
+    return AABB(Vec3(), Vec3(_contentSize.width, _contentSize.height, 0.f));
+}
+
+OBB Node::getOBB() const
+{
+    return OBB(getAABB());
+}
+
 Rect Node::getBoundingBox() const
 {
     Rect rect(0.f, 0.f, _contentSize.width, _contentSize.height);
@@ -847,16 +857,35 @@ Rect Node::getBoundingBox() const
 
 bool Node::containsWorldPoint(const Vec2 &point) const
 {
-	if (_contentSize.equals(Size::ZERO)) {
+	auto obb = getOBB();
+	if (obb.isEmpty()) {
 		return false;
 	}
-
-	AABB aabb(Vec3(), Vec3(_contentSize.width, _contentSize.height, 0.f));
 	
-	AABB worldAABB(
-		Vec3(point.x, point.y, -99999.f), Vec3(point.x, point.y, 99999.f));
+	OBB worldOBB(AABB(
+		Vec3(point.x, point.y, -99999.f), Vec3(point.x, point.y, 99999.f)));
 
-	return aabb.transformed(getNodeToWorldTransform()).intersects(worldAABB);
+	return obb.transformed(getNodeToWorldTransform()).intersects(worldOBB);
+}
+
+AABB Node::getWorldAABB() const
+{
+	auto aabb = getAABB();
+	if (aabb.isEmpty()) {
+		return aabb;
+	}
+	
+	return aabb.transformed(getNodeToWorldTransform());
+}
+
+OBB Node::getWorldOBB() const
+{
+	auto obb = getOBB();
+	if (obb.isEmpty()) {
+		return obb;
+	}
+	
+	return obb.transformed(getNodeToWorldTransform());
 }
 
 // MARK: Children logic

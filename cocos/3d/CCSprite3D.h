@@ -203,17 +203,7 @@ public:
      * because bone can drive the vertices, we just use the origin vertices
      * to calculate the AABB.
      */
-    virtual AABB getAABB() override;
-    
-    /**
-     * Executes an action, and returns the action that is executed. For Sprite3D special logic are needed to take care of Fading.
-     *
-     * This node becomes the action's target. Refer to Action::getTarget()
-     * @warning Actions don't retain their target.
-     *
-     * @return An Action pointer
-     */
-    virtual Action* runAction(Action* action) override;
+    virtual AABB getAABB() const override;
     
     /**
      * Force to write to depth buffer, this is useful if you want to achieve effects like fading.
@@ -226,7 +216,6 @@ public:
      * Note: the bounding-box is just get from the AABB which as Z=0, so that is not very accurate.
      */
     virtual Rect getBoundingBox() const override;
-    virtual bool containsWorldPoint(const Vec2& point) const override;
 
     // set which face is going to cull, CullFaceSide::BACK, CullFaceSide::FRONT and CullFaceSide::NONE.
     void setCullFace(CullFaceSide side);

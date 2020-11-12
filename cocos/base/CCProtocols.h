@@ -290,8 +290,6 @@ protected:
 };
 
 struct CC_DLL Node3DProtocol {
-    virtual AABB getAABB() = 0;
-    
 protected:
     virtual ~Node3DProtocol() = default;
 };

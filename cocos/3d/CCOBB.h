@@ -149,6 +149,8 @@ public:
     Vec3 _extentY;  // _yAxis * _extents.y
     Vec3 _extentZ;  // _zAxis * _extents.z
     Vec3 _extents;  // obb length along each axis
+    
+    static const OBB ZERO;
 };
 
 bool OBB::operator!=(const OBB &other) const

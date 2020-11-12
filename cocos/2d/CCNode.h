@@ -39,6 +39,7 @@
 #include "math/CCMath.h"
 #include "2d/CCComponentContainer.h"
 #include "2d/CCComponent.h"
+#include "3d/CCOBB.h"
 
 #if CC_USE_PHYSICS
 #include "physics/CCPhysicsBody.h"
@@ -1155,8 +1156,13 @@ public:
      *
      * @return An AABB (axis-aligned bounding-box) in its parent's coordinate system
      */
+    virtual AABB getAABB() const;
+    virtual OBB getOBB() const;
     virtual Rect getBoundingBox() const;
     virtual bool containsWorldPoint(const Vec2& point) const;
+    
+    AABB getWorldAABB() const;
+    OBB getWorldOBB() const;
 
     /** Set event dispatcher for scene.
      *
