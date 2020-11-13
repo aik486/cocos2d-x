@@ -111,7 +111,8 @@ protected:
     backend::DepthStencilDescriptor *_depthstencilDescriptor    = nullptr;
     backend::UniformLocation _locMVPMatrix;
     std::vector<V3F_C4B> _bufferLines;
-    size_t oldLineCount = 0;
+    size_t _oldLineCount = 0;
+    size_t _currentLineCount = 0;
     
 
 private:

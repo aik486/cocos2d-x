@@ -64,7 +64,7 @@ void DrawNode3D::ensureCapacity(int count)
     
     auto EXTENDED_SIZE = _bufferLines.size() + count;
 
-    _bufferLines.reserve(EXTENDED_SIZE);
+    _bufferLines.resize(EXTENDED_SIZE);
 
 }
 
@@ -125,29 +125,29 @@ void DrawNode3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
     auto vertexBuffer = _customCommand.getVertexBuffer();
     size_t oldCapacity = vertexBuffer ? vertexBuffer->getSize() : 0;
-    auto newCapacity = _bufferLines.capacity() * sizeof(V3F_C4B);
+    auto newCapacity = _bufferLines.size() * sizeof(V3F_C4B);
     if (oldCapacity != newCapacity)
     {
         if (newCapacity > 0) {
-            _customCommand.createVertexBuffer(sizeof(V3F_C4B), _bufferLines.capacity(), CustomCommand::BufferUsage::DYNAMIC);
+            _customCommand.createVertexBuffer(sizeof(V3F_C4B), _bufferLines.size(), CustomCommand::BufferUsage::DYNAMIC);
             _customCommand.updateVertexBuffer(_bufferLines.data(), newCapacity);
         } else {
             _customCommand.setVertexBuffer(nullptr);
         }
         
-        oldLineCount = _bufferLines.size();
+        _oldLineCount = _currentLineCount;
     }
         
-    if (oldLineCount < _bufferLines.size()) {
-        size_t count = _bufferLines.size() - oldLineCount;
+    if (_oldLineCount < _currentLineCount) {
+        size_t count = _currentLineCount - _oldLineCount;
         size_t bufferSize = count * sizeof(V3F_C4B);
-        size_t offset = oldLineCount * sizeof(V3F_C4B);
-        _customCommand.updateVertexBuffer(_bufferLines.data() + oldLineCount, offset, bufferSize);
-        oldLineCount = _bufferLines.size();
+        size_t offset = _oldLineCount * sizeof(V3F_C4B);
+        _customCommand.updateVertexBuffer(_bufferLines.data() + _oldLineCount, offset, bufferSize);
+        _oldLineCount = _currentLineCount;
     }
 
-    _customCommand.setVertexDrawInfo(0, _bufferLines.size());
-    if (!_bufferLines.empty())
+    _customCommand.setVertexDrawInfo(0, _currentLineCount);
+    if (_currentLineCount > 0)
     {
         renderer->addCommand(&_customCommand);
     }
@@ -166,7 +166,7 @@ void DrawNode3D::updateCommand(const Mat4 &transform)
     blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = _blendFunc.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = _blendFunc.dst;
 
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _bufferLines.size());
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _currentLineCount);
 }
 
 void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4B &color)
@@ -177,8 +177,8 @@ void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4B &color
     V3F_C4B a = {Vec3(from.x, from.y, from.z), color};
     V3F_C4B b = {Vec3(to.x, to.y, to.z), color, };
 
-    _bufferLines.push_back(a);
-    _bufferLines.push_back(b);
+    _bufferLines[_currentLineCount++] = a;
+    _bufferLines[_currentLineCount++] = b;
 }
 
 void DrawNode3D::drawCube(const AABB &aabb, const Color4B &color)
@@ -230,8 +230,8 @@ void DrawNode3D::drawCube(Vec3* vertices, const Color4B &color)
 
 void DrawNode3D::clear()
 {
-    _bufferLines.clear();
-    oldLineCount = 0;
+    _oldLineCount = 0;
+    _currentLineCount = 0;
 }
 
 const BlendFunc& DrawNode3D::getBlendFunc() const
