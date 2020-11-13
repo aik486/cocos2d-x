@@ -10159,6 +10159,324 @@ bool QtScriptComponent::constructObject(QScriptContext *context, NativeObjectTyp
 } // end of cocos2d
 
 namespace cocos2d {
+QtScriptOBB::QtScriptOBB(QScriptEngine *engine, const QByteArray &className)
+	: QtScriptBaseClassPrototype<OBB, false>(engine, className)
+{
+}
+
+QtScriptOBB::QtScriptOBB(QScriptEngine *engine)
+	: QtScriptOBB(engine, "OBB")
+{
+}
+
+void QtScriptOBB::Register(const QScriptValue &targetNamespace)
+{
+	QScriptValue inherit;
+	auto ctor = RegisterT<OBB, QtScriptOBB>(targetNamespace, inherit);
+	Q_ASSERT(ctor.isFunction());
+}
+
+bool QtScriptOBB::containPoint(const cocos2d::Vec3& point)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->containPoint(point);
+	}
+	return false;
+}
+
+bool QtScriptOBB::differs(const cocos2d::OBB& other)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->operator!=(other);
+	}
+	return false;
+}
+
+bool QtScriptOBB::equals(const cocos2d::OBB& other)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->operator==(other);
+	}
+	return false;
+}
+
+bool QtScriptOBB::intersects(const cocos2d::OBB& box)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->intersects(box);
+	}
+	return false;
+}
+
+bool QtScriptOBB::isEmpty()
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->isEmpty();
+	}
+	return false;
+}
+
+void QtScriptOBB::reset()
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		__o->reset();
+	}
+}
+
+void QtScriptOBB::set(const cocos2d::Vec3& center, const cocos2d::Vec3& _xAxis, const cocos2d::Vec3& _yAxis, const cocos2d::Vec3& _zAxis, const cocos2d::Vec3& _extents)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		__o->set(center, _xAxis, _yAxis, _zAxis, _extents);
+	}
+}
+
+void QtScriptOBB::setAABB(const cocos2d::AABB& aabb)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		__o->setAABB(aabb);
+	}
+}
+
+cocos2d::AABB QtScriptOBB::toAABB()
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->toAABB();
+	}
+	return cocos2d::AABB();
+}
+
+void QtScriptOBB::transform(const cocos2d::Mat4& mat)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		__o->transform(mat);
+	}
+}
+
+cocos2d::OBB QtScriptOBB::transformed(const cocos2d::Mat4& mat)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->transformed(mat);
+	}
+	return cocos2d::OBB();
+}
+
+int QtScriptOBB::constructorArgumentCountMin() const
+{
+	return 0;
+}
+
+int QtScriptOBB::constructorArgumentCountMax() const
+{
+	return 1;
+}
+
+bool QtScriptOBB::constructObject(QScriptContext *context, NativeObjectType &out)
+{
+	auto __e = context->engine();
+	Q_UNUSED(__e);
+	bool ok = false;
+	switch (context->argumentCount())
+	{
+		case 0:
+		{
+			Q_UNUSED(out);
+			ok = true;
+			break;
+		}
+		case 1:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::OBB>(context->argument(0));
+			out = OBB(arg0);
+			ok = true;
+			break;
+		}
+	}
+
+	if (!ok)
+	{
+		QtScriptUtils::badArgumentsException(context,
+			"cocos2d::OBB constructor");
+	}
+	return ok;
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_center() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_center;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_center(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_center = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_extentX() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_extentX;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_extentX(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_extentX = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_extentY() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_extentY;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_extentY(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_extentY = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_extentZ() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_extentZ;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_extentZ(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_extentZ = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_extents() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_extents;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_extents(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_extents = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_xAxis() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_xAxis;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_xAxis(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_xAxis = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_yAxis() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_yAxis;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_yAxis(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_yAxis = value;
+	}
+}
+
+cocos2d::Vec3 QtScriptOBB::_public_field_get_zAxis() const
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		return object->_zAxis;
+	}
+	return cocos2d::Vec3();
+}
+
+void QtScriptOBB::_public_field_set_zAxis(const cocos2d::Vec3& value)
+{
+	auto object = thiz<OBB *>();
+	if (object)
+	{
+		object->_zAxis = value;
+	}
+}
+
+} // end of cocos2d
+
+namespace cocos2d {
 QtScriptNode::QtScriptNode(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptRef(engine, className)
 {
@@ -10370,6 +10688,16 @@ void QtScriptNode::enumerateChildren(const QByteArray& name, QScriptValue callba
 	return qscriptvalue_cast<bool>(callback.call(QScriptValue(), arguments));
 });
 	}
+}
+
+cocos2d::AABB QtScriptNode::getAABB()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getAABB();
+	}
+	return cocos2d::AABB();
 }
 
 cocos2d::Action* QtScriptNode::getActionByTag(int tag)
@@ -10682,6 +11010,16 @@ int QtScriptNode::getNumberOfRunningActionsByTag(int tag)
 	return 0;
 }
 
+cocos2d::OBB QtScriptNode::getOBB()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getOBB();
+	}
+	return cocos2d::OBB();
+}
+
 quint8 QtScriptNode::getOpacity()
 {
 	auto __o = this->thiz<Node *>();
@@ -10990,6 +11328,26 @@ cocos2d::Ref* QtScriptNode::getUserObject()
 		return __o->getUserObject();
 	}
 	return nullptr;
+}
+
+cocos2d::AABB QtScriptNode::getWorldAABB()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getWorldAABB();
+	}
+	return cocos2d::AABB();
+}
+
+cocos2d::OBB QtScriptNode::getWorldOBB()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getWorldOBB();
+	}
+	return cocos2d::OBB();
 }
 
 cocos2d::AffineTransform QtScriptNode::getWorldToNodeAffineTransform()
@@ -38420,324 +38778,6 @@ QScriptValue QtScriptRenderTexture::create(QScriptContext *context, QScriptEngin
 } // end of cocos2d
 
 namespace cocos2d {
-QtScriptOBB::QtScriptOBB(QScriptEngine *engine, const QByteArray &className)
-	: QtScriptBaseClassPrototype<OBB, false>(engine, className)
-{
-}
-
-QtScriptOBB::QtScriptOBB(QScriptEngine *engine)
-	: QtScriptOBB(engine, "OBB")
-{
-}
-
-void QtScriptOBB::Register(const QScriptValue &targetNamespace)
-{
-	QScriptValue inherit;
-	auto ctor = RegisterT<OBB, QtScriptOBB>(targetNamespace, inherit);
-	Q_ASSERT(ctor.isFunction());
-}
-
-bool QtScriptOBB::containPoint(const cocos2d::Vec3& point)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		return __o->containPoint(point);
-	}
-	return false;
-}
-
-bool QtScriptOBB::differs(const cocos2d::OBB& other)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		return __o->operator!=(other);
-	}
-	return false;
-}
-
-bool QtScriptOBB::equals(const cocos2d::OBB& other)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		return __o->operator==(other);
-	}
-	return false;
-}
-
-bool QtScriptOBB::intersects(const cocos2d::OBB& box)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		return __o->intersects(box);
-	}
-	return false;
-}
-
-bool QtScriptOBB::isEmpty()
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		return __o->isEmpty();
-	}
-	return false;
-}
-
-void QtScriptOBB::reset()
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		__o->reset();
-	}
-}
-
-void QtScriptOBB::set(const cocos2d::Vec3& center, const cocos2d::Vec3& _xAxis, const cocos2d::Vec3& _yAxis, const cocos2d::Vec3& _zAxis, const cocos2d::Vec3& _extents)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		__o->set(center, _xAxis, _yAxis, _zAxis, _extents);
-	}
-}
-
-void QtScriptOBB::setAABB(const cocos2d::AABB& aabb)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		__o->setAABB(aabb);
-	}
-}
-
-cocos2d::AABB QtScriptOBB::toAABB()
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		return __o->toAABB();
-	}
-	return cocos2d::AABB();
-}
-
-void QtScriptOBB::transform(const cocos2d::Mat4& mat)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		__o->transform(mat);
-	}
-}
-
-cocos2d::OBB QtScriptOBB::transformed(const cocos2d::Mat4& mat)
-{
-	auto __o = this->thiz<OBB *>();
-	if (__o)
-	{
-		return __o->transformed(mat);
-	}
-	return cocos2d::OBB();
-}
-
-int QtScriptOBB::constructorArgumentCountMin() const
-{
-	return 0;
-}
-
-int QtScriptOBB::constructorArgumentCountMax() const
-{
-	return 1;
-}
-
-bool QtScriptOBB::constructObject(QScriptContext *context, NativeObjectType &out)
-{
-	auto __e = context->engine();
-	Q_UNUSED(__e);
-	bool ok = false;
-	switch (context->argumentCount())
-	{
-		case 0:
-		{
-			Q_UNUSED(out);
-			ok = true;
-			break;
-		}
-		case 1:
-		{
-			auto arg0 = qscriptvalue_cast<cocos2d::OBB>(context->argument(0));
-			out = OBB(arg0);
-			ok = true;
-			break;
-		}
-	}
-
-	if (!ok)
-	{
-		QtScriptUtils::badArgumentsException(context,
-			"cocos2d::OBB constructor");
-	}
-	return ok;
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_center() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_center;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_center(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_center = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_extentX() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_extentX;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_extentX(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_extentX = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_extentY() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_extentY;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_extentY(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_extentY = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_extentZ() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_extentZ;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_extentZ(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_extentZ = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_extents() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_extents;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_extents(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_extents = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_xAxis() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_xAxis;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_xAxis(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_xAxis = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_yAxis() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_yAxis;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_yAxis(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_yAxis = value;
-	}
-}
-
-cocos2d::Vec3 QtScriptOBB::_public_field_get_zAxis() const
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		return object->_zAxis;
-	}
-	return cocos2d::Vec3();
-}
-
-void QtScriptOBB::_public_field_set_zAxis(const cocos2d::Vec3& value)
-{
-	auto object = thiz<OBB *>();
-	if (object)
-	{
-		object->_zAxis = value;
-	}
-}
-
-} // end of cocos2d
-
-namespace cocos2d {
 QtScriptPlane::QtScriptPlane(QScriptEngine *engine, const QByteArray &className)
 	: QtScriptBaseClassPrototype<Plane, false>(engine, className)
 {
@@ -46217,16 +46257,6 @@ void QtScriptSprite3D::genMaterial(bool useLight)
 	{
 		__o->genMaterial(useLight);
 	}
-}
-
-cocos2d::AABB QtScriptSprite3D::getAABB()
-{
-	auto __o = this->thiz<Sprite3D *>();
-	if (__o)
-	{
-		return __o->getAABB();
-	}
-	return cocos2d::AABB();
 }
 
 cocos2d::AttachNode* QtScriptSprite3D::getAttachNode(const QByteArray& boneName)

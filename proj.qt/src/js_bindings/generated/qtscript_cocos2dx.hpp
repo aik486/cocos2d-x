@@ -2285,6 +2285,65 @@ Q_DECLARE_METATYPE(cocos2d::Component *)
 Q_DECLARE_METATYPE(const cocos2d::Component *)
 
 namespace cocos2d {
+class QtScriptOBB final : public QtScriptBaseClassPrototype<OBB, false>
+{
+	Q_OBJECT
+
+protected:
+	explicit QtScriptOBB(QScriptEngine *engine, const QByteArray &className);
+
+	virtual int constructorArgumentCountMin() const override;
+	virtual int constructorArgumentCountMax() const override;
+	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
+
+public:
+	explicit QtScriptOBB(QScriptEngine *engine);
+	static void Register(const QScriptValue &targetNamespace);
+
+	Q_INVOKABLE bool containPoint(const cocos2d::Vec3& point);
+	Q_INVOKABLE bool differs(const cocos2d::OBB& other);
+	Q_INVOKABLE bool equals(const cocos2d::OBB& other);
+	Q_INVOKABLE bool intersects(const cocos2d::OBB& box);
+	Q_INVOKABLE bool isEmpty();
+	Q_INVOKABLE void reset();
+	Q_INVOKABLE void set(const cocos2d::Vec3& center, const cocos2d::Vec3& _xAxis, const cocos2d::Vec3& _yAxis, const cocos2d::Vec3& _zAxis, const cocos2d::Vec3& _extents);
+	Q_INVOKABLE void setAABB(const cocos2d::AABB& aabb);
+	Q_INVOKABLE cocos2d::AABB toAABB();
+	Q_INVOKABLE void transform(const cocos2d::Mat4& mat);
+	Q_INVOKABLE cocos2d::OBB transformed(const cocos2d::Mat4& mat);
+	Q_PROPERTY(cocos2d::Vec3 center READ _public_field_get_center WRITE _public_field_set_center)
+	cocos2d::Vec3 _public_field_get_center() const;
+	void _public_field_set_center(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 extentX READ _public_field_get_extentX WRITE _public_field_set_extentX)
+	cocos2d::Vec3 _public_field_get_extentX() const;
+	void _public_field_set_extentX(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 extentY READ _public_field_get_extentY WRITE _public_field_set_extentY)
+	cocos2d::Vec3 _public_field_get_extentY() const;
+	void _public_field_set_extentY(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 extentZ READ _public_field_get_extentZ WRITE _public_field_set_extentZ)
+	cocos2d::Vec3 _public_field_get_extentZ() const;
+	void _public_field_set_extentZ(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 extents READ _public_field_get_extents WRITE _public_field_set_extents)
+	cocos2d::Vec3 _public_field_get_extents() const;
+	void _public_field_set_extents(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 xAxis READ _public_field_get_xAxis WRITE _public_field_set_xAxis)
+	cocos2d::Vec3 _public_field_get_xAxis() const;
+	void _public_field_set_xAxis(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 yAxis READ _public_field_get_yAxis WRITE _public_field_set_yAxis)
+	cocos2d::Vec3 _public_field_get_yAxis() const;
+	void _public_field_set_yAxis(const cocos2d::Vec3& value);
+	Q_PROPERTY(cocos2d::Vec3 zAxis READ _public_field_get_zAxis WRITE _public_field_set_zAxis)
+	cocos2d::Vec3 _public_field_get_zAxis() const;
+	void _public_field_set_zAxis(const cocos2d::Vec3& value);
+};
+
+} // end of cocos2d
+
+Q_DECLARE_METATYPE(cocos2d::OBB)
+Q_DECLARE_METATYPE(cocos2d::OBB *)
+Q_DECLARE_METATYPE(const cocos2d::OBB *)
+
+namespace cocos2d {
 class QtScriptNode : public QtScriptRef
 {
 	Q_OBJECT
@@ -2359,6 +2418,7 @@ public:
 	Q_INVOKABLE void copyNodeChildrenFrom(const cocos2d::Node* from, bool skipHidden);
 	Q_INVOKABLE void copyPropertiesFrom(const cocos2d::Node* from);
 	Q_INVOKABLE void enumerateChildren(const QByteArray& name, QScriptValue callback);
+	Q_INVOKABLE cocos2d::AABB getAABB();
 	Q_INVOKABLE cocos2d::Action* getActionByTag(int tag);
 	const cocos2d::Mat4* getAdditionalTransform();
 	cocos2d::Vec2 getAnchorPoint();
@@ -2390,6 +2450,7 @@ public:
 	cocos2d::Vec2 getNormalizedPosition();
 	Q_INVOKABLE int getNumberOfRunningActions();
 	Q_INVOKABLE int getNumberOfRunningActionsByTag(int tag);
+	Q_INVOKABLE cocos2d::OBB getOBB();
 	quint8 getOpacity();
 	unsigned int getOrderOfArrival();
 	Q_INVOKABLE cocos2d::Node* getParent();
@@ -2421,6 +2482,8 @@ public:
 	int getTag();
 	Q_INVOKABLE const cocos2d::Node* getTransformParent();
 	cocos2d::Ref* getUserObject();
+	Q_INVOKABLE cocos2d::AABB getWorldAABB();
+	Q_INVOKABLE cocos2d::OBB getWorldOBB();
 	Q_INVOKABLE cocos2d::AffineTransform getWorldToNodeAffineTransform();
 	Q_INVOKABLE cocos2d::Mat4 getWorldToNodeTransform();
 	Q_INVOKABLE bool init();
@@ -8655,65 +8718,6 @@ Q_DECLARE_METATYPE(cocos2d::RenderTexture *)
 Q_DECLARE_METATYPE(const cocos2d::RenderTexture *)
 
 namespace cocos2d {
-class QtScriptOBB final : public QtScriptBaseClassPrototype<OBB, false>
-{
-	Q_OBJECT
-
-protected:
-	explicit QtScriptOBB(QScriptEngine *engine, const QByteArray &className);
-
-	virtual int constructorArgumentCountMin() const override;
-	virtual int constructorArgumentCountMax() const override;
-	virtual bool constructObject(QScriptContext *, NativeObjectType &out) override;
-
-public:
-	explicit QtScriptOBB(QScriptEngine *engine);
-	static void Register(const QScriptValue &targetNamespace);
-
-	Q_INVOKABLE bool containPoint(const cocos2d::Vec3& point);
-	Q_INVOKABLE bool differs(const cocos2d::OBB& other);
-	Q_INVOKABLE bool equals(const cocos2d::OBB& other);
-	Q_INVOKABLE bool intersects(const cocos2d::OBB& box);
-	Q_INVOKABLE bool isEmpty();
-	Q_INVOKABLE void reset();
-	Q_INVOKABLE void set(const cocos2d::Vec3& center, const cocos2d::Vec3& _xAxis, const cocos2d::Vec3& _yAxis, const cocos2d::Vec3& _zAxis, const cocos2d::Vec3& _extents);
-	Q_INVOKABLE void setAABB(const cocos2d::AABB& aabb);
-	Q_INVOKABLE cocos2d::AABB toAABB();
-	Q_INVOKABLE void transform(const cocos2d::Mat4& mat);
-	Q_INVOKABLE cocos2d::OBB transformed(const cocos2d::Mat4& mat);
-	Q_PROPERTY(cocos2d::Vec3 center READ _public_field_get_center WRITE _public_field_set_center)
-	cocos2d::Vec3 _public_field_get_center() const;
-	void _public_field_set_center(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 extentX READ _public_field_get_extentX WRITE _public_field_set_extentX)
-	cocos2d::Vec3 _public_field_get_extentX() const;
-	void _public_field_set_extentX(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 extentY READ _public_field_get_extentY WRITE _public_field_set_extentY)
-	cocos2d::Vec3 _public_field_get_extentY() const;
-	void _public_field_set_extentY(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 extentZ READ _public_field_get_extentZ WRITE _public_field_set_extentZ)
-	cocos2d::Vec3 _public_field_get_extentZ() const;
-	void _public_field_set_extentZ(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 extents READ _public_field_get_extents WRITE _public_field_set_extents)
-	cocos2d::Vec3 _public_field_get_extents() const;
-	void _public_field_set_extents(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 xAxis READ _public_field_get_xAxis WRITE _public_field_set_xAxis)
-	cocos2d::Vec3 _public_field_get_xAxis() const;
-	void _public_field_set_xAxis(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 yAxis READ _public_field_get_yAxis WRITE _public_field_set_yAxis)
-	cocos2d::Vec3 _public_field_get_yAxis() const;
-	void _public_field_set_yAxis(const cocos2d::Vec3& value);
-	Q_PROPERTY(cocos2d::Vec3 zAxis READ _public_field_get_zAxis WRITE _public_field_set_zAxis)
-	cocos2d::Vec3 _public_field_get_zAxis() const;
-	void _public_field_set_zAxis(const cocos2d::Vec3& value);
-};
-
-} // end of cocos2d
-
-Q_DECLARE_METATYPE(cocos2d::OBB)
-Q_DECLARE_METATYPE(cocos2d::OBB *)
-Q_DECLARE_METATYPE(const cocos2d::OBB *)
-
-namespace cocos2d {
 class QtScriptPlane final : public QtScriptBaseClassPrototype<Plane, false>
 {
 	Q_OBJECT
@@ -10292,7 +10296,6 @@ public:
 	Q_INVOKABLE void applySpriteData(cocos2d::Sprite3DData* data, cocos2d::Sprite3DData* skele);
 	Q_INVOKABLE void genMaterial();
 	Q_INVOKABLE void genMaterial(bool useLight);
-	Q_INVOKABLE cocos2d::AABB getAABB();
 	Q_INVOKABLE cocos2d::AttachNode* getAttachNode(const QByteArray& boneName);
 	cocos2d::BlendFunc getBlendFunc();
 	unsigned int getLightMask();
