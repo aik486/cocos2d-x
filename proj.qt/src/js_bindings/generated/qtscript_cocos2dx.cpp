@@ -46417,6 +46417,16 @@ bool QtScriptSprite3D::initWithSkeletonFile(const QByteArray& modelPath, const Q
 	return false;
 }
 
+bool QtScriptSprite3D::isAABBForInvisibleMeshes()
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		return __o->isAABBForInvisibleMeshes();
+	}
+	return false;
+}
+
 bool QtScriptSprite3D::isForce2DQueue()
 {
 	auto __o = this->thiz<Sprite3D *>();
@@ -46501,6 +46511,15 @@ void QtScriptSprite3D::reset()
 	if (__o)
 	{
 		__o->reset();
+	}
+}
+
+void QtScriptSprite3D::setAABBForInvisibleMeshes(bool value)
+{
+	auto __o = this->thiz<Sprite3D *>();
+	if (__o)
+	{
+		__o->setAABBForInvisibleMeshes(value);
 	}
 }
 

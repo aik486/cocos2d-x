@@ -10291,6 +10291,7 @@ public:
 	explicit QtScriptSprite3D(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_PROPERTY(bool aabbForInvisibleMeshes READ isAABBForInvisibleMeshes WRITE setAABBForInvisibleMeshes)
 	Q_PROPERTY(cocos2d::BlendFunc blendFunc READ getBlendFunc WRITE setBlendFunc)
 	Q_PROPERTY(bool force2DQueue READ isForce2DQueue WRITE setForce2DQueue)
 	Q_PROPERTY(bool forceDepthWrite READ isForceDepthWrite WRITE setForceDepthWrite)
@@ -10313,6 +10314,7 @@ public:
 	Q_INVOKABLE bool initWithFile(const QByteArray& path);
 	Q_INVOKABLE bool initWithFile(const QByteArray& path, cocos2d::Sprite3DData* skele);
 	Q_INVOKABLE bool initWithSkeletonFile(const QByteArray& modelPath, const QByteArray& skeletonPath);
+	bool isAABBForInvisibleMeshes();
 	bool isForce2DQueue();
 	bool isForceDepthWrite();
 	bool isForceDisableDepthTest();
@@ -10322,6 +10324,7 @@ public:
 	Q_INVOKABLE void removeAllAttachNode();
 	Q_INVOKABLE void removeAttachNode(const QByteArray& boneName);
 	Q_INVOKABLE void reset();
+	void setAABBForInvisibleMeshes(bool value);
 	void setBlendFunc(const cocos2d::BlendFunc& blendFunc);
 	Q_INVOKABLE void setCullFace(int side);
 	Q_INVOKABLE void setCullFaceEnabled(bool enable);

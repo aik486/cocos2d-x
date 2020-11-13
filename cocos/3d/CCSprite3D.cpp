@@ -486,6 +486,7 @@ Sprite3D* Sprite3D::createSprite3DNode(NodeData* nodedata,ModelData* modeldata,c
     auto sprite = new (std::nothrow) Sprite3D();
     if (sprite)
     {
+        sprite->setAABBForInvisibleMeshes(_aabbForInvisibleMeshes);
         sprite->setName(nodedata->id);
         auto mesh = createMesh(nodedata, modeldata, materialdatas);
         // set locale transform
@@ -643,6 +644,7 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
                 auto mesh = createMesh(nodedata, it, materialdatas);
                 if (mesh)
                 {
+                    _aabbDirty = true;
                     _meshes.pushBack(mesh);
                     _meshesSorted.clear();
                     mesh->_visibleChanged = std::bind(&Sprite3D::onAABBDirty, this);
@@ -723,6 +725,16 @@ void  Sprite3D::addMesh(Mesh* mesh)
     _meshVertexDatas.pushBack(meshVertex);
     _meshes.pushBack(mesh);
     _meshesSorted.clear();
+    _aabbDirty = true;
+}
+
+void Sprite3D::setAABBForInvisibleMeshes(bool value)
+{
+    if (_aabbForInvisibleMeshes == value) {
+        return;
+    }
+    _aabbForInvisibleMeshes = value;
+    _aabbDirty = true;
 }
 
 void Sprite3D::setTexture(const std::string& texFile)
@@ -916,7 +928,7 @@ AABB Sprite3D::getAABB() const
         if (_meshes.size())
         {
             for (const auto& it : _meshes) {
-                if (it->isVisible())
+                if (it->isVisible() || _aabbForInvisibleMeshes)
                     _aabb.merge(it->getAABB());
             }
             
