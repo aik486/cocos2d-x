@@ -2391,6 +2391,7 @@ public:
 	Q_PROPERTY(float rotationY READ getRotationY WRITE setRotationY)
 	Q_PROPERTY(float rotationZ READ getRotationZ WRITE setRotationZ)
 	Q_PROPERTY(float scale READ getScale WRITE setScale)
+	Q_PROPERTY(cocos2d::Vec3 scale3D READ getScale3D WRITE setScale3D)
 	Q_PROPERTY(float scaleX READ getScaleX WRITE setScaleX)
 	Q_PROPERTY(float scaleY READ getScaleY WRITE setScaleY)
 	Q_PROPERTY(float scaleZ READ getScaleZ WRITE setScaleZ)
@@ -2472,6 +2473,7 @@ public:
 	float getRotationY();
 	float getRotationZ();
 	float getScale();
+	cocos2d::Vec3 getScale3D();
 	float getScaleX();
 	float getScaleY();
 	float getScaleZ();
@@ -2555,6 +2557,8 @@ public:
 	void setRotationZ(float value);
 	void setScale(float scale);
 	Q_INVOKABLE void setScale(float scaleX, float scaleY);
+	void setScale3D(const cocos2d::Vec3& scale);
+	Q_INVOKABLE void setScale3D(float x, float y, float z);
 	void setScaleX(float scaleX);
 	void setScaleY(float scaleY);
 	void setScaleZ(float scaleZ);

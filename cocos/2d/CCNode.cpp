@@ -557,6 +557,23 @@ void Node::setScaleX(float scaleX)
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 
+void Node::setScale3D(float x, float y, float z)
+{
+    setScaleX(x);
+    setScaleY(y);
+    setScaleZ(z);
+}
+
+Vec3 Node::getScale3D() const
+{
+    return Vec3(_scaleX, _scaleY, _scaleZ);
+}
+
+void Node::setScale3D(const Vec3 &scale)
+{
+    setScale3D(scale.x, scale.y, scale.z);
+}
+
 /// scaleY getter
 float Node::getScaleY() const
 {

@@ -11230,6 +11230,16 @@ float QtScriptNode::getScale()
 	return static_cast<float>(0);
 }
 
+cocos2d::Vec3 QtScriptNode::getScale3D()
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		return __o->getScale3D();
+	}
+	return cocos2d::Vec3();
+}
+
 float QtScriptNode::getScaleX()
 {
 	auto __o = this->thiz<Node *>();
@@ -12049,6 +12059,24 @@ void QtScriptNode::setScale(float scaleX, float scaleY)
 	if (__o)
 	{
 		__o->setScale(scaleX, scaleY);
+	}
+}
+
+void QtScriptNode::setScale3D(const cocos2d::Vec3& scale)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setScale3D(scale);
+	}
+}
+
+void QtScriptNode::setScale3D(float x, float y, float z)
+{
+	auto __o = this->thiz<Node *>();
+	if (__o)
+	{
+		__o->setScale3D(x, y, z);
 	}
 }
 

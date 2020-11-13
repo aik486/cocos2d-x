@@ -245,6 +245,12 @@ public:
      * @warning The physics body doesn't support this.
      */
     virtual void setScaleX(float scaleX);
+    
+    void setScale3D(float x, float y, float z);
+    
+    Vec3 getScale3D() const;
+    void setScale3D(const Vec3& scale);
+    
     /**
      * Returns the scale factor on X axis of this node
      *
