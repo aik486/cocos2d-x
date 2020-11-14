@@ -879,10 +879,8 @@ bool Node::containsWorldPoint(const Vec2 &point) const
 		return false;
 	}
 	
-	OBB worldOBB(AABB(
-		Vec3(point.x, point.y, -99999.f), Vec3(point.x, point.y, 99999.f)));
-
-	return obb.transformed(getNodeToWorldTransform()).intersects(worldOBB);
+	auto world2dRay = OBB::world2dRay(point);
+	return obb.transformed(getNodeToWorldTransform()).intersects(world2dRay);
 }
 
 AABB Node::getWorldAABB() const

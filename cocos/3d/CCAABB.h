@@ -39,6 +39,7 @@ NS_CC_BEGIN
 /**
  * Axis Aligned Bounding Box (AABB), usually calculate some rough but fast collision detection.
  */
+class Rect;
 class CC_DLL AABB
 {
 
@@ -55,6 +56,8 @@ public:
      * @lua new
      */
     AABB(const Vec3& min, const Vec3& max);
+    static AABB fromRect(const Rect& rect);
+    static AABB world2dRay(const Vec2& worldPoint);
     
     /**
      * Gets the center point of the bounding box.

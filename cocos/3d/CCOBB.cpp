@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "3d/CCOBB.h"
+#include "math/CCGeometry.h"
 
 NS_CC_BEGIN
 
@@ -260,6 +261,16 @@ OBB::OBB(const Vec3* verts, int num)
     _extents = 0.5f * (vecMax - vecMin);
     
     computeExtAxis();
+}
+
+OBB OBB::fromRect(const Rect &rect)
+{
+    return OBB(AABB::fromRect(rect));
+}
+
+OBB OBB::world2dRay(const Vec2 &worldPoint)
+{
+    return OBB(ABB::world2Ray(worldPoint));
 }
 
 bool OBB::containPoint(const Vec3& point) const

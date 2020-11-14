@@ -60,6 +60,9 @@ public:
      */
     OBB(const Vec3* verts, int num);
     
+    static OBB fromRect(const Rect& rect);
+    static OBB world2dRay(const Vec2& worldPoint);
+    
     /*
      * Check point in
      */

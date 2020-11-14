@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "3d/CCAABB.h"
+#include "math/CCGeometry.h"
 
 NS_CC_BEGIN
 
@@ -41,6 +42,17 @@ AABB::AABB(const AABB &other)
 AABB::AABB(const Vec3& min, const Vec3& max)
 {
     set(min, max);
+}
+
+AABB AABB::fromRect(const Rect &rect)
+{
+    return AABB(Vec3(rect.getMinX(), rect.getMinY(), 0.f), 
+                Vec3(rect.getMaxX(), rect.getMaxY(), 0.f));
+}
+
+AABB AABB::world2dRay(const Vec2 &worldPoint)
+{
+    return AABB(Vec3(worldPoint.x, worldPoint.y, -99999.f), Vec3(worldPoint.x, worldPoint.y, 99999.f)) ;
 }
 
 Vec3 AABB::getCenter()
