@@ -42,11 +42,11 @@ ProgramGL::ProgramGL(const std::string& vertexShader, const std::string& fragmen
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     //some device required manually specify the precision qualifiers for vertex shader.
-    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(std::move(vsPreDefine + _vertexShader)));
-    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(std::move(fsPreDefine +  _fragmentShader)));
+    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newVertexShaderModule(std::move(vsPreDefine + _vertexShader)));
+    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newFragmentShaderModule(std::move(fsPreDefine +  _fragmentShader)));
 #else
-    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(_vertexShader));
-    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(_fragmentShader));
+    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newVertexShaderModule(_vertexShader));
+    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newFragmentShaderModule(_fragmentShader));
 #endif
 
     CC_SAFE_RETAIN(_vertexShaderModule);

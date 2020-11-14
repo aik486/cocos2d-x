@@ -28,15 +28,35 @@
 #include "base/CCRef.h"
 #include "platform/CCPlatformMacros.h"
 #include "Program.h"
+#include "base/CCMap.h"
+#include "base/ccMacros.h"
+#include "ShaderModule.h"
+#include "renderer/ccShaders.h"
 
 #include <string>
-#include <unordered_map>
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+namespace std
+{
+    template <>
+    struct hash<cocos2d::backend::ProgramType>
+    {
+        typedef cocos2d::backend::ProgramType argument_type;
+        typedef std::size_t result_type;
+        result_type operator()(argument_type const& v) const
+        {
+            return hash<int>()(static_cast<int>(v));
+        }
+    };
+}
+#endif
 
 CC_BACKEND_BEGIN
 /**
  * @addtogroup _backend
  * @{
  */
+
 
 /**
  * Cache and reuse program object.
@@ -54,20 +74,14 @@ public:
     backend::Program* getBuiltinProgram(ProgramType type) const;
     
     /**
-     * Remove a program object from cache.
-     * @param program Specifies the program object to move.
-     */
-    void removeProgram(backend::Program* program);
-
-    /**
      * Remove all unused program objects from cache.
      */
-    void removeUnusedProgram();
+    void removeUnusedCustomPrograms();
 
     /**
      * Remove all program objects from cache.
      */
-    void removeAllPrograms();
+    void removeCustomPrograms();
     
     /**
      * Add custom program to the cache.
@@ -75,13 +89,18 @@ public:
      * @param program Specifies the program to store in the cache.
      */
     void addCustomProgram(const std::string& key, backend::Program* program);
+    /**
+     * Remove a program object from cache.
+     * @param program Specifies the program object to move.
+     */
+    void removeCustomProgram(const std::string& key);
     
     /// Get custom program from cache.
     backend::Program* getCustomProgram(const std::string& key) const;
     
 protected:
-    ProgramCache() = default;
-    virtual ~ProgramCache();
+    ProgramCache();
+    virtual ~ProgramCache() override;
     
     /**
      * Pre-load programs into cache.
@@ -91,8 +110,8 @@ protected:
     /// Add built-in program
     void addProgram(ProgramType type);
     
-    static std::unordered_map<backend::ProgramType, backend::Program*> _cachedPrograms; ///< The cached program object.
-    static std::unordered_map<std::string, backend::Program*> _cachedCustomPrograms; ///< The cached custom program object.
+    Map<backend::ProgramType, backend::Program*> _cachedPrograms; ///< The cached program object.
+    Map<std::string, backend::Program*> _cachedCustomPrograms; ///< The cached custom program object.
     static ProgramCache *_sharedProgramCache; ///< A shared instance of the program cache.
 };
 

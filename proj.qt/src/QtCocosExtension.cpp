@@ -40,6 +40,7 @@ static Program *getShaderPositionTextureColorEx()
 			positionTextureColor_vert, ccPositionTextureColor_frag);
 
 		programCache->addCustomProgram(key, program);
+		program->release();
 	}
 
 	return program;

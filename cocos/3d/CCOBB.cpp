@@ -270,7 +270,7 @@ OBB OBB::fromRect(const Rect &rect)
 
 OBB OBB::world2dRay(const Vec2 &worldPoint)
 {
-    return OBB(ABB::world2Ray(worldPoint));
+    return OBB(AABB::world2dRay(worldPoint));
 }
 
 bool OBB::containPoint(const Vec3& point) const

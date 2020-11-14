@@ -27,7 +27,6 @@
 
 CC_BACKEND_BEGIN
 
-std::unordered_map<std::size_t, backend::ShaderModule*> ShaderCache::_cachedShaders;
 ShaderCache* ShaderCache::_sharedShaderCache = nullptr;
 
 ShaderCache* ShaderCache::getInstance()
@@ -80,20 +79,19 @@ backend::ShaderModule* ShaderCache::newShaderModule(backend::ShaderStage stage, 
     
     auto shader = backend::Device::getInstance()->newShaderModule(stage, shaderSource);
     shader->setHashValue(key);
-    _cachedShaders.emplace(key, shader);
+    _cachedShaders.insert(key, shader);
+    shader->release();
     
     return shader;
 }
 
-void ShaderCache::removeUnusedShader()
+void ShaderCache::removeUnusedShaders()
 {
     for (auto iter = _cachedShaders.cbegin(); iter != _cachedShaders.cend();)
     {
         auto shaderModule = iter->second;
         if (shaderModule->getReferenceCount() == 1)
         {
-            //            CCLOG("cocos2d: TextureCache: removing unused program");
-            shaderModule->release();
             iter = _cachedShaders.erase(iter);
         }
         else
@@ -105,11 +103,19 @@ void ShaderCache::removeUnusedShader()
 
 void ShaderCache::removeAllShaders()
 {
-    for(auto& shaderModule : _cachedShaders)
-    {
-        CC_SAFE_RELEASE(shaderModule.second);
-    }
     _cachedShaders.clear();
+}
+
+void ShaderCache::removeShader(ShaderModule *m)
+{
+    if (!m) {
+        return;
+    }
+    
+    auto it = _cachedShaders.find(m->getHashValue());
+    if (it != _cachedShaders.end() && it->second == m) {
+        _cachedShaders.erase(it);
+    }
 }
 
 CC_BACKEND_END

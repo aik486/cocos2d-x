@@ -27,9 +27,9 @@
 #include "base/CCRef.h"
 #include "platform/CCPlatformMacros.h"
 #include "renderer/backend/ShaderModule.h"
+#include "base/CCMap.h"
 
 #include <string>
-#include <unordered_map>
 
 CC_BACKEND_BEGIN
 /**
@@ -54,21 +54,26 @@ public:
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    static backend::ShaderModule* newVertexShaderModule(const std::string& shaderSource);
+    backend::ShaderModule* newVertexShaderModule(const std::string& shaderSource);
     
     /** 
      * Create a fragment shader module.
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    static backend::ShaderModule* newFragmentShaderModule(const std::string& shaderSource);
+    backend::ShaderModule* newFragmentShaderModule(const std::string& shaderSource);
+    
     
     /**
      * Remove all unused shaders.
      */
-    void removeUnusedShader();
+    void removeUnusedShaders();
     
+    /** remove all shaders */
     void removeAllShaders();
+    
+    /** remove specific shader from cache */
+    void removeShader(backend::ShaderModule* m);
     
 protected:
     virtual ~ShaderCache();
@@ -87,9 +92,9 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    static backend::ShaderModule* newShaderModule(backend::ShaderStage stage, const std::string& shaderSource);
+    backend::ShaderModule* newShaderModule(backend::ShaderStage stage, const std::string& shaderSource);
     
-    static std::unordered_map<std::size_t, backend::ShaderModule*> _cachedShaders;
+    Map<size_t, backend::ShaderModule*> _cachedShaders;
     static ShaderCache* _sharedShaderCache;
 };
 

@@ -177,6 +177,11 @@ typedef void (Ref::*SEL_SCHEDULE)(float);
 #define CC_MENU_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_MenuHandler>(&_SELECTOR)
 #define CC_SCHEDULE_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_SCHEDULE>(&_SELECTOR)
 
+template <typename T>
+T* ccSafeAutorelease(T* ref) {
+    return ref ? static_cast<T*>(ref->autorelease()) : nullptr;
+}
+
 NS_CC_END
 // end of base group
 /** @} */

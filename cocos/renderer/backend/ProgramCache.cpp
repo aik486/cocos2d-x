@@ -24,26 +24,7 @@
  
 #include "ProgramCache.h"
 #include "Device.h"
-#include "ShaderModule.h"
-#include "renderer/ccShaders.h"
-#include "base/ccMacros.h"
 #include "base/CCConfiguration.h"
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-namespace std
-{
-    template <>
-    struct hash<cocos2d::backend::ProgramType>
-    {
-        typedef cocos2d::backend::ProgramType argument_type;
-        typedef std::size_t result_type;
-        result_type operator()(argument_type const& v) const
-        {
-            return hash<int>()(static_cast<int>(v));
-        }
-    };
-}
-#endif
 
 CC_BACKEND_BEGIN
 
@@ -64,9 +45,6 @@ namespace
         return std::string(def);
     }
 }
-
-std::unordered_map<backend::ProgramType, backend::Program*>  ProgramCache::_cachedPrograms;
-std::unordered_map<std::string, backend::Program*> ProgramCache::_cachedCustomPrograms;
 
 ProgramCache* ProgramCache::_sharedProgramCache = nullptr;
 
@@ -90,10 +68,8 @@ void ProgramCache::destroyInstance()
 
 ProgramCache::~ProgramCache()
 {
-    for(auto& program : _cachedPrograms)
-    {
-        CC_SAFE_RELEASE(program.second);
-    }
+    _cachedPrograms.clear();
+    removeCustomPrograms();
     CCLOGINFO("deallocing ProgramCache: %p", this);
     ShaderCache::destroyInstance();
 }
@@ -257,49 +233,33 @@ void ProgramCache::addProgram(ProgramType type)
             break;
     }
     program->setProgramType(type);
-    ProgramCache::_cachedPrograms.emplace(type, program);
+    _cachedPrograms.insert(type, program);
+    program->release();
 }
 
 backend::Program* ProgramCache::getBuiltinProgram(ProgramType type) const
 {
-    const auto& iter = ProgramCache::_cachedPrograms.find(type);
-    if (ProgramCache::_cachedPrograms.end() != iter)
+    const auto& iter = _cachedPrograms.find(type);
+    if (_cachedPrograms.end() != iter)
     {
         return iter->second;
     }
     return nullptr;
 }
 
-void ProgramCache::removeProgram(backend::Program* program)
+void ProgramCache::removeCustomProgram(const std::string& key)
 {
-    if (!program)
-    {
-        return;
-    }
-    
-    for (auto it = _cachedPrograms.cbegin(); it != _cachedPrograms.cend();)
-    {
-        if (it->second == program)
-        {
-            it->second->release();
-            it = _cachedPrograms.erase(it);
-            break;
-        }
-        else
-            ++it;
-    }
+    _cachedCustomPrograms.erase(key);
 }
 
-void ProgramCache::removeUnusedProgram()
+void ProgramCache::removeUnusedCustomPrograms()
 {
-    for (auto iter = _cachedPrograms.cbegin(); iter != _cachedPrograms.cend();)
+    for (auto iter = _cachedCustomPrograms.cbegin(); iter != _cachedCustomPrograms.cend();)
     {
         auto program = iter->second;
         if (program->getReferenceCount() == 1)
         {
-//            CCLOG("cocos2d: TextureCache: removing unused program");
-            program->release();
-            iter = _cachedPrograms.erase(iter);
+            iter = _cachedCustomPrograms.erase(iter);
         }
         else
         {
@@ -308,35 +268,30 @@ void ProgramCache::removeUnusedProgram()
     }
 }
 
-void ProgramCache::removeAllPrograms()
+void ProgramCache::removeCustomPrograms()
 {
-    for (auto& program : _cachedPrograms)
-    {
-        program.second->release();
-    }
-    _cachedPrograms.clear();
-    
-    for (auto& program : _cachedCustomPrograms)
-    {
-        program.second->release();
-    }
     _cachedCustomPrograms.clear();
 }
 
 void ProgramCache::addCustomProgram(const std::string &key, backend::Program *program)
 {
-    _cachedCustomPrograms.emplace(key, program);
+    _cachedCustomPrograms.insert(key, program);
 }
 
 backend::Program* ProgramCache::getCustomProgram(const std::string &key) const
 {
     const auto& iter = ProgramCache::_cachedCustomPrograms.find(key);
-    if (ProgramCache::_cachedCustomPrograms.end() != iter)
+    if (_cachedCustomPrograms.end() != iter)
     {
         return iter->second;
     }
     
     return nullptr;
+}
+
+ProgramCache::ProgramCache()
+{
+    //
 }
 
 CC_BACKEND_END

@@ -1862,12 +1862,13 @@ public:
 	explicit QtScriptShaderCache(QScriptEngine *engine);
 	static void Register(const QScriptValue &targetNamespace);
 
+	Q_INVOKABLE cocos2d::backend::ShaderModule* newFragmentShaderModule(const QByteArray& shaderSource);
+	Q_INVOKABLE cocos2d::backend::ShaderModule* newVertexShaderModule(const QByteArray& shaderSource);
 	Q_INVOKABLE void removeAllShaders();
-	Q_INVOKABLE void removeUnusedShader();
+	Q_INVOKABLE void removeShader(cocos2d::backend::ShaderModule* m);
+	Q_INVOKABLE void removeUnusedShaders();
 	static QScriptValue destroyInstance(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue newFragmentShaderModule(QScriptContext *context, QScriptEngine* engine);
-	static QScriptValue newVertexShaderModule(QScriptContext *context, QScriptEngine* engine);
 };
 
 } // end of backend
@@ -10454,9 +10455,9 @@ public:
 	Q_INVOKABLE void addCustomProgram(const QByteArray& key, cocos2d::backend::Program* program);
 	Q_INVOKABLE cocos2d::backend::Program* getBuiltinProgram(int type);
 	Q_INVOKABLE cocos2d::backend::Program* getCustomProgram(const QByteArray& key);
-	Q_INVOKABLE void removeAllPrograms();
-	Q_INVOKABLE void removeProgram(cocos2d::backend::Program* program);
-	Q_INVOKABLE void removeUnusedProgram();
+	Q_INVOKABLE void removeCustomProgram(const QByteArray& key);
+	Q_INVOKABLE void removeCustomPrograms();
+	Q_INVOKABLE void removeUnusedCustomPrograms();
 	static QScriptValue destroyInstance(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
 };
@@ -10524,9 +10525,9 @@ public:
 
 	Q_INVOKABLE cocos2d::backend::DepthStencilState* createDepthStencilState(const cocos2d::backend::DepthStencilDescriptor& descriptor);
 	Q_INVOKABLE cocos2d::backend::DeviceInfo* getDeviceInfo();
-	Q_INVOKABLE cocos2d::backend::Buffer* newBuffer(unsigned size, int type, int usage);
-	Q_INVOKABLE cocos2d::backend::Program* newProgram(const QByteArray& vertexShader, const QByteArray& fragmentShader);
-	Q_INVOKABLE cocos2d::backend::TextureBackend* newTexture(const cocos2d::backend::TextureDescriptor& descriptor);
+	Q_INVOKABLE cocos2d::backend::Buffer* newBuffer(unsigned arg0, int arg1, int arg2);
+	Q_INVOKABLE cocos2d::backend::Program* newProgram(const QByteArray& arg0, const QByteArray& arg1);
+	Q_INVOKABLE cocos2d::backend::TextureBackend* newTexture(const cocos2d::backend::TextureDescriptor& arg0);
 	static QScriptValue getInstance(QScriptContext *context, QScriptEngine* engine);
 };
 

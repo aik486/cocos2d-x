@@ -8080,14 +8080,6 @@ void QtScriptShaderCache::Register(const QScriptValue &targetNamespace)
 		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
 			&QtScriptShaderCache::getInstance)),
 			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("newFragmentShaderModule", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptShaderCache::newFragmentShaderModule)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	ctor.setProperty("newVertexShaderModule", engine->newFunction(
-		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
-			&QtScriptShaderCache::newVertexShaderModule)),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 int QtScriptShaderCache::constructorArgumentCountMin() const
@@ -8108,6 +8100,26 @@ bool QtScriptShaderCache::constructObject(QScriptContext *context, NativeObjectT
 	return false;
 }
 
+cocos2d::backend::ShaderModule* QtScriptShaderCache::newFragmentShaderModule(const QByteArray& shaderSource)
+{
+	auto __o = this->thiz<ShaderCache *>();
+	if (__o)
+	{
+		return __o->newFragmentShaderModule(shaderSource.toStdString());
+	}
+	return nullptr;
+}
+
+cocos2d::backend::ShaderModule* QtScriptShaderCache::newVertexShaderModule(const QByteArray& shaderSource)
+{
+	auto __o = this->thiz<ShaderCache *>();
+	if (__o)
+	{
+		return __o->newVertexShaderModule(shaderSource.toStdString());
+	}
+	return nullptr;
+}
+
 void QtScriptShaderCache::removeAllShaders()
 {
 	auto __o = this->thiz<ShaderCache *>();
@@ -8117,12 +8129,21 @@ void QtScriptShaderCache::removeAllShaders()
 	}
 }
 
-void QtScriptShaderCache::removeUnusedShader()
+void QtScriptShaderCache::removeShader(cocos2d::backend::ShaderModule* m)
 {
 	auto __o = this->thiz<ShaderCache *>();
 	if (__o)
 	{
-		__o->removeUnusedShader();
+		__o->removeShader(m);
+	}
+}
+
+void QtScriptShaderCache::removeUnusedShaders()
+{
+	auto __o = this->thiz<ShaderCache *>();
+	if (__o)
+	{
+		__o->removeUnusedShaders();
 	}
 }
 
@@ -8164,50 +8185,6 @@ QScriptValue QtScriptShaderCache::getInstance(QScriptContext *context, QScriptEn
 
 	QtScriptUtils::badArgumentsException(context,
 			"cocos2d::backend::ShaderCache::getInstance");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptShaderCache::newFragmentShaderModule(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
-			auto arg0 = tmp_0.toStdString();
-			return __e->toScriptValue(ShaderCache::newFragmentShaderModule(arg0));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::backend::ShaderCache::newFragmentShaderModule");
-	return __e->uncaughtException();
-}
-
-QScriptValue QtScriptShaderCache::newVertexShaderModule(QScriptContext *context, QScriptEngine* __e)
-{
-	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
-	{
-		return __e->uncaughtException();
-	}
-
-	switch (context->argumentCount())
-	{
-		case 1:
-		{
-			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
-			auto arg0 = tmp_0.toStdString();
-			return __e->toScriptValue(ShaderCache::newVertexShaderModule(arg0));
-		}
-	}
-
-	QtScriptUtils::badArgumentsException(context,
-			"cocos2d::backend::ShaderCache::newVertexShaderModule");
 	return __e->uncaughtException();
 }
 
@@ -47332,30 +47309,30 @@ cocos2d::backend::Program* QtScriptProgramCache::getCustomProgram(const QByteArr
 	return nullptr;
 }
 
-void QtScriptProgramCache::removeAllPrograms()
+void QtScriptProgramCache::removeCustomProgram(const QByteArray& key)
 {
 	auto __o = this->thiz<ProgramCache *>();
 	if (__o)
 	{
-		__o->removeAllPrograms();
+		__o->removeCustomProgram(key.toStdString());
 	}
 }
 
-void QtScriptProgramCache::removeProgram(cocos2d::backend::Program* program)
+void QtScriptProgramCache::removeCustomPrograms()
 {
 	auto __o = this->thiz<ProgramCache *>();
 	if (__o)
 	{
-		__o->removeProgram(program);
+		__o->removeCustomPrograms();
 	}
 }
 
-void QtScriptProgramCache::removeUnusedProgram()
+void QtScriptProgramCache::removeUnusedCustomPrograms()
 {
 	auto __o = this->thiz<ProgramCache *>();
 	if (__o)
 	{
-		__o->removeUnusedProgram();
+		__o->removeUnusedCustomPrograms();
 	}
 }
 
@@ -47608,32 +47585,32 @@ cocos2d::backend::DeviceInfo* QtScriptDevice::getDeviceInfo()
 	return nullptr;
 }
 
-cocos2d::backend::Buffer* QtScriptDevice::newBuffer(unsigned size, int type, int usage)
+cocos2d::backend::Buffer* QtScriptDevice::newBuffer(unsigned arg0, int arg1, int arg2)
 {
 	auto __o = this->thiz<Device *>();
 	if (__o)
 	{
-		return __o->newBuffer(size, cocos2d::backend::BufferType(type), cocos2d::backend::BufferUsage(usage));
+		return ccSafeAutorelease(__o->newBuffer(arg0, cocos2d::backend::BufferType(arg1), cocos2d::backend::BufferUsage(arg2)));
 	}
 	return nullptr;
 }
 
-cocos2d::backend::Program* QtScriptDevice::newProgram(const QByteArray& vertexShader, const QByteArray& fragmentShader)
+cocos2d::backend::Program* QtScriptDevice::newProgram(const QByteArray& arg0, const QByteArray& arg1)
 {
 	auto __o = this->thiz<Device *>();
 	if (__o)
 	{
-		return __o->newProgram(vertexShader.toStdString(), fragmentShader.toStdString());
+		return ccSafeAutorelease(__o->newProgram(arg0.toStdString(), arg1.toStdString()));
 	}
 	return nullptr;
 }
 
-cocos2d::backend::TextureBackend* QtScriptDevice::newTexture(const cocos2d::backend::TextureDescriptor& descriptor)
+cocos2d::backend::TextureBackend* QtScriptDevice::newTexture(const cocos2d::backend::TextureDescriptor& arg0)
 {
 	auto __o = this->thiz<Device *>();
 	if (__o)
 	{
-		return __o->newTexture(descriptor);
+		return ccSafeAutorelease(__o->newTexture(arg0));
 	}
 	return nullptr;
 }
