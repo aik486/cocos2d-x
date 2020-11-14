@@ -13,9 +13,11 @@
 #include <QVector3D>
 #include <QVector4D>
 
+class QImage;
 namespace cocos2d
 {
 class Node;
+class Texture2D;
 using CCShape = QVector<Point>;
 
 QPolygonF shapeFromNode(Node *node);
@@ -63,4 +65,6 @@ qreal getGlobalNodeRotation(Node *node);
 
 Rect getWorldRectForNode(
 	Node *node, bool *xReversePtr = nullptr, bool *yReversePtr = nullptr);
+
+Texture2D *makeTextureFromQImage(const QImage &image);
 }

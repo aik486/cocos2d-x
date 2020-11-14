@@ -432,39 +432,16 @@ QScriptValue QtCocosScriptEngine::addImageSpriteFrame(
 	{
 		image.loadFromData(qscriptvalue_cast<QByteArray>(arg1));
 	}
-
-	backend::PixelFormat textureFormat;
-	if (image.hasAlphaChannel())
-	{
-		if (image.format() != QImage::Format_RGBA8888_Premultiplied)
-		{
-			image =
-				image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
-		}
-
-		textureFormat = backend::PixelFormat::RGBA8888;
-	} else
-	{
-		if (image.format() != QImage::Format_RGB888)
-			image = image.convertToFormat(QImage::Format_RGB888);
-		textureFormat = backend::PixelFormat::RGB888;
-	}
-
 	if (image.isNull())
 	{
 		image = QImage(1, 1, QImage::Format_RGB888);
-		image.fill(Qt::transparent);
+		image.fill(Qt::white);
 	}
 
 	QtCocosContext::makeCurrent();
 
 	Rect rect(0, 0, float(image.width()), float(image.height()));
-	auto texture = new Texture2D;
-	bool textureOk = texture->initWithData(image.constBits(), qImageSize(image),
-		textureFormat, image.width(), image.height(), rect.size, true);
-
-	Q_ASSERT(textureOk);
-	Q_UNUSED(textureOk);
+	auto texture = makeTextureFromQImage(image);
 
 	if (argc == 3)
 	{

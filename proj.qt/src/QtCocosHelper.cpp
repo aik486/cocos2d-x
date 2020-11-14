@@ -1,8 +1,9 @@
 ﻿#include "QtCocosHelper.h"
 
+#include "cocos2d.h"
 #include "QtCocosExtension.h"
 
-#include "2d/CCNode.h"
+#include <QImage>
 
 namespace cocos2d
 {
@@ -310,5 +311,39 @@ Vec3 qVector3DToCCVec3(const QVector3D &vec)
 Vec4 qVector4DToCCVec4(const QVector4D &vec)
 {
 	return Vec4(vec.x(), vec.y(), vec.z(), vec.w());
+}
+
+Texture2D *makeTextureFromQImage(const QImage &image)
+{
+	if (image.isNull())
+	{
+		return nullptr;
+	}
+
+	auto img = image;
+	PixelFormat textureFormat;
+	if (img.hasAlphaChannel())
+	{
+		if (img.format() != QImage::Format_RGBA8888_Premultiplied)
+		{
+			img = img.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
+		}
+
+		textureFormat = PixelFormat::RGBA8888;
+	} else
+	{
+		if (img.format() != QImage::Format_RGB888)
+			img = img.convertToFormat(QImage::Format_RGB888);
+		textureFormat = PixelFormat::RGB888;
+	}
+
+	Size size(float(img.width()), float(img.height()));
+	auto texture = new Texture2D;
+	bool textureOk = texture->initWithData(img.constBits(), qImageSize(img),
+		textureFormat, img.width(), img.height(), size, true);
+
+	Q_ASSERT(textureOk);
+	Q_UNUSED(textureOk);
+	return texture;
 }
 }
