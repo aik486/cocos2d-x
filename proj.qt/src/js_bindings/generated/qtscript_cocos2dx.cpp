@@ -6980,9 +6980,19 @@ QtScriptAABB::QtScriptAABB(QScriptEngine *engine)
 
 void QtScriptAABB::Register(const QScriptValue &targetNamespace)
 {
+	auto engine = targetNamespace.engine();
+	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<AABB, QtScriptAABB>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
+	ctor.setProperty("fromRect", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptAABB::fromRect)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("world2dRay", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptAABB::world2dRay)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 bool QtScriptAABB::containPoint(const cocos2d::Vec3& point)
@@ -7098,6 +7108,48 @@ cocos2d::AABB QtScriptAABB::transformed(const cocos2d::Mat4& mat)
 		return __o->transformed(mat);
 	}
 	return cocos2d::AABB();
+}
+
+QScriptValue QtScriptAABB::fromRect(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 1:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::Rect>(context->argument(0));
+			return __e->toScriptValue(AABB::fromRect(arg0));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::AABB::fromRect");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptAABB::world2dRay(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 1:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::Vec2>(context->argument(0));
+			return __e->toScriptValue(AABB::world2dRay(arg0));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::AABB::world2dRay");
+	return __e->uncaughtException();
 }
 
 int QtScriptAABB::constructorArgumentCountMin() const
@@ -10171,9 +10223,19 @@ QtScriptOBB::QtScriptOBB(QScriptEngine *engine)
 
 void QtScriptOBB::Register(const QScriptValue &targetNamespace)
 {
+	auto engine = targetNamespace.engine();
+	Q_ASSERT(engine);
 	QScriptValue inherit;
 	auto ctor = RegisterT<OBB, QtScriptOBB>(targetNamespace, inherit);
 	Q_ASSERT(ctor.isFunction());
+	ctor.setProperty("fromRect", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptOBB::fromRect)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	ctor.setProperty("world2dRay", engine->newFunction(
+		static_cast<QScriptValue (*)(QScriptContext *, QScriptEngine *)>(
+			&QtScriptOBB::world2dRay)),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
 bool QtScriptOBB::containPoint(const cocos2d::Vec3& point)
@@ -10280,6 +10342,48 @@ cocos2d::OBB QtScriptOBB::transformed(const cocos2d::Mat4& mat)
 		return __o->transformed(mat);
 	}
 	return cocos2d::OBB();
+}
+
+QScriptValue QtScriptOBB::fromRect(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 1:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::Rect>(context->argument(0));
+			return __e->toScriptValue(OBB::fromRect(arg0));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::OBB::fromRect");
+	return __e->uncaughtException();
+}
+
+QScriptValue QtScriptOBB::world2dRay(QScriptContext *context, QScriptEngine* __e)
+{
+	if (!QtScriptUtils::checkArgumentCount(context, 1, 1))
+	{
+		return __e->uncaughtException();
+	}
+
+	switch (context->argumentCount())
+	{
+		case 1:
+		{
+			auto arg0 = qscriptvalue_cast<cocos2d::Vec2>(context->argument(0));
+			return __e->toScriptValue(OBB::world2dRay(arg0));
+		}
+	}
+
+	QtScriptUtils::badArgumentsException(context,
+			"cocos2d::OBB::world2dRay");
+	return __e->uncaughtException();
 }
 
 int QtScriptOBB::constructorArgumentCountMin() const

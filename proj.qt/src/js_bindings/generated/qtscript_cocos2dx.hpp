@@ -1551,6 +1551,8 @@ public:
 	Q_INVOKABLE void set(const cocos2d::Vec3& min, const cocos2d::Vec3& max);
 	Q_INVOKABLE void transform(const cocos2d::Mat4& mat);
 	Q_INVOKABLE cocos2d::AABB transformed(const cocos2d::Mat4& mat);
+	static QScriptValue fromRect(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue world2dRay(QScriptContext *context, QScriptEngine* engine);
 	Q_PROPERTY(cocos2d::Vec3 max READ _public_field_get_max WRITE _public_field_set_max)
 	cocos2d::Vec3 _public_field_get_max() const;
 	void _public_field_set_max(const cocos2d::Vec3& value);
@@ -2311,6 +2313,8 @@ public:
 	Q_INVOKABLE cocos2d::AABB toAABB();
 	Q_INVOKABLE void transform(const cocos2d::Mat4& mat);
 	Q_INVOKABLE cocos2d::OBB transformed(const cocos2d::Mat4& mat);
+	static QScriptValue fromRect(QScriptContext *context, QScriptEngine* engine);
+	static QScriptValue world2dRay(QScriptContext *context, QScriptEngine* engine);
 	Q_PROPERTY(cocos2d::Vec3 center READ _public_field_get_center WRITE _public_field_set_center)
 	cocos2d::Vec3 _public_field_get_center() const;
 	void _public_field_set_center(const cocos2d::Vec3& value);
