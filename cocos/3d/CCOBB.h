@@ -94,7 +94,8 @@ public:
      * verts[6] : left bottom back
      * verts[7] : left top back
      */
-    void getCorners(Vec3* verts) const;
+    void getCorners(Vec3* dst) const;
+    Vec3 getCorner(int side) const;
     
     /*
      * Check intersect with other

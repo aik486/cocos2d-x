@@ -63,6 +63,19 @@ public:
      * Gets the center point of the bounding box.
      */
     Vec3 getCenter();
+    
+    enum {
+        LEFT_TOP_FRONT = 0,
+        LEFT_BOTTOM_FRONT,
+        RIGHT_BOTTOM_FRONT,
+        RIGHT_TOP_FRONT,
+        RIGHT_TOP_BACK,
+        RIGHT_BOTTOM_BACK,
+        LEFT_BOTTOM_BACK,
+        LEFT_TOP_BACK,
+        
+        NUM_SIDES
+    };
 
     /* Near face, specified counter-clockwise looking towards the origin from the positive z-axis.
      * verts[0] : left top front
@@ -77,6 +90,7 @@ public:
      * verts[7] : left top back
      */
     void getCorners(Vec3 *dst) const;
+    Vec3 getCorner(int side) const;
 
     /**
      * Tests whether this bounding box intersects the specified bounding object.

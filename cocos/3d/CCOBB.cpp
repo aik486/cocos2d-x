@@ -323,10 +323,10 @@ void OBB::setAABB(const AABB &aabb)
 
 AABB OBB::toAABB() const
 {
-    Vec3 corners[8];
+    Vec3 corners[AABB::NUM_SIDES];
     getCorners(corners);
     AABB result;
-    result.updateMinMax(corners, 8);
+    result.updateMinMax(corners, AABB::NUM_SIDES);
     return result;
 }
 
@@ -335,17 +335,35 @@ void OBB::reset()
     memset(this, 0, sizeof(OBB));
 }
 
-void OBB::getCorners(Vec3* verts) const
+void OBB::getCorners(Vec3* dst) const
 {
-    verts[0] = _center - _extentX + _extentY + _extentZ;     // left top front
-    verts[1] = _center - _extentX - _extentY + _extentZ;     // left bottom front
-    verts[2] = _center + _extentX - _extentY + _extentZ;     // right bottom front
-    verts[3] = _center + _extentX + _extentY + _extentZ;     // right top front
-    
-    verts[4] = _center + _extentX + _extentY - _extentZ;     // right top back
-    verts[5] = _center + _extentX - _extentY - _extentZ;     // right bottom back
-    verts[6] = _center - _extentX - _extentY - _extentZ;     // left bottom back
-    verts[7] = _center - _extentX + _extentY - _extentZ;     // left top back
+    assert(dst);
+    for (int i = 0; i < AABB::NUM_SIDES; i++) {
+        *dst++ = getCorner(i);
+    }
+}
+
+Vec3 OBB::getCorner(int side) const
+{
+    switch (side) {
+        case AABB::LEFT_TOP_FRONT:
+            return _center - _extentX + _extentY + _extentZ;
+        case AABB::LEFT_BOTTOM_FRONT:
+            return _center - _extentX - _extentY + _extentZ;
+        case AABB::RIGHT_BOTTOM_FRONT:
+            return _center + _extentX - _extentY + _extentZ;
+        case AABB::RIGHT_TOP_FRONT:
+            return _center + _extentX + _extentY + _extentZ;
+        case AABB::RIGHT_TOP_BACK:
+            return _center + _extentX + _extentY - _extentZ;
+        case AABB::RIGHT_BOTTOM_BACK:
+            return _center + _extentX - _extentY - _extentZ;
+        case AABB::LEFT_BOTTOM_BACK:
+            return _center - _extentX - _extentY - _extentZ;
+        case AABB::LEFT_TOP_BACK:
+            return _center - _extentX + _extentY - _extentZ;
+    }
+    return Vec3();
 }
 
 float OBB::projectPoint(const Vec3& point, const Vec3& axis)const
@@ -357,21 +375,21 @@ float OBB::projectPoint(const Vec3& point, const Vec3& axis)const
 
 void OBB::getInterval(const OBB& box, const Vec3& axis, float &min, float &max)const
 {
-    Vec3 corners[8];
+    Vec3 corners[AABB::NUM_SIDES];
     box.getCorners(corners);
     float value;
     min = max = projectPoint(axis, corners[0]);
-    for(int i = 1; i < 8; i++)
+    for(int i = 1; i < AABB::NUM_SIDES; i++)
     {
         value = projectPoint(axis, corners[i]);
-        min = MIN(min, value);
-        max = MAX(max, value);
+        min = std::min(min, value);
+        max = std::max(max, value);
     }
 }
 
 Vec3 OBB::getEdgeDirection(int index)const
 {
-    Vec3 corners[8];
+    Vec3 corners[AABB::NUM_SIDES];
     getCorners(corners);
     
     Vec3 tmpLine;
@@ -398,7 +416,7 @@ Vec3 OBB::getEdgeDirection(int index)const
 
 Vec3 OBB::getFaceDirection(int index) const
 {
-    Vec3 corners[8];
+    Vec3 corners[AABB::NUM_SIDES];
     getCorners(corners);
     
     Vec3 faceDirection, v0, v1;

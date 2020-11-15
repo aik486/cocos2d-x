@@ -68,26 +68,33 @@ Vec3 AABB::getCenter()
 void AABB::getCorners(Vec3 *dst) const
 {
     assert(dst);
-    
-    // Near face, specified counter-clockwise looking towards the origin from the positive z-axis.
-    // Left-top-front.
-    dst[0].set(_min.x, _max.y, _max.z);
-    // Left-bottom-front.
-    dst[1].set(_min.x, _min.y, _max.z);
-    // Right-bottom-front.
-    dst[2].set(_max.x, _min.y, _max.z);
-    // Right-top-front.
-    dst[3].set(_max.x, _max.y, _max.z);
+    for (int i = 0; i < NUM_SIDES; i++) {
+        *dst++ = getCorner(i);
+    }
+}
 
-    // Far face, specified counter-clockwise looking towards the origin from the negative z-axis.
-    // Right-top-back.
-    dst[4].set(_max.x, _max.y, _min.z);
-    // Right-bottom-back.
-    dst[5].set(_max.x, _min.y, _min.z);
-    // Left-bottom-back.
-    dst[6].set(_min.x, _min.y, _min.z);
-    // Left-top-back.
-    dst[7].set(_min.x, _max.y, _min.z);
+Vec3 AABB::getCorner(int side) const
+{
+    switch (side) {
+        case LEFT_TOP_FRONT: 
+            return Vec3(_min.x, _max.y, _max.z);
+        case LEFT_BOTTOM_FRONT: 
+            return Vec3(_min.x, _min.y, _max.z);
+        case RIGHT_BOTTOM_FRONT:
+            return Vec3(_max.x, _min.y, _max.z);
+        case RIGHT_TOP_FRONT:
+            return Vec3(_max.x, _max.y, _max.z);
+        case RIGHT_TOP_BACK:
+            return Vec3(_max.x, _max.y, _min.z);
+        case RIGHT_BOTTOM_BACK:
+            return Vec3(_max.x, _min.y, _min.z);
+        case LEFT_BOTTOM_BACK:
+            return Vec3(_min.x, _min.y, _min.z);
+        case LEFT_TOP_BACK:
+            return Vec3(_min.x, _max.y, _min.z);
+    }
+    
+    return Vec3();
 }
 
 bool AABB::intersects(const AABB& aabb) const
@@ -174,16 +181,16 @@ void AABB::transform(const Mat4& mat)
         return;
     }
     
-    Vec3 corners[8];
+    Vec3 corners[NUM_SIDES];
     getCorners(corners);
 
     // Transform the corners, recalculate the min and max points along the way.
-    for (int i = 0; i < 8; i++)
-        mat.transformPoint(&corners[i]);
+    for (auto &corner : corners)
+        mat.transformPoint(&corner);
     
     reset();
     
-    updateMinMax(corners, 8);
+    updateMinMax(corners, NUM_SIDES);
 }
 
 AABB AABB::transformed(const Mat4 &mat) const
