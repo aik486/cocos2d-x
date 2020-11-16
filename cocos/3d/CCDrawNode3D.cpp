@@ -62,10 +62,10 @@ void DrawNode3D::ensureCapacity(int count)
 {
     CCASSERT(count>=0, "capacity must be >= 0");
     
-    auto EXTENDED_SIZE = _bufferLines.size() + count;
-
-    _bufferLines.resize(EXTENDED_SIZE);
-
+    auto EXTENDED_SIZE = _currentLineCount + count;
+    if (EXTENDED_SIZE > _bufferLines.size()){
+        _bufferLines.resize(EXTENDED_SIZE);
+    }
 }
 
 bool DrawNode3D::init()
@@ -187,14 +187,14 @@ void DrawNode3D::drawCube(const AABB &aabb, const Color4B &color)
         return;
     }
     
-    Vec3 corners[8];
+    Vec3 corners[AABB::NUM_SIDES];
     aabb.getCorners(corners);
     drawCube(corners, color);
 }
 
 void DrawNode3D::drawCube(const OBB &obb, const Color4B &color)
 {
-    Vec3 corners[8];
+    Vec3 corners[AABB::NUM_SIDES];
     obb.getCorners(corners);
     drawCube(corners, color);
 }
