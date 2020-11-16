@@ -1543,7 +1543,7 @@ public:
 	Q_INVOKABLE bool differs(const cocos2d::AABB& other);
 	Q_INVOKABLE bool equals(const cocos2d::AABB& other);
 	Q_INVOKABLE cocos2d::Vec3 getCenter();
-	Q_INVOKABLE void getCorners(cocos2d::Vec3* dst);
+	Q_INVOKABLE cocos2d::Vec3 getCorner(int side);
 	Q_INVOKABLE bool intersects(const cocos2d::AABB& aabb);
 	Q_INVOKABLE bool isEmpty();
 	Q_INVOKABLE void merge(const cocos2d::AABB& box);
@@ -2306,6 +2306,7 @@ public:
 	Q_INVOKABLE bool containPoint(const cocos2d::Vec3& point);
 	Q_INVOKABLE bool differs(const cocos2d::OBB& other);
 	Q_INVOKABLE bool equals(const cocos2d::OBB& other);
+	Q_INVOKABLE cocos2d::Vec3 getCorner(int side);
 	Q_INVOKABLE bool intersects(const cocos2d::OBB& box);
 	Q_INVOKABLE bool isEmpty();
 	Q_INVOKABLE void reset();

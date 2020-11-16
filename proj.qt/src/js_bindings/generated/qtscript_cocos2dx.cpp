@@ -7035,13 +7035,14 @@ cocos2d::Vec3 QtScriptAABB::getCenter()
 	return cocos2d::Vec3();
 }
 
-void QtScriptAABB::getCorners(cocos2d::Vec3* dst)
+cocos2d::Vec3 QtScriptAABB::getCorner(int side)
 {
 	auto __o = this->thiz<AABB *>();
 	if (__o)
 	{
-		__o->getCorners(dst);
+		return __o->getCorner(side);
 	}
+	return cocos2d::Vec3();
 }
 
 bool QtScriptAABB::intersects(const cocos2d::AABB& aabb)
@@ -10243,6 +10244,16 @@ bool QtScriptOBB::equals(const cocos2d::OBB& other)
 		return __o->operator==(other);
 	}
 	return false;
+}
+
+cocos2d::Vec3 QtScriptOBB::getCorner(int side)
+{
+	auto __o = this->thiz<OBB *>();
+	if (__o)
+	{
+		return __o->getCorner(side);
+	}
+	return cocos2d::Vec3();
 }
 
 bool QtScriptOBB::intersects(const cocos2d::OBB& box)
