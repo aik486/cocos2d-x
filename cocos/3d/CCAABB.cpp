@@ -136,8 +136,9 @@ void AABB::set(const Vec3& min, const Vec3& max)
 
 void AABB::reset()
 {
-	_min = Vec3();
-	_max = Vec3();
+	auto inf = std::numeric_limits<float>::infinity();
+	_min = Vec3(inf, inf, inf);
+	_max = Vec3(-inf, -inf, -inf);
 }
 
 bool AABB::isEmpty() const
