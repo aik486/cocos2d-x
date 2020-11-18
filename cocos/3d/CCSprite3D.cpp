@@ -800,8 +800,8 @@ void Sprite3D::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTra
     if (_meshesSorted.empty())
     {
         _meshesSorted = _meshes;
-        std::stable_sort(_meshesSorted.begin(), _meshesSorted.end(), [](Mesh* a, Mesh*) -> bool {
-            return !a->_isTransparent;
+        std::stable_sort(_meshesSorted.begin(), _meshesSorted.end(), [](Mesh* a, Mesh*b) -> bool {
+            return (a->_isTransparent ? 1 : 0) < (b->_isTransparent ? 1 : 0);
         });
     }
     
