@@ -2464,6 +2464,26 @@ float QtScriptQuaternion::toAxisAngle(cocos2d::Vec3* e)
 	return static_cast<float>(0);
 }
 
+cocos2d::Vec3 QtScriptQuaternion::toEulerAngleDegreesVec()
+{
+	auto __o = this->thiz<Quaternion *>();
+	if (__o)
+	{
+		return __o->toEulerAngleDegreesVec();
+	}
+	return cocos2d::Vec3();
+}
+
+cocos2d::Vec3 QtScriptQuaternion::toEulerAngleRadiansVec()
+{
+	auto __o = this->thiz<Quaternion *>();
+	if (__o)
+	{
+		return __o->toEulerAngleRadiansVec();
+	}
+	return cocos2d::Vec3();
+}
+
 cocos2d::Vec3 QtScriptQuaternion::vec3Multiplied(const cocos2d::Vec3& v)
 {
 	auto __o = this->thiz<Quaternion *>();

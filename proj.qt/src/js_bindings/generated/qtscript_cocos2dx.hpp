@@ -317,6 +317,8 @@ public:
 	Q_INVOKABLE void set(float xx, float yy, float zz, float ww);
 	Q_INVOKABLE void setIdentity();
 	Q_INVOKABLE float toAxisAngle(cocos2d::Vec3* e);
+	Q_INVOKABLE cocos2d::Vec3 toEulerAngleDegreesVec();
+	Q_INVOKABLE cocos2d::Vec3 toEulerAngleRadiansVec();
 	Q_INVOKABLE cocos2d::Vec3 vec3Multiplied(const cocos2d::Vec3& v);
 	static QScriptValue identity(QScriptContext *context, QScriptEngine* engine);
 	static QScriptValue squad(QScriptContext *context, QScriptEngine* engine);
