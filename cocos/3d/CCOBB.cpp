@@ -323,10 +323,10 @@ void OBB::setAABB(const AABB &aabb)
 
 AABB OBB::toAABB() const
 {
-    Vec3 corners[AABB::NUM_SIDES];
+    Vec3 corners[AABB::NUM_CORNERS];
     getCorners(corners);
     AABB result;
-    result.updateMinMax(corners, AABB::NUM_SIDES);
+    result.updateMinMax(corners, AABB::NUM_CORNERS);
     return result;
 }
 
@@ -338,7 +338,7 @@ void OBB::reset()
 void OBB::getCorners(Vec3* dst) const
 {
     assert(dst);
-    for (int i = 0; i < AABB::NUM_SIDES; i++) {
+    for (int i = 0; i < AABB::NUM_CORNERS; i++) {
         *dst++ = getCorner(i);
     }
 }
@@ -375,11 +375,11 @@ float OBB::projectPoint(const Vec3& point, const Vec3& axis)const
 
 void OBB::getInterval(const OBB& box, const Vec3& axis, float &min, float &max)const
 {
-    Vec3 corners[AABB::NUM_SIDES];
+    Vec3 corners[AABB::NUM_CORNERS];
     box.getCorners(corners);
     float value;
     min = max = projectPoint(axis, corners[0]);
-    for(int i = 1; i < AABB::NUM_SIDES; i++)
+    for(int i = 1; i < AABB::NUM_CORNERS; i++)
     {
         value = projectPoint(axis, corners[i]);
         min = std::min(min, value);
@@ -389,7 +389,7 @@ void OBB::getInterval(const OBB& box, const Vec3& axis, float &min, float &max)c
 
 Vec3 OBB::getEdgeDirection(int index)const
 {
-    Vec3 corners[AABB::NUM_SIDES];
+    Vec3 corners[AABB::NUM_CORNERS];
     getCorners(corners);
     
     Vec3 tmpLine;
@@ -416,7 +416,7 @@ Vec3 OBB::getEdgeDirection(int index)const
 
 Vec3 OBB::getFaceDirection(int index) const
 {
-    Vec3 corners[AABB::NUM_SIDES];
+    Vec3 corners[AABB::NUM_CORNERS];
     getCorners(corners);
     
     Vec3 faceDirection, v0, v1;

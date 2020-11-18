@@ -290,6 +290,9 @@ public:
      * @return The angle (in radians).
      */
     float toAxisAngle(Vec3* e) const;
+    
+    Vec3 toEulerAngleRadiansVec() const;
+    Vec3 toEulerAngleDegreesVec() const;
 
     /**
      * Interpolates between two quaternions using linear interpolation.

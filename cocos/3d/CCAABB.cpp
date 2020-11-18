@@ -68,7 +68,7 @@ Vec3 AABB::getCenter()
 void AABB::getCorners(Vec3 *dst) const
 {
     assert(dst);
-    for (int i = 0; i < NUM_SIDES; i++) {
+    for (int i = 0; i < NUM_CORNERS; i++) {
         *dst++ = getCorner(i);
     }
 }
@@ -182,7 +182,7 @@ void AABB::transform(const Mat4& mat)
         return;
     }
     
-    Vec3 corners[NUM_SIDES];
+    Vec3 corners[NUM_CORNERS];
     getCorners(corners);
 
     // Transform the corners, recalculate the min and max points along the way.
@@ -191,7 +191,7 @@ void AABB::transform(const Mat4& mat)
     
     reset();
     
-    updateMinMax(corners, NUM_SIDES);
+    updateMinMax(corners, NUM_CORNERS);
 }
 
 AABB AABB::transformed(const Mat4 &mat) const

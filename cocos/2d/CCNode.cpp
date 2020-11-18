@@ -461,17 +461,10 @@ void Node::updateRotationQuat()
 
 void Node::updateRotation3D()
 {
-    //convert quaternion to Euler angle
-    float x = _rotationQuat.x, y = _rotationQuat.y, z = _rotationQuat.z, w = _rotationQuat.w;
-    _rotationX = atan2f(2.f * (w * x + y * z), 1.f - 2.f * (x * x + y * y));
-    float sy = 2.f * (w * y - z * x);
-    sy = clampf(sy, -1, 1);
-    _rotationY = asinf(sy);
-    _rotationZ_X = atan2f(2.f * (w * z + x * y), 1.f - 2.f * (y * y + z * z));
-    
-    _rotationX = CC_RADIANS_TO_DEGREES(_rotationX);
-    _rotationY = CC_RADIANS_TO_DEGREES(_rotationY);
-    _rotationZ_X = _rotationZ_Y = -CC_RADIANS_TO_DEGREES(_rotationZ_X);
+    auto vec = _rotationQuat.toEulerAngleDegreesVec();
+    _rotationX = vec.x;
+    _rotationY = vec.y;
+    _rotationZ_X = _rotationZ_Y = vec.z;
 }
 
 void Node::setRotationQuat(const Quaternion& quat)

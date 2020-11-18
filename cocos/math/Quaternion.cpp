@@ -23,6 +23,7 @@
 
 #include <cmath>
 #include "base/ccMacros.h"
+#include "math/Vec2.h"
 
 NS_CC_MATH_BEGIN
 
@@ -246,6 +247,29 @@ float Quaternion::toAxisAngle(Vec3* axis) const
     axis->normalize();
 
     return (2.0f * std::acos(q.w));
+}
+
+Vec3 Quaternion::toEulerAngleRadiansVec() const
+{
+    Vec3 result;
+    result.x = atan2f(2.f * (w * x + y * z), 1.f - 2.f * (x * x + y * y));
+    float sy = 2.f * (w * y - z * x);
+    sy = clampf(sy, -1, 1);
+    result.y = asinf(sy);
+    result.z = -atan2f(2.f * (w * z + x * y), 1.f - 2.f * (y * y + z * z));
+    
+    return result;
+}
+
+Vec3 Quaternion::toEulerAngleDegreesVec() const
+{
+    auto result = toEulerAngleRadiansVec();
+    
+    result.x = CC_RADIANS_TO_DEGREES(result.x);
+    result.y = CC_RADIANS_TO_DEGREES(result.y);
+    result.z = CC_RADIANS_TO_DEGREES(result.z);
+    
+    return result;
 }
 
 void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)

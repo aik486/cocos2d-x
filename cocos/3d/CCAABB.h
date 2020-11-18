@@ -74,7 +74,7 @@ public:
         LEFT_BOTTOM_BACK,
         LEFT_TOP_BACK,
         
-        NUM_SIDES
+        NUM_CORNERS
     };
 
     /* Near face, specified counter-clockwise looking towards the origin from the positive z-axis.

@@ -187,14 +187,14 @@ void DrawNode3D::drawCube(const AABB &aabb, const Color4B &color)
         return;
     }
     
-    Vec3 corners[AABB::NUM_SIDES];
+    Vec3 corners[AABB::NUM_CORNERS];
     aabb.getCorners(corners);
     drawCube(corners, color);
 }
 
 void DrawNode3D::drawCube(const OBB &obb, const Color4B &color)
 {
-    Vec3 corners[AABB::NUM_SIDES];
+    Vec3 corners[AABB::NUM_CORNERS];
     obb.getCorners(corners);
     drawCube(corners, color);
 }
