@@ -346,7 +346,7 @@ protected:
         std::unique_ptr<Sprite3DData> modelData;
         std::unique_ptr<Sprite3DData> skeletonData;
     };
-    AsyncLoadParam             _asyncLoadParam;
+    std::unique_ptr<AsyncLoadParam> _asyncLoadParam;
     
     bool _force2Dqueue = false;
 };

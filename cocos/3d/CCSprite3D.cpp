@@ -138,7 +138,8 @@ void Sprite3D::createAsync(const std::string& modelPath, const std::string &skel
         return;
     }
     
-    auto &param = sprite->_asyncLoadParam;
+    sprite->_asyncLoadParam.reset(new AsyncLoadParam);
+    auto &param = *sprite->_asyncLoadParam;
     param.afterLoadCallback = callback;
     param.texPath = texturePath;
     param.modelPath = modelPath;
@@ -158,7 +159,7 @@ void Sprite3D::createAsync(const std::string& modelPath, const std::string &skel
     
     AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(Sprite3D::afterAsyncLoad, sprite), nullptr, [sprite]()
     {
-        auto &param = sprite->_asyncLoadParam;
+        auto &param = *sprite->_asyncLoadParam;
         bool ok = true;
         if (param.modelData) {
             ok = param.modelData->loadFromFile(param.modelPath);
@@ -175,29 +176,30 @@ void Sprite3D::createAsync(const std::string& modelPath, const std::string &skel
 void Sprite3D::afterAsyncLoad(void*)
 {
     autorelease();
-    if (_asyncLoadParam.result)
+    auto &param = *this->_asyncLoadParam;
+    if (param.result)
     {
         auto cache = Sprite3DCache::getInstance();
         
         Sprite3DData* skeletonData = nullptr;
-        if (!_asyncLoadParam.skeletonPath.empty()) {
-            auto& skeletonDataPtr = _asyncLoadParam.skeletonData;
-            skeletonData = cache->getSpriteData(_asyncLoadParam.skeletonPath);
+        if (!param.skeletonPath.empty()) {
+            auto& skeletonDataPtr = param.skeletonData;
+            skeletonData = cache->getSpriteData(param.skeletonPath);
             if (skeletonDataPtr && !skeletonData)
             {
                 skeletonData = skeletonDataPtr.release();
-                cache->addSprite3DData(_asyncLoadParam.skeletonPath, skeletonData);
+                cache->addSprite3DData(param.skeletonPath, skeletonData);
                 CC_SAFE_RELEASE(skeletonData);
             }
         }
         
         //create in the main thread
-        auto& modelDataPtr = _asyncLoadParam.modelData;
-        auto modelData = cache->getSpriteData(_asyncLoadParam.modelPath);
+        auto& modelDataPtr = param.modelData;
+        auto modelData = cache->getSpriteData(param.modelPath);
         if (modelDataPtr && !modelData)
         {
             modelData = modelDataPtr.release();
-            cache->addSprite3DData(_asyncLoadParam.modelPath, modelData);
+            cache->addSprite3DData(param.modelPath, modelData);
             CC_SAFE_RELEASE(modelData);
         }
         
@@ -205,21 +207,20 @@ void Sprite3D::afterAsyncLoad(void*)
             applySpriteData(modelData, skeletonData);
         }
         
-        if (!_asyncLoadParam.texPath.empty())
+        if (!param.texPath.empty())
         {
-            setTexture(_asyncLoadParam.texPath);
+            setTexture(param.texPath);
         }
     }
     else
     {
         CCLOG("file load failed: %s ", _asyncLoadParam.modelPath.c_str());
-        if (!_asyncLoadParam.skeletonPath.empty() && _asyncLoadParam.skeletonPath != _asyncLoadParam.modelPath)
+        if (!param.skeletonPath.empty() && param.skeletonPath != param.modelPath)
             CCLOG("file load failed: %s ", _asyncLoadParam.skeletonPath.c_str());
     }
-    _asyncLoadParam.afterLoadCallback(this, _asyncLoadParam.callbackParam);
-    
-    AsyncLoadParam dummy;
-    std::swap(dummy, _asyncLoadParam);
+    param.afterLoadCallback(this, param.callbackParam);
+
+    _asyncLoadParam.reset();
 }
 
 bool Sprite3D::loadFromCacheWithSkeleton(const std::string& path, const std::string& skeletonPath)
