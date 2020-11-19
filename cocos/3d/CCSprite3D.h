@@ -335,17 +335,7 @@ protected:
     bool                         _forceDisableDepthTest;
     bool    _aabbForInvisibleMeshes = false;
     
-    struct AsyncLoadParam
-    {
-        std::function<void(Sprite3D*, void*)> afterLoadCallback; // callback after load
-        void*                           callbackParam;
-        bool                            result; // sprite load result
-        std::string                     modelPath;
-        std::string                     skeletonPath;
-        std::string                     texPath; //
-        std::unique_ptr<Sprite3DData> modelData;
-        std::unique_ptr<Sprite3DData> skeletonData;
-    };
+    struct AsyncLoadParam;    
     std::unique_ptr<AsyncLoadParam> _asyncLoadParam;
     
     bool _force2Dqueue = false;

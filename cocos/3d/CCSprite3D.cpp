@@ -48,6 +48,18 @@
 
 NS_CC_BEGIN
 
+struct Sprite3D::AsyncLoadParam
+{
+    std::function<void(Sprite3D*, void*)> afterLoadCallback; // callback after load
+    void*                           callbackParam;
+    bool                            result; // sprite load result
+    std::string                     modelPath;
+    std::string                     skeletonPath;
+    std::string                     texPath; //
+    std::unique_ptr<Sprite3DData> modelData;
+    std::unique_ptr<Sprite3DData> skeletonData;
+};
+
 static Sprite3DMaterial* getSprite3DMaterialForAttribs(const MeshVertexData* meshVertexData, bool usesLight, bool alphaTest);
 
 Sprite3D* Sprite3D::create()
@@ -214,9 +226,9 @@ void Sprite3D::afterAsyncLoad(void*)
     }
     else
     {
-        CCLOG("file load failed: %s ", _asyncLoadParam.modelPath.c_str());
+        CCLOG("file load failed: %s ", param.modelPath.c_str());
         if (!param.skeletonPath.empty() && param.skeletonPath != param.modelPath)
-            CCLOG("file load failed: %s ", _asyncLoadParam.skeletonPath.c_str());
+            CCLOG("file load failed: %s ", param.skeletonPath.c_str());
     }
     param.afterLoadCallback(this, param.callbackParam);
 
