@@ -283,6 +283,7 @@ void Director::drawScene()
 
     pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
+    bool shouldRender = false;
     if (_runningScene)
     {
 #if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION) || CC_USE_NAVMESH)
@@ -296,12 +297,14 @@ void Director::drawScene()
             _openGLView->renderScene(_runningScene, _renderer);
         
         _eventDispatcher->dispatchEvent(_eventAfterVisit);
+        shouldRender = true;
     }
 
     // draw the notifications node
     if (_notificationNode)
     {
         _notificationNode->visit(_renderer, Mat4::IDENTITY, 0);
+        shouldRender = true;
     }
 
     updateFrameRate();
@@ -310,10 +313,15 @@ void Director::drawScene()
     {
 #if !CC_STRIP_FPS
         showStats();
+        shouldRender = true;
 #endif
     }
     
-   _renderer->render();
+    if (shouldRender) {
+        _renderer->render();
+    } else {
+        _renderer->clean();
+    }
 
     _eventDispatcher->dispatchEvent(_eventAfterDraw);
 
