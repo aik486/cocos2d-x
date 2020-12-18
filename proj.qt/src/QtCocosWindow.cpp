@@ -117,18 +117,17 @@ void QtCocosWindow::setScale(int value)
 {
 	if (mScale != value)
 	{
+		if (value < 10)
+			value = 10;
+		else if (value > 1600)
+			value = 1600;
+
+		mScale = value;
 		if (nullptr != mMainNode)
 		{
-			mMainNode->setScale((value / 100.f) * devicePixelRatio());
+			mMainNode->setScale(getScaleForMainNode());
 		} else
 		{
-			if (value < 10)
-				value = 10;
-			else if (value > 1600)
-				value = 1600;
-
-			mScale = value;
-
 			emit ScaleChanged();
 		}
 	}
@@ -234,7 +233,8 @@ void QtCocosWindow::initializeGL()
 	mMainNode->autorelease()->retain();
 	mMainNode->setAnchorPoint(Point::ANCHOR_MIDDLE);
 	mMainNode->setContentSize(Size::ZERO);
-	mMainNode->Node::setScale((mScale / 100.f) * devicePixelRatio());
+
+	updateMainNodeScale();
 
 	mScene = Scene::create();
 	mScene->retain();
@@ -263,6 +263,8 @@ void QtCocosWindow::resizeGL(int w, int h)
 	mScene->getDefaultCamera()->initDefault();
 	mMainNode->setPosition(
 		Point(scaledSize.width * 0.5f, scaledSize.height * 0.5f));
+
+	updateMainNodeScale();
 
 	emit VisibleFrameAdjusted();
 
@@ -527,8 +529,13 @@ void QtCocosWindow::exposeEvent(QExposeEvent *)
 	updateAnimationState(false);
 
 	if (isExposed())
+	{
+		if (mMainNode)
+		{
+			mMainNode->setScale(getScaleForMainNode());
+		}
 		applicationWillEnterForeground();
-	else
+	} else
 		applicationDidEnterBackground();
 }
 
@@ -599,6 +606,19 @@ void QtCocosWindow::updateAnimationState(bool force)
 	}
 }
 
+float QtCocosWindow::getScaleForMainNode() const
+{
+	return float((mScale / 100.0) * devicePixelRatio());
+}
+
+void QtCocosWindow::updateMainNodeScale()
+{
+	if (mMainNode)
+	{
+		mMainNode->Node::setScale(getScaleForMainNode());
+	}
+}
+
 bool QtCocosWindow::isContextMenuEvent(QMouseEvent *event)
 {
 	auto buttons = event->buttons();
@@ -634,8 +654,7 @@ void QtCocosWindow::InternalMainNode::setScale(float scale)
 			percentScale = 1600;
 
 		window->mScale = percentScale;
-
-		Node::setScale((percentScale / 100.f) * pixelRatio);
+		window->updateMainNodeScale();
 
 		emit window->VisibleFrameAdjusted();
 		emit window->ScaleChanged();
