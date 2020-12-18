@@ -119,7 +119,7 @@ void QtCocosWindow::setScale(int value)
 	{
 		if (nullptr != mMainNode)
 		{
-			mMainNode->setScale(value / 100.f);
+			mMainNode->setScale((value / 100.f) * devicePixelRatio());
 		} else
 		{
 			if (value < 10)
@@ -234,7 +234,7 @@ void QtCocosWindow::initializeGL()
 	mMainNode->autorelease()->retain();
 	mMainNode->setAnchorPoint(Point::ANCHOR_MIDDLE);
 	mMainNode->setContentSize(Size::ZERO);
-	mMainNode->Node::setScale(mScale / 100.f);
+	mMainNode->Node::setScale((mScale / 100.f) * devicePixelRatio());
 
 	mScene = Scene::create();
 	mScene->retain();
@@ -491,7 +491,7 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 
 	if (y != 0)
 	{
-		auto newScale = int((y > 0 ? 110.0 : 90.0) * mMainNode->getScale());
+		auto newScale = int((y > 0 ? 110.0 : 90.0) * (scale() / 100.0));
 		int mod = newScale % 5;
 
 		if (mod != 0)
@@ -625,7 +625,8 @@ void QtCocosWindow::InternalMainNode::setScale(float scale)
 {
 	if (_scaleX != scale || _scaleY != scale || _scaleZ != scale)
 	{
-		int percentScale = qRound(scale * 100.f);
+		const qreal pixelRatio = window->devicePixelRatio();
+		int percentScale = qRound((scale / pixelRatio) * 100.0);
 
 		if (percentScale < 10)
 			percentScale = 10;
@@ -634,7 +635,7 @@ void QtCocosWindow::InternalMainNode::setScale(float scale)
 
 		window->mScale = percentScale;
 
-		Node::setScale(percentScale / 100.f);
+		Node::setScale((percentScale / 100.f) * pixelRatio);
 
 		emit window->VisibleFrameAdjusted();
 		emit window->ScaleChanged();
