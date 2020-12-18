@@ -117,18 +117,17 @@ void QtCocosWindow::setScale(int value)
 {
 	if (mScale != value)
 	{
+		if (value < 10)
+			value = 10;
+		else if (value > 1600)
+			value = 1600;
+
+		mScale = value;
 		if (nullptr != mMainNode)
 		{
-			mMainNode->setScale(value / 100.f);
+			mMainNode->setScale(getScaleForMainNode());
 		} else
 		{
-			if (value < 10)
-				value = 10;
-			else if (value > 1600)
-				value = 1600;
-
-			mScale = value;
-
 			emit ScaleChanged();
 		}
 	}
@@ -234,7 +233,8 @@ void QtCocosWindow::initializeGL()
 	mMainNode->autorelease()->retain();
 	mMainNode->setAnchorPoint(Point::ANCHOR_MIDDLE);
 	mMainNode->setContentSize(Size::ZERO);
-	mMainNode->Node::setScale(mScale / 100.f);
+
+	updateMainNodeScale();
 
 	mScene = Scene::create();
 	mScene->retain();
@@ -250,14 +250,21 @@ void QtCocosWindow::initializeGL()
 void QtCocosWindow::resizeGL(int w, int h)
 {
 	QOpenGLWindow::resizeGL(w, h);
+	const qreal pixelRatio = devicePixelRatio();
+
+	Size scaledSize(w * pixelRatio, h * pixelRatio);
 
 	makeCurrent();
-	mEGLView->setFrameSize(w, h);
-	mEGLView->setDesignResolutionSize(w, h, ResolutionPolicy::NO_BORDER);
+	mEGLView->setFrameSize(scaledSize.width, scaledSize.height);
+	mEGLView->setDesignResolutionSize(
+		scaledSize.width, scaledSize.height, ResolutionPolicy::NO_BORDER);
 
-	mScene->setContentSize(Size(w, h));
+	mScene->setContentSize(scaledSize);
 	mScene->getDefaultCamera()->initDefault();
-	mMainNode->setPosition(Point(w * 0.5f, h * 0.5f));
+	mMainNode->setPosition(
+		Point(scaledSize.width * 0.5f, scaledSize.height * 0.5f));
+
+	updateMainNodeScale();
 
 	emit VisibleFrameAdjusted();
 
@@ -348,14 +355,15 @@ void QtCocosWindow::mousePressEvent(QMouseEvent *event)
 	if (ignoredMouseEvent(event))
 		return;
 
+	const qreal pixelRatio = devicePixelRatio();
+	Point scaledPos(pos.x() * pixelRatio, pos.y() * pixelRatio);
+
 	auto ids = intptr_t(event->button());
-	auto xs = float(pos.x());
-	auto ys = float(pos.y());
 
 	mMouseButtons |= ids;
 
 	makeCurrent();
-	mEGLView->handleTouchesBegin(1, &ids, &xs, &ys);
+	mEGLView->handleTouchesBegin(1, &ids, &scaledPos.x, &scaledPos.y);
 
 	emit MousePressed(event);
 }
@@ -369,15 +377,15 @@ void QtCocosWindow::mouseReleaseEvent(QMouseEvent *event)
 		return;
 
 	auto pos = event->localPos();
+	const qreal pixelRatio = devicePixelRatio();
+	Point scaledPos(pos.x() * pixelRatio, pos.y() * pixelRatio);
 
 	auto ids = intptr_t(event->button());
-	auto xs = float(pos.x());
-	auto ys = float(pos.y());
 
 	mMouseButtons &= ~ids;
 
 	makeCurrent();
-	mEGLView->handleTouchesEnd(1, &ids, &xs, &ys);
+	mEGLView->handleTouchesEnd(1, &ids, &scaledPos.x, &scaledPos.y);
 
 	emit MouseReleased(event);
 }
@@ -398,15 +406,15 @@ void QtCocosWindow::mouseDoubleClickEvent(QMouseEvent *event)
 	auto pos = event->localPos();
 
 	intptr_t ids = (int) event->button();
-	auto xs = float(pos.x());
-	auto ys = float(pos.y());
+	const qreal pixelRatio = devicePixelRatio();
+	Point scaledPos(pos.x() * pixelRatio, pos.y() * pixelRatio);
 
 	mMouseButtons |= ids;
 
 	ids |= GLViewImpl::DOUBLE_CLICK_FLAG;
 
 	makeCurrent();
-	mEGLView->handleTouchesBegin(1, &ids, &xs, &ys);
+	mEGLView->handleTouchesBegin(1, &ids, &scaledPos.x, &scaledPos.y);
 }
 
 void QtCocosWindow::mouseMoveEvent(QMouseEvent *event)
@@ -425,8 +433,8 @@ void QtCocosWindow::mouseMoveEvent(QMouseEvent *event)
 #endif
 
 	auto pos = event->localPos();
-	auto pos_x = float(pos.x());
-	auto pos_y = float(pos.y());
+	const qreal pixelRatio = devicePixelRatio();
+	Point scaledPos(pos.x() * pixelRatio, pos.y() * pixelRatio);
 
 	std::vector<intptr_t> ids;
 	std::vector<float> xs;
@@ -437,8 +445,8 @@ void QtCocosWindow::mouseMoveEvent(QMouseEvent *event)
 	if (buttons == Qt::NoButton)
 	{
 		ids.push_back(Qt::NoButton);
-		xs.push_back(pos_x);
-		ys.push_back(pos_y);
+		xs.push_back(scaledPos.x);
+		ys.push_back(scaledPos.y);
 
 		if (0 == (mState & BEGIN_NO_TOUCH))
 		{
@@ -451,22 +459,22 @@ void QtCocosWindow::mouseMoveEvent(QMouseEvent *event)
 		if (0 != (buttons & Qt::LeftButton))
 		{
 			ids.push_back(Qt::LeftButton);
-			xs.push_back(pos_x);
-			ys.push_back(pos_y);
+			xs.push_back(scaledPos.x);
+			ys.push_back(scaledPos.y);
 		}
 
 		if (0 != (buttons & Qt::RightButton))
 		{
 			ids.push_back(Qt::RightButton);
-			xs.push_back(pos_x);
-			ys.push_back(pos_y);
+			xs.push_back(scaledPos.x);
+			ys.push_back(scaledPos.y);
 		}
 
 		if (0 != (buttons & Qt::MiddleButton))
 		{
 			ids.push_back(Qt::MiddleButton);
-			xs.push_back(pos_x);
-			ys.push_back(pos_y);
+			xs.push_back(scaledPos.x);
+			ys.push_back(scaledPos.y);
 		}
 	}
 
@@ -485,7 +493,7 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 
 	if (y != 0)
 	{
-		auto newScale = int((y > 0 ? 110.0 : 90.0) * mMainNode->getScale());
+		auto newScale = int((y > 0 ? 110.0 : 90.0) * (scale() / 100.0));
 		int mod = newScale % 5;
 
 		if (mod != 0)
@@ -521,8 +529,13 @@ void QtCocosWindow::exposeEvent(QExposeEvent *)
 	updateAnimationState(false);
 
 	if (isExposed())
+	{
+		if (mMainNode)
+		{
+			mMainNode->setScale(getScaleForMainNode());
+		}
 		applicationWillEnterForeground();
-	else
+	} else
 		applicationDidEnterBackground();
 }
 
@@ -593,6 +606,19 @@ void QtCocosWindow::updateAnimationState(bool force)
 	}
 }
 
+float QtCocosWindow::getScaleForMainNode() const
+{
+	return float((mScale / 100.0) * devicePixelRatio());
+}
+
+void QtCocosWindow::updateMainNodeScale()
+{
+	if (mMainNode)
+	{
+		mMainNode->Node::setScale(getScaleForMainNode());
+	}
+}
+
 bool QtCocosWindow::isContextMenuEvent(QMouseEvent *event)
 {
 	auto buttons = event->buttons();
@@ -619,7 +645,8 @@ void QtCocosWindow::InternalMainNode::setScale(float scale)
 {
 	if (_scaleX != scale || _scaleY != scale || _scaleZ != scale)
 	{
-		int percentScale = qRound(scale * 100.f);
+		const qreal pixelRatio = window->devicePixelRatio();
+		int percentScale = qRound((scale / pixelRatio) * 100.0);
 
 		if (percentScale < 10)
 			percentScale = 10;
@@ -627,8 +654,7 @@ void QtCocosWindow::InternalMainNode::setScale(float scale)
 			percentScale = 1600;
 
 		window->mScale = percentScale;
-
-		Node::setScale(percentScale / 100.f);
+		window->updateMainNodeScale();
 
 		emit window->VisibleFrameAdjusted();
 		emit window->ScaleChanged();

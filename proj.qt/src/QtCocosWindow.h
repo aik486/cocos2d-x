@@ -95,6 +95,9 @@ private:
 
 	bool ignoredMouseEvent(QMouseEvent *event);
 	void updateAnimationState(bool force);
+
+	float getScaleForMainNode() const;
+	void updateMainNodeScale();
 	static bool isContextMenuEvent(QMouseEvent *event);
 
 	enum
