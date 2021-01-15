@@ -134,8 +134,8 @@ void QtCocosWindow::setScale(int value)
 			mMainNode->setScale(value / 100.f);
 		} else
 		{
-			if (value < 10)
-				value = 10;
+			if (value < 5)
+				value = 5;
 			else if (value > 1600)
 				value = 1600;
 
@@ -493,17 +493,34 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 
 	if (y != 0)
 	{
-		auto newScale = int((y > 0 ? 110.0 : 90.0) * mMainNode->getScale());
-		int mod = newScale % 5;
+		int newScale = mScale;
+		static const int SCALE_TABLE[] = { 5, 12, 18, 25, 33, 50, 67, 100, 150,
+			200, 300, 400, 550, 800, 1200, 1600 };
 
-		if (mod != 0)
+		int prev = 0;
+		for (int cur : SCALE_TABLE)
 		{
-			newScale -= mod;
-
-			if (y > 0)
-				newScale += 5;
+			if (newScale >= prev && newScale <= cur)
+			{
+				if (y > 0)
+				{
+					if (newScale == cur)
+					{
+						continue;
+					}
+					newScale = cur;
+				} else
+				{
+					newScale = prev;
+				}
+				break;
+			}
+			prev = cur;
 		}
-
+		if (newScale < 5)
+		{
+			newScale = 5;
+		}
 		setScale(newScale);
 	}
 }
@@ -629,8 +646,8 @@ void QtCocosWindow::InternalMainNode::setScale(float scale)
 	{
 		int percentScale = qRound(scale * 100.f);
 
-		if (percentScale < 10)
-			percentScale = 10;
+		if (percentScale < 5)
+			percentScale = 5;
 		else if (percentScale > 1600)
 			percentScale = 1600;
 
