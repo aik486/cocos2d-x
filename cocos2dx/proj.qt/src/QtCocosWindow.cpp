@@ -57,6 +57,7 @@ QtCocosWindow::QtCocosWindow()
 	, mEnabled(true)
 	, mRunning(false)
 	, mInitialized(false)
+	, mCancelContextMenu(false)
 {
 	mBgColor = { 0.f, 0.f, 0.f, 0.f };
 
@@ -164,6 +165,11 @@ QColor QtCocosWindow::backgroundColor() const
 void QtCocosWindow::setBackgroundColor(const QColor &color)
 {
 	mBgColor = qColorToCcColor4F(color);
+}
+
+void QtCocosWindow::cancelContextMenu()
+{
+	mCancelContextMenu = true;
 }
 
 bool QtCocosWindow::applicationDidFinishLaunching()
@@ -347,12 +353,6 @@ void QtCocosWindow::mousePressEvent(QMouseEvent *event)
 
 	auto pos = event->localPos();
 
-	if (mMasterWidget && isContextMenuEvent(event))
-	{
-		mMasterWidget->customContextMenuRequested(
-			QPoint(int(pos.x()), int(pos.y())));
-	}
-
 	if (ignoredMouseEvent(event))
 		return;
 
@@ -370,24 +370,42 @@ void QtCocosWindow::mousePressEvent(QMouseEvent *event)
 
 void QtCocosWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-	if (ignoredMouseEvent(event))
-		return;
-
 	if (!mEnabled)
+	{
+		ignoredMouseEvent(event);
 		return;
+	}
 
 	auto pos = event->localPos();
 
-	auto ids = int(event->button());
-	auto xs = float(pos.x());
-	auto ys = float(pos.y());
+	do
+	{
+		if (ignoredMouseEvent(event))
+			break;
 
-	mMouseButtons &= ~ids;
+		auto ids = int(event->button());
+		auto xs = float(pos.x());
+		auto ys = float(pos.y());
 
-	makeCurrent();
-	mEGLView->handleTouchesEnd(1, &ids, &xs, &ys);
+		mMouseButtons &= ~ids;
 
-	emit MouseReleased(event);
+		makeCurrent();
+		mEGLView->handleTouchesEnd(1, &ids, &xs, &ys);
+
+		emit MouseReleased(event);
+	} while (false);
+
+	if (mCancelContextMenu)
+	{
+		if (!mMouseButtons)
+		{
+			mCancelContextMenu = false;
+		}
+	} else if (mMasterWidget && isContextMenuEvent(event))
+	{
+		mMasterWidget->customContextMenuRequested(
+			QPoint(int(pos.x()), int(pos.y())));
+	}
 }
 
 void QtCocosWindow::mouseDoubleClickEvent(QMouseEvent *event)
@@ -624,7 +642,7 @@ bool QtCocosWindow::isContextMenuEvent(QMouseEvent *event)
 	auto button = event->button();
 	auto modifiers = event->modifiers();
 
-	if (buttons != Qt::RightButton || button != Qt::RightButton)
+	if (buttons != Qt::NoButton || button != Qt::RightButton)
 		return false;
 
 #ifdef Q_OS_MAC

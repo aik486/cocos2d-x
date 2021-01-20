@@ -57,6 +57,8 @@ public:
 	inline bool isEnabled() const;
 	inline void setEnabled(bool enabled);
 
+	void cancelContextMenu();
+
 public:
 	virtual bool applicationDidFinishLaunching() override;
 	virtual void applicationDidEnterBackground() override;
@@ -123,6 +125,7 @@ private:
 	bool mEnabled;
 	bool mRunning;
 	bool mInitialized;
+	bool mCancelContextMenu;
 };
 
 QWidget *QtCocosWindow::masterWidget() const
