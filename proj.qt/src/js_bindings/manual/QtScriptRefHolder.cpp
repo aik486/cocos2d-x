@@ -55,8 +55,7 @@ QtScriptRefHolder::QtScriptRefHolder(QScriptEngine *engine)
 
 void QtScriptRefHolder::Register(const QScriptValue &targetNamespace)
 {
-	auto engine = targetNamespace.engine();
-	Q_ASSERT(engine);
+	Q_ASSERT(targetNamespace.engine());
 	auto ctor = RegisterT<AnyObjectHolder, QtScriptRefHolder>(
 		targetNamespace, QScriptValue());
 	Q_ASSERT(ctor.isFunction());

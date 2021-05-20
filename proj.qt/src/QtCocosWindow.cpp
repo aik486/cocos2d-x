@@ -348,7 +348,7 @@ void QtCocosWindow::mousePressEvent(QMouseEvent *event)
 
 	if (mMasterWidget && isContextMenuEvent(event))
 	{
-		mMasterWidget->customContextMenuRequested(
+		emit mMasterWidget->customContextMenuRequested(
 			QPoint(int(pos.x()), int(pos.y())));
 	}
 
