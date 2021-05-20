@@ -116,12 +116,12 @@ void ProtectedNode::addProtectedChild(Node *child, int zOrder, int tag)
     
     if (_cascadeColorEnabled)
     {
-        updateCascadeColor();
+        child->updateDisplayedColor(_displayedColor, false);
     }
     
     if (_cascadeOpacityEnabled)
     {
-        updateCascadeOpacity();
+        child->updateDisplayedOpacity(_displayedOpacity, false);
     }
 }
 
