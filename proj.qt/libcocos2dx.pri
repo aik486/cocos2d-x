@@ -37,7 +37,7 @@ macx {
 }
 
 win32-msvc* {
-    LIBS += -lgdi32 -lopengl32 -luser32 -ladvapi32 -lshell32
+    LIBS += -lgdi32 -lopengl32 -luser32 -ladvapi32 -lshell32 -lws2_32
 }
 
 win32|emscripten {
