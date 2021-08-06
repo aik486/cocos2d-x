@@ -703,6 +703,9 @@ void DrawNode::reserve(int capacity, BufferType bufferType)
         return;
     }
     auto &state = _states[bufferType];
+    if (state.bufferCapacity >= capacity)
+        return;
+
     state.bufferCapacity = capacity;
     auto &buffer = state.buffer;
     size_t newSize = size_t(capacity) * sizeof(V2F_C4B_T2F);
