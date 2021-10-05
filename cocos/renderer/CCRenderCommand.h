@@ -39,6 +39,7 @@ NS_CC_BEGIN
 *
  The `Renderer` knows how to render `RenderCommands` objects.
  */
+class RenderQueue;
 class CC_DLL RenderCommand
 {
 public:
@@ -79,6 +80,9 @@ public:
     /** Returns whether is transparent. */
     bool isTransparent() const { return _isTransparent; }
     
+    bool shouldDelete() const { return _shouldDelete; }
+    void setShouldDelete(bool yes) { _shouldDelete = yes; }
+
     /** Set transparent flag. */
     void setTransparent(bool isTransparent) { _isTransparent = isTransparent; }
     /**
@@ -117,6 +121,8 @@ protected:
     /** Transparent flag. */
     bool  _isTransparent = true;
     
+    bool _shouldDelete = false;
+
     /**
      QuadCommand and TrianglesCommand could be auto batched if there material ID is the same, however, if
      a command is skip batching, it would be forced to draw in a separate function call, and break the batch.
@@ -133,6 +139,8 @@ protected:
     Mat4 _mv;
 
     PipelineDescriptor _pipelineDescriptor;
+
+    friend class RenderQueue;
 };
 
 NS_CC_END

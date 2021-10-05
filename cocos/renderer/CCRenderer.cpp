@@ -135,7 +135,13 @@ void RenderQueue::clear()
 {
     for(int i = 0; i < QUEUE_GROUP::QUEUE_COUNT; ++i)
     {
-        _commands[i].clear();
+        auto& commands = _commands[i];
+        for (auto command : commands) {
+            if (command->shouldDelete()) {
+                delete command;
+            }
+        }
+        commands.clear();
     }
 }
 
@@ -829,43 +835,45 @@ void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachmen
     }
 }
 
+void Renderer::visitClearCommand(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil)
+{
+    backend::RenderPassDescriptor descriptor;
+
+    if (flags & ClearFlag::COLOR)
+    {
+        _clearColor = color;
+        descriptor.clearColorValue = {color.r, color.g, color.b, color.a};
+        descriptor.needClearColor = true;
+        descriptor.needColorAttachment = true;
+        descriptor.colorAttachmentsTexture[0] = _renderPassDescriptor.colorAttachmentsTexture[0];
+    }
+    if (flags & ClearFlag::DEPTH)
+    {
+        descriptor.clearDepthValue = depth;
+        descriptor.needClearDepth = true;
+        descriptor.depthTestEnabled = true;
+        descriptor.depthAttachmentTexture = _renderPassDescriptor.depthAttachmentTexture;
+    }
+    if (flags & ClearFlag::STENCIL)
+    {
+        descriptor.clearStencilValue = stencil;
+        descriptor.needClearStencil = true;
+        descriptor.stencilTestEnabled = true;
+        descriptor.stencilAttachmentTexture = _renderPassDescriptor.stencilAttachmentTexture;
+    }
+
+    _commandBuffer->beginRenderPass(descriptor);
+    _commandBuffer->endRenderPass();
+}
+
 void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
 {
     _clearFlag = flags;
 
     CallbackCommand* command = new CallbackCommand();
+    command->setShouldDelete(true);
     command->init(globalOrder);
-    command->func = [=]() -> void {
-        backend::RenderPassDescriptor descriptor;
-
-        if (flags & ClearFlag::COLOR)
-        {
-            _clearColor = color;
-            descriptor.clearColorValue = {color.r, color.g, color.b, color.a};
-            descriptor.needClearColor = true;
-            descriptor.needColorAttachment = true;
-            descriptor.colorAttachmentsTexture[0] = _renderPassDescriptor.colorAttachmentsTexture[0];
-        }
-        if (flags & ClearFlag::DEPTH)
-        {
-            descriptor.clearDepthValue = depth;
-            descriptor.needClearDepth = true;
-            descriptor.depthTestEnabled = true;
-            descriptor.depthAttachmentTexture = _renderPassDescriptor.depthAttachmentTexture;
-        }
-        if (flags & ClearFlag::STENCIL)
-        {
-            descriptor.clearStencilValue = stencil;
-            descriptor.needClearStencil = true;
-            descriptor.stencilTestEnabled = true;
-            descriptor.stencilAttachmentTexture = _renderPassDescriptor.stencilAttachmentTexture;
-        }
-
-        _commandBuffer->beginRenderPass(descriptor);
-        _commandBuffer->endRenderPass();
-
-        delete command;
-    };
+    command->func = std::bind(&Renderer::visitClearCommand, this, flags, color, depth, stencil);
     addCommand(command);
 }
 

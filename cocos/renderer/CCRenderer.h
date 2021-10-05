@@ -464,6 +464,7 @@ protected:
 
     void flushTriangles();
 
+    void visitClearCommand(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil);
     void processRenderCommand(RenderCommand* command);
     void processGroupCommand(GroupCommand*);
     void visitRenderQueue(RenderQueue& queue);
