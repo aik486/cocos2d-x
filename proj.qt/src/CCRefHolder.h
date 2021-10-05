@@ -73,6 +73,7 @@ public:
 			CC_SAFE_RELEASE_NULL(other.mObject);
 		} else
 		{
+			CC_SAFE_RELEASE(mObject);
 			mObject = other.mObject;
 			other.mObject = nullptr;
 		}
