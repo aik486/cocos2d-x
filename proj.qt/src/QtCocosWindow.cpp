@@ -545,7 +545,7 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 
 void QtCocosWindow::showEvent(QShowEvent *)
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	// Dirty hack for a MacOS bug when exposeEvent is not executed
 	// while showing window after hide
 	if (mMasterWidget)
@@ -663,7 +663,7 @@ bool QtCocosWindow::isContextMenuEvent(QMouseEvent *event)
 	if (buttons != Qt::RightButton || button != Qt::RightButton)
 		return false;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	if (modifiers == Qt::MetaModifier)
 		return true;
 #endif
