@@ -520,6 +520,9 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 			}
 			prev = cur;
 		}
+	} else if (newScale <= 5 && y > 0)
+	{
+		newScale = 10;
 	} else
 	{
 		newScale = int((y > 0 ? 110.0 : 90.0) * (newScale / 100.0));
