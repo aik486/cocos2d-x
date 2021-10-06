@@ -13,7 +13,7 @@ namespace cocos2d
 class Scene;
 class Node;
 class GLViewImpl;
-}
+} // namespace cocos2d
 
 class QtCocosWindow
 	: public QOpenGLWindow
@@ -37,6 +37,9 @@ public:
 
 	inline int scale() const;
 	void setScale(int value);
+
+	inline bool isFixedWheelScale() const;
+	inline void setFixedWheelScale(bool fixed);
 
 	inline cocos2d::Node *mainNode() const;
 	cocos2d::Scene *scene() const;
@@ -119,6 +122,7 @@ private:
 	bool mEnabled;
 	bool mRunning;
 	bool mInitialized;
+	bool mFixedWheelScale;
 };
 
 QWidget *QtCocosWindow::masterWidget() const
@@ -129,6 +133,16 @@ QWidget *QtCocosWindow::masterWidget() const
 int QtCocosWindow::scale() const
 {
 	return mScale;
+}
+
+bool QtCocosWindow::isFixedWheelScale() const
+{
+	return mFixedWheelScale;
+}
+
+void QtCocosWindow::setFixedWheelScale(bool fixed)
+{
+	mFixedWheelScale = fixed;
 }
 
 cocos2d::Node *QtCocosWindow::mainNode() const

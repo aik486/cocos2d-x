@@ -47,6 +47,7 @@ QtCocosWindow::QtCocosWindow()
 	, mEnabled(true)
 	, mRunning(false)
 	, mInitialized(false)
+	, mFixedWheelScale(false)
 {
 	auto surfaceFormat = format();
 	surfaceFormat.setStencilBufferSize(8);
@@ -115,21 +116,20 @@ void QtCocosWindow::animate(bool yes)
 
 void QtCocosWindow::setScale(int value)
 {
-	if (mScale != value)
-	{
-		if (value < 10)
-			value = 10;
-		else if (value > 1600)
-			value = 1600;
+	if (value < 5)
+		value = 5;
+	else if (value > 1600)
+		value = 1600;
+	if (mScale == value)
+		return;
 
-		mScale = value;
-		if (nullptr != mMainNode)
-		{
-			mMainNode->setScale(getScaleForMainNode());
-		} else
-		{
-			emit ScaleChanged();
-		}
+	mScale = value;
+	if (nullptr != mMainNode)
+	{
+		mMainNode->setScale(getScaleForMainNode());
+	} else
+	{
+		emit ScaleChanged();
 	}
 }
 
@@ -491,9 +491,38 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 
 	auto y = event->angleDelta().y();
 
-	if (y != 0)
+	if (y == 0)
+		return;
+
+	int newScale = mScale;
+	if (mFixedWheelScale)
 	{
-		auto newScale = int((y > 0 ? 110.0 : 90.0) * (scale() / 100.0));
+		static const int SCALE_TABLE[] = { 5, 12, 18, 25, 33, 50, 67, 100, 150,
+			200, 300, 400, 550, 800, 1200, 1600 };
+
+		int prev = 0;
+		for (int cur : SCALE_TABLE)
+		{
+			if (newScale >= prev && newScale <= cur)
+			{
+				if (y > 0)
+				{
+					if (newScale == cur)
+					{
+						continue;
+					}
+					newScale = cur;
+				} else
+				{
+					newScale = prev;
+				}
+				break;
+			}
+			prev = cur;
+		}
+	} else
+	{
+		newScale = int((y > 0 ? 110.0 : 90.0) * (newScale / 100.0));
 		int mod = newScale % 5;
 
 		if (mod != 0)
@@ -503,9 +532,8 @@ void QtCocosWindow::wheelEvent(QWheelEvent *event)
 			if (y > 0)
 				newScale += 5;
 		}
-
-		setScale(newScale);
 	}
+	setScale(newScale);
 }
 
 void QtCocosWindow::showEvent(QShowEvent *)
@@ -648,8 +676,8 @@ void QtCocosWindow::InternalMainNode::setScale(float scale)
 		const qreal pixelRatio = window->devicePixelRatio();
 		int percentScale = qRound((scale / pixelRatio) * 100.0);
 
-		if (percentScale < 10)
-			percentScale = 10;
+		if (percentScale < 5)
+			percentScale = 5;
 		else if (percentScale > 1600)
 			percentScale = 1600;
 
