@@ -51,6 +51,10 @@ QtCocosWindow::QtCocosWindow()
 {
 	auto surfaceFormat = format();
 	surfaceFormat.setStencilBufferSize(8);
+	surfaceFormat.setRenderableType(QSurfaceFormat::OpenGL);
+#ifdef Q_OS_MACOS
+	surfaceFormat.setProfile(QSurfaceFormat::CompatibilityProfile);
+#endif
 	setFormat(surfaceFormat);
 
 	QtCocosContext::setBackgroundColorSetter(
