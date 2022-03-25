@@ -703,4 +703,7 @@ HEADERS += \
 
 }
 
-include($$COCOS2DX_PATH/external/freetype2/qt/freetype_build.pri)
+FREETYPE_STATIC = $$(FREETYPE_STATIC)
+isEmpty(FREETYPE_STATIC) {
+    include($$COCOS2DX_PATH/external/freetype2/qt/freetype_build.pri)
+}
