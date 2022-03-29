@@ -2,7 +2,7 @@ include(cocos_qtscript_bindings.pri)
 
 QT += script
 
-CONFIG += c++11 warn_off
+CONFIG += c++11
 DESTDIR = $$COCOS2DX_LIB
 TARGET = cocos_qtscript_bindings
 TEMPLATE = lib
@@ -19,14 +19,28 @@ CONFIG(debug, debug|release) {
 }
 
 msvc {
-    QMAKE_CXXFLAGS_WARN_OFF -= -W0
-    QMAKE_CXXFLAGS += -W3 /wd4251 /wd4573
+    QMAKE_CXXFLAGS_WARN_ON += /wd4251 /wd4573 /wd4005 /wd4244
     DEFINES += _CRT_SECURE_NO_WARNINGS
     DEFINES += _SCL_SECURE_NO_WARNINGS
     CONFIG += no_batch
-    QMAKE_CXXFLAGS += /wd4005 /wd4244 /bigobj
+    QMAKE_CXXFLAGS += /bigobj
 } else {
     DEFINES += USE_FILE32API
+    clang|gcc:QMAKE_CXXFLAGS_WARN_ON += \
+        -Wno-deprecated-declarations \
+        -Wno-deprecated-copy-with-user-provided-copy \
+        -Wno-missing-field-initializers \
+        -Wno-null-pointer-subtraction \
+        -Wno-overloaded-virtual \
+        -Wno-sign-compare \
+        -Wno-unknown-warning-option \
+        -Wno-unknown-warning \
+        -Wno-unused-but-set-variable \
+        -Wno-unused-command-line-argument \
+        -Wno-unused-function \
+        -Wno-unused-parameter \
+        -Wno-unused-private-field \
+        -Wno-unused-variable
 }
 
 SOURCES +=\

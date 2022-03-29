@@ -36,15 +36,13 @@ macx {
     DEFINES += CC_TEXTURE_ATLAS_USE_VAO=1
 }
 
-win32-msvc* {
-    LIBS += -lgdi32 -lopengl32 -luser32 -ladvapi32 -lshell32 -lws2_32
-}
-
 win32|emscripten {
-    INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtZlib
+    !mingw:INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtZlib
 }
 
 win32 {
+    LIBS += -lgdi32 -lopengl32 -luser32 -ladvapi32 -lshell32 -lws2_32
+    mingw: LIBS += -lz
     DEFINES += _WINDOWS
     DEFINES += CC_TEXTURE_ATLAS_USE_VAO=0
     DEFINES += CC_USE_QT_OPENGL
