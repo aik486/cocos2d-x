@@ -19,7 +19,7 @@ CONFIG(debug, debug|release) {
 }
 
 msvc {
-    QMAKE_CXXFLAGS_WARN_ON += /wd4251 /wd4573 /wd4005 /wd4244
+    QMAKE_CXXFLAGS_WARN_ON += /wd4251 /wd4573 /wd4005 /wd4244 /wd4100 /wd4189
     DEFINES += _CRT_SECURE_NO_WARNINGS
     DEFINES += _SCL_SECURE_NO_WARNINGS
     CONFIG += no_batch
