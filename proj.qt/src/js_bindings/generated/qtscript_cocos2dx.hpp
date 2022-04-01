@@ -2007,6 +2007,7 @@ public:
 
 	Q_PROPERTY(bool is2DQueue READ is2DQueue WRITE set2DQueue)
 	Q_PROPERTY(bool is3D READ is3D WRITE set3D)
+	Q_PROPERTY(bool shouldDelete READ shouldDelete WRITE setShouldDelete)
 	Q_PROPERTY(bool skipBatching READ isSkipBatching WRITE setSkipBatching)
 	Q_PROPERTY(bool transparent READ isTransparent WRITE setTransparent)
 	Q_INVOKABLE float getDepth();
@@ -2021,8 +2022,10 @@ public:
 	bool isTransparent();
 	void set2DQueue(bool value);
 	void set3D(bool value);
+	void setShouldDelete(bool yes);
 	void setSkipBatching(bool value);
 	void setTransparent(bool isTransparent);
+	bool shouldDelete();
 };
 
 } // end of cocos2d
