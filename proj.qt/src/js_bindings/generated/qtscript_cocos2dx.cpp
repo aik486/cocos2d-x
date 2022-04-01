@@ -94,6 +94,9 @@ cocos2d::Vec2 QtScriptVec2::compOp(QScriptValue function)
 	{
 		return __o->compOp(!function.isFunction() ? std::function<float (float)>() : [=](float larg0) mutable -> float
 {
+	if (!function.engine()) {
+		return static_cast<float>(0);
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	return qscriptvalue_cast<float>(function.call(QScriptValue(), arguments));
@@ -8448,8 +8451,11 @@ void QtScriptProgramState::setCallbackUniform(const cocos2d::backend::UniformLoc
 	auto __o = this->thiz<ProgramState *>();
 	if (__o)
 	{
-		__o->setCallbackUniform(arg0, !arg1.isFunction() ? cocos2d::backend::ProgramState::UniformCallback() : [=](cocos2d::backend::ProgramState* larg0, const cocos2d::backend::UniformLocation& larg1) mutable -> void
+		__o->setCallbackUniform(arg0, !arg1.isFunction() ? cocos2d::backend::ProgramState::UniformCallback() : [=](cocos2d::backend::ProgramState* larg0, const cocos2d::backend::UniformLocation& larg1) mutable
 {
+	if (!arg1.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	arguments << __e->toScriptValue(larg1);
@@ -8829,6 +8835,15 @@ void QtScriptRenderCommand::set3D(bool value)
 	}
 }
 
+void QtScriptRenderCommand::setShouldDelete(bool yes)
+{
+	auto __o = this->thiz<RenderCommand *>();
+	if (__o)
+	{
+		__o->setShouldDelete(yes);
+	}
+}
+
 void QtScriptRenderCommand::setSkipBatching(bool value)
 {
 	auto __o = this->thiz<RenderCommand *>();
@@ -8845,6 +8860,16 @@ void QtScriptRenderCommand::setTransparent(bool isTransparent)
 	{
 		__o->setTransparent(isTransparent);
 	}
+}
+
+bool QtScriptRenderCommand::shouldDelete()
+{
+	auto __o = this->thiz<RenderCommand *>();
+	if (__o)
+	{
+		return __o->shouldDelete();
+	}
+	return false;
 }
 
 } // end of cocos2d
@@ -9040,8 +9065,11 @@ void QtScriptCustomCommand::setAfterCallback(QScriptValue after)
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		__o->setAfterCallback(!after.isFunction() ? cocos2d::CustomCommand::CallBackFunc() : [=]() mutable -> void
+		__o->setAfterCallback(!after.isFunction() ? cocos2d::CustomCommand::CallBackFunc() : [=]() mutable
 {
+	if (!after.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	after.call(QScriptValue(), arguments);
 });
@@ -9054,8 +9082,11 @@ void QtScriptCustomCommand::setBeforeCallback(QScriptValue before)
 	auto __o = this->thiz<CustomCommand *>();
 	if (__o)
 	{
-		__o->setBeforeCallback(!before.isFunction() ? cocos2d::CustomCommand::CallBackFunc() : [=]() mutable -> void
+		__o->setBeforeCallback(!before.isFunction() ? cocos2d::CustomCommand::CallBackFunc() : [=]() mutable
 {
+	if (!before.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	before.call(QScriptValue(), arguments);
 });
@@ -10795,6 +10826,9 @@ void QtScriptNode::enumerateChildren(const QByteArray& name, QScriptValue callba
 	{
 		__o->enumerateChildren(name.toStdString(), !callback.isFunction() ? std::function<bool (cocos2d::Node *)>() : [=](cocos2d::Node* larg0) mutable -> bool
 {
+	if (!callback.engine()) {
+		return false;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	return qscriptvalue_cast<bool>(callback.call(QScriptValue(), arguments));
@@ -11707,8 +11741,11 @@ void QtScriptNode::schedule(QScriptValue callback, const QByteArray& key)
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->schedule(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable -> void
+		__o->schedule(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -11722,8 +11759,11 @@ void QtScriptNode::schedule(QScriptValue callback, float interval, const QByteAr
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->schedule(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable -> void
+		__o->schedule(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -11737,8 +11777,11 @@ void QtScriptNode::schedule(QScriptValue callback, float interval, unsigned int 
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->schedule(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable -> void
+		__o->schedule(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -11752,8 +11795,11 @@ void QtScriptNode::scheduleOnce(QScriptValue callback, float delay, const QByteA
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->scheduleOnce(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable -> void
+		__o->scheduleOnce(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -11920,8 +11966,11 @@ void QtScriptNode::setOnEnterCallback(QScriptValue callback)
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->setOnEnterCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		__o->setOnEnterCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	callback.call(QScriptValue(), arguments);
 });
@@ -11934,8 +11983,11 @@ void QtScriptNode::setOnEnterTransitionDidFinishCallback(QScriptValue callback)
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->setOnEnterTransitionDidFinishCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		__o->setOnEnterTransitionDidFinishCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	callback.call(QScriptValue(), arguments);
 });
@@ -11948,8 +12000,11 @@ void QtScriptNode::setOnExitCallback(QScriptValue callback)
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->setOnExitCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		__o->setOnExitCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	callback.call(QScriptValue(), arguments);
 });
@@ -11962,8 +12017,11 @@ void QtScriptNode::setOnExitTransitionDidStartCallback(QScriptValue callback)
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->setOnExitTransitionDidStartCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		__o->setOnExitTransitionDidStartCallback(!callback.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	callback.call(QScriptValue(), arguments);
 });
@@ -11976,8 +12034,11 @@ void QtScriptNode::setOnUpdateCallback(QScriptValue callback)
 	auto __o = this->thiz<Node *>();
 	if (__o)
 	{
-		__o->setOnUpdateCallback(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable -> void
+		__o->setOnUpdateCallback(!callback.isFunction() ? std::function<void (float)>() : [=](float larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -13361,8 +13422,11 @@ void QtScriptScheduler::perform(QScriptValue function)
 	auto __o = this->thiz<Scheduler *>();
 	if (__o)
 	{
-		__o->performFunctionInCocosThread(!function.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		__o->performFunctionInCocosThread(!function.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!function.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	function.call(QScriptValue(), arguments);
 });
@@ -18592,8 +18656,11 @@ bool QtScriptActionFloat::initWithDuration(float duration, float from, float to,
 	auto __o = this->thiz<ActionFloat *>();
 	if (__o)
 	{
-		return __o->initWithDuration(duration, from, to, !callback.isFunction() ? cocos2d::ActionFloat::ActionFloatCallback() : [=](float larg0) mutable -> void
+		return __o->initWithDuration(duration, from, to, !callback.isFunction() ? cocos2d::ActionFloat::ActionFloatCallback() : [=](float larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -18627,8 +18694,11 @@ QScriptValue QtScriptActionFloat::create(QScriptContext *context, QScriptEngine*
 			auto arg1 = qscriptvalue_cast<float>(context->argument(1));
 			auto arg2 = qscriptvalue_cast<float>(context->argument(2));
 			auto tmp_3 = context->argument(3);
-			auto arg3 = !tmp_3.isFunction() ? cocos2d::ActionFloat::ActionFloatCallback() : [=](float larg0) mutable -> void
+			auto arg3 = !tmp_3.isFunction() ? cocos2d::ActionFloat::ActionFloatCallback() : [=](float larg0) mutable
 {
+	if (!tmp_3.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_3.call(QScriptValue(), arguments);
@@ -19521,8 +19591,11 @@ void QtScriptFileUtils::createDirectory(const QByteArray& dirPath, QScriptValue 
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->createDirectory(dirPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->createDirectory(dirPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19566,8 +19639,11 @@ void QtScriptFileUtils::getDataFromFile(const QByteArray& filename, QScriptValue
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->getDataFromFile(filename.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Data)>() : [=](cocos2d::Data larg0) mutable -> void
+		__o->getDataFromFile(filename.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Data)>() : [=](cocos2d::Data larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19621,8 +19697,11 @@ void QtScriptFileUtils::getFileSize(const QByteArray& filepath, QScriptValue cal
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->getFileSize(filepath.toStdString(), !callback.isFunction() ? std::function<void (long)>() : [=](long larg0) mutable -> void
+		__o->getFileSize(filepath.toStdString(), !callback.isFunction() ? std::function<void (long)>() : [=](long larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19676,8 +19755,11 @@ void QtScriptFileUtils::getStringFromFile(const QByteArray& path, QScriptValue c
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->getStringFromFile(path.toStdString(), !callback.isFunction() ? std::function<void (std::string)>() : [=](std::string larg0) mutable -> void
+		__o->getStringFromFile(path.toStdString(), !callback.isFunction() ? std::function<void (std::string)>() : [=](std::string larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(QByteArray::fromStdString(larg0));
 	callback.call(QScriptValue(), arguments);
@@ -19721,8 +19803,11 @@ void QtScriptFileUtils::isDirectoryExist(const QByteArray& fullPath, QScriptValu
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->isDirectoryExist(fullPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->isDirectoryExist(fullPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19746,8 +19831,11 @@ void QtScriptFileUtils::isFileExist(const QByteArray& filename, QScriptValue cal
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->isFileExist(filename.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->isFileExist(filename.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19781,8 +19869,11 @@ void QtScriptFileUtils::listFilesAsync(const QByteArray& dirPath, QScriptValue c
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->listFilesAsync(dirPath.toStdString(), !callback.isFunction() ? std::function<void (std::vector<std::string>)>() : [=](std::vector<std::string> larg0) mutable -> void
+		__o->listFilesAsync(dirPath.toStdString(), !callback.isFunction() ? std::function<void (std::vector<std::string>)>() : [=](std::vector<std::string> larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19805,8 +19896,11 @@ void QtScriptFileUtils::listFilesRecursivelyAsync(const QByteArray& dirPath, QSc
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->listFilesRecursivelyAsync(dirPath.toStdString(), !callback.isFunction() ? std::function<void (std::vector<std::string>)>() : [=](std::vector<std::string> larg0) mutable -> void
+		__o->listFilesRecursivelyAsync(dirPath.toStdString(), !callback.isFunction() ? std::function<void (std::vector<std::string>)>() : [=](std::vector<std::string> larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19848,8 +19942,11 @@ void QtScriptFileUtils::removeDirectory(const QByteArray& dirPath, QScriptValue 
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->removeDirectory(dirPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->removeDirectory(dirPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19873,8 +19970,11 @@ void QtScriptFileUtils::removeFile(const QByteArray& filepath, QScriptValue call
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->removeFile(filepath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->removeFile(filepath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19908,8 +20008,11 @@ void QtScriptFileUtils::renameFile(const QByteArray& path, const QByteArray& old
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->renameFile(path.toStdString(), oldname.toStdString(), name.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->renameFile(path.toStdString(), oldname.toStdString(), name.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -19978,8 +20081,11 @@ void QtScriptFileUtils::writeDataToFile(cocos2d::Data data, const QByteArray& fu
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->writeDataToFile(data, fullPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->writeDataToFile(data, fullPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -20003,8 +20109,11 @@ void QtScriptFileUtils::writeStringToFile(QByteArray dataStr, const QByteArray& 
 	auto __o = this->thiz<FileUtils *>();
 	if (__o)
 	{
-		__o->writeStringToFile(dataStr.toStdString(), fullPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable -> void
+		__o->writeStringToFile(dataStr.toStdString(), fullPath.toStdString(), !callback.isFunction() ? std::function<void (bool)>() : [=](bool larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -25133,8 +25242,11 @@ bool QtScriptCallFunc::initWithFunction(QScriptValue func)
 	auto __o = this->thiz<CallFunc *>();
 	if (__o)
 	{
-		return __o->initWithFunction(!func.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		return __o->initWithFunction(!func.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!func.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	func.call(QScriptValue(), arguments);
 });
@@ -25164,8 +25276,11 @@ QScriptValue QtScriptCallFunc::create(QScriptContext *context, QScriptEngine* __
 		case 1:
 		{
 			auto tmp_0 = context->argument(0);
-			auto arg0 = !tmp_0.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+			auto arg0 = !tmp_0.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!tmp_0.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	tmp_0.call(QScriptValue(), arguments);
 };
@@ -25247,8 +25362,11 @@ bool QtScriptCallFuncN::initWithFunction(QScriptValue func)
 	auto __o = this->thiz<CallFuncN *>();
 	if (__o)
 	{
-		return __o->initWithFunction(!func.isFunction() ? std::function<void (cocos2d::Node *)>() : [=](cocos2d::Node* larg0) mutable -> void
+		return __o->initWithFunction(!func.isFunction() ? std::function<void (cocos2d::Node *)>() : [=](cocos2d::Node* larg0) mutable
 {
+	if (!func.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	func.call(QScriptValue(), arguments);
@@ -25279,8 +25397,11 @@ QScriptValue QtScriptCallFuncN::create(QScriptContext *context, QScriptEngine* _
 		case 1:
 		{
 			auto tmp_0 = context->argument(0);
-			auto arg0 = !tmp_0.isFunction() ? std::function<void (cocos2d::Node *)>() : [=](cocos2d::Node* larg0) mutable -> void
+			auto arg0 = !tmp_0.isFunction() ? std::function<void (cocos2d::Node *)>() : [=](cocos2d::Node* larg0) mutable
 {
+	if (!tmp_0.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_0.call(QScriptValue(), arguments);
@@ -29216,8 +29337,11 @@ void QtScriptCallbackCommand::setFunc(QScriptValue value)
 	auto object = thiz<CallbackCommand *>();
 	if (object)
 	{
-		object->func = !value.isFunction() ? std::function<void ()>() : [=]() mutable -> void
+		object->func = !value.isFunction() ? std::function<void ()>() : [=]() mutable
 {
+	if (!value.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	value.call(QScriptValue(), arguments);
 };
@@ -33239,8 +33363,11 @@ bool QtScriptMenuItem::initWithCallback(QScriptValue callback)
 	auto __o = this->thiz<MenuItem *>();
 	if (__o)
 	{
-		return __o->initWithCallback(!callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithCallback(!callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -33285,8 +33412,11 @@ void QtScriptMenuItem::setCallback(QScriptValue callback)
 	auto __o = this->thiz<MenuItem *>();
 	if (__o)
 	{
-		__o->setCallback(!callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+		__o->setCallback(!callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -33319,8 +33449,11 @@ QScriptValue QtScriptMenuItem::create(QScriptContext *context, QScriptEngine* __
 		case 1:
 		{
 			auto tmp_0 = context->argument(0);
-			auto arg0 = !tmp_0.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg0 = !tmp_0.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!tmp_0.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_0.call(QScriptValue(), arguments);
@@ -33414,8 +33547,11 @@ bool QtScriptMenuItemLabel::initWithLabel(cocos2d::Node* label, QScriptValue cal
 	auto __o = this->thiz<MenuItemLabel *>();
 	if (__o)
 	{
-		return __o->initWithLabel(label, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithLabel(label, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -33469,8 +33605,11 @@ QScriptValue QtScriptMenuItemLabel::create(QScriptContext *context, QScriptEngin
 		{
 			auto arg0 = qscriptvalue_cast<cocos2d::Node*>(context->argument(0));
 			auto tmp_1 = context->argument(1);
-			auto arg1 = !tmp_1.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg1 = !tmp_1.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!tmp_1.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_1.call(QScriptValue(), arguments);
@@ -33534,8 +33673,11 @@ bool QtScriptMenuItemAtlasFont::initWithString(const QByteArray& value, const QB
 	auto __o = this->thiz<MenuItemAtlasFont *>();
 	if (__o)
 	{
-		return __o->initWithString(value.toStdString(), charMapFile.toStdString(), itemWidth, itemHeight, startCharMap, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithString(value.toStdString(), charMapFile.toStdString(), itemWidth, itemHeight, startCharMap, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -33574,8 +33716,11 @@ QScriptValue QtScriptMenuItemAtlasFont::create(QScriptContext *context, QScriptE
 			auto arg3 = qscriptvalue_cast<int>(context->argument(3));
 			auto arg4 = qscriptvalue_cast<char>(context->argument(4));
 			auto tmp_5 = context->argument(5);
-			auto arg5 = !tmp_5.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg5 = !tmp_5.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!tmp_5.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_5.call(QScriptValue(), arguments);
@@ -33675,8 +33820,11 @@ bool QtScriptMenuItemFont::initWithString(const QByteArray& value, QScriptValue 
 	auto __o = this->thiz<MenuItemFont *>();
 	if (__o)
 	{
-		return __o->initWithString(value.toStdString(), !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithString(value.toStdString(), !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -33727,8 +33875,11 @@ QScriptValue QtScriptMenuItemFont::create(QScriptContext *context, QScriptEngine
 			auto tmp_0 = qscriptvalue_cast<QByteArray>(context->argument(0));
 			auto arg0 = tmp_0.toStdString();
 			auto tmp_1 = context->argument(1);
-			auto arg1 = !tmp_1.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg1 = !tmp_1.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!tmp_1.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_1.call(QScriptValue(), arguments);
@@ -33907,8 +34058,11 @@ bool QtScriptMenuItemSprite::initWithNormalSprite(cocos2d::Node* normalSprite, c
 	auto __o = this->thiz<MenuItemSprite *>();
 	if (__o)
 	{
-		return __o->initWithNormalSprite(normalSprite, selectedSprite, disabledSprite, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithNormalSprite(normalSprite, selectedSprite, disabledSprite, !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -33972,8 +34126,11 @@ QScriptValue QtScriptMenuItemSprite::create(QScriptContext *context, QScriptEngi
 			auto arg1 = qscriptvalue_cast<cocos2d::Node*>(context->argument(1));
 			auto arg2 = qscriptvalue_cast<cocos2d::Node*>(context->argument(2));
 			auto tmp_3 = context->argument(3);
-			auto arg3 = !tmp_3.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg3 = !tmp_3.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!tmp_3.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_3.call(QScriptValue(), arguments);
@@ -34037,8 +34194,11 @@ bool QtScriptMenuItemImage::initWithNormalImage(const QByteArray& normalImage, c
 	auto __o = this->thiz<MenuItemImage *>();
 	if (__o)
 	{
-		return __o->initWithNormalImage(normalImage.toStdString(), selectedImage.toStdString(), disabledImage.toStdString(), !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+		return __o->initWithNormalImage(normalImage.toStdString(), selectedImage.toStdString(), disabledImage.toStdString(), !callback.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -34118,8 +34278,11 @@ QScriptValue QtScriptMenuItemImage::create(QScriptContext *context, QScriptEngin
 			auto tmp_2 = qscriptvalue_cast<QByteArray>(context->argument(2));
 			auto arg2 = tmp_2.toStdString();
 			auto tmp_3 = context->argument(3);
-			auto arg3 = !tmp_3.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg3 = !tmp_3.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!tmp_3.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_3.call(QScriptValue(), arguments);
@@ -34285,8 +34448,11 @@ QScriptValue QtScriptMenuItemToggle::createWithCallback(QScriptContext *context,
 		case 2:
 		{
 			auto tmp_0 = context->argument(0);
-			auto arg0 = !tmp_0.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable -> void
+			auto arg0 = !tmp_0.isFunction() ? cocos2d::ccMenuCallback() : [=](cocos2d::Ref* larg0) mutable
 {
+	if (!tmp_0.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	tmp_0.call(QScriptValue(), arguments);
@@ -38705,8 +38871,11 @@ void QtScriptRenderTexture::newImage(QScriptValue callback)
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		__o->newImage(!callback.isFunction() ? cocos2d::RenderTexture::ImageCallback() : [=](cocos2d::Image* larg0) mutable -> void
+		__o->newImage(!callback.isFunction() ? cocos2d::RenderTexture::ImageCallback() : [=](cocos2d::Image* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -38720,8 +38889,11 @@ void QtScriptRenderTexture::newImage(QScriptValue callback, bool flipImage)
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		__o->newImage(!callback.isFunction() ? cocos2d::RenderTexture::ImageCallback() : [=](cocos2d::Image* larg0) mutable -> void
+		__o->newImage(!callback.isFunction() ? cocos2d::RenderTexture::ImageCallback() : [=](cocos2d::Image* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -38755,8 +38927,11 @@ bool QtScriptRenderTexture::saveToFile(const QByteArray& filename, bool isRGBA, 
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		return __o->saveToFile(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string&)>() : [=](cocos2d::RenderTexture* larg0, const std::string& larg1) mutable -> void
+		return __o->saveToFile(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string &)>() : [=](cocos2d::RenderTexture* larg0, const std::string& larg1) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	arguments << __e->toScriptValue(QByteArray::fromStdString(larg1));
@@ -38792,8 +38967,11 @@ bool QtScriptRenderTexture::saveToFileAsNonPMA(const QByteArray& filename, bool 
 	auto __o = this->thiz<RenderTexture *>();
 	if (__o)
 	{
-		return __o->saveToFileAsNonPMA(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string&)>() : [=](cocos2d::RenderTexture* larg0, const std::string& larg1) mutable -> void
+		return __o->saveToFileAsNonPMA(filename.toStdString(), isRGBA, !callback.isFunction() ? std::function<void (cocos2d::RenderTexture *, const std::string &)>() : [=](cocos2d::RenderTexture* larg0, const std::string& larg1) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	arguments << __e->toScriptValue(QByteArray::fromStdString(larg1));
@@ -42698,8 +42876,11 @@ void QtScriptTextureCache::addImageAsync(const QByteArray& filepath, QScriptValu
 	auto __o = this->thiz<TextureCache *>();
 	if (__o)
 	{
-		__o->addImageAsync(filepath.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Texture2D *)>() : [=](cocos2d::Texture2D* larg0) mutable -> void
+		__o->addImageAsync(filepath.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Texture2D *)>() : [=](cocos2d::Texture2D* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
@@ -42713,8 +42894,11 @@ void QtScriptTextureCache::addImageAsync(const QByteArray& path, QScriptValue ca
 	auto __o = this->thiz<TextureCache *>();
 	if (__o)
 	{
-		__o->addImageAsync(path.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Texture2D *)>() : [=](cocos2d::Texture2D* larg0) mutable -> void
+		__o->addImageAsync(path.toStdString(), !callback.isFunction() ? std::function<void (cocos2d::Texture2D *)>() : [=](cocos2d::Texture2D* larg0) mutable
 {
+	if (!callback.engine()) {
+		return;
+	}
 	QScriptValueList arguments;
 	arguments << __e->toScriptValue(larg0);
 	callback.call(QScriptValue(), arguments);
