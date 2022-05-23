@@ -27,49 +27,32 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
+#ifndef Spine_Property_h
+#define Spine_Property_h
 
-#include <spine/PathAttachment.h>
-
-using namespace spine;
-
-RTTI_IMPL(PathAttachment, VertexAttachment)
-
-PathAttachment::PathAttachment(const String &name) : VertexAttachment(name), _closed(false), _constantSpeed(false),
-													 _color() {
+namespace spine {
+	typedef long long PropertyId;
+	enum Property {
+		Property_Rotate = 1 << 0,
+		Property_X = 1 << 1,
+		Property_Y = 1 << 2,
+		Property_ScaleX = 1 << 3,
+		Property_ScaleY = 1 << 4,
+		Property_ShearX = 1 << 5,
+		Property_ShearY = 1 << 6,
+		Property_Rgb = 1 << 7,
+		Property_Alpha = 1 << 8,
+		Property_Rgb2 = 1 << 9,
+		Property_Attachment = 1 << 10,
+		Property_Deform = 1 << 11,
+		Property_Event = 1 << 12,
+		Property_DrawOrder = 1 << 13,
+		Property_IkConstraint = 1 << 14,
+		Property_TransformConstraint = 1 << 15,
+		Property_PathConstraintPosition = 1 << 16,
+		Property_PathConstraintSpacing = 1 << 17,
+		Property_PathConstraintMix = 1 << 18
+	};
 }
 
-Vector<float> &PathAttachment::getLengths() {
-	return _lengths;
-}
-
-bool PathAttachment::isClosed() {
-	return _closed;
-}
-
-void PathAttachment::setClosed(bool inValue) {
-	_closed = inValue;
-}
-
-bool PathAttachment::isConstantSpeed() {
-	return _constantSpeed;
-}
-
-void PathAttachment::setConstantSpeed(bool inValue) {
-	_constantSpeed = inValue;
-}
-
-Color &PathAttachment::getColor() {
-	return _color;
-}
-
-Attachment *PathAttachment::copy() {
-	PathAttachment *copy = new (__FILE__, __LINE__) PathAttachment(getName());
-	copyTo(copy);
-	copy->_lengths.clearAndAddAll(_lengths);
-	copy->_closed = _closed;
-	copy->_constantSpeed = _constantSpeed;
-	return copy;
-}
+#endif /* Spine_Property_h */

@@ -27,49 +27,31 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
+#ifndef SPINE_DEBUG_LOG_H
+#define SPINE_DEBUG_LOG_H
+
+#include <spine/spine.h>
+
+namespace spine {
+	SP_API void spDebug_printSkeletonData(SkeletonData *skeletonData);
+
+	SP_API void spDebug_printAnimation(Animation *animation);
+
+	SP_API void spDebug_printTimeline(Timeline *timeline);
+
+	SP_API void spDebug_printBoneDatas(Vector<BoneData *> &boneDatas);
+
+	SP_API void spDebug_printBoneData(BoneData *boneData);
+
+	SP_API void spDebug_printSkeleton(Skeleton *skeleton);
+
+	SP_API void spDebug_printBones(Vector<Bone *> &bones);
+
+	SP_API void spDebug_printBone(Bone *bone);
+
+	SP_API void spDebug_printFloats(float *values, int numFloats);
+
+	SP_API void spDebug_printFloats(Vector<float> &values);
+}
+
 #endif
-
-#include <spine/PathAttachment.h>
-
-using namespace spine;
-
-RTTI_IMPL(PathAttachment, VertexAttachment)
-
-PathAttachment::PathAttachment(const String &name) : VertexAttachment(name), _closed(false), _constantSpeed(false),
-													 _color() {
-}
-
-Vector<float> &PathAttachment::getLengths() {
-	return _lengths;
-}
-
-bool PathAttachment::isClosed() {
-	return _closed;
-}
-
-void PathAttachment::setClosed(bool inValue) {
-	_closed = inValue;
-}
-
-bool PathAttachment::isConstantSpeed() {
-	return _constantSpeed;
-}
-
-void PathAttachment::setConstantSpeed(bool inValue) {
-	_constantSpeed = inValue;
-}
-
-Color &PathAttachment::getColor() {
-	return _color;
-}
-
-Attachment *PathAttachment::copy() {
-	PathAttachment *copy = new (__FILE__, __LINE__) PathAttachment(getName());
-	copyTo(copy);
-	copy->_lengths.clearAndAddAll(_lengths);
-	copy->_closed = _closed;
-	copy->_constantSpeed = _constantSpeed;
-	return copy;
-}

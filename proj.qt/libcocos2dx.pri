@@ -58,4 +58,6 @@ INCLUDEPATH += \
     $$COCOS2DX_QT_PATH/src \
     $$COCOS2DX_PATH \
     $$COCOS2DX_PATH/cocos \
-    $$COCOS2DX_PATH/external
+    $$COCOS2DX_PATH/external \
+    $$COCOS2DX_PATH/cocos/editor-support \
+    $$COCOS2DX_PATH/external/xxhash
