@@ -16,6 +16,7 @@
 #include <QApplication>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QScreen>
 
 using namespace cocos2d;
 
@@ -57,6 +58,8 @@ QtCocosWindow::QtCocosWindow()
 #endif
 	setFormat(surfaceFormat);
 
+	connect(qApp, &QApplication::primaryScreenChanged, this,
+		&QtCocosWindow::fixScale);
 	QtCocosContext::setBackgroundColorSetter(
 		[this](const QColor &color) { setBackgroundColor(color); });
 }
@@ -552,12 +555,7 @@ void QtCocosWindow::showEvent(QShowEvent *)
 #ifdef Q_OS_MACOS
 	// Dirty hack for a MacOS bug when exposeEvent is not executed
 	// while showing window after hide
-	if (mMasterWidget)
-	{
-		auto oldSize = size();
-		resize(1, 1);
-		mMasterWidget->resize(oldSize.width() + 1, oldSize.height() + 1);
-	}
+	fixScale();
 #endif
 }
 
@@ -673,6 +671,17 @@ bool QtCocosWindow::isContextMenuEvent(QMouseEvent *event)
 #endif
 
 	return modifiers == Qt::NoModifier;
+}
+
+void QtCocosWindow::fixScale()
+{
+	// Dirty hack to fix scale after move from retina display or expose event bug
+	if (mMasterWidget)
+	{
+		auto oldSize = size();
+		resize(1, 1);
+		mMasterWidget->resize(oldSize.width() + 1, oldSize.height() + 1);
+	}
 }
 
 QtCocosWindow::InternalMainNode::InternalMainNode(QtCocosWindow *window)

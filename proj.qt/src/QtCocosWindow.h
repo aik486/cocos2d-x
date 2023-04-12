@@ -102,6 +102,7 @@ private:
 	float getScaleForMainNode() const;
 	void updateMainNodeScale();
 	static bool isContextMenuEvent(QMouseEvent *event);
+	void fixScale();
 
 	enum
 	{
