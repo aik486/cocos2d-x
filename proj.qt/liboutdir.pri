@@ -15,7 +15,18 @@ emscripten:COCOS2DX_LIB = $$COCOS2DX_LIB-emscripten
 clang:COCOS2DX_LIB = $$COCOS2DX_LIB-clang
 else::gcc:COCOS2DX_LIB = $$COCOS2DX_LIB-gcc
 
-COCOS2DX_LIB = $$COCOS2DX_LIB-$$QT_ARCH
+ARCH = $$QT_ARCH
+macx {
+    isEqual(QMAKE_APPLE_DEVICE_ARCHS, "x86_64") {
+        ARCH = $$QMAKE_APPLE_DEVICE_ARCHS
+    } else:isEqual(QMAKE_APPLE_DEVICE_ARCHS, "arm64") {
+        ARCH = $$QMAKE_APPLE_DEVICE_ARCHS
+    } else:contains(QMAKE_APPLE_DEVICE_ARCHS, "x86_64"):contains(QMAKE_APPLE_DEVICE_ARCHS, "arm64") {
+        ARCH = "universal"
+    }
+}
+
+COCOS2DX_LIB = $$COCOS2DX_LIB-$$ARCH
 
 CONFIG(debug, debug|release) {
     COCOS2DX_LIB = $$COCOS2DX_LIB/debug
