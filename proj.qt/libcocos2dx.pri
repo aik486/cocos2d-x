@@ -27,6 +27,8 @@ linux {
     
 }
 
+clang|gcc:QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations
+
 macx {
     LIBS += \
         -framework Foundation \

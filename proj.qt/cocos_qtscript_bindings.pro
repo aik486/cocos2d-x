@@ -27,7 +27,6 @@ msvc {
 } else {
     DEFINES += USE_FILE32API
     clang|gcc:QMAKE_CXXFLAGS_WARN_ON += \
-        -Wno-deprecated-declarations \
         -Wno-deprecated-copy-with-user-provided-copy \
         -Wno-deprecated-copy \
         -Wno-missing-field-initializers \
