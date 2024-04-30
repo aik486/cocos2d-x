@@ -170,6 +170,11 @@ void ClippingNode::onExit()
 
 void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
+    if (!_stencil || !_stencil->isVisible())
+    {
+        Node::visit(renderer, parentTransform, parentFlags);
+        return;
+    }
     if (!_visible || !hasContent())
         return;
     
