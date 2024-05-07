@@ -76,7 +76,7 @@ public:
      * @param isPow2 Specifies if texture width and height are power of two.
      * @return Minifying filter
      */
-    static GLint toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps);
+    static GLint toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps, bool isPow2);
 
     /**
      * Convert wrap parameter for texture coordinate to GLint. i.e. convert SamplerAddressMode::REPEAT to GL_REPEAT.

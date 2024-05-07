@@ -150,9 +150,9 @@ GLint UtilsGL::toGLMagFilter(SamplerFilter magFilter)
     return ret;
 }
 
-GLint UtilsGL::toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps)
+GLint UtilsGL::toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps, bool isPow2)
 {
-    if (hasMipmaps)
+    if (hasMipmaps && !isPow2)
     {
         CCLOG("Change minification filter to either NEAREST or LINEAR since non-power-of-two texture occur in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
         if (SamplerFilter::LINEAR == minFilter)

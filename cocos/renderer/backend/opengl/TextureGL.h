@@ -35,7 +35,7 @@ CC_BACKEND_BEGIN
  */
 struct TextureInfoGL
 {
-    void applySamplerDescriptor(const SamplerDescriptor &desc, bool hasMipmaps);
+    void applySamplerDescriptor(const SamplerDescriptor &desc, bool isPow2, bool hasMipmaps);
 
     GLint magFilterGL = GL_LINEAR;
     GLint minFilterGL = GL_LINEAR;
