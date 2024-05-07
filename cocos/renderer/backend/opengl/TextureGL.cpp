@@ -52,7 +52,7 @@ namespace {
     }
 }
 
-void TextureInfoGL::applySamplerDescriptor(const SamplerDescriptor& descriptor, bool isPow2, bool hasMipmaps)
+void TextureInfoGL::applySamplerDescriptor(const SamplerDescriptor& descriptor, bool hasMipmaps)
 {
     if (descriptor.magFilter != SamplerFilter::DONT_CARE)
     {
@@ -61,17 +61,17 @@ void TextureInfoGL::applySamplerDescriptor(const SamplerDescriptor& descriptor, 
 
     if (descriptor.minFilter != SamplerFilter::DONT_CARE)
     {
-        minFilterGL = UtilsGL::toGLMinFilter(descriptor.minFilter, hasMipmaps, isPow2);
+        minFilterGL = UtilsGL::toGLMinFilter(descriptor.minFilter, hasMipmaps);
     }
 
     if (descriptor.sAddressMode != SamplerAddressMode::DONT_CARE)
     {
-        sAddressModeGL = UtilsGL::toGLAddressMode(descriptor.sAddressMode, isPow2);
+        sAddressModeGL = UtilsGL::toGLAddressMode(descriptor.sAddressMode);
     }
 
     if (descriptor.tAddressMode != SamplerAddressMode::DONT_CARE)
     {
-        tAddressModeGL = UtilsGL::toGLAddressMode(descriptor.tAddressMode, isPow2);
+        tAddressModeGL = UtilsGL::toGLAddressMode(descriptor.tAddressMode);
     }
 }
 
@@ -105,12 +105,11 @@ void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescrip
     TextureBackend::updateTextureDescriptor(descriptor);
     UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
 
-    bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
     _textureInfo.magFilterGL = UtilsGL::toGLMagFilter(descriptor.samplerDescriptor.magFilter);
-    _textureInfo.minFilterGL = UtilsGL::toGLMinFilter(descriptor.samplerDescriptor.minFilter, _hasMipmaps, isPow2);
+    _textureInfo.minFilterGL = UtilsGL::toGLMinFilter(descriptor.samplerDescriptor.minFilter, _hasMipmaps);
 
-    _textureInfo.sAddressModeGL = UtilsGL::toGLAddressMode(descriptor.samplerDescriptor.sAddressMode, isPow2);
-    _textureInfo.tAddressModeGL = UtilsGL::toGLAddressMode(descriptor.samplerDescriptor.tAddressMode, isPow2);
+    _textureInfo.sAddressModeGL = UtilsGL::toGLAddressMode(descriptor.samplerDescriptor.sAddressMode);
+    _textureInfo.tAddressModeGL = UtilsGL::toGLAddressMode(descriptor.samplerDescriptor.tAddressMode);
 
     updateSamplerDescriptor(descriptor.samplerDescriptor);
 
@@ -130,8 +129,7 @@ Texture2DGL::~Texture2DGL()
 }
 
 void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor &sampler) {
-    bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
-    _textureInfo.applySamplerDescriptor(sampler, isPow2, _hasMipmaps);
+    _textureInfo.applySamplerDescriptor(sampler, _hasMipmaps);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _textureInfo.texture);
@@ -420,7 +418,7 @@ TextureCubeGL::~TextureCubeGL()
 
 void TextureCubeGL::updateSamplerDescriptor(const SamplerDescriptor &sampler)
 {
-    _textureInfo.applySamplerDescriptor(sampler, true, _hasMipmaps);
+    _textureInfo.applySamplerDescriptor(sampler, _hasMipmaps);
     setTexParameters();
 }
 
